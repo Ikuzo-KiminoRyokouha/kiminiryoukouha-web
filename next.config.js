@@ -10,14 +10,6 @@ module.exports = async (phase) => {
   const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
-    images: {
-      remotePatterns: [
-        {
-          protocol: "https",
-          hostname: "icons.iconarchive.com",
-        },
-      ],
-    },
   };
 
   const defaultConfig = {};
@@ -28,8 +20,9 @@ module.exports = async (phase) => {
         {
           pwa: {
             dest: "public",
-            register: true,
-            skipWaiting: true,
+            /*             register: true,
+            skipWaiting: true, */
+            disable: process.env.NODE_ENV === "production" ? false : true,
           },
         },
       ],

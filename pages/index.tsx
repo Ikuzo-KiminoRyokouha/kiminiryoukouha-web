@@ -17,8 +17,8 @@ export default function Home() {
           Welcome to <span>Next.js!</span>
         </h1>
         <h1 className="bg-red-200 px-2 text-blue-400">hihi</h1>
-        <button>
-          <Link href={"/camera"}>
+        {/*         <button>
+          <Link href={"/navigation"}>
             <Image
               src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/512/Camera-Next-icon.png"
               alt={"camera"}
@@ -26,7 +26,7 @@ export default function Home() {
               height={24}
             ></Image>
           </Link>
-        </button>
+        </button> */}
         <p className={styles.description}>
           Get started by editing{" "}
           <code className={styles.code}>pages/index.tsx</code>
