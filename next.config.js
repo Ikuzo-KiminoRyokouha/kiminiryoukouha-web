@@ -10,6 +10,12 @@ module.exports = async (phase) => {
   const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
+    webpack5: true,
+    webpack: (config) => {
+      config.resolve.fallback = { fs: false };
+
+      return config;
+    },
   };
 
   const defaultConfig = {};

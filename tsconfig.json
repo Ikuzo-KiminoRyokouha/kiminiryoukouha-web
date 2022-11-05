@@ -13,8 +13,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "typeRoots": ["./types/custom.d.ts", "./node_modules/@types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "./types/custom.d.ts",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "utils/Tmap.js",
+    "utils/Tmap.js"
+  ],
   "exclude": ["node_modules"]
 }

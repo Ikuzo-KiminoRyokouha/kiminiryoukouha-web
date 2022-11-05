@@ -12,21 +12,19 @@ export default function Home() {
         </title>
         <meta name="description" content="너의 여행은의 메인 페이지 입니다." />
       </Head>
+
       <main className={styles.main}>
+        <div id="map_div"></div>
+
         <h1 className={styles.title}>
           Welcome to <span>Next.js!</span>
         </h1>
         <h1 className="bg-red-200 px-2 text-blue-400">hihi</h1>
-        {/*         <button>
+        <button>
           <Link href={"/navigation"}>
-            <Image
-              src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/512/Camera-Next-icon.png"
-              alt={"camera"}
-              width={24}
-              height={24}
-            ></Image>
+            <div>AR CAMERA</div>
           </Link>
-        </button> */}
+        </button>
         <p className={styles.description}>
           Get started by editing{" "}
           <code className={styles.code}>pages/index.tsx</code>
