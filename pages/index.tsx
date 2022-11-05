@@ -12,10 +12,7 @@ export default function Home() {
         </title>
         <meta name="description" content="너의 여행은의 메인 페이지 입니다." />
       </Head>
-
       <main className={styles.main}>
-        <div id="map_div"></div>
-
         <h1 className={styles.title}>
           Welcome to <span>Next.js!</span>
         </h1>
