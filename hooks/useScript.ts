@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 /**
  * @description 혹시 바꿀거면 민규한테 물어보고 바꿀 것
  * @param {string} src script 태그에서 쓰는 URL
- * @returns {loading, error} 로딩과 에러 정보를 반환시켜줌
+ * @returns 로딩과 에러 정보와 추가적인 스크립트 로딩유무를 반환시켜줌
  */
 const useScript = (src: string) => {
   const [loading, setLoading] = useState(true);
