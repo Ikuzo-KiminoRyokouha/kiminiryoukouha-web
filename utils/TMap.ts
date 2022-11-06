@@ -3,7 +3,6 @@ import { LatLng } from "../types/tmap.type";
 
 /**
  * @description TMap 관련 전반적인 처리를 다루는 클래스입니다.
- * @inject axios
  */
 export default class TMap {
   private map: any;
@@ -36,7 +35,6 @@ export default class TMap {
         zoom: 15,
         https: true,
       });
-      console.log(this.map);
     }
   }
 
@@ -88,7 +86,6 @@ export default class TMap {
         }
       );
       const data = result.data.features;
-      console.log(data);
       if (data) {
         var tDistance =
           "총 거리 : " +
