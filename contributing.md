@@ -26,7 +26,7 @@
 
 // footer
 
-- 해결, 관련, 참고 해야하는 것이 있다ㅏ면 기록
+- 해결, 관련, 참고 해야하는 것이 있다면 기록
 
 # 2. Branch 관리
 
@@ -53,7 +53,19 @@
 
 3. git push origin feature_number/작업내용
 
-4. develop 브런치로 merge
+4. develop 브런치로 merge(자기가 한 커밋은 자기가 머지할 것)
+
+5. 본인이 작업한 브런치 삭제
+
+- 내가 커밋하고 머지하기 전에 먼저 머지 시킨 사람이 있을떄
+
+1. 머지 전에 git pull origin develop 으로 최신코드를 내 브런치로 가져온다
+
+2. 그 다음 머지
+
+- 최신 코드 상태 내려 받기
+
+1. git pull origin "<branch 이름>"
 
 # 4. Folder 구조
 
@@ -65,3 +77,7 @@
 - styles : css 파일을 담는 곳
 - types : 타입들 모아놓는 곳
 - utils : hook은 아니지만 유용하게 쓰이는 함수들 모아놓는 곳
+
+# env 파일
+
+- 혹여나 본인이 환경변수가 필요한 경우 .env.example에 예시와 주석 작성할 것
