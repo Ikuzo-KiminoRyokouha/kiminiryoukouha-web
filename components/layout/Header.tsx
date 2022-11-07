@@ -4,7 +4,7 @@ import useInput from "../../hooks/useInput";
 import { useRouter } from "next/router";
 
 export default function Header() {
-  const keyword = useInput("");
+  const keyword = useInput("", "where do you wanna go?");
   const router = useRouter();
   return (
     <div className="sticky top-0 z-40 w-full flex-none bg-white lg:border-b lg:border-slate-900/10 lg:bg-opacity-10">
@@ -68,7 +68,6 @@ export default function Header() {
               <input
                 className="mx-4 rounded-lg p-1 focus:outline-0 focus:ring-0"
                 {...keyword}
-                placeholder="where do you wanna go?"
               />
               {/* 로그인 버튼 */}
               <button

@@ -4,10 +4,10 @@ import MyInput from "../components/MyInput";
 import useInput from "../hooks/useInput";
 
 export default function SignUp() {
-  const id = useInput("");
-  const pwd = useInput("");
-  const checkPwd = useInput("");
-  const nick = useInput("");
+  const id = useInput("", "id");
+  const pwd = useInput("", "password");
+  const checkPwd = useInput("", "password Confirm");
+  const nick = useInput("", "nickname");
 
   return (
     <div className="mx-auto flex flex-col items-center justify-center pb-20 md:h-screen">
@@ -20,14 +20,10 @@ export default function SignUp() {
           <h1 className="p-1 pb-5 text-4xl">SignUp</h1>
         </div>
         <form className="flex flex-col ">
-          <MyInput {...id} type="email" placeholder="id" />
-          <MyInput {...pwd} type="password" placeholder="password" />
-          <MyInput
-            {...checkPwd}
-            type="password"
-            placeholder="password confirm"
-          />
-          <MyInput {...nick} type="text" placeholder="nickname" />
+          <MyInput {...id} type="email" />
+          <MyInput {...pwd} type="password" />
+          <MyInput {...checkPwd} type="password" />
+          <MyInput {...nick} type="text" />
           <MyButton name="Sign Up" />
         </form>
       </div>

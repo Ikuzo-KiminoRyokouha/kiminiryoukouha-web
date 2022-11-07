@@ -5,8 +5,8 @@ import MyInput from "../components/MyInput";
 import MyButton from "../components/MyButton";
 
 export default function LoginPage() {
-  const id = useInput("");
-  const pwd = useInput("");
+  const id = useInput("", "id");
+  const pwd = useInput("", "password");
   return (
     <div className="mx-auto flex flex-col items-center justify-center pb-20 md:h-screen">
       <Head>
@@ -18,8 +18,8 @@ export default function LoginPage() {
           <h1 className="p-1 pb-5 text-4xl">Sign in</h1>
         </div>
         <form className="flex flex-col ">
-          <MyInput {...id} type="email" placeholder="id" />
-          <MyInput {...pwd} type="password" placeholder="password" />
+          <MyInput {...id} type="email" />
+          <MyInput {...pwd} type="password" />
 
           <div className="flex items-center ">
             <div>
