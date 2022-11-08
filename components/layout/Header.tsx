@@ -7,8 +7,12 @@ export default function Header() {
   const keyword = useInput("", "where do you wanna go?");
   const router = useRouter();
   return (
-    <div className="sticky top-0 z-40 w-full flex-none bg-white lg:border-b lg:border-slate-900/10 lg:bg-opacity-10">
-      <div className="mx-4 max-h-16 border-b border-slate-900/10 py-4 lg:mx-0 lg:border-0 lg:px-8">
+    <div
+      className={`sticky top-0 z-40 w-full flex-none bg-white bg-opacity-100 lg:border-b lg:border-slate-900/10 ${
+        router.pathname === "/" ? "lg:bg-opacity-10" : "lg:bg-opacity-100"
+      } `}
+    >
+      <div className="max-h-16 border-b border-slate-900/10 py-4 md:mx-4 lg:mx-0 lg:border-0 lg:px-8">
         <div className="max-w-8xl mx-auto">
           <div className="relative flex items-center">
             {/* 앱 타이틀 */}

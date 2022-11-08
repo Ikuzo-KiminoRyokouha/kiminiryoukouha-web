@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import AuthCheck from "../components/AuthCheck";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ChatBotButton from "../components/layout/ChatBotButton";
+import Footer from "../components/layout/Footer";
 
 /**
  * @description 로그인 정보가 필요한 페이지 접근 시, 해당 배열에 URL정보를 넣어줄 것
@@ -21,8 +23,16 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <AuthCheck>
           <Component {...pageProps} />
+          <Footer />
         </AuthCheck>
         <ReactQueryDevtools initialIsOpen={false} />
+        <div
+          className="z-100 fixed bottom-10 right-8 hidden h-12 w-12 items-center
+       justify-center rounded-full bg-blue-600 text-4xl text-white
+       drop-shadow-lg duration-300 hover:animate-bounce hover:bg-blue-700 hover:drop-shadow-2xl md:flex"
+        >
+          <ChatBotButton />
+        </div>
       </QueryClientProvider>
     );
   }
@@ -31,7 +41,15 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />
+      <Footer />
       <ReactQueryDevtools initialIsOpen={false} />
+      <div
+        className="z-100 fixed bottom-10 right-8 hidden h-12 w-12 items-center
+       justify-center rounded-full bg-blue-600 text-4xl text-white
+       drop-shadow-lg duration-300 hover:animate-bounce hover:bg-blue-700 hover:drop-shadow-2xl md:flex"
+      >
+        <ChatBotButton />
+      </div>
     </QueryClientProvider>
   );
 }
