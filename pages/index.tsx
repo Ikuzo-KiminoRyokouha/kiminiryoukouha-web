@@ -1,8 +1,9 @@
 import Head from "next/head";
 import Image from "next/image";
-import PlanCard from "../components/card/PlanCard";
+import PlanCarousel from "../components/PlanCarousel";
 import ChatBotButton from "../components/layout/ChatBotButton";
 import Header from "../components/layout/Header";
+import ImageCard from "../components/card/ImageCard";
 export default function Home() {
   return (
     <div>
@@ -48,28 +49,62 @@ export default function Home() {
           </div>
         </div>
       </main>
-      <div
-        className="z-100 fixed bottom-10 right-8 flex h-12 w-12
-       items-center justify-center rounded-full bg-blue-600 text-4xl
-       text-white drop-shadow-lg duration-300 hover:animate-bounce hover:bg-blue-700 hover:drop-shadow-2xl"
-      >
-        <ChatBotButton />
-      </div>
-      <div className="max-w-8xl mx-auto mt-6 space-y-6">
-        <div className="flex">
-          <p className="mr-6 text-xl font-bold">私の旅行キーワードは？</p>
-          <p className="bg-sky-600 p-1 px-4">食べ物</p>
+      <div className="mx-auto mt-6 max-w-7xl space-y-6">
+        <div className="flex pl-2 md:pl-0">
+          <p className="mr-6 text-xl font-bold md:text-2xl">
+            私の旅行キーワードは？
+          </p>
+          <p className="bg-sky-500 p-1 px-4 text-white">食べ物</p>
         </div>
-        <div>
+        <div className="ml-12 hidden md:block">
           <p>おすすめプラン</p>
         </div>
-        <div className="p-1">
-          <PlanCard />
+      </div>
+      <PlanCarousel />
+      <div className="mx-auto mt-5 max-w-7xl space-y-6">
+        <p className="pl-2 text-xl font-bold md:text-2xl">
+          どこへ行きたいんですか
+        </p>
+        <div className="flex h-96 flex-col md:flex-row">
+          <ImageCard src={"/assets/main-img.png"} description={"東京/なごや"} />
+          <div className="flex flex-1 flex-row md:flex-col">
+            <ImageCard
+              src={"/assets/main-img.png"}
+              description={"東京/なごや"}
+            />
+            <ImageCard
+              src={"/assets/main-img.png"}
+              description={"東京/なごや"}
+            />
+          </div>
+          <div className="flex flex-1 flex-row md:flex-col">
+            <ImageCard
+              src={"/assets/main-img.png"}
+              description={"東京/なごや"}
+            />
+            <ImageCard
+              src={"/assets/main-img.png"}
+              description={"東京/なごや"}
+            />
+          </div>
         </div>
       </div>
-      {/* <footer>
-        <div>asdfasdfasdf</div>
-      </footer> */}
+      <div className="mx-auto mt-5 hidden max-w-7xl  space-y-6 md:block">
+        <p className="pl-2 text-xl font-bold md:text-2xl">ARから見る世界</p>
+        <div className="flex h-96 space-x-6">
+          <div className="relative flex-1">
+            <Image src={"/assets/main-img.png"} layout={"fill"}></Image>
+          </div>
+          <div className="my-auto flex-1 space-y-6">
+            <p className="text-4xl font-bold">
+              その場で我がサービスをご利用していらっしゃっていたお客様たちの意見を見てみましょう‼
+            </p>
+            <button className="bg-sky-500 py-2 px-6 text-lg font-bold text-white">
+              体験 &#10132;
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
