@@ -1,3 +1,6 @@
+/**
+ * @description 웹 상에서 보이는 Footer 컴포넌트 입니다.
+ */
 export default function Footer() {
   return (
     <div className="mt-6 hidden h-36 bg-gray-200 md:block">

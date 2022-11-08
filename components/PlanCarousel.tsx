@@ -19,12 +19,16 @@ const responsive = {
   },
 };
 
+/**
+ * @description 추천 플랜을 보기위한 캐러셀 입니다.
+ * @returns
+ */
 export default function PlanCarousel() {
   return (
     <Carousel
       className="mx-auto my-2 max-w-7xl md:my-6"
       swipeable={false}
-      draggable={false}
+      draggable
       showDots={true}
       responsive={responsive}
       ssr={true} // means to render carousel on server-side.
