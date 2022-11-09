@@ -2,7 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import useInput from "../../hooks/useInput";
 import { useRouter } from "next/router";
-
+import { AiOutlineMenu } from "react-icons/ai";
+import { BsFillPersonFill } from "react-icons/bs";
 /**
  * @description 모든 화면에 공통적으로 적용 되는 Header 컴포넌트 입니다.
  */
@@ -17,7 +18,11 @@ export default function Header() {
     >
       <div className="max-h-16 border-b border-slate-900/10 py-4 md:mx-4 lg:mx-0 lg:border-0 lg:px-8">
         <div className="max-w-8xl mx-auto">
-          <div className="relative flex items-center">
+          <div className="relative flex items-center justify-between px-4 md:justify-start md:px-0">
+            {/* 모바일 햄버거 */}
+            <div className="flex md:hidden">
+              <AiOutlineMenu size={25} />
+            </div>
             {/* 앱 타이틀 */}
             <Link href={"/"}>
               <div className="flex cursor-pointer items-center space-x-2">
@@ -34,6 +39,11 @@ export default function Header() {
                 </span>
               </div>
             </Link>
+            {/* 모바일 유저 아이콘 */}
+            <div className="flex md:hidden">
+              <BsFillPersonFill size={25} />
+            </div>
+
             {/* 메뉴 */}
             <div className="relative ml-auto hidden items-center lg:flex">
               {/* 네비게이션 바 */}
