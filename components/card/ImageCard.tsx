@@ -4,7 +4,11 @@ interface Props {
   src: string;
   description: string;
 }
-
+/**
+ * @description 가고싶은 여행지에 대해서 쓰는 이미지 카드입니다.
+ * @param src 이미지 주소
+ * @param description 이미지에 대한 설명
+ */
 export default function ImageCard({ src, description }: Props) {
   return (
     <div className="relative m-1 flex-1">

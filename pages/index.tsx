@@ -1,8 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import PlanCarousel from "../components/PlanCarousel";
-import ChatBotButton from "../components/layout/ChatBotButton";
-import Header from "../components/layout/Header";
 import ImageCard from "../components/card/ImageCard";
 export default function Home() {
   return (
@@ -13,7 +11,6 @@ export default function Home() {
         </title>
         <meta name="description" content="너의 여행은의 메인 페이지 입니다." />
       </Head>
-      <Header />
 
       <main>
         <div className="hidden min-h-screen lg:block">
@@ -49,6 +46,7 @@ export default function Home() {
           </div>
         </div>
       </main>
+      {/* 나의 여행 키워드 */}
       <div className="mx-auto mt-6 max-w-7xl space-y-6">
         <div className="flex pl-2 md:pl-0">
           <p className="mr-6 text-xl font-bold md:text-2xl">
@@ -61,6 +59,7 @@ export default function Home() {
         </div>
       </div>
       <PlanCarousel />
+      {/* 어디로 가고싶은지 */}
       <div className="mx-auto mt-5 max-w-7xl space-y-6">
         <p className="pl-2 text-xl font-bold md:text-2xl">
           どこへ行きたいんですか
@@ -89,6 +88,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* AR로 보는세계 */}
       <div className="mx-auto mt-5 hidden max-w-7xl  space-y-6 md:block">
         <p className="pl-2 text-xl font-bold md:text-2xl">ARから見る世界</p>
         <div className="flex h-96 space-x-6">

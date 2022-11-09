@@ -3,6 +3,9 @@ import Image from "next/image";
 import useInput from "../../hooks/useInput";
 import { useRouter } from "next/router";
 
+/**
+ * @description 모든 화면에 공통적으로 적용 되는 Header 컴포넌트 입니다.
+ */
 export default function Header() {
   const keyword = useInput("", "where do you wanna go?");
   const router = useRouter();
