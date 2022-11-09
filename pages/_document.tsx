@@ -16,6 +16,10 @@ export default function Document() {
         />
         <link rel="manifest" href="/manifast.json" />
         <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="viewport"
+          content="width=device-width, initail-scale=1"
+        ></meta>
         <meta name="theme-color" color="#ffffff" content="#ffffff"></meta>
         <link
           rel="image/png"
