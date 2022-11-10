@@ -1,6 +1,10 @@
-export default function MyButton({ name }) {
+export default function MyButton({ name, onClick }) {
   return (
-    <button type="submit" className="my-3 rounded bg-sky-600 p-4  text-white">
+    <button
+      onClick={onClick}
+      type="submit"
+      className="my-3 rounded bg-sky-600 p-4  text-white"
+    >
       {name}
     </button>
   );
