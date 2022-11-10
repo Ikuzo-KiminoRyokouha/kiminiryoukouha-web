@@ -4,12 +4,16 @@ import useInput from "../../hooks/useInput";
 import { useRouter } from "next/router";
 import { AiOutlineMenu } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
+import { useQuery } from "@tanstack/react-query";
+import { getUser } from "../../utils/client";
 /**
  * @description 모든 화면에 공통적으로 적용 되는 Header 컴포넌트 입니다.
  */
 export default function Header() {
   const keyword = useInput("", "where do you wanna go?");
   const router = useRouter();
+  const { data } = useQuery(["getUser"], getUser);
+
   return (
     <div
       className={`sticky top-0 z-40 w-full flex-none bg-white bg-opacity-100 lg:border-b lg:border-slate-900/10 ${
@@ -83,16 +87,24 @@ export default function Header() {
               </nav>
               {/* 검색 */}
               <input
-                className="mx-4 rounded-lg p-1 focus:outline-0 focus:ring-0"
+                className="mx-4 rounded-lg border border-black p-1 focus:outline-0 focus:ring-0"
                 {...keyword}
               />
               {/* 로그인 버튼 */}
-              <button
-                onClick={() => router.push("/login")}
-                className="rounded-lg bg-sky-600 p-2 px-4"
-              >
-                <span className="text-white">Login</span>
-              </button>
+              {!data && (
+                <button
+                  onClick={() => router.push("/login")}
+                  className="rounded-lg bg-sky-600 p-2 px-4"
+                >
+                  <span className="text-white">Login</span>
+                </button>
+              )}
+              {data && (
+                <div className="flex items-center justify-center space-x-2 p-2">
+                  <BsFillPersonFill />
+                  <span className="font-bold">user様</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
