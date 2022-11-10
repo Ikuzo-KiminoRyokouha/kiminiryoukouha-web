@@ -5,47 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import data2 from "../../components/testData2";
-import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 
-export default function QnA() {
+export default function FnA() {
   const router = useRouter();
-  const [currentPage, setCurrentPage] = useState("");
-  const [nextPagination, setNextPagination] = useState(1);
 
-  const maxPagination = 5; // 한 페이지에 페이지네이션 5개씩만 나옴
-  const postsPerPage = 6; // 한 페이지에 6개씩 보여줌
-  const indexOfLast = currentPage * postsPerPage; // 현 페이지 마지막 게시물의 인덱스 번호
-  const indexOfFirst = indexOfLast - postsPerPage; // 현 페이지 첫번째 게시물의 인덱스 번호
-  const currentPosts = (posts) => {
-    let currentPosts = 0;
-    currentPosts = posts.slice(indexOfFirst, indexOfLast);
-    return currentPosts;
-  };
-
-  const paginationLeft = () => {
-    if (parseInt(currentPage) > 1) {
-      router.push({
-        pathname: "/QnA",
-        query: { page: parseInt(currentPage) - 1 },
-      });
-    }
-  };
-
-  const paginationRight = () => {
-    if (parseInt(currentPage) < pageNumbers.length) {
-      router.push({
-        pathname: "/QnA",
-        query: { page: parseInt(currentPage) + 1 },
-      });
-    }
-  };
-
-  const pageNumbers = [];
-  // 받아오는 총 게시물수를 지정한 숫자로 나눠서 총 페이지수 return
-  for (let i = 1; i <= Math.ceil(data2.length / postsPerPage); i++) {
-    pageNumbers.push(i);
-  }
+  const [searchQuery, setSearchQuery] = useState("");
+  console.log(searchQuery);
 
   // 검색 버튼
   const searchBtn = () => {};
@@ -62,13 +27,56 @@ export default function QnA() {
   };
 
   useEffect(() => {
-    if (router.query.page) {
-      setCurrentPage(router.query.page);
-    }
-  }, [router.query.page]);
+    console.log(router);
+  }, []);
+
+  const data2 = [
+    {
+      number: 1002,
+      name: "이거 오류남",
+      writer: "김성우",
+      date: "22.11.07",
+      status: "답변완료",
+    },
+    {
+      number: 1003,
+      name: "이거 안됨",
+      writer: "김동겸",
+      date: "22.11.08",
+      status: "답변대기중",
+    },
+    {
+      number: 1003,
+      name: "이거 안됨",
+      writer: "김동겸",
+      date: "22.11.08",
+      status: "답변대기중",
+    },
+    {
+      number: 1003,
+      name: "이거 안됨",
+      writer: "김동겸",
+      date: "22.11.08",
+      status: "답변대기중",
+    },
+    {
+      number: 1003,
+      name: "이거 안됨",
+      writer: "김동겸",
+      date: "22.11.08",
+      status: "답변대기중",
+    },
+    {
+      number: 1003,
+      name: "이거 안됨",
+      writer: "김동겸",
+      date: "22.11.08",
+      status: "답변대기중",
+    },
+  ];
 
   return (
-    <div className="">
+    <div>
       <Head>
         <title>Q&A</title>
         <meta
@@ -86,17 +94,22 @@ export default function QnA() {
             <div className="flex h-full w-full">
               <div className="flex w-1/4 ">
                 <div className="flex w-full flex-col items-center">
-                  <div className="mt-10 h-9 w-2/3 bg-sky-600">
-                    <Link href={"/QnA"} legacyBehavior>
+                  <div className="mt-10 h-9 w-2/3 border-gray-300">
+                    <Link
+                      href={{ pathname: "/QnA", query: { page: 1 } }}
+                      legacyBehavior
+                    >
                       <a>
-                        <h2 className="pl-1 text-lg text-white ">질의응답</h2>
+                        <h2 className="pl-1 text-lg ">질의응답</h2>
                       </a>
                     </Link>
                   </div>
-                  <div className="h-9 w-2/3 border-b-2 border-solid border-gray-300">
+                  <div className="h-9 w-2/3 border-b-2 border-solid bg-sky-600">
                     <Link href="/F&A" legacyBehavior>
                       <a>
-                        <h2 className="pl-1 text-lg">자주묻는질문</h2>
+                        <h2 className="pl-1 text-lg text-white">
+                          자주묻는질문
+                        </h2>
                       </a>
                     </Link>
                   </div>
@@ -111,7 +124,7 @@ export default function QnA() {
               </div>
               <div className="w-3/4">
                 <div className="flex h-32 w-full justify-between bg-white">
-                  <h1 className="mt-8 text-3xl">질의응답 게시판</h1>
+                  <h1 className="mt-8 text-3xl">자주묻는질문</h1>
                   <div className="flex items-end">
                     <div className="pb-3 ">
                       <input
@@ -145,7 +158,7 @@ export default function QnA() {
                         </tr>
                       </thead>
                       <tbody className="text-center">
-                        {currentPosts(data2).map((data, index) => {
+                        {data2.map((data, index) => {
                           return (
                             <tr className="border-b-2 border-solid" key={index}>
                               <td className="p-2 text-xl font-normal">
@@ -154,7 +167,7 @@ export default function QnA() {
                               <td className="w-2/4 p-2 text-xl font-normal">
                                 <Link
                                   href={{
-                                    pathname: "/QnA/view",
+                                    pathname: "/F&A/view",
                                     query: { id: `${data.number}` },
                                   }}
                                   legacyBehavior
@@ -187,42 +200,31 @@ export default function QnA() {
                   </div>
                   <div className="flex justify-center pt-5">
                     <ul className="flex">
-                      <button className="pr-5" onClick={paginationLeft}>
-                        <BiLeftArrow className="text-sky-600" />
-                      </button>
-                      {pageNumbers.map((number, index) => {
-                        if (parseInt(router.query.page) === number) {
-                          return (
-                            <li className="p-2" key={index}>
-                              <Link
-                                href={{
-                                  pathname: `/QnA`,
-                                  query: { page: `${number}` },
-                                }}
-                                legacyBehavior
-                              >
-                                <a className="text-lg text-sky-600">{number}</a>
-                              </Link>
-                            </li>
-                          );
-                        }
-                        return (
-                          <li className="p-2" key={index}>
-                            <Link
-                              href={{
-                                pathname: `/QnA`,
-                                query: { page: `${number}` },
-                              }}
-                              legacyBehavior
-                            >
-                              <a className="text-lg">{number}</a>
-                            </Link>
-                          </li>
-                        );
-                      })}
-                      <button className="pl-5" onClick={paginationRight}>
-                        <BiRightArrow className="text-sky-600" />
-                      </button>
+                      <li className="p-2">
+                        <Link href="#" legacyBehavior>
+                          <a className="text-lg">1</a>
+                        </Link>
+                      </li>
+                      <li className="p-2">
+                        <Link href="#" legacyBehavior>
+                          <a className="text-lg">2</a>
+                        </Link>
+                      </li>
+                      <li className="p-2">
+                        <Link href="#" legacyBehavior>
+                          <a className="text-lg">3</a>
+                        </Link>
+                      </li>
+                      <li className="p-2">
+                        <Link href="#" legacyBehavior>
+                          <a className="text-lg">4</a>
+                        </Link>
+                      </li>
+                      <li className="p-2">
+                        <Link href="#" legacyBehavior>
+                          <a className="text-lg">5</a>
+                        </Link>
+                      </li>
                     </ul>
                   </div>
                 </div>
