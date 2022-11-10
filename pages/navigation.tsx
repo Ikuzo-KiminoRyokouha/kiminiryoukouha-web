@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 
 import useScript from "../hooks/useScript";
-import AR from "../utils/AR";
 import TMap from "../utils/TMap";
+import { TbExchange } from "react-icons/tb";
 
+import useInput from "../hooks/useInput";
 import type { LatLng } from "../types/tmap.type";
 export default function Navigation() {
+  const source = useInput("", "出発地");
+  const destination = useInput("", "到着地");
+
   const { loading, error, additionalScriptLoaing } = useScript(
     `https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=${process.env.NEXT_PUBLIC_TMAP_API_KEY}`
   );
@@ -14,12 +18,12 @@ export default function Navigation() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     const ar = new AR(canvasRef);
     ar.createScene().then((scene) => {
       ar.loopEngine(scene);
     });
-  }, []);
+  }, []); */
 
   useEffect(() => {
     if (additionalScriptLoaing) {
@@ -39,13 +43,26 @@ export default function Navigation() {
     }
   }, [additionalScriptLoaing]);
   return (
-    <div className="flex min-h-screen w-full flex-col md:flex-row">
-      <div className="flex-1">
-        <canvas className="h-full w-full" id="ar-canvas" ref={canvasRef} />
+    <>
+      <div className="max-w-8xl mx-auto flex h-full w-full flex-1">
+        <div className="hidden w-1/4 border md:block">
+          <p className="px-2 text-2xl">Navigation</p>
+          <div></div>
+          <div className="my-3 flex space-x-2 border-y px-2 py-2">
+            <div className="space-y-2 px-3">
+              <input className="w-full border p-1" {...source} />
+              <input className="w-full border p-1" {...destination} />
+            </div>
+            <button className="border p-1">
+              <TbExchange size={25} />
+            </button>
+          </div>
+          {/* <p className="h-1 border-t"></p> */}
+        </div>
+        <div className="flex-1">
+          <div id="map"></div>
+        </div>
       </div>
-      <div className="flex-1 bg-slate-300">
-        <div id="map"></div>
-      </div>
-    </div>
+    </>
   );
 }

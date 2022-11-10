@@ -31,7 +31,9 @@ const BottomNavMenu = [
     href: "#",
   },
 ];
-
+/**
+ * @description 모바일 디바이스 환경에서 Bottom 에서 네비게이팅을 도와주는 컴포넌트입니다.
+ */
 export default function BottomNavigation() {
   return (
     <section className="fixed inset-x-0 bottom-0 z-10 block max-h-16 rounded-t-xl bg-white shadow md:hidden">

@@ -12,7 +12,7 @@ import BottomNavigation from "../components/layout/BottomNavigation";
 /**
  * @description 로그인 정보가 필요한 페이지 접근 시, 해당 배열에 URL정보를 넣어줄 것
  */
-const NEED_AUTH_URL: Array<string> = ["/navigation"];
+const NEED_AUTH_URL: Array<string> = [];
 
 const queryClient = new QueryClient();
 
@@ -37,12 +37,14 @@ export default function App({ Component, pageProps }: AppProps) {
   //로그인 정보가 필요없는 페이지 일때
   return (
     <QueryClientProvider client={queryClient}>
-      <Header />
-      <Component {...pageProps} />
-      <BottomNavigation />
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <Component {...pageProps} />
+        <BottomNavigation />
+        <ReactQueryDevtools initialIsOpen={false} />
+        <ChatBotButton />
+      </div>
       <Footer />
-      <ReactQueryDevtools initialIsOpen={false} />
-      <ChatBotButton />
     </QueryClientProvider>
   );
 }
