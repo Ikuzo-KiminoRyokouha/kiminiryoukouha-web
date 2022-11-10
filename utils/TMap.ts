@@ -22,7 +22,7 @@ export default class TMap {
    * @param targetDom TMap을 띄워야할 타겟돔의 id 혹은 class 의 쿼리 셀렉터 형식
    */
   initTmap(targetDom: string) {
-    if (window.Tmapv2?.Map) {
+    if (window.Tmapv2?.Map && !this.map) {
       this.targetDom = targetDom;
       // 1. 맵 띄우기
       this.map = new window.Tmapv2.Map(targetDom, {
