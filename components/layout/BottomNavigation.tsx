@@ -48,3 +48,5 @@ export default function BottomNavigation() {
     </section>
   );
 }
+
+// core -> 프로젝트
