@@ -11,7 +11,7 @@ export default function Document() {
           crossOrigin={"true"}
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&family=Noto+Sans+KR&display=swap"
           rel="stylesheet"
         />
         <link rel="manifest" href="/manifast.json" />
