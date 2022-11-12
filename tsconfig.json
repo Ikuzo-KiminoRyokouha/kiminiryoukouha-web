@@ -24,6 +24,6 @@
     "utils/Tmap.js",
     "utils/Tmap.js",
     "components/layout/Header.txs"
-  ],
+, "pages/detail.js"  ],
   "exclude": ["node_modules"]
 }
