@@ -28,7 +28,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="mx-auto flex flex-col items-center justify-center pb-20 md:h-screen">
+    <div className="max-w-8xl mx-auto flex w-full flex-col items-center justify-center pb-20 md:h-screen">
       <Head>
         <title>SignUp</title>
         <meta name="description" content="SignUp page" />
