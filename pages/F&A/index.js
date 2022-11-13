@@ -5,12 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { DesktopBoard, MobileBoard } from "../../components/board";
 
 export default function FnA() {
   const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState("");
-  console.log(searchQuery);
 
   // 검색 버튼
   const searchBtn = () => {};
@@ -26,9 +26,7 @@ export default function FnA() {
     // 로그인 상태 아닐때
   };
 
-  useEffect(() => {
-    console.log(router);
-  }, []);
+  useEffect(() => {}, []);
 
   const data2 = [
     {
@@ -78,7 +76,7 @@ export default function FnA() {
   return (
     <div>
       <Head>
-        <title>Q&A</title>
+        <title>F&A</title>
         <meta
           name="description"
           content="너의 여행은의 질의응답 게시판 입니다."
@@ -86,25 +84,24 @@ export default function FnA() {
       </Head>
       <div>
         <div className="mx-auto max-w-7xl">
-          <div className="relative h-72">
+          {/* 이미지 박스 */}
+          <div className="relative hidden h-72 md:block">
             <Image src={"/assets/QnA-bg.png"} layout={"fill"} />
             {/* inset :0 position: absolute */}
           </div>
           <div className="h-full w-full">
-            <div className="flex h-full w-full">
-              <div className="flex w-1/4 ">
-                <div className="flex w-full flex-col items-center">
-                  <div className="mt-10 h-9 w-2/3 border-gray-300">
-                    <Link
-                      href={{ pathname: "/QnA", query: { page: 1 } }}
-                      legacyBehavior
-                    >
+            <div className="flex h-full w-full flex-col md:flex-row">
+              {/* 사진 밑 게시판 네비 박스 */}
+              <nav className=" w-full md:flex md:w-1/4">
+                <div className="flex w-full flex-row items-center md:flex-col">
+                  <div className="h-9 flex-1  border-b-2 border-solid border-gray-300 md:mt-10 md:w-2/3 md:flex-none">
+                    <Link href={"/QnA"} legacyBehavior>
                       <a>
-                        <h2 className="pl-1 text-lg ">질의응답</h2>
+                        <h2 className="pl-1 text-lg  ">질의응답</h2>
                       </a>
                     </Link>
                   </div>
-                  <div className="h-9 w-2/3 border-b-2 border-solid bg-sky-600">
+                  <div className="h-9 flex-1 border-b-2 border-solid border-gray-300 bg-sky-600 md:w-2/3 md:flex-none">
                     <Link href="/F&A" legacyBehavior>
                       <a>
                         <h2 className="pl-1 text-lg text-white">
@@ -114,114 +111,10 @@ export default function FnA() {
                     </Link>
                   </div>
                 </div>
-              </div>
-              <div className="w-3/4">
-                <div className="flex h-32 w-full justify-between bg-white">
-                  <h1 className="mt-8 text-3xl">자주묻는질문</h1>
-                  <div className="flex items-end">
-                    <div className="pb-3 ">
-                      <input
-                        className="mr-3 rounded-sm border-2 border-solid border-gray-300 p-2"
-                        placeholder="검색어를 입력하세요"
-                        onChange={search}
-                      />
-                      <button
-                        className="rounded border-2 border-solid border-sky-600 bg-sky-600 p-3 text-white"
-                        onClick={searchBtn}
-                      >
-                        검색
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="h-full w-full">
-                  <div className="w-full border-2 border-solid">
-                    <table className="w-full text-center">
-                      <thead className="bg-gray-300 text-center">
-                        <tr>
-                          <th className="p-2 text-xl font-normal">
-                            <span>게시물번호</span>
-                          </th>
-                          <th className="w-2/4 p-2 text-xl font-normal">
-                            제목
-                          </th>
-                          <th className="p-2 text-xl font-normal">작성자</th>
-                          <th className="p-2 text-xl font-normal">날짜</th>
-                          <th className="p-2 text-xl font-normal">답변상태</th>
-                        </tr>
-                      </thead>
-                      <tbody className="text-center">
-                        {data2.map((data, index) => {
-                          return (
-                            <tr className="border-b-2 border-solid" key={index}>
-                              <td className="p-2 text-xl font-normal">
-                                {data.number}
-                              </td>
-                              <td className="w-2/4 p-2 text-xl font-normal">
-                                <Link
-                                  href={{
-                                    pathname: "/F&A/view",
-                                    query: { id: `${data.number}` },
-                                  }}
-                                  legacyBehavior
-                                >
-                                  <a>{data.name}</a>
-                                </Link>
-                              </td>
-                              <td className="p-2 text-xl font-normal">
-                                {data.writer}
-                              </td>
-                              <td className="p-2 text-xl font-normal">
-                                {data.date}
-                              </td>
-                              <td className="p-2 text-xl font-normal">
-                                {data.status}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="flex justify-end pt-3">
-                    <button
-                      className="rounded bg-sky-600 p-3 text-white"
-                      onClick={onClickWrite}
-                    >
-                      글쓰기
-                    </button>
-                  </div>
-                  <div className="flex justify-center pt-5">
-                    <ul className="flex">
-                      <li className="p-2">
-                        <Link href="#" legacyBehavior>
-                          <a className="text-lg">1</a>
-                        </Link>
-                      </li>
-                      <li className="p-2">
-                        <Link href="#" legacyBehavior>
-                          <a className="text-lg">2</a>
-                        </Link>
-                      </li>
-                      <li className="p-2">
-                        <Link href="#" legacyBehavior>
-                          <a className="text-lg">3</a>
-                        </Link>
-                      </li>
-                      <li className="p-2">
-                        <Link href="#" legacyBehavior>
-                          <a className="text-lg">4</a>
-                        </Link>
-                      </li>
-                      <li className="p-2">
-                        <Link href="#" legacyBehavior>
-                          <a className="text-lg">5</a>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              </nav>
+              {/* 게시판 박스 */}
+              <DesktopBoard />
+              <MobileBoard />
             </div>
           </div>
         </div>

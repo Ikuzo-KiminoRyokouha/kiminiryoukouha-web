@@ -81,7 +81,9 @@ export default function DesktopBoard() {
                         <a className="hover:underline">{data.name}</a>
                       </Link>
                     </td>
-                    <td className="p-2 text-xl font-normal">{data.writer}</td>
+                    <td className="break-keep p-2 text-xl font-normal">
+                      {data.writer}
+                    </td>
                     <td className="p-2 text-xl font-normal">{data.date}</td>
                     <td className="p-2 text-xl font-normal">{data.status}</td>
                   </tr>

@@ -25,8 +25,8 @@ export default function QnA() {
               {/* 사진 밑 게시판 네비 박스 */}
               <nav className=" w-full md:flex md:w-1/4">
                 <div className="flex w-full flex-row items-center md:flex-col">
-                  <div className="h-9 flex-1 bg-sky-600 md:mt-10 md:w-2/3 md:flex-none">
-                    <Link href={"/QnA"} legacyBehavior>
+                  <div className="h-9 flex-1 border-b-2 border-solid border-gray-300 bg-sky-600 md:mt-10 md:w-2/3 md:flex-none">
+                    <Link href={"/QnA?page=1"} legacyBehavior>
                       <a>
                         <h2 className="pl-1 text-lg text-white ">질의응답</h2>
                       </a>
@@ -51,3 +51,5 @@ export default function QnA() {
     </div>
   );
 }
+
+// 29번째줄 더블클릭
