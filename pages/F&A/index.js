@@ -113,13 +113,6 @@ export default function FnA() {
                       </a>
                     </Link>
                   </div>
-                  <div className="h-9 w-2/3 border-b-2 border-solid border-gray-300">
-                    <Link href="/freeboard" legacyBehavior>
-                      <a>
-                        <h2 className="pl-1 text-lg">자유게시판</h2>
-                      </a>
-                    </Link>
-                  </div>
                 </div>
               </div>
               <div className="w-3/4">
