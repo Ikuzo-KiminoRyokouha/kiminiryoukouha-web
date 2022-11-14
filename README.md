@@ -3,6 +3,7 @@
 ## Authors
 
 - [@SHIN MINGYU](https://github.com/SHIN-MINGYU) - AR / FRONT / BACK
+- [@Defiler1](https://github.com/Defiler1) - FRONT
 
 ## Tech Stack
 
