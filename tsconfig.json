@@ -4,26 +4,23 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "incremental": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "typeRoots": ["./types/custom.d.ts", "./node_modules/@types"]
+    "jsx": "preserve"
   },
   "include": [
-    "./types/custom.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "utils/Tmap.js",
-    "utils/Tmap.js",
-    "components/layout/Header.txs"
+    "pages/QnA/index.tsx",
+    "components/board/DesktopBoard.js"
   ],
   "exclude": ["node_modules"]
 }
