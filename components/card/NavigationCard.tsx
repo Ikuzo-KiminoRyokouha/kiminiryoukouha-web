@@ -30,7 +30,6 @@ export default function NavigationCard({
     return myLatLng && getDistanceFromLatLon(myLatLng, latLng);
   }, [myLatLng, latLng]);
 
-  console.log("name : ", poi.name, "distance : ", distance, "km");
   return (
     <div className="w-full space-y-2 border p-2">
       <div className="flex justify-between">

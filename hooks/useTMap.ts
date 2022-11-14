@@ -11,31 +11,40 @@ import useInput from "./useInput";
  * @returns
  */
 export default function useTMap(targetDom: string) {
+  /* 출발지 이름 */
   const source = useInput("", "出発地");
+  /* 도착지 이름 */
   const destination = useInput("", "到着地");
+  /* 출발지 좌표 */
   const [start, setStart] = useState<LatLng>();
+  /* 도착지 좌표 */
   const [end, setEnd] = useState<LatLng>();
+  /* 내 좌표 */
   const [myLatLng, setMyLatLng] = useState<LatLng>();
-
+  /* 검색 결과 */
   const [searchResult, setSearchResult] = useState<Array<TMapPOIResult>>();
+  /* 내가 검색한게 출발인지 도착인지 */
   const [direction, setDirection] = useState<"도착" | "출발">();
-
+  /* TMap instance */
   const [tmap, setTmap] = useState<TMap>(new TMap());
+  /* 현재 기기에서 자신의 위치를 감시하고 있는지 나타내는 변수 */
+  const [watchId, setWatchId] = useState<number>(-1);
 
   const { additionalScriptLoaing } = useScript(
     `https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=${process.env.NEXT_PUBLIC_TMAP_API_KEY}`
   );
 
   /**
-   *  @description GPS에 접근해 내 위치를 저장하는 함수 입니다.
+   *  @description GPS에 접근해 내 위치를 저장하는 함수 입니다. (1 회성)
    */
-  const getMyDirection = () => {
+  const getMyPosition = () => {
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         const latLng: LatLng = {
           lat: String(position.coords.latitude),
           lng: String(position.coords.longitude),
         };
+        tmap.makeMyMarker(latLng, "http://localhost:3000/assets/my-marker.png");
         setMyLatLng(latLng);
         setStart(latLng);
         source.onChange("내 위치");
@@ -47,13 +56,61 @@ export default function useTMap(targetDom: string) {
     );
   };
 
+  /**
+   * @description GPS에 접근해 내 위치를 지속적으로 감시하는 함수입니다. (지속)
+   */
+  const watchMyPosition = () => {
+    const newId = navigator.geolocation.watchPosition(
+      (position) => {
+        const newRecord = {
+          lat: String(position.coords.latitude),
+          lng: String(position.coords.longitude),
+        };
+        setMyLatLng(newRecord);
+      },
+      (err) => {
+        console.log(err.message);
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: 10000,
+      }
+    );
+    setWatchId(newId);
+  };
+
+  /**
+   * @description 자신위치 추적 취소 함수
+   */
+  const stopWatchMyPosition = (e: Event) => {
+    e.preventDefault();
+    if (watchId !== -1) {
+      navigator.geolocation.clearWatch(watchId);
+      setWatchId(-1);
+    }
+  };
+
+  useEffect(() => {
+    watchMyPosition();
+  }, []);
+
+  useEffect(() => {
+    console.log(myLatLng);
+  }, [myLatLng]);
   useEffect(() => {
     // useScript로 해당 tmap 스크립트가 불러와져야 tmap을 그려줍니다.
     if (additionalScriptLoaing) {
       tmap.initTmap(targetDom);
-      getMyDirection();
+      getMyPosition();
     }
   }, [additionalScriptLoaing]);
+
+  useEffect(() => {
+    if (start && end) {
+      startGuide();
+    }
+  }, [start, end]);
 
   /**
    * @description 키워드를 기반으로 지도 상의 10개의 검색 결과를 제공해주는 함수입니다.
@@ -65,10 +122,10 @@ export default function useTMap(targetDom: string) {
     direction: "도착" | "출발"
   ) => {
     const res = await tmap.searchTotalPOI(keyword);
-    const latLng: LatLng = {
-      lat: res.data.searchPoiInfo.pois.poi[0].frontLat,
-      lng: res.data.searchPoiInfo.pois.poi[0].frontLon,
-    };
+    const latLng: LatLng = tmap.convertLatLng(
+      Number(res.data.searchPoiInfo.pois.poi[0].frontLat),
+      Number(res.data.searchPoiInfo.pois.poi[0].frontLon)
+    );
     if (res.data) {
       setSearchResult(() => {
         return res.data.searchPoiInfo.pois.poi;
@@ -99,7 +156,6 @@ export default function useTMap(targetDom: string) {
       setEnd(latLng);
       destination.onChange(name);
     }
-    startGuide();
   };
 
   /**

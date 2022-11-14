@@ -23,7 +23,7 @@ const BottomNavMenu = [
   {
     title: "AR",
     icon: <GiSteampunkGoggles className="inline-block" size={"25"} />,
-    href: "#",
+    href: "/navigation",
   },
   {
     title: "Setting",
