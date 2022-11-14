@@ -11,5 +11,3 @@ export default function QnA() {
     </>
   );
 }
-
-// 29번째줄 더블클릭
