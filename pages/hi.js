@@ -460,24 +460,6 @@ export default function QnA() {
             <Image src={"/assets/QnA-bg.png"} layout={"fill"} />
             {/* inset :0 position: absolute */}
           </div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
-          <div>hi</div>
 
           <div className="h-full w-full">
             <div className="flex h-full w-full">
@@ -506,118 +488,50 @@ export default function QnA() {
                   </div>
                 </div>
               </div>
-              <div className="w-3/4">
-                <div className="flex h-32 w-full justify-between bg-white">
-                  <h1 className="mt-8 text-3xl">질의응답 게시판</h1>
-                  <div className="flex items-end">
-                    <div className="pb-3 ">
-                      <input
-                        className="mr-3 rounded-sm border-2 border-solid border-gray-300 p-2"
-                        placeholder="검색어를 입력하세요"
-                        onChange={search}
-                      />
-                      <button
-                        className="rounded border-2 border-solid border-sky-600 bg-sky-600 p-3 text-white"
-                        onClick={searchBtn}
-                      >
-                        검색
-                      </button>
-                    </div>
-                  </div>
+              <div className="max-w-8xl mx-auto w-full">
+                <div className="my-8  text-3xl font-bold">
+                  {" "}
+                  Qna든 F&든 게시판이름
                 </div>
-                <div className="h-full w-full">
-                  <div className="w-full border-2 border-solid">
-                    <table className="w-full text-center">
-                      <thead className="bg-gray-300 text-center">
-                        <tr>
-                          <th className="p-2 text-xl font-normal">
-                            <span>게시물번호</span>
-                          </th>
-                          <th className="w-2/4 p-2 text-xl font-normal">
-                            제목
-                          </th>
-                          <th className="p-2 text-xl font-normal">작성자</th>
-                          <th className="p-2 text-xl font-normal">날짜</th>
-                          <th className="p-2 text-xl font-normal">답변상태</th>
-                        </tr>
-                      </thead>
-                      <tbody className="text-center">
-                        {currentPosts(data2).map((data, index) => {
-                          return (
-                            <tr className="border-b-2 border-solid" key={index}>
-                              <td className="p-2 text-xl font-normal">
-                                {data.number}
-                              </td>
-                              <td className="w-2/4 p-2 text-xl font-normal">
-                                <Link
-                                  href={{
-                                    pathname: "/QnA/view",
-                                    query: { id: `${data.number}` },
-                                  }}
-                                  legacyBehavior
-                                >
-                                  <a>{data.name}</a>
-                                </Link>
-                              </td>
-                              <td className="p-2 text-xl font-normal">
-                                {data.writer}
-                              </td>
-                              <td className="p-2 text-xl font-normal">
-                                {data.date}
-                              </td>
-                              <td className="p-2 text-xl font-normal">
-                                {data.status}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="flex justify-end pt-3">
-                    <button
-                      className="rounded bg-sky-600 p-3 text-white"
-                      onClick={onClickWrite}
-                    >
-                      글쓰기
-                    </button>
-                  </div>
-                  <div className="flex justify-center pt-5">
-                    <ul className="flex">
-                      <button>{"<"}</button>
-                      {pageNumbers.map((number, index) => {
-                        if (parseInt(router.query.page) === number) {
-                          return (
-                            <li className="p-2" key={index}>
-                              <Link
-                                href={{
-                                  pathname: `/QnA`,
-                                  query: { page: `${number}` },
-                                }}
-                                legacyBehavior
-                              >
-                                <a className="text-lg text-sky-600">{number}</a>
-                              </Link>
-                            </li>
-                          );
-                        }
-                        return (
-                          <li className="p-2" key={index}>
-                            <Link
-                              href={{
-                                pathname: `/QnA`,
-                                query: { page: `${number}` },
-                              }}
-                              legacyBehavior
-                            >
-                              <a className="text-lg">{number}</a>
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
+                <div className="float-left w-4/5 text-2xl font-semibold">
+                  {" "}
+                  아침밥은 김치찌개 에다가 참치꽁치찌개{" "}
                 </div>
+                <div className=" float-left w-1/5 text-right ">2011.22.34</div>
+                <br></br>
+                <div className="w-5/5  float-none clear-both my-2 h-1 "></div>
+                <div className="float-left w-4/5">작성자: wqeasd987</div>
+                <div className="my float-left w-1/5 text-right">
+                  조회 2300 | 댓글 300
+                </div>
+                <br></br>
+                <div className="bg-gray  float-none clear-both my-2 h-px w-full bg-gray-200 "></div>
+                <div className="w-5/5 h-auto border-black bg-slate-600">
+                  sadasdsasa
+                </div>
+                <div className="flex justify-end pt-3">
+                  <button className="rounded bg-sky-400 p-3 text-white">
+                    수정
+                  </button>
+                  <button className="rounded bg-sky-400 p-3 text-white">
+                    삭제
+                  </button>
+                </div>
+                <div className="my-8">
+                  <form>
+                    <textarea className="  float-left h-full  w-11/12 border-black bg-gray-200"></textarea>
+                  </form>
+
+                  <button className=" float-left flex w-1/12 justify-center rounded bg-sky-400 p-2 text-white">
+                    등록
+                  </button>
+                </div>
+
+                <div className="my-8"> 전체댓글 300개</div>
+                <div className="text-1xl">닉네임: 어쩌구 저쩌구 </div>
+                <div className="bg-gray  float-none clear-both my-2 h-px w-full bg-gray-200 "></div>
+                <div className="text-1xl">닉네임: 어쩌구 저쩌구23 </div>
+                <div className="bg-gray  float-none clear-both my-2 h-px w-full bg-gray-200 "></div>
               </div>
             </div>
           </div>
