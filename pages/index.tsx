@@ -62,7 +62,7 @@ export default function Home() {
       </div>
       <PlanCarousel />
       {/* 어디로 가고싶은지 */}
-      <div className="mx-auto mt-5 max-w-7xl space-y-6">
+      <div className="mx-auto mt-5 mb-16 max-w-7xl space-y-6 md:mb-0">
         <p className="pl-2 text-xl font-bold md:text-2xl">
           どこへ行きたいんですか
         </p>
@@ -91,7 +91,7 @@ export default function Home() {
         </div>
       </div>
       {/* AR로 보는세계 */}
-      <div className="mx-auto mt-5 hidden max-w-7xl  space-y-6 md:block">
+      <div className="mx-auto my-5 hidden max-w-7xl  space-y-6 md:block">
         <p className="pl-2 text-xl font-bold md:text-2xl">ARから見る世界</p>
         <div className="flex h-96 space-x-6">
           <div className="relative flex-1">

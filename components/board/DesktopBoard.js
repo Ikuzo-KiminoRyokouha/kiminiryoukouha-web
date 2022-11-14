@@ -7,7 +7,7 @@ import data2 from "../testData2";
 
 const MAX_PAGE = 17;
 
-export default function DesktopBoard() {
+export default function DesktopBoard({ boardname }) {
   const router = useRouter();
   const search = useInput("", "검색어를 입력하세요");
   const paginationProps = usePagination(MAX_PAGE);
@@ -34,7 +34,9 @@ export default function DesktopBoard() {
   return (
     <div className="hidden w-3/4 md:block">
       <div className="flex h-32 w-full justify-between bg-white">
-        <h1 className="mt-8 text-3xl">질의응답 게시판</h1>
+        <h1 className="mt-8 text-3xl">
+          {boardname === "QnA" ? "질의응답" : "자주묻는질문"} 게시판
+        </h1>
         <div className="flex items-end">
           <div className="pb-3 ">
             <input
@@ -73,7 +75,7 @@ export default function DesktopBoard() {
                     <td className="w-2/4 p-2 text-xl font-normal">
                       <Link
                         href={{
-                          pathname: "/QnA/view",
+                          pathname: `/${boardname}/view`,
                           query: { id: `${data.number}` },
                         }}
                         legacyBehavior
@@ -95,7 +97,7 @@ export default function DesktopBoard() {
         <div className="flex justify-end pt-3">
           <button
             className="rounded bg-sky-600 p-3 text-white"
-            onClick={() => router.push("/QnA/write")}
+            onClick={() => router.push(`/${boardname}/write`)}
           >
             글쓰기
           </button>

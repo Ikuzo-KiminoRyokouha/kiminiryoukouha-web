@@ -22,7 +22,7 @@ export default class TMap {
    * @param targetDom TMap을 띄워야할 타겟돔의 id 혹은 class 의 쿼리 셀렉터 형식
    */
   initTmap(targetDom: string) {
-    if (window.Tmapv2?.Map) {
+    if (window.Tmapv2?.Map && !this.map) {
       this.targetDom = targetDom;
       // 1. 맵 띄우기
       this.map = new window.Tmapv2.Map(targetDom, {
@@ -94,14 +94,7 @@ export default class TMap {
         var tTime =
           " 총 시간 : " + (data[0].properties.totalTime / 60).toFixed(0) + "분";
 
-        // 기존 그려진 마크가 있다면 초기화
-        if (this.resultdrawArr.length > 0) {
-          for (var i in this.resultdrawArr) {
-            this.resultdrawArr[i].setMap(null);
-          }
-          this.resultdrawArr = [];
-        }
-
+        this.resetMarker();
         this.drawInfoArr = [];
         for (var i in data) {
           //for문 [S]
@@ -191,10 +184,17 @@ export default class TMap {
     }
   }
 
+  /**
+   * @description 입력받은 위도 경도를 바탕으로 지도상의 센터를 재정의해주는 함수입니다.
+   * @param latLng
+   */
   reDefineCenterMap(latLng: LatLng) {
     this.map.setCenter(new window.Tmapv2.LatLng(latLng.lat, latLng.lng));
   }
 
+  /**
+   * @description 그러진 Tmap 위에 선을 그리는 함 수 입니다.
+   */
   drawLine(arrPoint: any) {
     var polyline_;
     polyline_ = new window.Tmapv2.Polyline({
@@ -204,5 +204,93 @@ export default class TMap {
       map: this.map,
     });
     this.resultdrawArr.push(polyline_);
+  }
+
+  /**
+   * @description 입력받은 장소를 기반으로 장소통합검색을 실시하는 함수입니다.
+   * @param {string} keyword 검색하고 싶은 장소입니다
+   */
+  async searchTotalPOI(keyword: string) {
+    this.resetMarker();
+
+    const res = await axios.get(
+      "https://apis.openapi.sk.com/tmap/pois?format=json&callback=result",
+      {
+        params: {
+          version: 1,
+          searchKeyword: keyword,
+          searchType: "all",
+          resCoordType: "EPSG3857",
+          reqCoordType: "WGS84GEO",
+          count: 10,
+        },
+        headers: {
+          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
+        },
+      }
+    );
+    // 마커 리셋
+
+    const positionBound = new window.Tmapv2.LatLngBounds(); // 맵에 결과물을 확인 하기위한 객체 생성
+
+    const data = res.data.searchPoiInfo.pois.poi;
+
+    // 마커 지도상에 띄우기
+    data.forEach((poi: any, idx: number) => {
+      const noorLat = Number(poi.noorLat);
+      const noorLon = Number(poi.noorLon);
+      const { name } = poi;
+
+      var { lat, lng: lon } = this.convertLatLng(noorLat, noorLon);
+
+      var markerPosition = new window.Tmapv2.LatLng(lat, lon);
+
+      const marker = new window.Tmapv2.Marker({
+        position: markerPosition,
+        //icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
+        icon:
+          "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" +
+          idx +
+          ".png",
+        iconSize: new window.Tmapv2.Size(24, 38),
+        title: name,
+        map: this.map,
+      });
+
+      this.resultdrawArr.push(marker);
+      positionBound.extend(markerPosition);
+    });
+
+    this.map.panToBounds(positionBound);
+
+    this.map.zoomOut();
+
+    return res;
+  }
+
+  resetMarker() {
+    // 기존 그려진 마크가 있다면 초기화
+    if (this.resultdrawArr.length > 0) {
+      for (var i in this.resultdrawArr) {
+        this.resultdrawArr[i].setMap(null);
+      }
+      this.resultdrawArr = [];
+    }
+
+    this.marker_e && this.marker_e.setMap(null);
+    this.marker_s && this.marker_s.setMap(null);
+
+    this.drawInfoArr = [];
+  }
+  /**
+   * @description 위도와 경도를 바탕으로 WGS84GEO 형식의 좌표값으로 변환해주는 함수입니다.
+   * @returns
+   */
+  convertLatLng(lat: number, lng: number): LatLng {
+    var pointCng = new window.Tmapv2.Point(lng, lat);
+    var projectionCng = new window.Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
+      pointCng
+    );
+    return { lat: projectionCng._lat, lng: projectionCng._lng };
   }
 }
