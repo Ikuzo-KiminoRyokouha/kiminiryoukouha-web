@@ -9,8 +9,7 @@ export default class TMap {
   private targetDom: string = "";
   private marker_s: any;
   private marker_e: any;
-  private marker_p1: any;
-  private marker_p2: any;
+  private marker_me: any;
   private totalMarkerArr: any[] = [];
   private drawInfoArr: any[] = [];
   private resultdrawArr: any[] = [];
@@ -44,6 +43,8 @@ export default class TMap {
    * @param end types/tmap.type.ts 에 정의된 LatLng 형식의 타입의 변수
    */
   async getDirection(start: LatLng, end: LatLng) {
+    await this.resetMarker();
+
     // 출발지 마킹
     this.marker_s = new window.Tmapv2.Marker({
       position: new window.Tmapv2.LatLng(
@@ -54,6 +55,8 @@ export default class TMap {
       iconSize: new window.Tmapv2.Size(24, 38),
       map: this.map,
     });
+
+    this.reDefineCenterMap(start);
 
     // 도착지 마킹
     this.marker_e = new window.Tmapv2.Marker({
@@ -94,7 +97,14 @@ export default class TMap {
         var tTime =
           " 총 시간 : " + (data[0].properties.totalTime / 60).toFixed(0) + "분";
 
-        this.resetMarker();
+        // 기존 그려진 마크가 있다면 초기화
+        if (this.resultdrawArr.length > 0) {
+          for (var i in this.resultdrawArr) {
+            await this.resultdrawArr[i].setMap(null);
+          }
+          this.resultdrawArr = [];
+        }
+
         this.drawInfoArr = [];
         for (var i in data) {
           //for문 [S]
@@ -175,6 +185,7 @@ export default class TMap {
               iconSize: size,
               map: this.map,
             });
+            this.totalMarkerArr.push(marker_p);
           }
         } //for문 [E]
         this.drawLine(this.drawInfoArr);
@@ -211,7 +222,7 @@ export default class TMap {
    * @param {string} keyword 검색하고 싶은 장소입니다
    */
   async searchTotalPOI(keyword: string) {
-    this.resetMarker();
+    await this.resetMarker();
 
     const res = await axios.get(
       "https://apis.openapi.sk.com/tmap/pois?format=json&callback=result",
@@ -268,17 +279,24 @@ export default class TMap {
     return res;
   }
 
-  resetMarker() {
+  async resetMarker() {
     // 기존 그려진 마크가 있다면 초기화
     if (this.resultdrawArr.length > 0) {
       for (var i in this.resultdrawArr) {
-        this.resultdrawArr[i].setMap(null);
+        await this.resultdrawArr[i].setMap(null);
       }
       this.resultdrawArr = [];
     }
 
-    this.marker_e && this.marker_e.setMap(null);
-    this.marker_s && this.marker_s.setMap(null);
+    if (this.totalMarkerArr.length > 0) {
+      for (var i in this.totalMarkerArr) {
+        await this.totalMarkerArr[i].setMap(null);
+      }
+    }
+    this.totalMarkerArr = [];
+
+    this.marker_e && (await this.marker_e.setMap(null));
+    this.marker_s && (await this.marker_s.setMap(null));
 
     this.drawInfoArr = [];
   }
@@ -292,5 +310,30 @@ export default class TMap {
       pointCng
     );
     return { lat: projectionCng._lat, lng: projectionCng._lng };
+  }
+
+  /**
+   * @description 좌포를 바탕으로 지도 상에 마커를 띄워주는 함수입니다.
+   */
+  private makeMarker(latLng: LatLng, img_url: string, isCircle?: boolean) {
+    return new window.Tmapv2.Marker({
+      position: new window.Tmapv2.LatLng(
+        parseFloat(latLng.lat),
+        parseFloat(latLng.lng)
+      ),
+      icon: img_url,
+      iconSize: isCircle
+        ? new window.Tmapv2.Size(24, 24)
+        : new window.Tmapv2.Size(24, 38),
+      map: this.map,
+    });
+  }
+
+  makeMyMarker(latLng: LatLng, img_url: string) {
+    console.log(latLng, img_url);
+    this.marker_me = this.makeMarker(latLng, img_url, true);
+  }
+  async removeMyMarker() {
+    await this.marker_me.setMap(null);
   }
 }

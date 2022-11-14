@@ -23,7 +23,8 @@
     "**/*.tsx",
     "utils/Tmap.js",
     "utils/Tmap.js",
-    "components/layout/Header.txs"
+    "components/layout/Header.txs",
+    "pages/write.js"
   ],
   "exclude": ["node_modules"]
 }
