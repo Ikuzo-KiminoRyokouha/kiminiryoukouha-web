@@ -19,7 +19,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/QnA/index.tsx",
+    "utils/Tmap.js",
+    "pages/write.js",
     "components/board/DesktopBoard.js"
   ],
   "exclude": ["node_modules"]
