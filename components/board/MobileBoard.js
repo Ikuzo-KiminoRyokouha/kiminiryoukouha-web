@@ -3,7 +3,6 @@ import usePagination from "../../hooks/usePagination";
 import useInput from "../../hooks/useInput";
 import { useRouter } from "next/router";
 import { FiSearch } from "react-icons/fi";
-import Link from "next/link";
 import data2 from "../testData2";
 
 const MAX_PAGE = 17;
@@ -37,9 +36,12 @@ export default function MobileBoard({ boardname }) {
 
   return (
     <div className="block md:hidden">
-      <div className="flex border-b-2 border-solid border-gray-300 focus:outline-none">
+      <div className="relative flex border-b-2 border-solid border-gray-300 focus:outline-none">
         <input {...search} className="focus: w-full border-black p-2" />
-        <div onClick={searching} className="absolute mr-2 flex items-center">
+        <div
+          onClick={searching}
+          className="absolute right-1 top-1 mr-2 flex items-center"
+        >
           <FiSearch size={35} color={"#E0E0E0"} />
         </div>
       </div>
