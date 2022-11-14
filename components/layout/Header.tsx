@@ -79,8 +79,8 @@ export default function Header() {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/F&A">
-                      <a className="hover:text-sky-600">F&A</a>
+                    <Link href="/QnA?page=1">
+                      <a className="hover:text-sky-600">Q&A</a>
                     </Link>
                   </li>
                 </ul>

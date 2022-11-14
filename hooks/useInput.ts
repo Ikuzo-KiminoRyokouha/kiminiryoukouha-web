@@ -5,8 +5,12 @@ import { ChangeEvent, useState } from "react";
  */
 const useInput = (initailState: string, placeholder: string) => {
   const [value, setValue] = useState<string>(initailState);
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+  const onChange = (e: ChangeEvent<HTMLInputElement> | string) => {
+    if (typeof e === "string") {
+      setValue(e);
+    } else {
+      setValue(e.target.value);
+    }
   };
 
   return { value, onChange, placeholder };
