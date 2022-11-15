@@ -1,9 +1,11 @@
 import { useEffect, useRef } from "react";
 import { TbExchange } from "react-icons/tb";
+import { GiSteampunkGoggles } from "react-icons/gi";
 import { MdAssistantNavigation, MdClose } from "react-icons/md";
 import NavigationCard from "../components/card/NavigationCard";
 import useTMap from "../hooks/useTMap";
 import useToggle from "../hooks/useToggle";
+import AR from "../utils/AR";
 
 export default function Navigation() {
   const {
@@ -19,15 +21,15 @@ export default function Navigation() {
   } = useTMap("map");
 
   const isVisible = useToggle(false);
-
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  /*   useEffect(() => {
+  useEffect(() => {
     const ar = new AR(canvasRef);
-    ar.createScene().then((scene) => {
+    ar.createScene(buttonRef.current).then((scene) => {
       ar.loopEngine(scene);
     });
-  }, []); */
+  }, []);
 
   return (
     <>
@@ -35,7 +37,7 @@ export default function Navigation() {
         <div
           className={`absolute inset-0 ${
             isVisible.value ? "top-16" : "top-full"
-          } z-50 basis-full border bg-white transition-all md:relative md:top-auto md:z-0 md:flex md:basis-1/4 md:flex-col`}
+          } z-50 basis-full border bg-white transition-all duration-300 md:relative md:top-auto md:z-0 md:flex md:basis-1/4 md:flex-col`}
         >
           <div className="absolute flex h-full flex-col overflow-hidden">
             <div className="flex items-center justify-between p-3 text-2xl font-bold">
@@ -94,17 +96,28 @@ export default function Navigation() {
           </div>
         </div>
         <div className="relative basis-full md:basis-3/4">
-          <div className="absolute h-full w-full p-2 md:hidden">
+          <div className="absolute h-full w-full space-y-2 p-2 md:hidden">
             <div className="flex justify-end">
               <button
-                className="z-10 rounded-lg  border  border-gray-300 bg-white p-1 text-sky-600"
+                className="z-10 rounded-lg border border-gray-300 bg-white p-1 text-sky-600"
                 onClick={isVisible.setTrue}
               >
                 <MdAssistantNavigation size={24}></MdAssistantNavigation>
               </button>
             </div>
+            <div className="flex justify-end">
+              <button
+                ref={buttonRef}
+                className="z-10 rounded-lg  border  border-gray-300 bg-white p-1 text-sky-600"
+              >
+                <GiSteampunkGoggles size={24}></GiSteampunkGoggles>
+              </button>
+            </div>
           </div>
           <div id="map"></div>
+          <div>
+            <canvas className="hidden" ref={canvasRef}></canvas>
+          </div>
         </div>
       </div>
     </>

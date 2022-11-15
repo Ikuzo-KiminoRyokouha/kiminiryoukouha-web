@@ -1,5 +1,6 @@
 import { RefObject } from "react";
 import * as BABYLON from "babylonjs";
+import { WebXREnterExitUIButton } from "babylonjs";
 
 /**
  * @description AR관련 전반적인 처리를 다루는 클래스입니다.
@@ -19,7 +20,7 @@ export default class AR {
    * @description AR 장면 테스팅 함수입니다.
    * @returns scene 장면을 반환 , loopEngine 의 매개변수로 활용합니다.
    */
-  async createScene() {
+  async createScene(button: HTMLButtonElement) {
     var scene = new BABYLON.Scene(this.engine);
 
     const alpha = (3 * Math.PI) / 2;
@@ -44,6 +45,12 @@ export default class AR {
     );
     light.intensity = 0.6;
 
+    const customButton = new WebXREnterExitUIButton(
+      button,
+      "immersive-ar",
+      "local-floor"
+    );
+
     var xr = await scene.createDefaultXRExperienceAsync({
       uiOptions: {
         sessionMode: "immersive-ar",
@@ -51,28 +58,30 @@ export default class AR {
         onError: (error) => {
           alert(error);
         },
+        customButtons: [customButton],
       },
       optionalFeatures: true,
+      disableDefaultUI: true,
     });
 
     const fm = xr.baseExperience.featuresManager;
 
-    const domOverlayFeature = fm.enableFeature(
-      BABYLON.WebXRDomOverlay,
-      "latest",
-      {
-        element: "#sibal",
-      },
-      undefined,
-      false
-    );
+    // const domOverlayFeature = fm.enableFeature(
+    //   BABYLON.WebXRDomOverlay,
+    //   "latest",
+    //   {
+    //     element: "",
+    //   },
+    //   undefined,
+    //   false
+    // );
 
     xr.baseExperience.onStateChangedObservable.add((webXRState) => {
       switch (webXRState) {
         case BABYLON.WebXRState.ENTERING_XR:
         case BABYLON.WebXRState.IN_XR:
           // domOverlayType will be null when not supported.
-          console.log("overlay type:", domOverlayFeature);
+          // console.log("overlay type:", domOverlayFeature);
           break;
       }
     });

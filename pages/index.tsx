@@ -2,7 +2,6 @@ import Head from "next/head";
 import Image from "next/image";
 import PlanCarousel from "../components/PlanCarousel";
 import ImageCard from "../components/card/ImageCard";
-import { BsFillPersonFill } from "react-icons/bs";
 
 export default function Home() {
   return (

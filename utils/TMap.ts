@@ -330,7 +330,6 @@ export default class TMap {
   }
 
   makeMyMarker(latLng: LatLng, img_url: string) {
-    console.log(latLng, img_url);
     this.marker_me = this.makeMarker(latLng, img_url, true);
   }
   async removeMyMarker() {
