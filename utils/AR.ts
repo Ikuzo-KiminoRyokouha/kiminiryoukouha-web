@@ -1,5 +1,7 @@
 import { RefObject } from "react";
 import * as BABYLON from "babylonjs";
+import { WebXREnterExitUI, WebXREnterExitUIButton } from "babylonjs";
+import AROverlayDom from "../components/layout/AROverlay";
 
 /**
  * @description AR관련 전반적인 처리를 다루는 클래스입니다.
@@ -7,19 +9,26 @@ import * as BABYLON from "babylonjs";
 export default class AR {
   private canvasRef: RefObject<HTMLCanvasElement>;
   private engine: BABYLON.Engine;
-
-  constructor(canvasRef: RefObject<HTMLCanvasElement>) {
+  private setOverlayDomTrue: () => void;
+  private setOverlayDomFalse: () => void;
+  constructor(
+    canvasRef: RefObject<HTMLCanvasElement>,
+    setOverlayDomTrue: () => void,
+    setOverlayDomFalse: () => void
+  ) {
     this.canvasRef = canvasRef;
-
     // 3D 엔진 로딩
     this.engine = new BABYLON.Engine(this.canvasRef.current, true);
+
+    this.setOverlayDomFalse = setOverlayDomFalse;
+    this.setOverlayDomTrue = setOverlayDomTrue;
   }
 
   /**
    * @description AR 장면 테스팅 함수입니다.
    * @returns scene 장면을 반환 , loopEngine 의 매개변수로 활용합니다.
    */
-  async createScene() {
+  async createScene(button: HTMLButtonElement) {
     var scene = new BABYLON.Scene(this.engine);
 
     const alpha = (3 * Math.PI) / 2;
@@ -46,13 +55,18 @@ export default class AR {
 
     var xr = await scene.createDefaultXRExperienceAsync({
       uiOptions: {
-        sessionMode: "immersive-ar",
-        referenceSpaceType: "local-floor",
+        // sessionMode: "immersive-ar",
+        // referenceSpaceType: "local-floor",
+        ignoreSessionGrantedEvent: true,
         onError: (error) => {
           alert(error);
         },
+        customButtons: [
+          new WebXREnterExitUIButton(button, "immersive-ar", "local-floor"),
+        ],
       },
       optionalFeatures: true,
+      // disableDefaultUI: true,
     });
 
     const fm = xr.baseExperience.featuresManager;
@@ -61,7 +75,7 @@ export default class AR {
       BABYLON.WebXRDomOverlay,
       "latest",
       {
-        element: "#sibal",
+        element: "#ar-overlay-dom",
       },
       undefined,
       false
@@ -72,7 +86,10 @@ export default class AR {
         case BABYLON.WebXRState.ENTERING_XR:
         case BABYLON.WebXRState.IN_XR:
           // domOverlayType will be null when not supported.
-          console.log("overlay type:", domOverlayFeature);
+          this.setOverlayDomTrue();
+          break;
+        case BABYLON.WebXRState.EXITING_XR:
+          this.setOverlayDomFalse();
           break;
       }
     });

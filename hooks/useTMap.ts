@@ -96,9 +96,6 @@ export default function useTMap(targetDom: string) {
   }, []);
 
   useEffect(() => {
-    console.log(myLatLng);
-  }, [myLatLng]);
-  useEffect(() => {
     // useScript로 해당 tmap 스크립트가 불러와져야 tmap을 그려줍니다.
     if (additionalScriptLoaing) {
       tmap.initTmap(targetDom);
@@ -168,6 +165,9 @@ export default function useTMap(targetDom: string) {
     source.onChange(destination.value);
   };
 
+  /**
+   * @description 출발좌표와 끝지점 좌표를 기반으로 방향을 지도를 그려주는 함수입니다.
+   */
   const startGuide = () => {
     start && end && tmap.getDirection(start, end);
   };
@@ -182,5 +182,7 @@ export default function useTMap(targetDom: string) {
     destination,
     myLatLng,
     convertLatLng,
+    start,
+    end,
   };
 }
