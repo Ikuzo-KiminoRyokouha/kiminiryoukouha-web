@@ -1,6 +1,7 @@
 import { RefObject } from "react";
 import * as BABYLON from "babylonjs";
-import { WebXREnterExitUIButton } from "babylonjs";
+import { WebXREnterExitUI, WebXREnterExitUIButton } from "babylonjs";
+import AROverlayDom from "../components/layout/AROverlay";
 
 /**
  * @description AR관련 전반적인 처리를 다루는 클래스입니다.
@@ -8,12 +9,19 @@ import { WebXREnterExitUIButton } from "babylonjs";
 export default class AR {
   private canvasRef: RefObject<HTMLCanvasElement>;
   private engine: BABYLON.Engine;
-
-  constructor(canvasRef: RefObject<HTMLCanvasElement>) {
+  private setOverlayDomTrue: () => void;
+  private setOverlayDomFalse: () => void;
+  constructor(
+    canvasRef: RefObject<HTMLCanvasElement>,
+    setOverlayDomTrue: () => void,
+    setOverlayDomFalse: () => void
+  ) {
     this.canvasRef = canvasRef;
-
     // 3D 엔진 로딩
     this.engine = new BABYLON.Engine(this.canvasRef.current, true);
+
+    this.setOverlayDomFalse = setOverlayDomFalse;
+    this.setOverlayDomTrue = setOverlayDomTrue;
   }
 
   /**
@@ -45,43 +53,43 @@ export default class AR {
     );
     light.intensity = 0.6;
 
-    const customButton = new WebXREnterExitUIButton(
-      button,
-      "immersive-ar",
-      "local-floor"
-    );
-
     var xr = await scene.createDefaultXRExperienceAsync({
       uiOptions: {
-        sessionMode: "immersive-ar",
-        referenceSpaceType: "local-floor",
+        // sessionMode: "immersive-ar",
+        // referenceSpaceType: "local-floor",
+        ignoreSessionGrantedEvent: true,
         onError: (error) => {
           alert(error);
         },
-        customButtons: [customButton],
+        customButtons: [
+          new WebXREnterExitUIButton(button, "immersive-ar", "local-floor"),
+        ],
       },
       optionalFeatures: true,
-      disableDefaultUI: true,
+      // disableDefaultUI: true,
     });
 
     const fm = xr.baseExperience.featuresManager;
 
-    // const domOverlayFeature = fm.enableFeature(
-    //   BABYLON.WebXRDomOverlay,
-    //   "latest",
-    //   {
-    //     element: "",
-    //   },
-    //   undefined,
-    //   false
-    // );
+    const domOverlayFeature = fm.enableFeature(
+      BABYLON.WebXRDomOverlay,
+      "latest",
+      {
+        element: "#ar-overlay-dom",
+      },
+      undefined,
+      false
+    );
 
     xr.baseExperience.onStateChangedObservable.add((webXRState) => {
       switch (webXRState) {
         case BABYLON.WebXRState.ENTERING_XR:
         case BABYLON.WebXRState.IN_XR:
           // domOverlayType will be null when not supported.
-          // console.log("overlay type:", domOverlayFeature);
+          this.setOverlayDomTrue();
+          break;
+        case BABYLON.WebXRState.EXITING_XR:
+          this.setOverlayDomFalse();
           break;
       }
     });

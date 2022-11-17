@@ -6,6 +6,7 @@ import NavigationCard from "../components/card/NavigationCard";
 import useTMap from "../hooks/useTMap";
 import useToggle from "../hooks/useToggle";
 import AR from "../utils/AR";
+import AROverlayDom from "../components/layout/AROverlay";
 
 export default function Navigation() {
   const {
@@ -18,14 +19,21 @@ export default function Navigation() {
     direction,
     myLatLng,
     convertLatLng,
+    start,
+    end,
   } = useTMap("map");
 
+  /* 모바일 상에서 Navigation Toggle State */
   const isVisible = useToggle(false);
+  /* ar 진입 버튼 */
   const buttonRef = useRef<HTMLButtonElement>(null);
+  /* ar 그리는 ref */
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  /* ar 내부의 UI 활성화 비활성화 */
+  const arUiVisible = useToggle(false);
 
   useEffect(() => {
-    const ar = new AR(canvasRef);
+    const ar = new AR(canvasRef, arUiVisible.setTrue, arUiVisible.setFalse);
     ar.createScene(buttonRef.current).then((scene) => {
       ar.loopEngine(scene);
     });
@@ -107,18 +115,37 @@ export default function Navigation() {
             </div>
             <div className="flex justify-end">
               <button
-                ref={buttonRef}
-                className="z-10 rounded-lg  border  border-gray-300 bg-white p-1 text-sky-600"
+                onClick={() => {
+                  buttonRef.current.click();
+                }}
+                className="z-10 rounded-lg  border border-gray-300 bg-white p-1 text-sky-600"
               >
                 <GiSteampunkGoggles size={24}></GiSteampunkGoggles>
               </button>
             </div>
+            <button
+              ref={buttonRef}
+              className="z-10 hidden  rounded-lg  border border-gray-300 bg-white p-1 text-sky-600"
+            ></button>
           </div>
           <div id="map"></div>
-          <div>
-            <canvas className="hidden" ref={canvasRef}></canvas>
+          <div className="hidden">
+            <canvas ref={canvasRef}></canvas>
           </div>
         </div>
+      </div>
+      <div
+        id="ar-overlay-dom"
+        className={`${arUiVisible ? "block" : "hidden"}`}
+      >
+        <AROverlayDom
+          visible={arUiVisible.value}
+          arExitAction={() => {
+            buttonRef.current.click();
+          }}
+          start={start}
+          end={end}
+        />
       </div>
     </>
   );
