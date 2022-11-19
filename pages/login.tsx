@@ -10,10 +10,10 @@ import { useRouter } from "next/router";
 export default function LoginPage() {
   const router = useRouter();
   const { mutate } = useMutation(["login"], mLogin, {
-    onSuccess(data, variables, context) {
+    onSuccess() {
       router.push("/");
     },
-    onError(error, variables, context) {
+    onError(error) {
       alert("something went wrong");
       console.log(error);
     },
@@ -30,19 +30,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-8xl mx-auto flex w-full flex-col items-center justify-center pb-20 md:h-screen">
+    <div className="max-w-8xl mx-auto mb-[53px] flex w-full flex-1 flex-col items-center justify-center">
       <Head>
         <title>Login</title>
         <meta name="description" content="login page" />
       </Head>
-      <div className="w-1/4">
+      <div className="flex h-full flex-col items-center justify-center md:w-1/4">
         <div>
-          <h1 className="p-1 pb-5 text-4xl">Sign in</h1>
+          <h1 className="p-1 pb-5 text-4xl font-bold">Sign in</h1>
         </div>
         <div className="flex flex-col ">
           <MyInput {...id} type="email" />
           <MyInput {...pwd} type="password" />
-
           <div className="flex items-center ">
             <div>
               <input type="checkbox" id="remember" className="h-4 w-4" />
@@ -57,10 +56,14 @@ export default function LoginPage() {
 
           <div className="flex justify-between">
             <Link href="signUp" legacyBehavior>
-              <a className="text-sky-600">Create Account</a>
+              <a className="text-xs text-sky-600 md:text-base">
+                Create Account
+              </a>
             </Link>
             <Link href="findPwd" legacyBehavior>
-              <a className="text-sky-600">Forgot Password?</a>
+              <a className="text-xs text-sky-600 md:text-base">
+                Forgot Password?
+              </a>
             </Link>
           </div>
         </div>
