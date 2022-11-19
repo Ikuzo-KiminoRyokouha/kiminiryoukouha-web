@@ -9,8 +9,15 @@ import { mSignUp } from "../utils/fetchFn/mutation/user";
 export default function SignUp() {
   const router = useRouter();
 
+  /*  회원가입 mutation */
   const { mutate } = useMutation(["signUp"], mSignUp, {
-    onSuccess() {},
+    onSuccess() {
+      /*  성공 콜백 to login */
+      router.replace("/login");
+    },
+    onError() {
+      alert("どこか間違っている情報があります");
+    },
   });
 
   const id = useInput("", "id");
@@ -18,6 +25,9 @@ export default function SignUp() {
   const checkPwd = useInput("", "password Confirm");
   const nick = useInput("", "nickname");
 
+  /**
+   * @description 회원가입 제출 함수입니다.
+   */
   const onSubmit = () => {
     mutate({
       email: id.value,
@@ -28,12 +38,12 @@ export default function SignUp() {
   };
 
   return (
-    <div className="max-w-8xl mx-auto flex w-full flex-col items-center justify-center pb-20 md:h-screen">
+    <div className="max-w-8xl mx-auto flex w-full flex-1 flex-col items-center justify-center pb-20 md:h-screen">
       <Head>
         <title>SignUp</title>
         <meta name="description" content="SignUp page" />
       </Head>
-      <div className="w-1/4">
+      <div className="md:w-1/4">
         <div>
           <h1 className="p-1 pb-5 text-4xl">SignUp</h1>
         </div>
