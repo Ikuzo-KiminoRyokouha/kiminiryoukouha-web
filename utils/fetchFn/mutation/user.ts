@@ -26,7 +26,11 @@ export const mSignUp = (body: IUser) => {
  * @param {string} password 사용자 패스워드
  */
 export const mLogin = (body: Pick<IUser, "email" | "password">) => {
-  return mainRequest.post(process.env.NEXT_PUBLIC_API_URL + "/api/user/login", {
+  return mainRequest.post(process.env.NEXT_PUBLIC_API_URL + "/api/auth/login", {
     ...body,
   });
+};
+
+export const mLogout = () => {
+  return mainRequest.get(process.env.NEXT_PUBLIC_API_URL + "/api/auth/logout");
 };

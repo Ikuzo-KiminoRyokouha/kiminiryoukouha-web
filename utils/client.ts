@@ -1,8 +1,9 @@
 import { createGlobalState } from "react-hooks-global-state";
+import { IUser } from "../types/user.interface";
 
 const { setGlobalState, getGlobalState, useGlobalState } = createGlobalState({
   accessToken: "",
-  user: "",
+  user: undefined,
 });
 
 export const getJWTToken = () => getGlobalState("accessToken");
@@ -11,5 +12,6 @@ export const setJWTToken = (token: string) =>
 export const useJWTToken = () => useGlobalState("accessToken");
 
 export const getUser = () => getGlobalState("user");
-export const setUser = (user: string) => setGlobalState("user", user);
+export const setUser = (user: Omit<IUser, "password"> | undefined) =>
+  setGlobalState("user", user);
 export const useUser = () => useGlobalState("user");
