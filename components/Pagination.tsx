@@ -38,8 +38,9 @@ export default function Pagination({
           {Array.from({
             length: pageLength,
           }).map((_, index) => {
-            const page =
-              parseInt((currentPage / 5 - 0.1) as any) * 5 + index + 1;
+            const page = currentPage
+              ? parseInt((currentPage / 5 - 0.1) as any) * 5 + index + 1
+              : 1;
             return (
               <li className="p-2" key={index}>
                 <Link

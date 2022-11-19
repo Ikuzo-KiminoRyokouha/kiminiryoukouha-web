@@ -4,6 +4,7 @@ import useInput from "../../hooks/useInput";
 import { useRouter } from "next/router";
 import { FiSearch } from "react-icons/fi";
 import data2 from "../testData2";
+import { BiLockAlt } from "react-icons/bi";
 
 const MAX_PAGE = 17;
 
@@ -29,7 +30,7 @@ export default function MobileBoard({ boardname }) {
   };
 
   const currentPosts = (posts) => {
-    let currentPosts = 0;
+    let currentPosts = [];
     currentPosts = posts.slice(indexOfFirst, indexOfLast);
     return currentPosts;
   };
@@ -67,8 +68,9 @@ export default function MobileBoard({ boardname }) {
                     <span className="text-xs text-gray-300">{data.writer}</span>
                   </div>
                   {/* 제목 */}
-                  <div className="flex">
+                  <div className="flex items-center">
                     <span className="pt-2.5 text-lg">{data.name}</span>
+                    <BiLockAlt className="mt-3 pl-1" />
                   </div>
                 </div>
               </div>

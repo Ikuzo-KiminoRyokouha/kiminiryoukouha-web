@@ -6,6 +6,7 @@ for (let i = 1; i <= 100; i++) {
     writer: "김성우",
     date: "22.11.07",
     status: "답변완료",
+    secret: 0,
   });
 }
 
