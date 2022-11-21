@@ -1,33 +1,32 @@
 import { MdClose } from "react-icons/md";
-import useTMap from "../../../hooks/useTMap";
+import { start } from "repl";
 import { LatLng } from "../../../types/tmap.type";
-import { getDistanceFromLatLon } from "../../../utils/math";
 
 interface Props {
-  visible: boolean;
   arExitAction: () => void;
   start: LatLng;
   end: LatLng;
+  myLatLng: LatLng;
 }
 
-export default function AROverlayDom({ visible, arExitAction }: Props) {
+export default function AROverlayDom({ arExitAction, start, myLatLng }: Props) {
   return (
-    <div id="ar-overlay-dom" className={`${visible ? "block" : "hidden"}`}>
-      <div className="flex h-screen w-screen flex-col justify-between">
-        <div className="m-2 flex-1">
-          <div className="flex justify-between">
-            <div className="m-2 h-16 min-w-fit bg-white p-1">
-              <p>거리 : 250 m</p>
-              <p>목적지 : 영진전문대학교 글로벌 캠퍼스</p>
-              <p></p>
-            </div>
-            <MdClose color="red" size={40} onClick={arExitAction} />
+    <div className="flex h-screen w-screen flex-col justify-between">
+      <div className="m-2 flex-1">
+        <div className="flex justify-between">
+          <div className="m-2 h-16 min-w-fit bg-white p-1">
+            <p>거리 : 250 m</p>
+            <p>목적지 : 영진전문대학교 글로벌 캠퍼스</p>
+            <p>
+              lat : {myLatLng?.lat} lng {myLatLng?.lng}
+            </p>
           </div>
+          <MdClose color="red" size={40} onClick={arExitAction} />
         </div>
-        <div className="flex justify-end">
-          <div className="m-6 h-36 w-36 rounded-full">
-            <div id="map"></div>
-          </div>
+      </div>
+      <div className="flex justify-end">
+        <div className="m-6 h-36 w-36 rounded-full">
+          <div id="map"></div>
         </div>
       </div>
     </div>

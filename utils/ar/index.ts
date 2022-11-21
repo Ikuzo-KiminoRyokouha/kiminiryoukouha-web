@@ -1,11 +1,21 @@
 import * as t from "three";
-import { ARButton } from "three/examples/jsm/webxr/ARButton";
-import { browserHasImmersiveArCompatibility } from "./domUtil";
+import { LatLng } from "../../types/tmap.type";
+import { browserHasImmersiveArCompatibility } from "../domUtil";
+import ARCustomButton from "./ARCustomButton";
 
-class ARTest {
-  constructor() {}
+export default class ARTest {
+  private button: HTMLButtonElement;
+  private domOverlayRoot: HTMLDivElement;
 
-  initXRApp() {
+  constructor(button: HTMLButtonElement, domOverlayRoot: HTMLDivElement) {
+    this.button = button;
+    this.domOverlayRoot = domOverlayRoot;
+  }
+
+  /**
+   * @description xr app 에 있어서 초기화 작업이 일어나는 함수입니다.
+   */
+  private initXRApp() {
     const { devicePixelRatio, innerHeight, innerWidth } = window;
 
     // Create a bew WebGL renderer and set the size + pixel ratio
@@ -21,17 +31,18 @@ class ARTest {
     // Add it to the Dom
     document.body.appendChild(renderer.domElement);
 
-    document.body.appendChild(
-      ARButton.createButton(renderer, { requiredFeatures: ["hit-test"] })
-    );
+    ARCustomButton.connectToButton(this.button, renderer, {
+      domOverlay: { root: this.domOverlayRoot },
+      optionalFeatures: ["dom-overlay", "dom-overlay-for-handheld-ar"],
+    });
 
     // Pass the renderer to the  createScene-function
     this.createScene(renderer);
-
-    // Display a welcome message to the user
-    alert("hello");
   }
 
+  /**
+   * @description
+   */
   async start() {
     // Check if browser supports WebXR with 'immersive-ar'
     const immersiveArSupported = await browserHasImmersiveArCompatibility();
@@ -39,32 +50,38 @@ class ARTest {
     // Initailize app if supported.
     immersiveArSupported
       ? this.initXRApp()
-      : alert(" xr feature is not supported for your browser");
+      : console.log(" xr feature is not supported for your browser");
   }
 
-  createScene(renderer: t.WebGLRenderer) {
+  private createScene(renderer: t.WebGLRenderer) {
     const scene = new t.Scene();
-
     const camera = new t.PerspectiveCamera(
       70,
       window.innerWidth / window.innerHeight,
-      0.02,
-      20
+      0.1,
+      100
     );
 
-    const boxGeometry = new t.BoxGeometry(1, 1, 1);
+    const boxGeometry = new t.BoxGeometry(0.1, 0.1, 0.1);
     const boxMaterial = new t.MeshBasicMaterial({ color: 0xff0000 });
     const box = new t.Mesh(boxGeometry, boxMaterial);
-    box.position.z = -3;
+    box.position.set(-2.171883021654733, 0, -0.9907470404624489);
 
     scene.add(box);
 
     function renderLoop(timestamp: number, frame?: XRFrame) {
+      box.rotation.x += 0.01;
+      box.rotation.y += 0.01;
+
       // Only render content if XR view is presenting
       if (renderer.xr.isPresenting) {
         renderer.render(scene, camera);
       }
     }
     renderer.setAnimationLoop(renderLoop);
+  }
+
+  createBoxOnSopa(scene: t.Scene, myLatLng: LatLng) {
+    const position = { x: 0, y: 0, z: 0 };
   }
 }

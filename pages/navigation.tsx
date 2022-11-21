@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TbExchange } from "react-icons/tb";
 import { GiSteampunkGoggles } from "react-icons/gi";
 import { MdAssistantNavigation, MdClose } from "react-icons/md";
@@ -6,7 +6,7 @@ import NavigationCard from "../components/card/NavigationCard";
 import useTMap from "../hooks/useTMap";
 import useToggle from "../hooks/useToggle";
 import AROverlayDom from "../components/layout/AROverlay";
-import useAR from "../hooks/useAR";
+import ARTest from "../utils/ar/index";
 
 export default function Navigation() {
   const {
@@ -29,14 +29,21 @@ export default function Navigation() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   /* ar 그리는 ref */
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  /* ar 진입 오버레이 돔에 대한 ref */
+  const overlayDom = useRef<HTMLDivElement>(null);
 
-  const { arUiVisible, setMyLatLng } = useAR(canvasRef, buttonRef);
+  const [ar, setAR] = useState<ARTest>();
 
+  const arInit = async () => {
+    const ar = new ARTest(buttonRef.current, overlayDom.current);
+    await ar.start();
+    setAR(ar);
+  };
   useEffect(() => {
-    if (myLatLng) {
-      setMyLatLng(myLatLng);
+    if ((buttonRef.current, overlayDom.current)) {
+      arInit();
     }
-  }, [myLatLng]);
+  }, [buttonRef.current]);
 
   return (
     <>
@@ -114,18 +121,16 @@ export default function Navigation() {
             </div>
             <div className="flex justify-end">
               <button
-                onClick={() => {
-                  buttonRef.current.click();
-                }}
+                ref={buttonRef}
                 className="z-10 rounded-lg  border border-gray-300 bg-white p-1 text-sky-600"
               >
                 <GiSteampunkGoggles size={24}></GiSteampunkGoggles>
               </button>
             </div>
-            <button
+            {/* <button
               ref={buttonRef}
               className="z-10 hidden  rounded-lg  border border-gray-300 bg-white p-1 text-sky-600"
-            ></button>
+            ></button> */}
           </div>
           <div id="map"></div>
           <div className="hidden">
@@ -133,12 +138,9 @@ export default function Navigation() {
           </div>
         </div>
       </div>
-      <div
-        id="ar-overlay-dom"
-        className={`${arUiVisible.value ? "block" : "hidden"}`}
-      >
+      <div id="ar-overlay-dom" ref={overlayDom} style={{ display: "none" }}>
         <AROverlayDom
-          visible={arUiVisible.value}
+          myLatLng={myLatLng}
           arExitAction={() => {
             buttonRef.current.click();
           }}
