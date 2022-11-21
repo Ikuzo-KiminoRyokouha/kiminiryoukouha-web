@@ -37,9 +37,9 @@ export default function NavigationCard({
           {idx}. {poi.name}
         </p>
         <p>
-          {distance && distance > 0
+          {distance && distance > 1
             ? Math.round(distance!) + " km"
-            : Math.round(distance!) + "m"}{" "}
+            : Math.round(distance! * 1000) + "m"}{" "}
         </p>
       </div>
       <div className="space-y-1">

@@ -1,6 +1,7 @@
 import { MdClose } from "react-icons/md";
 import useTMap from "../../../hooks/useTMap";
 import { LatLng } from "../../../types/tmap.type";
+import { getDistanceFromLatLon } from "../../../utils/math";
 
 interface Props {
   visible: boolean;
@@ -9,13 +10,7 @@ interface Props {
   end: LatLng;
 }
 
-export default function AROverlayDom({
-  visible,
-  arExitAction,
-  start,
-  end,
-}: Props) {
-  const { myLatLng } = useTMap("mobile-map");
+export default function AROverlayDom({ visible, arExitAction }: Props) {
   return (
     <div id="ar-overlay-dom" className={`${visible ? "block" : "hidden"}`}>
       <div className="flex h-screen w-screen flex-col justify-between">
@@ -24,6 +19,7 @@ export default function AROverlayDom({
             <div className="m-2 h-16 min-w-fit bg-white p-1">
               <p>거리 : 250 m</p>
               <p>목적지 : 영진전문대학교 글로벌 캠퍼스</p>
+              <p></p>
             </div>
             <MdClose color="red" size={40} onClick={arExitAction} />
           </div>

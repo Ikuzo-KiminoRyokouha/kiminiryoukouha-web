@@ -5,8 +5,8 @@ import { MdAssistantNavigation, MdClose } from "react-icons/md";
 import NavigationCard from "../components/card/NavigationCard";
 import useTMap from "../hooks/useTMap";
 import useToggle from "../hooks/useToggle";
-import AR from "../utils/AR";
 import AROverlayDom from "../components/layout/AROverlay";
+import useAR from "../hooks/useAR";
 
 export default function Navigation() {
   const {
@@ -29,15 +29,14 @@ export default function Navigation() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   /* ar 그리는 ref */
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  /* ar 내부의 UI 활성화 비활성화 */
-  const arUiVisible = useToggle(false);
+
+  const { arUiVisible, setMyLatLng } = useAR(canvasRef, buttonRef);
 
   useEffect(() => {
-    const ar = new AR(canvasRef, arUiVisible.setTrue, arUiVisible.setFalse);
-    ar.createScene(buttonRef.current).then((scene) => {
-      ar.loopEngine(scene);
-    });
-  }, []);
+    if (myLatLng) {
+      setMyLatLng(myLatLng);
+    }
+  }, [myLatLng]);
 
   return (
     <>
@@ -136,7 +135,7 @@ export default function Navigation() {
       </div>
       <div
         id="ar-overlay-dom"
-        className={`${arUiVisible ? "block" : "hidden"}`}
+        className={`${arUiVisible.value ? "block" : "hidden"}`}
       >
         <AROverlayDom
           visible={arUiVisible.value}
