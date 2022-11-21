@@ -62,6 +62,7 @@ export default function useTMap(targetDom: string) {
   const watchMyPosition = () => {
     const newId = navigator.geolocation.watchPosition(
       (position) => {
+        console.log(position);
         const newRecord = {
           lat: String(position.coords.latitude),
           lng: String(position.coords.longitude),
@@ -83,8 +84,7 @@ export default function useTMap(targetDom: string) {
   /**
    * @description 자신위치 추적 취소 함수
    */
-  const stopWatchMyPosition = (e: Event) => {
-    e.preventDefault();
+  const stopWatchMyPosition = () => {
     if (watchId !== -1) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(-1);
@@ -93,6 +93,9 @@ export default function useTMap(targetDom: string) {
 
   useEffect(() => {
     watchMyPosition();
+    return () => {
+      stopWatchMyPosition();
+    };
   }, []);
 
   useEffect(() => {
