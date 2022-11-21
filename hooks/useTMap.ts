@@ -62,7 +62,6 @@ export default function useTMap(targetDom: string) {
   const watchMyPosition = () => {
     const newId = navigator.geolocation.watchPosition(
       (position) => {
-        console.log(position);
         const newRecord = {
           lat: String(position.coords.latitude),
           lng: String(position.coords.longitude),
@@ -70,10 +69,11 @@ export default function useTMap(targetDom: string) {
         setMyLatLng(newRecord);
       },
       (err) => {
+        alert("error");
         console.log(err.message);
       },
       {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 10000,
       }

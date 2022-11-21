@@ -26,9 +26,9 @@ const BottomNavMenu = [
     href: "/navigation",
   },
   {
-    title: "Setting",
+    title: "Test",
     icon: <AiOutlineSetting className="inline-block" size={"25"} />,
-    href: "#",
+    href: "/test",
   },
 ];
 /**
