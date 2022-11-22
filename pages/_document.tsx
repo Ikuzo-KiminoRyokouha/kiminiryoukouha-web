@@ -4,6 +4,16 @@ export default function Document() {
   return (
     <Html>
       <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin={"true"}
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&family=Noto+Sans+KR&display=swap"
+          rel="stylesheet"
+        />
         <link rel="manifest" href="/manifast.json" />
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" color="#ffffff" content="#ffffff"></meta>

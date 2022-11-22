@@ -78,6 +78,16 @@
 - types : 타입들 모아놓는 곳
 - utils : hook은 아니지만 유용하게 쓰이는 함수들 모아놓는 곳
 
-# env 파일
+# 5. env 파일
 
 - 혹여나 본인이 환경변수가 필요한 경우 .env.example에 예시와 주석 작성할 것
+
+# 6. fetch API
+
+- 리퀘스트 요청필요 할 때
+
+  // /utils/request/authRequest => 인증 정보가 필요한 요청
+
+  // /utils/request/mainRequest => 인증정보가 필요 없는 요청
+
+  // <span style="color:red">라라벨 연동시에는 mainRequest만 사용할 것</span>
