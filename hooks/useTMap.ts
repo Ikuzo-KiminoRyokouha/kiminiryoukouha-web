@@ -69,10 +69,11 @@ export default function useTMap(targetDom: string) {
         setMyLatLng(newRecord);
       },
       (err) => {
+        alert("error");
         console.log(err.message);
       },
       {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 10000,
       }
@@ -83,8 +84,7 @@ export default function useTMap(targetDom: string) {
   /**
    * @description 자신위치 추적 취소 함수
    */
-  const stopWatchMyPosition = (e: Event) => {
-    e.preventDefault();
+  const stopWatchMyPosition = () => {
     if (watchId !== -1) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(-1);
@@ -93,6 +93,9 @@ export default function useTMap(targetDom: string) {
 
   useEffect(() => {
     watchMyPosition();
+    return () => {
+      stopWatchMyPosition();
+    };
   }, []);
 
   useEffect(() => {
