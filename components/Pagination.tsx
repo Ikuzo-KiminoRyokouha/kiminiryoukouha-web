@@ -8,6 +8,7 @@ interface Props {
   moveToNext: () => void;
   moveToPrev: () => void;
   maxPage: number;
+  pathname: string;
 }
 
 export default function Pagination({
@@ -15,17 +16,9 @@ export default function Pagination({
   moveToNext,
   moveToPrev,
   maxPage,
+  pathname,
 }: Props) {
   const router = useRouter();
-  const [pageLength, setPageLength] = useState<number>();
-
-  useLayoutEffect(() => {
-    setPageLength(
-      maxPage < (parseInt((currentPage / 5 - 0.01) as any) + 1) * 5
-        ? maxPage % 5
-        : 5
-    );
-  }, [currentPage]);
 
   return (
     <>
@@ -36,7 +29,7 @@ export default function Pagination({
             <BiLeftArrow className="text-sky-600" />
           </button>
           {Array.from({
-            length: pageLength,
+            length: maxPage,
           }).map((_, index) => {
             const page = currentPage
               ? parseInt((currentPage / 5 - 0.1) as any) * 5 + index + 1
@@ -45,7 +38,7 @@ export default function Pagination({
               <li className="p-2" key={index}>
                 <Link
                   href={{
-                    pathname: `/QnA`,
+                    pathname: `${pathname}`,
                     query: { page },
                   }}
                   legacyBehavior

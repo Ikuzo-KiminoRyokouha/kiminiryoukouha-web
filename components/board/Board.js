@@ -2,23 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { DesktopBoard, MobileBoard } from "./index";
-import { getPosts } from "../../utils/fetchFn/query/board";
-import { useEffect } from "react";
+import { getBoardPosts } from "../../utils/fetchFn/query/board";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
 
-export default function BoardUI({ boardname }) {
-  const defaultPage = 1;
-
-  const { data, isLoading, error } = useQuery(
-    ["getPosts", defaultPage],
-    getPosts
+export default function BoardUI({ boardname, searchData }) {
+  const router = useRouter();
+  const boardCurrentPage = useMemo(
+    () => router.query.page,
+    [router.query.page]
   );
 
-  // console.log(JSON.stringify({ data }));
-  // const POSTS = { data }.data.data.boards;
-  // const MAX_PAGE = { data }.data.data.pages;
-  const POSTS = "";
-  const MAX_PAGE = "";
-  // console.log({ data }.data.data);
+  const { data, isLoading, error } = useQuery(
+    ["getPosts", boardCurrentPage, router.query.search, 1],
+    getBoardPosts
+  );
+
+  const POSTS = data?.data.boards;
 
   return (
     <div>
@@ -36,7 +36,10 @@ export default function BoardUI({ boardname }) {
                 {boardname === "QnA" ? (
                   <>
                     <div className="h-9 flex-1 border-b-2 border-solid border-gray-300 bg-sky-600 md:mt-10 md:w-2/3 md:flex-none">
-                      <Link href={`/QnA?page=${defaultPage}`} legacyBehavior>
+                      <Link
+                        href={`/QnA?page=${boardCurrentPage}`}
+                        legacyBehavior
+                      >
                         <a>
                           <h2 className="pl-2 text-lg text-white md:pl-1">
                             질의응답
@@ -45,7 +48,10 @@ export default function BoardUI({ boardname }) {
                       </Link>
                     </div>
                     <div className="h-9 flex-1 border-b-2 border-solid border-gray-300 md:w-2/3 md:flex-none">
-                      <Link href={`/FnA?page=${defaultPage}`} legacyBehavior>
+                      <Link
+                        href={`/FnA?page=${boardCurrentPage}`}
+                        legacyBehavior
+                      >
                         <a>
                           <h2 className="pl-2 text-lg md:pl-1">자주묻는질문</h2>
                         </a>
@@ -77,10 +83,17 @@ export default function BoardUI({ boardname }) {
             {/* 게시판 박스 */}
             <DesktopBoard
               boardname={boardname}
-              POSTS={POSTS}
-              MAX_PAGE={MAX_PAGE}
+              POSTS={data?.data.boards || []}
+              MAX_PAGE={data?.data.pages || 0}
+              pathname={router.pathname}
+              searchData={searchData}
             />
-            <MobileBoard boardname={boardname} />
+            <MobileBoard
+              boardname={boardname}
+              POSTS={data?.data.boards || []}
+              MAX_PAGE={data?.data.pages || 0}
+              pathname={router.pathname}
+            />
           </div>
         </div>
       </div>
