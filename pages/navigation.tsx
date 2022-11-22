@@ -1,12 +1,11 @@
-import { useRef } from "react";
-import { TbExchange } from "react-icons/tb";
+import { useEffect, useRef } from "react";
 import { GiSteampunkGoggles } from "react-icons/gi";
 import { MdAssistantNavigation, MdClose } from "react-icons/md";
+import { TbExchange } from "react-icons/tb";
+
 import NavigationCard from "../components/card/NavigationCard";
-import useTMap from "../hooks/useTMap";
-import useToggle from "../hooks/useToggle";
 import AROverlayDom from "../components/layout/AROverlay";
-import useAR from "../hooks/useAR";
+import { useAR, useToggle, useTMap, useLocation } from "../hooks";
 
 export default function Navigation() {
   const {
@@ -17,13 +16,13 @@ export default function Navigation() {
     setResult,
     setResultToReserve,
     direction,
-    myLatLng,
     convertLatLng,
     start,
     end,
-    accuracy,
     markerLatLngArr,
   } = useTMap("map");
+
+  const { myLatLng, accuracy, getMyPositionOnce } = useLocation();
 
   /* 모바일 상에서 Navigation Toggle State */
   const isVisible = useToggle(false);
@@ -34,7 +33,8 @@ export default function Navigation() {
   /* ar 진입 오버레이 돔에 대한 ref */
   const overlayDom = useRef<HTMLDivElement>(null);
 
-  const { renderToLatLng, removeAllMesh } = useAR(buttonRef, overlayDom);
+  const { renderToLatLng, removeAllMesh, ar } = useAR(buttonRef, overlayDom);
+
   /**
    * @description 네비게이션의 길찾기를 바탕으로 받아온 정보가 있다면, AR상에 해당 좌표를 기반으로 오브젝트 모델을 띄워줌
    */
@@ -45,18 +45,21 @@ export default function Navigation() {
   //   }
   // }, [myLatLng, , markerLatLngArr]);
 
+  useEffect(() => {
+    ar && ar.createBox({ lat: 35.9475, lng: 128.46367 });
+  }, [ar]);
   return (
     <>
-      <div className="max-w-8xl mx-auto mb-[53px] flex max-h-full w-full flex-1 md:mb-0">
+      <div className="max-w-8xl mx-auto mb-[53px] flex max-h-full w-full flex-1 lg:mb-0">
         <div
           className={`absolute inset-0 ${
             isVisible.value ? "top-16" : "top-full"
-          } z-50 basis-full border bg-white transition-all duration-300 md:relative md:top-auto md:z-0 md:flex md:basis-1/4 md:flex-col`}
+          } z-50 basis-full border bg-white transition-all duration-300 lg:relative lg:top-auto lg:z-0 lg:flex lg:basis-1/4 lg:flex-col`}
         >
           <div className="absolute flex h-full flex-col overflow-hidden">
             <div className="flex items-center justify-between p-3 text-2xl font-bold">
               <span>Navigation</span>
-              <button className="md:hidden">
+              <button className=" lg:hidden">
                 <MdClose onClick={isVisible.setFalse} />
               </button>
             </div>
@@ -109,8 +112,8 @@ export default function Navigation() {
             </div>
           </div>
         </div>
-        <div className="relative basis-full md:basis-3/4">
-          <div className="absolute h-full w-full space-y-2 p-2 md:hidden">
+        <div className="relative basis-full lg:basis-3/4">
+          <div className="absolute h-full w-full space-y-2 p-2 lg:hidden">
             <div className="flex justify-end">
               <button
                 className="z-10 rounded-lg border border-gray-300 bg-white p-1 text-sky-600"

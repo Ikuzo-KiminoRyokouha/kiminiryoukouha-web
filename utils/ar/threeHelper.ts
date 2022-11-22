@@ -4,17 +4,19 @@ import { LatLng } from "../../types/tmap.type";
 /**
  * @description 위도와 경도를 바탕으로 미터 거리를 계산해주는 함수입니다.
  */
-export function computeDistanceMeters(src: LatLng, dest: LatLng) {
-  var dlongitude = degToRad(dest.lng - src.lng);
-  var dlatitude = degToRad(dest.lat - src.lat);
+export function computeDistanceMeters(base: LatLng, dest: LatLng) {
+  var dlongitude = degToRad(dest.lng - base.lng);
+  var dlatitude = degToRad(dest.lat - base.lat);
 
   var a =
     Math.sin(dlatitude / 2) * Math.sin(dlatitude / 2) +
-    Math.cos(degToRad(src.lat)) *
+    Math.cos(degToRad(base.lat)) *
       Math.cos(degToRad(dest.lat)) *
       (Math.sin(dlongitude / 2) * Math.sin(dlongitude / 2));
   var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var distance = angle * 6378160;
+  // var distance = angle * 6378160;
+
+  var distance = angle * 6378135;
 
   return distance;
 }
@@ -29,7 +31,7 @@ export function getXYZFromLatLng(base: LatLng, dest: LatLng) {
     lng: dest.lng,
     lat: base.lat,
   };
- 
+
   position.x = computeDistanceMeters(base, dstCoords);
   position.x *= dest.lng > base.lng ? 1 : -1;
 

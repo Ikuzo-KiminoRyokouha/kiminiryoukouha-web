@@ -1,7 +1,6 @@
 import { MutableRefObject, useEffect, useState } from "react";
 import { LatLng } from "../types/tmap.type";
 import AR from "../utils/ar";
-import { getXYZFromLatLng } from "../utils/ar/threeHelper";
 
 export default function useAR(
   buttonRef: MutableRefObject<HTMLButtonElement>,
@@ -24,19 +23,26 @@ export default function useAR(
     }
   }, [buttonRef.current]);
 
-  const renderToLatLng = (base: LatLng, target: LatLng | Array<LatLng>) => {
+  /**
+   *
+   * @param target  오브젝트를 띄워줘야 하는 위도와 경도
+   */
+  const renderToLatLng = (target: LatLng | Array<LatLng>) => {
     if (!Array.isArray(target)) {
-      ar.createBox(getXYZFromLatLng(base, target));
+      ar.createBox(target);
     } else {
       target.forEach((latLng, _) => {
-        ar.createBox(getXYZFromLatLng(base, latLng));
+        ar.createBox(latLng);
       });
     }
   };
 
+  /**
+   * @description 해당 scene 의 모든 object를 삭제한다.
+   */
   const removeAllMesh = () => {
     ar.scene.remove();
   };
 
-  return { renderToLatLng, removeAllMesh };
+  return { renderToLatLng, removeAllMesh, ar };
 }
