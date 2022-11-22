@@ -36,7 +36,7 @@ const BottomNavMenu = [
  */
 export default function BottomNavigation() {
   return (
-    <section className="fixed inset-x-0 bottom-0 z-10 block max-h-16 rounded-t-xl bg-white shadow md:hidden">
+    <section className="fixed inset-x-0 bottom-0 z-10 block max-h-16 rounded-t-xl bg-white shadow lg:hidden">
       <div id="tabs" className="flex justify-between">
         {BottomNavMenu.map((el, index) => (
           <Link href={el.href} key={index + el.title}>

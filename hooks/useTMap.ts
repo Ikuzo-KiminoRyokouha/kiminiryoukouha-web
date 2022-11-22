@@ -19,16 +19,12 @@ export default function useTMap(targetDom: string) {
   const [start, setStart] = useState<LatLng>();
   /* 도착지 좌표 */
   const [end, setEnd] = useState<LatLng>();
-  /* 내 좌표 */
-  const [myLatLng, setMyLatLng] = useState<LatLng>();
   /* 검색 결과 */
   const [searchResult, setSearchResult] = useState<Array<TMapPOIResult>>();
   /* 내가 검색한게 출발인지 도착인지 */
   const [direction, setDirection] = useState<"도착" | "출발">();
   /* TMap instance */
   const [tmap, setTmap] = useState<TMap>(new TMap());
-  /* 현재 기기에서 자신의 위치를 감시하고 있는지 나타내는 변수 */
-  const [watchId, setWatchId] = useState<number>(-1);
 
   const { additionalScriptLoaing } = useScript(
     `https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=${process.env.NEXT_PUBLIC_TMAP_API_KEY}`
@@ -41,11 +37,10 @@ export default function useTMap(targetDom: string) {
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         const latLng: LatLng = {
-          lat: String(position.coords.latitude),
-          lng: String(position.coords.longitude),
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         };
         tmap.makeMyMarker(latLng, "http://localhost:3000/assets/my-marker.png");
-        setMyLatLng(latLng);
         setStart(latLng);
         source.onChange("내 위치");
         tmap.reDefineCenterMap(latLng);
@@ -55,48 +50,6 @@ export default function useTMap(targetDom: string) {
       }
     );
   };
-
-  /**
-   * @description GPS에 접근해 내 위치를 지속적으로 감시하는 함수입니다. (지속)
-   */
-  const watchMyPosition = () => {
-    const newId = navigator.geolocation.watchPosition(
-      (position) => {
-        const newRecord = {
-          lat: String(position.coords.latitude),
-          lng: String(position.coords.longitude),
-        };
-        setMyLatLng(newRecord);
-      },
-      (err) => {
-        alert("error");
-        console.log(err.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 10000,
-      }
-    );
-    setWatchId(newId);
-  };
-
-  /**
-   * @description 자신위치 추적 취소 함수
-   */
-  const stopWatchMyPosition = () => {
-    if (watchId !== -1) {
-      navigator.geolocation.clearWatch(watchId);
-      setWatchId(-1);
-    }
-  };
-
-  useEffect(() => {
-    watchMyPosition();
-    return () => {
-      stopWatchMyPosition();
-    };
-  }, []);
 
   useEffect(() => {
     // useScript로 해당 tmap 스크립트가 불러와져야 tmap을 그려줍니다.
@@ -183,9 +136,9 @@ export default function useTMap(targetDom: string) {
     source,
     setResultToReserve,
     destination,
-    myLatLng,
     convertLatLng,
     start,
     end,
+    markerLatLngArr: tmap.markerLatLngArr,
   };
 }

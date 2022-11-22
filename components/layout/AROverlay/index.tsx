@@ -7,9 +7,15 @@ interface Props {
   start: LatLng;
   end: LatLng;
   myLatLng: LatLng;
+  accuracy: number;
 }
 
-export default function AROverlayDom({ arExitAction, start, myLatLng }: Props) {
+export default function AROverlayDom({
+  arExitAction,
+  start,
+  myLatLng,
+  accuracy,
+}: Props) {
   return (
     <div className="flex h-screen w-screen flex-col justify-between">
       <div className="m-2 flex-1">
@@ -20,6 +26,7 @@ export default function AROverlayDom({ arExitAction, start, myLatLng }: Props) {
             <p>
               lat : {myLatLng?.lat} lng {myLatLng?.lng}
             </p>
+            <p>정확도 : {accuracy}</p>
           </div>
           <MdClose color="red" size={40} onClick={arExitAction} />
         </div>

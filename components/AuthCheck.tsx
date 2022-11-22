@@ -16,7 +16,9 @@ interface Props extends IProps {
  */
 export default function AuthCheck({ children, needAuth }: Props) {
   // getUser 쿼리 수행
-  const { data, isLoading, isSuccess } = useQuery(["getUser"], getUser);
+  const { data, isLoading, isSuccess } = useQuery(["getUser"], getUser, {
+    retry: 0,
+  });
   const router = useRouter();
 
   useEffect(() => {

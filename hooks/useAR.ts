@@ -1,41 +1,48 @@
-import { RefObject, useEffect, useMemo, useState } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import { LatLng } from "../types/tmap.type";
-import AR from "../utils/AR";
-import useToggle from "./useToggle";
+import AR from "../utils/ar";
 
 export default function useAR(
-  canvasRef: RefObject<HTMLCanvasElement>,
-  buttonRef: RefObject<HTMLButtonElement>
+  buttonRef: MutableRefObject<HTMLButtonElement>,
+  overlayDom: MutableRefObject<HTMLDivElement>
 ) {
-  /* ar 내부의 UI 활성화 비활성화 */
-  const arUiVisible = useToggle(false);
-  /* ar 객체 */
-  const [ar, setAR] = useState<AR>(null);
-  /* 유저의 위도 경도에 대한 정보 */
-  const [myLatLng, setMyLatLng] = useState<LatLng>();
-
+  const [ar, setAR] = useState<AR>();
   /**
-   * @description ar기능의 초기화 함수
+   * @description ar Class 초기화 및 제일 먼저 불러와져야 하는 함수들 호출
    */
-  const init = async () => {
-    const ar = new AR(canvasRef, arUiVisible.setTrue, arUiVisible.setFalse);
-    const scene = await ar.createScene(buttonRef.current);
-    ar.loopEngine(scene);
+  const arInit = async () => {
+    const ar = new AR(buttonRef.current, overlayDom.current);
+    await ar.start();
+
     setAR(ar);
   };
 
   useEffect(() => {
-    init();
-  }, []);
-
-  // 위도와 경도를 기반으로 기준이 되는 벡터를 갱신하는 hook
-  useEffect(() => {
-    if (myLatLng && ar) {
-      console.log(myLatLng);
-      console.log(ar.setStandardVector(myLatLng));
-      console.log(ar.getCoordinatesFromLatLng(35.9474453, 128.464));
+    if ((buttonRef.current, overlayDom.current)) {
+      arInit();
     }
-  }, [myLatLng, ar]);
+  }, [buttonRef.current]);
 
-  return { arUiVisible, myLatLng, setMyLatLng };
+  /**
+   *
+   * @param target  오브젝트를 띄워줘야 하는 위도와 경도
+   */
+  const renderToLatLng = (target: LatLng | Array<LatLng>) => {
+    if (!Array.isArray(target)) {
+      ar.createBox(target);
+    } else {
+      target.forEach((latLng, _) => {
+        ar.createBox(latLng);
+      });
+    }
+  };
+
+  /**
+   * @description 해당 scene 의 모든 object를 삭제한다.
+   */
+  const removeAllMesh = () => {
+    ar.scene.remove();
+  };
+
+  return { renderToLatLng, removeAllMesh, ar };
 }

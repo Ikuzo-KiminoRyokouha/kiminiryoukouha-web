@@ -1,4 +1,3 @@
-import axios from "axios";
 import mainRequest from "../../request/mainRequest";
 
 export const getUser = () => {

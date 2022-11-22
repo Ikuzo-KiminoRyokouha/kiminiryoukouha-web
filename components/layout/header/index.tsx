@@ -26,6 +26,7 @@ export default function Header() {
     onSuccess: () => router.reload(),
     onError: () => alert("요청 실패"),
   });
+
   return (
     <div
       className={`sticky top-0 z-40 h-[64px] w-full flex-none bg-white bg-opacity-100 lg:border-b lg:border-slate-900/10 ${
@@ -34,9 +35,9 @@ export default function Header() {
     >
       <div className="border-b border-slate-900/10 py-4 md:mx-4 lg:mx-0 lg:border-0 lg:px-8">
         <div className="max-w-8xl mx-auto">
-          <div className="relative flex items-center justify-between px-4 md:justify-start md:px-0">
+          <div className="relative flex items-center justify-between px-4 lg:justify-start lg:px-0">
             {/* 모바일 햄버거 */}
-            <div className="flex md:hidden">
+            <div className="flex lg:hidden">
               <AiOutlineMenu size={25} />
             </div>
             {/* 앱 타이틀 */}
@@ -57,12 +58,12 @@ export default function Header() {
             </Link>
 
             {/* 메뉴 */}
-            <div className="relative flex items-center md:ml-auto">
+            <div className="relative flex items-center lg:ml-auto">
               {/* 네비게이션 바 */}
               <HeaderNav items={headerNavMap} />
               {/* 검색 */}
               <input
-                className="mx-4 hidden rounded-lg border border-black p-1 focus:outline-0 focus:ring-0 md:block "
+                className="mx-4 hidden rounded-lg border border-black p-1 focus:outline-0 focus:ring-0 lg:block "
                 {...keyword}
               />
               {/* 로그인 버튼 */}
