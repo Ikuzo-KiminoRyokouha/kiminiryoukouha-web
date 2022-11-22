@@ -26,6 +26,7 @@ export default function Header() {
     onSuccess: () => router.reload(),
     onError: () => alert("요청 실패"),
   });
+
   return (
     <div
       className={`sticky top-0 z-40 h-[64px] w-full flex-none bg-white bg-opacity-100 lg:border-b lg:border-slate-900/10 ${

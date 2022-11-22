@@ -29,6 +29,8 @@ export default function useTMap(targetDom: string) {
   const [tmap, setTmap] = useState<TMap>(new TMap());
   /* 현재 기기에서 자신의 위치를 감시하고 있는지 나타내는 변수 */
   const [watchId, setWatchId] = useState<number>(-1);
+  /* navigator 의 정확도 변수 DEBUG용 */
+  const [accuracy, setAccuracy] = useState<number>();
 
   const { additionalScriptLoaing } = useScript(
     `https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=${process.env.NEXT_PUBLIC_TMAP_API_KEY}`
@@ -41,8 +43,8 @@ export default function useTMap(targetDom: string) {
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         const latLng: LatLng = {
-          lat: String(position.coords.latitude),
-          lng: String(position.coords.longitude),
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         };
         tmap.makeMyMarker(latLng, "http://localhost:3000/assets/my-marker.png");
         setMyLatLng(latLng);
@@ -62,20 +64,20 @@ export default function useTMap(targetDom: string) {
   const watchMyPosition = () => {
     const newId = navigator.geolocation.watchPosition(
       (position) => {
+        setAccuracy(position.coords.accuracy);
         const newRecord = {
-          lat: String(position.coords.latitude),
-          lng: String(position.coords.longitude),
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         };
         setMyLatLng(newRecord);
       },
       (err) => {
-        alert("error");
         console.log(err.message);
       },
       {
         enableHighAccuracy: true,
         timeout: 5000,
-        maximumAge: 10000,
+        maximumAge: 0,
       }
     );
     setWatchId(newId);
@@ -187,5 +189,7 @@ export default function useTMap(targetDom: string) {
     convertLatLng,
     start,
     end,
+    accuracy,
+    markerLatLngArr: tmap.markerLatLngArr,
   };
 }

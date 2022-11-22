@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { TbExchange } from "react-icons/tb";
 import { GiSteampunkGoggles } from "react-icons/gi";
 import { MdAssistantNavigation, MdClose } from "react-icons/md";
@@ -6,7 +6,7 @@ import NavigationCard from "../components/card/NavigationCard";
 import useTMap from "../hooks/useTMap";
 import useToggle from "../hooks/useToggle";
 import AROverlayDom from "../components/layout/AROverlay";
-import ARTest from "../utils/ar/index";
+import useAR from "../hooks/useAR";
 
 export default function Navigation() {
   const {
@@ -21,6 +21,8 @@ export default function Navigation() {
     convertLatLng,
     start,
     end,
+    accuracy,
+    markerLatLngArr,
   } = useTMap("map");
 
   /* 모바일 상에서 Navigation Toggle State */
@@ -32,18 +34,16 @@ export default function Navigation() {
   /* ar 진입 오버레이 돔에 대한 ref */
   const overlayDom = useRef<HTMLDivElement>(null);
 
-  const [ar, setAR] = useState<ARTest>();
-
-  const arInit = async () => {
-    const ar = new ARTest(buttonRef.current, overlayDom.current);
-    await ar.start();
-    setAR(ar);
-  };
-  useEffect(() => {
-    if ((buttonRef.current, overlayDom.current)) {
-      arInit();
-    }
-  }, [buttonRef.current]);
+  const { renderToLatLng, removeAllMesh } = useAR(buttonRef, overlayDom);
+  /**
+   * @description 네비게이션의 길찾기를 바탕으로 받아온 정보가 있다면, AR상에 해당 좌표를 기반으로 오브젝트 모델을 띄워줌
+   */
+  // useEffect(() => {
+  //   if (myLatLng && markerLatLngArr.length > 1) {
+  //     removeAllMesh();
+  //     renderToLatLng(myLatLng, markerLatLngArr);
+  //   }
+  // }, [myLatLng, , markerLatLngArr]);
 
   return (
     <>
@@ -116,16 +116,20 @@ export default function Navigation() {
                 className="z-10 rounded-lg border border-gray-300 bg-white p-1 text-sky-600"
                 onClick={isVisible.setTrue}
               >
-                <MdAssistantNavigation size={24}></MdAssistantNavigation>
+                <MdAssistantNavigation size={36}></MdAssistantNavigation>
               </button>
             </div>
             <div className="flex justify-end">
+              {/*  ar 진입 버튼, 나중에 길찾기를 했을 떄만 가능 하도록 수정할 예정 */}
               <button
                 ref={buttonRef}
                 className="z-10 rounded-lg  border border-gray-300 bg-white p-1 text-sky-600"
               >
-                <GiSteampunkGoggles size={24}></GiSteampunkGoggles>
+                <GiSteampunkGoggles size={36}></GiSteampunkGoggles>
               </button>
+            </div>
+            <div className="flex justify-end">
+              <span className="z-10">{accuracy}</span>
             </div>
             {/* <button
               ref={buttonRef}
@@ -140,6 +144,7 @@ export default function Navigation() {
       </div>
       <div id="ar-overlay-dom" ref={overlayDom} style={{ display: "none" }}>
         <AROverlayDom
+          accuracy={accuracy}
           myLatLng={myLatLng}
           arExitAction={() => {
             buttonRef.current.click();
