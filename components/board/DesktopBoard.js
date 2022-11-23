@@ -1,19 +1,30 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import usePagination from "../../hooks/usePagination";
 import useInput from "../../hooks/useInput";
 import Pagination from "../Pagination";
-import data2 from "../testData2";
+import { useState } from "react";
+import { getSearch } from "../../utils/fetchFn/query/board";
+import { useQuery } from "@tanstack/react-query";
+import BoardPosts from "./BoardPosts";
 
-const MAX_PAGE = 17;
-
-export default function DesktopBoard({ boardname }) {
+export default function DesktopBoard({
+  boardname,
+  POSTS,
+  MAX_PAGE,
+  pathname,
+  searchData,
+}) {
   const router = useRouter();
   const search = useInput("", "검색어를 입력하세요");
-  const paginationProps = usePagination(MAX_PAGE);
+  const paginationProps = usePagination(MAX_PAGE, pathname);
   const postsPerPage = 6; // 한 페이지에 게시물 6개씩 보여줌
   const indexOfLast = paginationProps.currentPage * postsPerPage; // 현 페이지 마지막 게시물의 인덱스 번호
   const indexOfFirst = indexOfLast - postsPerPage; // 현 페이지 첫번째 게시물의 인덱스 번호
+  const { secret, setSecret } = useState(0); // 비밀글인지 아닌지 0 - 비밀글 1- 전체공개
+  // const [data, setData] = useState(POSTS);
+  const [searchText, setSearchText] = useState("");
+
+  const status = "답변완료";
 
   /**
    * @description 현재페이지 게시물들 반환해주는 함수
@@ -21,7 +32,7 @@ export default function DesktopBoard({ boardname }) {
    * @returns 배열
    */
   const currentPosts = (posts) => {
-    let currentPosts = 0;
+    let currentPosts = [];
     currentPosts = posts.slice(indexOfFirst, indexOfLast);
     return currentPosts;
   };
@@ -29,7 +40,14 @@ export default function DesktopBoard({ boardname }) {
   /**
    * @description 검색버튼 onClick 함수
    */
-  const searchBtn = () => {};
+  const searchBtn = () => {
+    setSearchText(search.value);
+
+    router.push({
+      pathname: `${pathname}/search`,
+      query: { search: search.value },
+    });
+  };
 
   return (
     <div className="hidden w-3/4 md:block">
@@ -68,29 +86,15 @@ export default function DesktopBoard({ boardname }) {
               </tr>
             </thead>
             <tbody className="text-center">
-              {currentPosts(data2).map((data, index) => {
-                return (
-                  <tr className="border-b-2 border-solid" key={index}>
-                    <td className="p-2 text-xl font-normal">{data.number}</td>
-                    <td className="w-2/4 p-2 text-xl font-normal">
-                      <Link
-                        href={{
-                          pathname: `/${boardname}/view`,
-                          query: { id: `${data.number}` },
-                        }}
-                        legacyBehavior
-                      >
-                        <a className="hover:underline">{data.name}</a>
-                      </Link>
-                    </td>
-                    <td className="break-keep p-2 text-xl font-normal">
-                      {data.writer}
-                    </td>
-                    <td className="p-2 text-xl font-normal">{data.date}</td>
-                    <td className="p-2 text-xl font-normal">{data.status}</td>
-                  </tr>
-                );
-              })}
+              {/* 게시판 테이블 내 게시물들 */}
+              {router.pathname === "/QnA/search" ? (
+                <BoardPosts
+                  datas={searchData.boards || []}
+                  boardname={boardname}
+                />
+              ) : (
+                <BoardPosts datas={POSTS} boardname={boardname} />
+              )}
             </tbody>
           </table>
         </div>
@@ -102,7 +106,19 @@ export default function DesktopBoard({ boardname }) {
             글쓰기
           </button>
         </div>
-        <Pagination {...paginationProps} maxPage={MAX_PAGE} />
+        {router.pathname === "/QnA/search" ? (
+          <Pagination
+            {...usePagination(searchData.pages, pathname)}
+            maxPage={searchData.pages}
+            pathname={pathname}
+          />
+        ) : (
+          <Pagination
+            {...paginationProps}
+            maxPage={MAX_PAGE}
+            pathname={pathname}
+          />
+        )}
       </div>
     </div>
   );
