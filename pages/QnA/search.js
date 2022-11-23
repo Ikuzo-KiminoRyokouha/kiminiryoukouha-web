@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function Search() {
   const { data: searchData } = useQuery(["getSearch", "test", 1], getSearch);
-  console.log(searchData?.data);
   return (
     <>
       <Seo

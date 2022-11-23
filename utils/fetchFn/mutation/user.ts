@@ -11,7 +11,7 @@ import mainRequest from "../../request/mainRequest";
  */
 export const mSignUp = (body: IUser) => {
   return mainRequest.post(
-    process.env.NEXT_PUBLIC_API_URL + "/api/user/register",
+    process.env.NEXT_PUBLIC_API_URL + "/api/auth/register",
     {
       ...body,
     }

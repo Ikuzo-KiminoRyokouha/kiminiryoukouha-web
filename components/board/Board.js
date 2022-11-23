@@ -14,7 +14,7 @@ export default function BoardUI({ boardname, searchData }) {
   );
 
   const { data, isLoading, error } = useQuery(
-    ["getPosts", boardCurrentPage, router.query.search, 1],
+    ["getPosts", boardCurrentPage],
     getBoardPosts
   );
 
