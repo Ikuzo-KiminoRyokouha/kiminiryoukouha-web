@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 import { useRouter } from "../node_modules/next/router";
+
 /**
  * @description Pagination 컴포넌트의 비지니스 로직입니다.
  * @param totalPages 페이지 네이션 컴포넌트에서 사용할 전체 페이지의 갯수
  */
-export default function usePagination(totalPages: number) {
+export default function usePagination(totalPages: number, pathname: string) {
   const router = useRouter();
   /**
    * @description 현재 페이지의 number type 변수입니다.
@@ -19,7 +20,7 @@ export default function usePagination(totalPages: number) {
   const moveToPrev = () => {
     if (currentPage > 1) {
       router.push({
-        pathname: "/QnA",
+        pathname: `${pathname}`,
         query: { page: currentPage - 1 },
       });
     }
@@ -31,7 +32,7 @@ export default function usePagination(totalPages: number) {
   const moveToNext = () => {
     if (currentPage < totalPages) {
       router.push({
-        pathname: "/QnA",
+        pathname: `${pathname}`,
         query: { page: currentPage + 1 },
       });
     }

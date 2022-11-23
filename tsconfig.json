@@ -20,8 +20,7 @@
     "**/*.ts",
     "**/*.tsx",
     "utils/Tmap.js",
-    "pages/write.js",
-    "components/board/DesktopBoard.js"
+    "pages/write.js"
   ],
   "exclude": ["node_modules"]
 }
