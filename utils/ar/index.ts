@@ -77,11 +77,14 @@ export default class AR {
 
   private updatePosition() {
     this.scene.children.forEach((child, idx) => {
-      const { x, y, z } = getXYZFromLatLng(
-        this.myLatLng,
-        this.childrenLatLng[idx]
-      );
-      child.position.set(x, y, z);
+      if (child.name === "box") {
+        const { x, y, z } = getXYZFromLatLng(
+          this.myLatLng,
+          this.childrenLatLng[idx]
+        );
+        child.position.set(x, y, z);
+        child.updateMatrix();
+      }
     });
   }
 
@@ -128,6 +131,8 @@ export default class AR {
 
     const box = new t.Mesh(boxGeometry, boxMaterial);
     box.position.set(x, y, z);
+
+    box.name = "b ox";
 
     this.childrenLatLng.push(latLng);
     this.scene.add(box);
