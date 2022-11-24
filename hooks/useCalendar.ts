@@ -75,7 +75,12 @@ export default function useCalendar() {
   }, [m]);
 
   useEffect(() => {
-    setSelectedDate(dayjs(`${y - m - d}`));
+    setSelectedDate(
+      dayjs()
+        .set("year", y)
+        .set("month", m)
+        .set("date", d + 1)
+    );
   }, [y, m, d]);
 
   /**
