@@ -1,10 +1,11 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, KeyboardEventHandler } from "react";
 
 interface Props {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   type: string;
   placeholder: string;
+  onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
 }
 
 export default function MyInput({ type, ...inputProps }: Props) {
