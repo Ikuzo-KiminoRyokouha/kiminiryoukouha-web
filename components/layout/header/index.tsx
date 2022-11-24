@@ -7,7 +7,7 @@ import { RiArrowDropDownFill } from "react-icons/ri";
 
 import useInput from "../../../hooks/useInput";
 import useToggle from "../../../hooks/useToggle";
-import { useUser } from "../../../utils/client";
+import { getUser, useUser } from "../../../utils/client";
 import HeaderNav from "./HeaderNav";
 import headerNavMap from "../../../utils/dataMap/headerNavMap.json";
 import DropDown from "../../dropdown/DropDown";
