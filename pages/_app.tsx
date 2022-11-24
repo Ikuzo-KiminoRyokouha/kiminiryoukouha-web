@@ -13,7 +13,7 @@ import { useMemo } from "react";
 /**
  * @description 로그인 정보가 필요한 페이지 접근 시, 해당 배열에 URL정보를 넣어줄 것
  */
-const NEED_AUTH_URL: Array<string> = ["/navigation"];
+const NEED_AUTH_URL: Array<string> = [];
 
 /**
  * @description react 쿼리가 Provider 형식으로 나눠주는데 함수를 쓰기위한 객체

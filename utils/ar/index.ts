@@ -1,8 +1,11 @@
 import * as t from "three";
-import { XYZ } from "../../types/ar.interface";
 import { LatLng } from "../../types/tmap.type";
 import { browserHasImmersiveArCompatibility } from "../domUtil";
 import ARCustomButton from "./ARCustomButton";
+import {
+  createDistanceTexture,
+  createRoadSignMaterial,
+} from "./object/roadSignBox";
 import { computeDistanceMeters, getXYZFromLatLng } from "./threeHelper";
 
 export default class AR {
@@ -50,6 +53,7 @@ export default class AR {
         lng: position.coords.longitude,
       };
       this.myLatLng = newRecord;
+      this.updateRoadSignBox();
       this.updatePosition();
     };
 
@@ -58,12 +62,12 @@ export default class AR {
     this.watchId = navigator.geolocation.watchPosition(onSuccess, onError, {
       enableHighAccuracy: true,
       maximumAge: 0,
-      timeout: 27000,
+      timeout: 3000,
     });
   }
 
   /**
-   * @description
+   * @description 모든 함수보다 제일 먼저 실행되어야 하는 함수  (but 생성자 안에는 안됨.) browser 인식 x
    */
   async start() {
     // Check if browser supports WebXR with 'immersive-ar'
@@ -77,17 +81,17 @@ export default class AR {
 
   private updatePosition() {
     this.scene.children.forEach((child, idx) => {
-      if (child.name === "box") {
-        const { x, y, z } = getXYZFromLatLng(
-          this.myLatLng,
-          this.childrenLatLng[idx]
-        );
-        child.position.set(x, y, z);
-        child.updateMatrix();
-      }
+      const { x, y, z } = getXYZFromLatLng(
+        this.myLatLng,
+        this.childrenLatLng[idx]
+      );
+      child.position.set(x, y, z);
     });
   }
 
+  /**
+   * @description 화면상에 3d 장면을 렌더링 해주는 함수입니다.
+   */
   private createScene(renderer: t.WebGLRenderer) {
     const scene = new t.Scene();
     this.scene = scene;
@@ -99,15 +103,23 @@ export default class AR {
     );
     this.camera = camera;
 
+    this.createRoadSignBox();
+
     this.animate();
   }
 
+  /**
+   * @description render를 60프레임으로 돌려주는 함수입니다/
+   */
   private animate() {
     const renderer = this.renderer;
     this.renderer.setAnimationLoop(() => this.render(renderer));
     this.camera.updateMatrixWorld();
   }
 
+  /**
+   * @description 화면상에 카메라와 3d장면을 세팅해주는 함수입니다.
+   */
   private render(renderer: t.WebGLRenderer) {
     if (renderer.xr.isPresenting) {
       renderer.render(this.scene, this.camera);
@@ -121,9 +133,8 @@ export default class AR {
   async createBox(latLng: LatLng) {
     const { x, y, z } = getXYZFromLatLng(this.myLatLng, latLng);
     const distance = computeDistanceMeters(this.myLatLng, latLng);
-
     const boxGeometry = new t.BoxGeometry(0.1, 0.1, 0.1);
-    const texture = this.createTexture(distance);
+    const texture = createDistanceTexture(distance);
     const boxMaterial = new t.MeshBasicMaterial({
       map: texture,
       side: t.DoubleSide,
@@ -132,31 +143,50 @@ export default class AR {
     const box = new t.Mesh(boxGeometry, boxMaterial);
     box.position.set(x, y, z);
 
-    box.name = "b ox";
+    box.name = "box";
 
     this.childrenLatLng.push(latLng);
     this.scene.add(box);
   }
 
   /**
-   *
-   * @param distance  현재 나의 좌표와 해당 포인트가 얼마나 먼지 에 대한 거리 (단위 : meter)
+   * @description 표지만을 만드는 함수입니다. 각종 포인트 마다 표지만을 띄워 해당 포인트까지 얼마나 거리가 먼지를 나타내주는 역할을합니다.
    */
-  createTexture(distance: number) {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1000;
-    canvas.height = 1000;
-    const ctx = canvas.getContext("2d");
-    ctx.font = "Bold 100px Arial";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "rgba(255,0,0,0.95)";
-    const text = distance > 1000 ? distance / 1000 + "km" : distance + "m";
-    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+  createRoadSignBox() {
+    const boxGeometry = new t.BoxGeometry(0.1, 0.1, 0.02);
+    const distance = computeDistanceMeters(this.myLatLng, {
+      lat: 35.9475028,
+      lng: 128.4636795,
+    });
 
-    const texture = new t.Texture(canvas);
+    const boxMaterial = createRoadSignMaterial(distance);
+    const box = new t.Mesh(boxGeometry, boxMaterial);
+    box.position.set(0, 0, -0.2);
+    box.name = "roadSignBox";
 
-    texture.needsUpdate = true;
+    this.scene.add(box);
+    // wireframe
+    var geo = new t.EdgesGeometry(box.geometry);
+    var mat = new t.LineBasicMaterial({ color: 0x000000 });
+    var wireframe = new t.LineSegments(geo, mat);
+    this.childrenLatLng.push({
+      lat: 35.9475028,
+      lng: 128.4636795,
+    });
+    box.add(wireframe);
+  }
 
-    return texture;
+  /**
+   * @description roadSignBox의 위치와 거리를 업데이트 하는 함수입니다.
+   */
+  updateRoadSignBox() {
+    const distance = computeDistanceMeters(this.myLatLng, {
+      lat: 35.9474443,
+      lng: 128.4637799,
+    });
+
+    const boxMaterial = createRoadSignMaterial(Math.round(distance));
+    (this.scene.getObjectByName("roadSignBox") as t.Mesh).material =
+      boxMaterial;
   }
 }

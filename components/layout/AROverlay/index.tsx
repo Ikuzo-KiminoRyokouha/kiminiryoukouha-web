@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { start } from "repl";
 import { LatLng } from "../../../types/tmap.type";

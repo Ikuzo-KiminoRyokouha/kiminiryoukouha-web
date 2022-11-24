@@ -45,9 +45,9 @@ export default function Navigation() {
   //   }
   // }, [myLatLng, , markerLatLngArr]);
 
-  useEffect(() => {
-    ar && ar.createBox({ lat: 35.9475, lng: 128.46367 });
-  }, [ar]);
+  // useEffect(() => {
+  //   ar && ar.createBox({ lat: 35.9475, lng: 128.46367 });
+  // }, [ar]);
   return (
     <>
       <div className="max-w-8xl mx-auto mb-[53px] flex max-h-full w-full flex-1 lg:mb-0">
@@ -148,7 +148,7 @@ export default function Navigation() {
       <div id="ar-overlay-dom" ref={overlayDom} style={{ display: "none" }}>
         <AROverlayDom
           accuracy={accuracy}
-          myLatLng={myLatLng}
+          myLatLng={ar?.myLatLng}
           arExitAction={() => {
             buttonRef.current.click();
           }}
