@@ -7,6 +7,7 @@ export default function useAR(
   overlayDom: MutableRefObject<HTMLDivElement>
 ) {
   const [ar, setAR] = useState<AR>();
+
   /**
    * @description ar Class 초기화 및 제일 먼저 불러와져야 하는 함수들 호출
    */

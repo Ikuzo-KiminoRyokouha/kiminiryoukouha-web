@@ -157,15 +157,15 @@ export default function Calendar({
                   className={`${
                     startDate?.isBefore(dayjs(`${y}-${m}-${date}`)) &&
                     endDate?.isAfter(dayjs(`${y}-${m}-${date}`))
-                      ? "bg-red-200"
+                      ? "bg-sky-200"
                       : ""
                   } ${
                     startDate?.isSame(dayjs(`${y}-${m}-${date}`))
-                      ? " rounded-l-full bg-red-200 text-white"
+                      ? " rounded-l-full bg-sky-200 text-white"
                       : ""
                   } ${
                     endDate?.isSame(dayjs(`${y}-${m}-${date}`))
-                      ? " rounded-r-full bg-red-200 text-white"
+                      ? " rounded-r-full bg-sky-200 text-white"
                       : ""
                   }`}
                 >
@@ -183,7 +183,7 @@ export default function Calendar({
                     }  ${
                       startDate?.isSame(dayjs(`${y}-${m}-${date}`)) ||
                       endDate?.isSame(dayjs(`${y}-${m}-${date}`))
-                        ? "bg-red-800 text-white"
+                        ? "bg-sky-500 text-white"
                         : ""
                     }`}
                   >

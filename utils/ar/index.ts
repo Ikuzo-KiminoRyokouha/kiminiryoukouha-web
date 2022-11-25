@@ -11,11 +11,12 @@ import { computeDistanceMeters, getXYZFromLatLng } from "./threeHelper";
 export default class AR {
   private button: HTMLButtonElement;
   private domOverlayRoot: HTMLDivElement;
-  private camera: t.PerspectiveCamera;
   private renderer: t.WebGLRenderer;
+  private minAccuracy: number = 100;
   private childrenLatLng: Array<LatLng> = [];
   private watchId: number;
   scene: t.Scene;
+  camera: t.PerspectiveCamera;
   myLatLng: LatLng = { lat: 0, lng: 0 };
 
   constructor(button: HTMLButtonElement, domOverlayRoot: HTMLDivElement) {
@@ -54,7 +55,10 @@ export default class AR {
       };
       this.myLatLng = newRecord;
       this.updateRoadSignBox();
-      this.updatePosition();
+      if (position.coords.accuracy < this.minAccuracy) {
+        this.minAccuracy = position.coords.accuracy;
+        this.updatePosition();
+      }
     };
 
     const onError = () => {};
