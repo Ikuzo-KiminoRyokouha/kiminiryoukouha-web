@@ -51,7 +51,7 @@ export default function Header() {
                     layout="responsive"
                   />
                 </div>
-                <span className="text-xl font-semibold text-sky-600">
+                <span className="whitespace-nowrap text-xl font-semibold text-sky-600">
                   君の旅行は
                 </span>
               </div>

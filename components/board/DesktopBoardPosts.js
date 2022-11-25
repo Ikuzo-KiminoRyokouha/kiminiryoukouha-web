@@ -1,15 +1,22 @@
 import Link from "next/link";
 import { BiLockAlt } from "react-icons/bi";
 
-export default function BoardPosts({ datas, boardname }) {
+/**
+ *
+ * @param {Array} datas 게시물 데이터
+ * @param boardname 게시판 이름
+ */
+export default function DesktopBoardPosts({ datas, boardname }) {
   return (
     <>
       {datas.map((data, index) => {
         return (
           <tr className="border-b-2 border-solid" key={index}>
             {/* 게시물 번호 */}
-            <td className="p-2 text-xl font-normal">{data.id}</td>
-            <td className="w-2/4 p-2 text-xl font-normal">
+            <td className="whitespace-nowrap p-2 text-xl font-normal">
+              {data.id}
+            </td>
+            <td className="w-2/4 whitespace-nowrap p-2 text-xl font-normal">
               {/* 제목 */}
               <Link
                 href={{
@@ -35,13 +42,17 @@ export default function BoardPosts({ datas, boardname }) {
               </Link>
             </td>
             {/* 유저이름 */}
-            <td className="break-keep p-2 text-xl font-normal">
-              {data.user_id}
+            <td className="whitespace-nowrap break-keep p-2 text-xl font-normal">
+              {data.user.name}
             </td>
             {/* 게시일 */}
-            <td className="p-2 text-xl font-normal">{data.created_at}</td>
+            <td className="whitespace-nowrap p-2 text-xl font-normal">
+              {data.created_at}
+            </td>
             {/* 답변상태 */}
-            <td className="p-2 text-xl font-normal">{status}</td>
+            <td className="whitespace-nowrap p-2 text-xl font-normal">
+              {data.complete === 0 ? "답변대기중" : "답변완료"}
+            </td>
           </tr>
         );
       })}
