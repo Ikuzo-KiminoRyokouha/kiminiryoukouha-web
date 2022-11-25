@@ -1,7 +1,19 @@
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import BoardUI from "../../components/board/Board";
 import Seo from "../../components/Seo";
 
 export default function QnA() {
+  const router = useRouter();
+  useEffect(() => {
+    if (!router.query?.page) {
+      router.push({
+        pathname: "/QnA",
+        query: { page: 1 },
+      });
+    }
+  }, []);
+
   return (
     <>
       <Seo
