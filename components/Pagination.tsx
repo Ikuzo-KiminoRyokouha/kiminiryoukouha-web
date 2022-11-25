@@ -1,7 +1,6 @@
 import Link from "../node_modules/next/link";
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 import { useRouter } from "next/router";
-import { useLayoutEffect, useState } from "react";
 
 interface Props {
   currentPage: number;

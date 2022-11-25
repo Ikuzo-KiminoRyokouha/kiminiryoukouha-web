@@ -2,8 +2,27 @@ import Head from "next/head";
 import Image from "next/image";
 import PlanCarousel from "../components/PlanCarousel";
 import ImageCard from "../components/card/ImageCard";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    const observer = new IntersectionObserver((e) => {
+      e.forEach((el) => {
+        console.log(el);
+        if (el.isIntersecting) {
+          (el.target as any).style.opacity = 1;
+        } else {
+          (el.target as any).style.opacity = 0;
+        }
+      });
+    });
+    const block = document.querySelectorAll("#block");
+    block.forEach((el) => {
+      el.classList.add("opacity-0");
+      (el as any).style.transition = "3s";
+      observer.observe(el);
+    });
+  }, []);
   return (
     <div>
       <Head>
@@ -13,7 +32,7 @@ export default function Home() {
         <meta name="description" content="너의 여행은의 메인 페이지 입니다." />
       </Head>
 
-      <main>
+      <main id="block" className="opacity-0">
         <div className="hidden min-h-screen lg:block">
           {/* 이미지 absoulte */}
           <Image src={"/assets/main-img.png"} layout={"fill"} />
@@ -48,26 +67,29 @@ export default function Home() {
         </div>
       </main>
       {/* 나의 여행 키워드 */}
-      <div className="mx-auto mt-6 max-w-7xl space-y-6">
-        <div className="flex pl-2 md:pl-0">
-          <p className="mr-6 text-xl font-bold md:text-2xl">
+      <div id="block" className="mx-auto mt-6 max-w-7xl space-y-6">
+        <div className="flex pl-2 lg:pl-0">
+          <p className="mr-6 text-xl font-bold lg:text-2xl">
             私の旅行キーワードは？
           </p>
           <p className="bg-sky-500 p-1 px-4 text-white">食べ物</p>
         </div>
-        <div className="ml-12 hidden md:block">
+        <div className="ml-12 hidden lg:block">
           <p>おすすめプラン</p>
         </div>
       </div>
       <PlanCarousel />
       {/* 어디로 가고싶은지 */}
-      <div className="mx-auto mt-5 mb-16 max-w-7xl space-y-6 md:mb-0">
-        <p className="pl-2 text-xl font-bold md:text-2xl">
+      <div
+        id="block"
+        className="mx-auto mt-5 mb-16 max-w-7xl space-y-6 lg:mb-0"
+      >
+        <p className="pl-2 text-xl font-bold lg:text-2xl">
           どこへ行きたいんですか
         </p>
-        <div className="flex h-96 flex-col md:flex-row">
+        <div className="flex h-96 flex-col lg:flex-row">
           <ImageCard src={"/assets/main-img.png"} description={"東京/なごや"} />
-          <div className="flex flex-1 flex-row md:flex-col">
+          <div className="flex flex-1 flex-row lg:flex-col">
             <ImageCard
               src={"/assets/main-img.png"}
               description={"東京/なごや"}
@@ -77,7 +99,7 @@ export default function Home() {
               description={"東京/なごや"}
             />
           </div>
-          <div className="flex flex-1 flex-row md:flex-col">
+          <div className="flex flex-1 flex-row lg:flex-col">
             <ImageCard
               src={"/assets/main-img.png"}
               description={"東京/なごや"}
@@ -90,8 +112,11 @@ export default function Home() {
         </div>
       </div>
       {/* AR로 보는세계 */}
-      <div className="mx-auto my-5 hidden max-w-7xl  space-y-6 md:block">
-        <p className="pl-2 text-xl font-bold md:text-2xl">ARから見る世界</p>
+      <div
+        id="block"
+        className="mx-auto my-5 hidden max-w-7xl  space-y-6 lg:block"
+      >
+        <p className="pl-2 text-xl font-bold lg:text-2xl">ARから見る世界</p>
         <div className="flex h-96 space-x-6">
           <div className="relative flex-1">
             <Image src={"/assets/main-img.png"} layout={"fill"}></Image>

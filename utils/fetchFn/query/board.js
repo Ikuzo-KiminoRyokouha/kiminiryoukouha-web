@@ -5,9 +5,7 @@ import mainRequest from "../../request/mainRequest";
  * @param {Array} queryKey
  */
 export const getBoardPosts = ({ queryKey }) => {
-  return mainRequest.get(
-    process.env.NEXT_PUBLIC_API_URL + `/api/board/all/${queryKey[1]}`
-  );
+  return mainRequest.get(`/api/board/all/${queryKey[1]}`);
 };
 
 /**

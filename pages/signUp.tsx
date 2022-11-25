@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import MyButton from "../components/MyButton";
 import MyInput from "../components/MyInput";
 import useInput from "../hooks/useInput";
 import { mSignUp } from "../utils/fetchFn/mutation/user";
@@ -52,7 +51,13 @@ export default function SignUp() {
           <MyInput {...pwd} type="password" />
           <MyInput {...checkPwd} type="password" />
           <MyInput {...nick} type="text" />
-          <MyButton onClick={onSubmit} name="Sign Up" />
+          <button
+            onClick={onSubmit}
+            type="submit"
+            className="my-3 rounded bg-sky-600 p-4  text-white"
+          >
+            Sign Up
+          </button>
         </div>
       </div>
     </div>
