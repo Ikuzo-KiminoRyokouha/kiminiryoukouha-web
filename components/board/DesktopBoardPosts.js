@@ -6,7 +6,8 @@ import { BiLockAlt } from "react-icons/bi";
  * @param {Array} datas 게시물 데이터
  * @param boardname 게시판 이름
  */
-export default function DesktopBoardPosts({ datas, boardname }) {
+export default function DesktopBoardPosts({ datas, boardname, asdf }) {
+  console.log(asdf);
   return (
     <>
       {datas.map((data, index) => {

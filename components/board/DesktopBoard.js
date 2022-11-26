@@ -3,6 +3,7 @@ import usePagination from "../../hooks/usePagination";
 import useInput from "../../hooks/useInput";
 import Pagination from "../Pagination";
 import DesktopBoardPosts from "./DesktopBoardPosts";
+import { useState } from "react";
 
 /**
  * @param boardname 어느 게시판인지 ex) QnA게시판인지 FnA게시판인지
@@ -31,6 +32,8 @@ export default function DesktopBoard({
       query: { search: search.value, page: 1 },
     });
   };
+
+  // console.log("qwer : " + router.pathname);
 
   return (
     <div className="hidden w-3/4 md:block">
@@ -89,9 +92,14 @@ export default function DesktopBoard({
                 <DesktopBoardPosts
                   datas={searchData.searchData.boards || []}
                   boardname={boardname}
+                  asdf={"asdf"}
                 />
               ) : (
-                <DesktopBoardPosts datas={POSTS} boardname={boardname} />
+                <DesktopBoardPosts
+                  datas={POSTS}
+                  boardname={boardname}
+                  asdf={"qwer"}
+                />
               )}
             </tbody>
           </table>
@@ -108,7 +116,10 @@ export default function DesktopBoard({
         {/* 페이지네이션 */}
         {router.pathname === "/QnA/search" ? (
           <Pagination
-            {...usePagination(searchData.searchData.pages, pathname)}
+            {...usePagination(
+              searchData.searchData.pages,
+              `${router.pathname}`
+            )}
             maxPage={searchData.searchData.pages}
             pathname={`${pathname}/search`}
           />

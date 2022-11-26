@@ -3,12 +3,18 @@ import Seo from "../../components/Seo";
 import { getSearch } from "../../utils/fetchFn/query/board";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function Search() {
   const router = useRouter();
+
+  const currentPage = useMemo(
+    () => router.query.page || 1,
+    [router.query.page]
+  );
+
   const { data: searchData } = useQuery(
-    ["getSearch", router.query?.search, 1],
+    ["getSearch", router.query?.search, currentPage],
     getSearch
   );
 
