@@ -13,8 +13,5 @@ export const getBoardPosts = ({ queryKey }) => {
  * @param {Array} queryKey
  */
 export const getSearch = ({ queryKey }) => {
-  return mainRequest.get(
-    process.env.NEXT_PUBLIC_API_URL +
-      `/api/board/search/${queryKey[1]}/${queryKey[2]}`
-  );
+  return mainRequest.get(`/api/board/search/${queryKey[1]}/${queryKey[2]}`);
 };
