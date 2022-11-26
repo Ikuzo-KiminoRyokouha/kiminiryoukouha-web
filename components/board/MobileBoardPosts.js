@@ -1,21 +1,16 @@
+import { useRouter } from "next/router";
 import { BiLockAlt } from "react-icons/bi";
+import { getUser } from "../../utils/client";
 
 export default function MobileBoardPosts({ datas, boardname }) {
+  const router = useRouter();
   return (
     <>
       {datas.map((data, index) => {
         return (
           <div key={index}>
             {/* 게시물 */}
-            <div
-              className="flex h-24 w-full border-b-2 border-solid border-gray-300"
-              onClick={() => {
-                router.push({
-                  pathname: `/${boardname}/view`,
-                  query: { id: data.id },
-                });
-              }}
-            >
+            <div className="flex h-24 w-full border-b-2 border-solid border-gray-300">
               {/* 게시물 번호 */}
               <div className="flex w-1/5 items-center justify-center">
                 <span>{data.id}</span>
@@ -37,12 +32,32 @@ export default function MobileBoardPosts({ datas, boardname }) {
                 </div>
                 {/* 제목 */}
                 {data.private == 1 ? (
-                  <div className="flex items-center">
+                  <div
+                    className="flex items-center"
+                    onClick={() => {
+                      if (getUser().name === data.user.name) {
+                        router.push({
+                          pathname: `/${boardname}/view`,
+                          query: { id: data.id },
+                        });
+                      } else {
+                        alert("권한이 없습니다.");
+                      }
+                    }}
+                  >
                     <span className="pt-2.5 text-lg">{data.title}</span>
                     <BiLockAlt className="mt-3 pl-1" />
                   </div>
                 ) : (
-                  <div className="flex items-center">
+                  <div
+                    className="flex items-center"
+                    onClick={() => {
+                      router.push({
+                        pathname: `/${boardname}/view`,
+                        query: { id: data.id },
+                      });
+                    }}
+                  >
                     <span className="pt-2.5 text-lg">{data.title}</span>
                   </div>
                 )}

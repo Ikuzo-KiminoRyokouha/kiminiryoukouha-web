@@ -3,6 +3,8 @@ import usePagination from "../../hooks/usePagination";
 import useInput from "../../hooks/useInput";
 import Pagination from "../Pagination";
 import DesktopBoardPosts from "./DesktopBoardPosts";
+import { useState } from "react";
+import { getUser } from "../../utils/client";
 
 /**
  * @param boardname 어느 게시판인지 ex) QnA게시판인지 FnA게시판인지
@@ -30,6 +32,17 @@ export default function DesktopBoard({
       pathname: `${pathname}/search`,
       query: { search: search.value, page: 1 },
     });
+  };
+
+  /**
+   * @description 글쓰기 버튼 onClick 함수 로그인시에만 가능
+   */
+  const onWrite = () => {
+    if (getUser()) {
+      router.push(`/${boardname}/write`);
+    } else {
+      router.push(`/login`);
+    }
   };
 
   return (
@@ -100,7 +113,7 @@ export default function DesktopBoard({
         <div className="flex justify-end pt-3">
           <button
             className="rounded bg-sky-600 p-3 text-white"
-            onClick={() => router.push(`/${boardname}/write`)}
+            onClick={onWrite}
           >
             글쓰기
           </button>
@@ -108,7 +121,10 @@ export default function DesktopBoard({
         {/* 페이지네이션 */}
         {router.pathname === "/QnA/search" ? (
           <Pagination
-            {...usePagination(searchData.searchData.pages, pathname)}
+            {...usePagination(
+              searchData.searchData.pages,
+              `${router.pathname}`
+            )}
             maxPage={searchData.searchData.pages}
             pathname={`${pathname}/search`}
           />

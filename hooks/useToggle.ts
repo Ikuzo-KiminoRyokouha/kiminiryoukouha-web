@@ -10,7 +10,6 @@ export default function useToggle(initailState: boolean) {
    * @description value의 값을 이전의 값과 반대로 설정하는 함수입니다/
    */
   const onClick = (e: MouseEvent) => {
-    e.preventDefault();
     setValue((prev) => !prev);
   };
 
