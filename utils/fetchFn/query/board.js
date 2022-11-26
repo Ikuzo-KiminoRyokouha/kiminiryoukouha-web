@@ -5,6 +5,5 @@ export const getBoardPosts = ({ queryKey }) => {
 };
 
 export const getSearch = ({ queryKey }) => {
-  console.log("queryKey", queryKey);
   return mainRequest.get(`/api/board/search/${queryKey[1]}/${queryKey[2]}`);
 };

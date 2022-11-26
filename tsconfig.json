@@ -21,7 +21,8 @@
     "**/*.ts",
     "**/*.tsx",
     "utils/Tmap.js",
-    "pages/write.js"
+    "pages/write.js",
+    "pages/QnA/write.js"
   ],
   "exclude": ["node_modules"]
 }

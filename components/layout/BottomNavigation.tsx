@@ -2,13 +2,13 @@ import Link from "next/link";
 import { BsHouse } from "react-icons/bs";
 import { BiMessageRounded, BiCalendar } from "react-icons/bi";
 import { GiSteampunkGoggles } from "react-icons/gi";
-import { AiOutlineSetting } from "react-icons/ai";
+import { CiCircleQuestion } from "react-icons/ci";
 
 const BottomNavMenu = [
   {
     title: "Home",
     icon: <BsHouse className="inline-block" size={"25"} />,
-    href: "#",
+    href: "/",
   },
   {
     title: "Chat",
@@ -21,14 +21,14 @@ const BottomNavMenu = [
     href: "#",
   },
   {
-    title: "AR",
+    title: "Nav",
     icon: <GiSteampunkGoggles className="inline-block" size={"25"} />,
     href: "/navigation",
   },
   {
-    title: "Test",
-    icon: <AiOutlineSetting className="inline-block" size={"25"} />,
-    href: "/test",
+    title: "Q&A",
+    icon: <CiCircleQuestion className="inline-block" size={"25"} />,
+    href: "/QnA",
   },
 ];
 /**
