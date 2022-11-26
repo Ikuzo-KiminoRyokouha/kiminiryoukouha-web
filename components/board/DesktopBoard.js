@@ -2,11 +2,15 @@ import { useRouter } from "next/router";
 import usePagination from "../../hooks/usePagination";
 import useInput from "../../hooks/useInput";
 import Pagination from "../Pagination";
-import { useState } from "react";
-import { getSearch } from "../../utils/fetchFn/query/board";
-import { useQuery } from "@tanstack/react-query";
-import BoardPosts from "./BoardPosts";
+import DesktopBoardPosts from "./DesktopBoardPosts";
 
+/**
+ * @param boardname 어느 게시판인지 ex) QnA게시판인지 FnA게시판인지
+ * @param POSTS 서버에서 받아온 게시물 데이터
+ * @param MAX_PAGE 서버에서 받아온 전체 페이지 수
+ * @param pathname pathname
+ * @param searchData 검색시 검색한 게시물 데이터
+ */
 export default function DesktopBoard({
   boardname,
   POSTS,
@@ -17,45 +21,31 @@ export default function DesktopBoard({
   const router = useRouter();
   const search = useInput("", "검색어를 입력하세요");
   const paginationProps = usePagination(MAX_PAGE, pathname);
-  const postsPerPage = 6; // 한 페이지에 게시물 6개씩 보여줌
-  const indexOfLast = paginationProps.currentPage * postsPerPage; // 현 페이지 마지막 게시물의 인덱스 번호
-  const indexOfFirst = indexOfLast - postsPerPage; // 현 페이지 첫번째 게시물의 인덱스 번호
-  const { secret, setSecret } = useState(0); // 비밀글인지 아닌지 0 - 비밀글 1- 전체공개
-  // const [data, setData] = useState(POSTS);
-  const [searchText, setSearchText] = useState("");
-
-  const status = "답변완료";
-
-  /**
-   * @description 현재페이지 게시물들 반환해주는 함수
-   * @param {any[]} arr
-   * @returns 배열
-   */
-  const currentPosts = (posts) => {
-    let currentPosts = [];
-    currentPosts = posts.slice(indexOfFirst, indexOfLast);
-    return currentPosts;
-  };
 
   /**
    * @description 검색버튼 onClick 함수
    */
   const searchBtn = () => {
-    setSearchText(search.value);
-
     router.push({
       pathname: `${pathname}/search`,
-      query: { search: search.value },
+      query: { search: search.value, page: 1 },
     });
   };
 
   return (
     <div className="hidden w-3/4 md:block">
+      {/* 게시판 박스 */}
       <div className="flex h-32 w-full justify-between bg-white">
         <h1 className="mt-8 text-3xl">
           {boardname === "QnA" ? "질의응답" : "자주묻는질문"} 게시판
         </h1>
-        <div className="flex items-end">
+        {/* 검색창 */}
+        <form
+          className="flex items-end"
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <div className="pb-3 ">
             <input
               className="mr-3 rounded-sm border-2 border-solid border-gray-300 p-2"
@@ -68,7 +58,7 @@ export default function DesktopBoard({
               검색
             </button>
           </div>
-        </div>
+        </form>
       </div>
       {/* 게시판 테이블 */}
       <div className="h-full w-full">
@@ -76,28 +66,37 @@ export default function DesktopBoard({
           <table className="w-full text-center">
             <thead className="bg-gray-300 text-center">
               <tr>
-                <th className="p-2 text-xl font-normal">
+                <th className="whitespace-nowrap p-2 text-xl font-normal">
                   <span>게시물번호</span>
                 </th>
-                <th className="w-2/4 p-2 text-xl font-normal">제목</th>
-                <th className="p-2 text-xl font-normal">작성자</th>
-                <th className="p-2 text-xl font-normal">날짜</th>
-                <th className="p-2 text-xl font-normal">답변상태</th>
+                <th className="w-2/4 whitespace-nowrap p-2 text-xl font-normal">
+                  제목
+                </th>
+                <th className="whitespace-nowrap p-2 text-xl font-normal">
+                  작성자
+                </th>
+                <th className="whitespace-nowrap p-2 text-xl font-normal">
+                  날짜
+                </th>
+                <th className="whitespace-nowrap p-2 text-xl font-normal">
+                  답변상태
+                </th>
               </tr>
             </thead>
             <tbody className="text-center">
               {/* 게시판 테이블 내 게시물들 */}
               {router.pathname === "/QnA/search" ? (
-                <BoardPosts
-                  datas={searchData.boards || []}
+                <DesktopBoardPosts
+                  datas={searchData.searchData.boards || []}
                   boardname={boardname}
                 />
               ) : (
-                <BoardPosts datas={POSTS} boardname={boardname} />
+                <DesktopBoardPosts datas={POSTS} boardname={boardname} />
               )}
             </tbody>
           </table>
         </div>
+        {/* 글쓰기 버튼 */}
         <div className="flex justify-end pt-3">
           <button
             className="rounded bg-sky-600 p-3 text-white"
@@ -106,11 +105,12 @@ export default function DesktopBoard({
             글쓰기
           </button>
         </div>
+        {/* 페이지네이션 */}
         {router.pathname === "/QnA/search" ? (
           <Pagination
-            {...usePagination(searchData.pages, pathname)}
-            maxPage={searchData.pages}
-            pathname={pathname}
+            {...usePagination(searchData.searchData.pages, pathname)}
+            maxPage={searchData.searchData.pages}
+            pathname={`${pathname}/search`}
           />
         ) : (
           <Pagination

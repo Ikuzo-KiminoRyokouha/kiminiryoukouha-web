@@ -10,9 +10,12 @@ import mainRequest from "../../request/mainRequest";
  * @param {string} role 사용자 역할
  */
 export const mSignUp = (body: IUser) => {
-  return mainRequest.post("/api/auth/register", {
-    ...body,
-  });
+  return mainRequest.post(
+    process.env.NEXT_PUBLIC_API_URL + "/api/user/register",
+    {
+      ...body,
+    }
+  );
 };
 
 // ===============================================
