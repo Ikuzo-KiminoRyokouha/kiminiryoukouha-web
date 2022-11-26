@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { FiSearch } from "react-icons/fi";
 import { BiLockAlt } from "react-icons/bi";
 import MobileBoardPosts from "./MobileBoardPosts";
+import { getUser } from "../../utils/client";
 
 /**
  * @param boardname 어느 게시판인지 ex) QnA게시판인지 FnA게시판인지
@@ -81,9 +82,13 @@ export default function MobileBoard({
         <div
           className="mt-6 pr-2"
           onClick={() => {
-            router.push({
-              pathname: `${pathname}/write`,
-            });
+            if (getUser()) {
+              router.push({
+                pathname: `${pathname}/write`,
+              });
+            } else {
+              router.push("/login");
+            }
           }}
         >
           <button className="rounded bg-sky-600 p-1 text-center  text-lg text-white">

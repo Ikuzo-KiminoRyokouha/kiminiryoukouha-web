@@ -4,6 +4,7 @@ import useInput from "../../hooks/useInput";
 import Pagination from "../Pagination";
 import DesktopBoardPosts from "./DesktopBoardPosts";
 import { useState } from "react";
+import { getUser } from "../../utils/client";
 
 /**
  * @param boardname 어느 게시판인지 ex) QnA게시판인지 FnA게시판인지
@@ -33,7 +34,16 @@ export default function DesktopBoard({
     });
   };
 
-  // console.log("qwer : " + router.pathname);
+  /**
+   * @description 글쓰기 버튼 onClick 함수 로그인시에만 가능
+   */
+  const onWrite = () => {
+    if (getUser()) {
+      router.push(`/${boardname}/write`);
+    } else {
+      router.push(`/login`);
+    }
+  };
 
   return (
     <div className="hidden w-3/4 md:block">
@@ -92,14 +102,9 @@ export default function DesktopBoard({
                 <DesktopBoardPosts
                   datas={searchData.searchData.boards || []}
                   boardname={boardname}
-                  asdf={"asdf"}
                 />
               ) : (
-                <DesktopBoardPosts
-                  datas={POSTS}
-                  boardname={boardname}
-                  asdf={"qwer"}
-                />
+                <DesktopBoardPosts datas={POSTS} boardname={boardname} />
               )}
             </tbody>
           </table>
@@ -108,7 +113,7 @@ export default function DesktopBoard({
         <div className="flex justify-end pt-3">
           <button
             className="rounded bg-sky-600 p-3 text-white"
-            onClick={() => router.push(`/${boardname}/write`)}
+            onClick={onWrite}
           >
             글쓰기
           </button>
