@@ -1,9 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 import { useToggle, useInput } from "../../hooks";
-import { mWriteBoard } from "../../utils/fetchFn/mutation/board";
+import useBoard from "../../hooks/useBoard";
 
 export default function Write() {
   /** @description PC_글작성&취소 버튼 css */
@@ -18,18 +17,13 @@ export default function Write() {
   /* 비밀글 여부 */
   const secret = useToggle(false);
 
-  const { mutate } = useMutation(["writeBoard"], mWriteBoard, {
-    onSuccess: () => {
-      route.push("/QnA");
-    },
-    onError: () => {},
-  });
+  const { writeBoard } = useBoard();
 
   /** @description 글작성 버튼_함수 */
   function submit() {
     console.log(title.value, secret.value, contents.value);
     if (title.value && contents.value) {
-      mutate({
+      writeBoard({
         title: title.value,
         private: secret.value ? 1 : 0,
         content: contents.value,

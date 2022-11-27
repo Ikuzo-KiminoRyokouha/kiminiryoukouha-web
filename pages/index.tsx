@@ -8,7 +8,6 @@ export default function Home() {
   useEffect(() => {
     const observer = new IntersectionObserver((e) => {
       e.forEach((el) => {
-        console.log(el);
         if (el.isIntersecting) {
           (el.target as any).style.opacity = 1;
         } else {

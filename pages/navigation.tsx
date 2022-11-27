@@ -24,6 +24,10 @@ export default function Navigation() {
 
   const { myLatLng, accuracy, getMyPositionOnce } = useLocation();
 
+  useEffect(() => {
+    start && end && isVisible.setFalse()
+  },[start,end])
+
   /* 모바일 상에서 Navigation Toggle State */
   const isVisible = useToggle(false);
   /* ar 진입 버튼 */
