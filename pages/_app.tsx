@@ -14,7 +14,7 @@ import { queryClient } from "../utils/request/reloadQuery";
 /**
  * @description 로그인 정보가 필요한 페이지 접근 시, 해당 배열에 URL정보를 넣어줄 것
  */
-const NEED_AUTH_URL: Array<string> = [];
+const NEED_AUTH_URL: Array<string> = ["/QnA/write"];
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();

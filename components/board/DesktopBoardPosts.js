@@ -11,6 +11,16 @@ import { getUser } from "../../utils/client";
 export default function DesktopBoardPosts({ datas, boardname }) {
   const router = useRouter();
 
+  const checkPrivate = (data) => {
+    if (getUser()?.id === data?.user.id) {
+      router.push({
+        pathname: `/${boardname}/view/${data.id}`,
+      });
+    } else {
+      alert("권한이 없습니다.");
+    }
+  };
+
   return (
     <>
       {datas.map((data, index) => {
@@ -22,40 +32,21 @@ export default function DesktopBoardPosts({ datas, boardname }) {
             </td>
             <td className="w-2/4 whitespace-nowrap p-2 text-xl font-normal">
               {/* 제목 */}
-              {data.private == 1 ? (
-                <a
-                  className="cursor-pointer"
-                  onClick={() => {
-                    if (getUser().name === data.user.name) {
-                      router.push({
-                        pathname: `/${boardname}/view`,
-                        query: { id: `${data.id}` },
-                      });
-                    } else {
-                      alert("권한이 없습니다.");
-                    }
-                  }}
-                >
-                  <span className="flex items-center">
-                    <span>{data.title}</span>
-                    <BiLockAlt className="mt-1 pl-1" />
-                  </span>
-                </a>
-              ) : (
-                <Link
-                  href={{
-                    pathname: `/${boardname}/view`,
-                    query: { id: `${data.id}` },
-                  }}
-                  legacyBehavior
-                >
-                  <a>
-                    <span className="flex items-center">
-                      <span>{data.title}</span>
-                    </span>
-                  </a>
-                </Link>
-              )}
+              <a
+                className="cursor-pointer"
+                onClick={() => {
+                  data.private === 1 && checkPrivate(data);
+                  data.private === 0 &&
+                    router.push({
+                      pathname: `/${boardname}/view/${data.id}`,
+                    });
+                }}
+              >
+                <span className="flex items-center">
+                  <span>{data.title}</span>
+                  {data.private === 1 && <BiLockAlt className="mt-1 pl-1" />}
+                </span>
+              </a>
             </td>
             {/* 유저이름 */}
             <td className="whitespace-nowrap break-keep p-2 text-xl font-normal">

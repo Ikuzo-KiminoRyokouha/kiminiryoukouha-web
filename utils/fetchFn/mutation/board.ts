@@ -21,8 +21,8 @@ export const mWriteComment = (body: any) => {
   return mainRequest.post(`/api/comment`, body);
 };
 
-export const mUpdateComment = (id: string) => {
-  return mainRequest.put(`/api/comment/${id}`);
+export const mUpdateComment = (body: any) => {
+  return mainRequest.put(`/api/comment/${body.id}`, body);
 };
 export const mDeleteComment = (id: string) => {
   return mainRequest.delete(`/api/comment/${id}`);
