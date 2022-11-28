@@ -8,3 +8,7 @@ export const queryClient = new QueryClient();
 export const reloadUser = () => {
   queryClient.invalidateQueries(["getUser"]);
 };
+
+export const reloadComment = () => {
+  queryClient.invalidateQueries(["getComment"]);
+};

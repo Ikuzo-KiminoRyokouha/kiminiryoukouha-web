@@ -37,8 +37,7 @@ export default function MobileBoardPosts({ datas, boardname }) {
                     onClick={() => {
                       if (getUser().name === data.user.name) {
                         router.push({
-                          pathname: `/${boardname}/view`,
-                          query: { id: data.id },
+                          pathname: `/${boardname}/view/${data.id}`,
                         });
                       } else {
                         alert("권한이 없습니다.");
@@ -53,8 +52,7 @@ export default function MobileBoardPosts({ datas, boardname }) {
                     className="flex items-center"
                     onClick={() => {
                       router.push({
-                        pathname: `/${boardname}/view`,
-                        query: { id: data.id },
+                        pathname: `/${boardname}/view/${data.id}`,
                       });
                     }}
                   >

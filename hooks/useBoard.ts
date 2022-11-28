@@ -9,6 +9,7 @@ import {
   mWriteBoard,
   mWriteComment,
 } from "../utils/fetchFn/mutation/board";
+import { reloadComment } from "../utils/request/reloadQuery";
 
 /**
  * @description 질의 응답게시판에 있어서 쓰일 함수들을 모아 놓은 훅입니다.
@@ -16,7 +17,7 @@ import {
 export default function useBoard() {
   const router = useRouter();
 
-  const mutationOption = useMemo(() => {
+  const boardMutationOption = useMemo(() => {
     return {
       onSuccess: () => {
         router.back();
@@ -29,42 +30,52 @@ export default function useBoard() {
   const { mutate: writeBoard } = useMutation(
     ["deleteBoardPost"],
     mWriteBoard,
-    mutationOption
+    boardMutationOption
   );
 
   //  질의응답  게시판 삭제 함수
   const { mutate: deleteBoard } = useMutation(
     ["deleteBoardPost"],
     mDeleteBoard,
-    mutationOption
+    boardMutationOption
   );
 
   // 질의응답 게시판 업데이트 함수
   const { mutate: updateBoard } = useMutation(
     ["updateBoardPost"],
     mUpdateBoard,
-    mutationOption
+    boardMutationOption
+  );
+
+  const commentMutationOption = useMemo(
+    () => ({
+      onSuccess() {
+        reloadComment();
+      },
+      onError() {},
+    }),
+    []
   );
 
   //  질의응답 댓글 생성 함수
   const { mutate: writeComment } = useMutation(
-    ["deleteComment"],
+    ["writeComment"],
     mWriteComment,
-    mutationOption
+    commentMutationOption
   );
 
   //  질의응답 댓글 삭제 함수
   const { mutate: deleteComment } = useMutation(
     ["deleteComment"],
     mDeleteComment,
-    mutationOption
+    commentMutationOption
   );
 
   // 질의응답 댓글 업데이트 함수
   const { mutate: updateComment } = useMutation(
     ["updateComment"],
     mUpdateComment,
-    mutationOption
+    commentMutationOption
   );
 
   return {

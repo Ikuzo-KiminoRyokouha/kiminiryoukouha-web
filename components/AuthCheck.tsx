@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { getUser } from "../utils/fetchFn/query/user";
@@ -15,6 +15,8 @@ interface Props extends IProps {
  * @returns
  */
 export default function AuthCheck({ children, needAuth }: Props) {
+  const [didAlert, setDidAlert] = useState(false);
+
   // getUser 쿼리 수행
   const { data, isLoading, isSuccess } = useQuery(["getUser"], getUser, {
     retry: 0,
@@ -24,7 +26,10 @@ export default function AuthCheck({ children, needAuth }: Props) {
   useEffect(() => {
     //   Auth정보가 필요하고 로딩이 끝났는데 데이터가 없거나, 에러가 뜨면 메인페이지로 돌아감
     if (!isLoading && !data && needAuth) {
-      alert("invaild user");
+      if (!alert) {
+        alert("invaild user");
+        setDidAlert(true);
+      }
       router.back();
     }
     // 데이터 페칭 성공시 전역 변수에 저장
@@ -39,6 +44,8 @@ export default function AuthCheck({ children, needAuth }: Props) {
   }
   // 로딩 중에는 빈 화면 띄워주기
   else if (isLoading && needAuth) {
+    return <div></div>;
+  } else if (!isLoading && !data) {
     return <div></div>;
   }
 

@@ -12,6 +12,10 @@ export const getBoardPost = ({ queryKey }) => {
   return mainRequest.get(`/api/board/${queryKey[1]}`);
 };
 
+export const getComment = ({ queryKey }) => {
+  return mainRequest.get(`/api/comment/${queryKey[1]}`);
+};
+
 /**
  * @description /api/board/search/검색어/페이지
  * @param {Array} queryKey
