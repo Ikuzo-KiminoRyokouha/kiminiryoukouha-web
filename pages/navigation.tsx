@@ -22,11 +22,9 @@ export default function Navigation() {
     markerLatLngArr,
   } = useTMap("map");
 
-  const { myLatLng, accuracy, getMyPositionOnce } = useLocation();
-
   useEffect(() => {
-    start && end && isVisible.setFalse()
-  },[start,end])
+    start && end && isVisible.setFalse();
+  }, [start, end]);
 
   /* 모바일 상에서 Navigation Toggle State */
   const isVisible = useToggle(false);
@@ -37,7 +35,10 @@ export default function Navigation() {
   /* ar 진입 오버레이 돔에 대한 ref */
   const overlayDom = useRef<HTMLDivElement>(null);
 
-  const { renderToLatLng, removeAllMesh, ar } = useAR(buttonRef, overlayDom);
+  const { renderToLatLng, removeAllMesh, ar, myLatLng, accuracy } = useAR(
+    buttonRef,
+    overlayDom
+  );
 
   /**
    * @description 네비게이션의 길찾기를 바탕으로 받아온 정보가 있다면, AR상에 해당 좌표를 기반으로 오브젝트 모델을 띄워줌
@@ -49,9 +50,9 @@ export default function Navigation() {
   //   }
   // }, [myLatLng, , markerLatLngArr]);
 
-  // useEffect(() => {
-  //   ar && ar.createBox({ lat: 35.9475, lng: 128.46367 });
-  // }, [ar]);
+  useEffect(() => {
+    ar && myLatLng && ar.createRoadSignBox(myLatLng);
+  }, [ar]);
   return (
     <>
       <div className="max-w-8xl mx-auto mb-[53px] flex max-h-full w-full flex-1 lg:mb-0">
@@ -152,7 +153,7 @@ export default function Navigation() {
       <div id="ar-overlay-dom" ref={overlayDom} style={{ display: "none" }}>
         <AROverlayDom
           accuracy={accuracy}
-          myLatLng={ar?.myLatLng}
+          myLatLng={myLatLng}
           arExitAction={() => {
             buttonRef.current.click();
           }}

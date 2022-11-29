@@ -28,9 +28,10 @@ export default function MobileBoard({
   /**
    * @description 검색창 돋보기 아이콘 클릭시 검색 실행 해주는 onClick 함수
    */
-  const searching = (data) => {
+  const searching = () => {
     router.push({
-      pathname: `/${boardname}/view/${data.id}`,
+      pathname: `${pathname}/search`,
+      query: { search: search.value, page: 1 },
     });
   };
 

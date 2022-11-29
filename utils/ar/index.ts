@@ -1,4 +1,5 @@
 import * as t from "three";
+import { Mesh } from "three";
 import { LatLng } from "../../types/tmap.type";
 import { browserHasImmersiveArCompatibility } from "../domUtil";
 import ARCustomButton from "./ARCustomButton";
@@ -12,12 +13,12 @@ export default class AR {
   private button: HTMLButtonElement;
   private domOverlayRoot: HTMLDivElement;
   private renderer: t.WebGLRenderer;
-  private minAccuracy: number = 100;
   private childrenLatLng: Array<LatLng> = [];
-  private watchId: number;
   scene: t.Scene;
   camera: t.PerspectiveCamera;
   myLatLng: LatLng = { lat: 0, lng: 0 };
+  EARTH = 40075016.68;
+  HALF_EARTH = 20037508.34;
 
   constructor(button: HTMLButtonElement, domOverlayRoot: HTMLDivElement) {
     this.button = button;
@@ -47,27 +48,6 @@ export default class AR {
     });
     // Pass the renderer to the  createScene-function
     this.createScene(renderer);
-
-    const onSuccess = (position: GeolocationPosition) => {
-      const newRecord = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-      this.myLatLng = newRecord;
-      this.updateRoadSignBox();
-      if (position.coords.accuracy < this.minAccuracy) {
-        this.minAccuracy = position.coords.accuracy;
-        this.updatePosition();
-      }
-    };
-
-    const onError = () => {};
-
-    this.watchId = navigator.geolocation.watchPosition(onSuccess, onError, {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-      timeout: 3000,
-    });
   }
 
   /**
@@ -83,12 +63,28 @@ export default class AR {
       : console.log(" xr feature is not supported for your browser");
   }
 
-  private updatePosition() {
+  lonToSphMerc(lon: number) {
+    return (lon / 180) * this.HALF_EARTH;
+  }
+
+  latToSphMerc(lat: number) {
+    var y = Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) / (Math.PI / 180);
+    return (y * this.HALF_EARTH) / 180.0;
+  }
+  project(latLng: LatLng) {
+    return [this.lonToSphMerc(latLng.lng), -this.latToSphMerc(latLng.lat)];
+  }
+
+  add(object: Mesh, latLng: LatLng) {
+    const worldCoords = this.project(latLng);
+    [object.position.x, object.position.z] = worldCoords;
+    this.scene.add(object);
+  }
+
+  updatePosition(myLatLng: LatLng) {
     this.scene.children.forEach((child, idx) => {
-      const { x, y, z } = getXYZFromLatLng(
-        this.myLatLng,
-        this.childrenLatLng[idx]
-      );
+      const { x, y, z } = getXYZFromLatLng(myLatLng, this.childrenLatLng[idx]);
+      // [this.camera.position.x, this.camera.position.z] = this.project(myLatLng);
       child.position.set(x, y, z);
     });
   }
@@ -106,8 +102,6 @@ export default class AR {
       1000
     );
     this.camera = camera;
-
-    this.createRoadSignBox();
 
     this.animate();
   }
@@ -134,9 +128,9 @@ export default class AR {
    * @param latLng  박스가 위치할 위도와 경로
    * @description 위도와 경도와 나의 위치를 기반으로 가상세계에 박스를 로딩해줍니다.
    */
-  async createBox(latLng: LatLng) {
-    const { x, y, z } = getXYZFromLatLng(this.myLatLng, latLng);
-    const distance = computeDistanceMeters(this.myLatLng, latLng);
+  async createBox(myLatLng: LatLng, latLng: LatLng) {
+    const { x, y, z } = getXYZFromLatLng(myLatLng, latLng);
+    const distance = computeDistanceMeters(myLatLng, latLng);
     const boxGeometry = new t.BoxGeometry(0.1, 0.1, 0.1);
     const texture = createDistanceTexture(distance);
     const boxMaterial = new t.MeshBasicMaterial({
@@ -156,16 +150,20 @@ export default class AR {
   /**
    * @description 표지만을 만드는 함수입니다. 각종 포인트 마다 표지만을 띄워 해당 포인트까지 얼마나 거리가 먼지를 나타내주는 역할을합니다.
    */
-  createRoadSignBox() {
-    const boxGeometry = new t.BoxGeometry(0.1, 0.1, 0.02);
-    const distance = computeDistanceMeters(this.myLatLng, {
-      lat: 35.9475028,
-      lng: 128.4636795,
+  createRoadSignBox(myLatLng: LatLng) {
+    const boxGeometry = new t.BoxGeometry(1, 1, 0.2);
+    const distance = computeDistanceMeters(myLatLng, {
+      lat: 35.9474318,
+      lng: 128.4633368,
     });
 
     const boxMaterial = createRoadSignMaterial(distance);
     const box = new t.Mesh(boxGeometry, boxMaterial);
-    box.position.set(0, 0, -0.2);
+    const { x, y, z } = getXYZFromLatLng(myLatLng, {
+      lat: 35.9474318,
+      lng: 128.4633368,
+    });
+    box.position.set(0, 0, 0.2);
     box.name = "roadSignBox";
 
     this.scene.add(box);
@@ -174,8 +172,8 @@ export default class AR {
     var mat = new t.LineBasicMaterial({ color: 0x000000 });
     var wireframe = new t.LineSegments(geo, mat);
     this.childrenLatLng.push({
-      lat: 35.9475028,
-      lng: 128.4636795,
+      lat: 35.9474318,
+      lng: 128.4633368,
     });
     box.add(wireframe);
   }
@@ -183,10 +181,10 @@ export default class AR {
   /**
    * @description roadSignBox의 위치와 거리를 업데이트 하는 함수입니다.
    */
-  updateRoadSignBox() {
-    const distance = computeDistanceMeters(this.myLatLng, {
-      lat: 35.9474443,
-      lng: 128.4637799,
+  updateRoadSignBox(myLatLng: LatLng) {
+    const distance = computeDistanceMeters(myLatLng, {
+      lat: 35.9474318,
+      lng: 128.4633368,
     });
 
     const boxMaterial = createRoadSignMaterial(Math.round(distance));

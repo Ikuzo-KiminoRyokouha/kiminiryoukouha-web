@@ -221,6 +221,68 @@ export default class TMap {
     this.resultdrawArr.push(polyline_);
   }
 
+  async searchAroundPOI(keyword: string) {
+    await this.resetMarker();
+    const tmapLatLng = this.map.getCenter();
+    console.log(tmapLatLng._lat, tmapLatLng._lng);
+    const res = await axios.get(
+      "https://apis.openapi.sk.com/tmap/pois/search/around?version=1&format=json&callback=result",
+      {
+        params: {
+          version: 1,
+          searchKeyword: keyword,
+          searchType: "name",
+          searchtypCd: "A",
+          radius: 1,
+          centerLon: tmapLatLng._lng,
+          centerLat: tmapLatLng._lat,
+
+          resCoordType: "EPSG3857",
+          reqCoordType: "WGS84GEO",
+          count: 10,
+        },
+        headers: {
+          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
+        },
+      }
+    );
+
+    const positionBound = new window.Tmapv2.LatLngBounds(); // 맵에 결과물을 확인 하기위한 객체 생성
+
+    const data = res.data.searchPoiInfo.pois.poi;
+
+    // 마커 지도상에 띄우기
+    data.forEach((poi: any, idx: number) => {
+      const noorLat = Number(poi.noorLat);
+      const noorLon = Number(poi.noorLon);
+      const { name } = poi;
+
+      var { lat, lng: lon } = this.convertLatLng(noorLat, noorLon);
+
+      var markerPosition = new window.Tmapv2.LatLng(lat, lon);
+
+      const marker = new window.Tmapv2.Marker({
+        position: markerPosition,
+        //icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
+        icon:
+          "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" +
+          idx +
+          ".png",
+        iconSize: new window.Tmapv2.Size(24, 38),
+        title: name,
+        map: this.map,
+      });
+
+      this.resultdrawArr.push(marker);
+      positionBound.extend(markerPosition);
+    });
+
+    this.map.panToBounds(positionBound);
+
+    this.map.zoomOut();
+    return res;
+  }
+
   /**
    * @description 입력받은 장소를 기반으로 장소통합검색을 실시하는 함수입니다.
    * @param {string} keyword 검색하고 싶은 장소입니다

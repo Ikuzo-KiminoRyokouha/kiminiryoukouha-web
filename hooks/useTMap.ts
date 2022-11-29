@@ -26,6 +26,9 @@ export default function useTMap(targetDom: string) {
   /* TMap instance */
   const [tmap, setTmap] = useState<TMap>(new TMap());
 
+  const [searchAroundResult, setSearchAroundResult] =
+    useState<Array<TMapPOIResult>>();
+
   const { additionalScriptLoaing } = useScript(
     `https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=${process.env.NEXT_PUBLIC_TMAP_API_KEY}`
   );
@@ -72,7 +75,7 @@ export default function useTMap(targetDom: string) {
    */
   const searchToKeyword = async (
     keyword: string,
-    direction: "도착" | "출발"
+    direction?: "도착" | "출발"
   ) => {
     const res = await tmap.searchTotalPOI(keyword);
     const latLng: LatLng = tmap.convertLatLng(
@@ -83,8 +86,10 @@ export default function useTMap(targetDom: string) {
       setSearchResult(() => {
         return res.data.searchPoiInfo.pois.poi;
       });
-      setDirection(() => direction);
-      setResult(latLng, direction, res.data.searchPoiInfo.pois.poi[0].name);
+      if (direction) {
+        setDirection(() => direction);
+        setResult(latLng, direction, res.data.searchPoiInfo.pois.poi[0].name);
+      }
     }
   };
 
@@ -128,8 +133,14 @@ export default function useTMap(targetDom: string) {
     start && end && tmap.getDirection(start, end);
   };
 
+  const searchAroundPOI = async (keyword: string) => {
+    const res = await tmap.searchAroundPOI(keyword);
+    setSearchAroundResult(() => res.data.searchPoiInfo.pois.poi);
+  };
+
   return {
     searchToKeyword,
+    searchAroundPOI,
     searchResult,
     setResult,
     direction,
@@ -137,8 +148,10 @@ export default function useTMap(targetDom: string) {
     setResultToReserve,
     destination,
     convertLatLng,
+    searchAroundResult,
     start,
     end,
     markerLatLngArr: tmap.markerLatLngArr,
+    tmap,
   };
 }
