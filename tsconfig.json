@@ -22,7 +22,8 @@
     "**/*.tsx",
     "utils/Tmap.js",
     "pages/write.js",
-    "pages/QnA/write.js"
+    "pages/QnA/write.js",
+    "components/Comment.js"
   ],
   "exclude": ["node_modules"]
 }

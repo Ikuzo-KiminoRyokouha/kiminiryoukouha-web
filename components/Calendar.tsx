@@ -7,6 +7,7 @@ interface Props {
   getStartDate?: (date: dayjs.Dayjs) => void;
   getEndDate?: (date: dayjs.Dayjs) => void;
   mode?: "single" | "startEnd";
+  className?: string;
 }
 
 export default function Calendar({
@@ -14,6 +15,7 @@ export default function Calendar({
   getStartDate,
   getEndDate,
   mode = "single",
+  className,
 }: Props) {
   const {
     d,
@@ -66,10 +68,8 @@ export default function Calendar({
     [count, startDate]
   );
 
-  console.log(count);
-
   return (
-    <div className="flex rounded-md bg-white shadow-lg">
+    <div className={`flex rounded-md bg-white shadow-lg ${className}`}>
       <div>
         {/* 달 과 달 앞뒤 이동 아이콘 맨 위에있는거 */}
         <div className="flex flex-col px-6 pt-3 pb-6">
@@ -147,10 +147,7 @@ export default function Calendar({
                 );
               }
               const date = idx - startDay + 1;
-              console.log(
-                startDate?.isAfter(dayjs(`${y}-${m}-${date}`)) &&
-                  endDate?.isBefore(dayjs(`${y}-${m}-${date}`))
-              );
+
               return (
                 <div
                   key={idx}

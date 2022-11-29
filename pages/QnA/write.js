@@ -21,7 +21,6 @@ export default function Write() {
 
   /** @description 글작성 버튼_함수 */
   function submit() {
-    console.log(title.value, secret.value, contents.value);
     if (title.value && contents.value) {
       writeBoard({
         title: title.value,

@@ -29,4 +29,10 @@ export type TMapPOIResult = {
       }
     ];
   };
+  buildingNo1: string;
+  detailAddrName: string;
+  lowerAddrName: string;
+  middleAddrName: string;
+  roadName: string;
+  upperAddrName: string;
 };

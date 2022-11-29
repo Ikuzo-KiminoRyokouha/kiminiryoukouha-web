@@ -16,7 +16,7 @@ export function computeDistanceMeters(base: LatLng, dest: LatLng) {
   var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   // var distance = angle * 6378160;
 
-  var distance = angle * 6378135;
+  var distance = angle * 6371000;
 
   return distance;
 }

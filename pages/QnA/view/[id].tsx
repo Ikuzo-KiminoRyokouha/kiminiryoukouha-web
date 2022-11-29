@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import BoardNav from "../../../components/board/BoardNav";
 import Comment from "../../../components/Comment";
 import { useInput, useBoard } from "../../../hooks";
+import { getUser } from "../../../utils/client";
 import { getBoardPost, getComment } from "../../../utils/fetchFn/query/board";
 
 //얘가 밑에 댓글 맵으로 뿌려주는거
@@ -31,6 +32,14 @@ export default function Detail() {
   });
 
   const { writeComment } = useBoard();
+
+  const authCheck = () => {
+    if (!getUser()) {
+      alert("로그인 되지 않은 유저입니다.");
+      return false;
+    }
+    return true;
+  };
 
   if (isLoading) {
     return <div></div>;
@@ -92,15 +101,22 @@ export default function Detail() {
               </div>
               {/**댓글 */}
               <div className="flex justify-end pt-3">
-                <Link href={`/QnA/update?id=${id}`}>
-                  <button className="mx-2 border px-4 py-2" onClick={() => {}}>
-                    수정
-                  </button>
-                </Link>
+                <button
+                  className="mx-2 border px-4 py-2"
+                  onClick={() => {
+                    if (authCheck()) {
+                      router.push(`/QnA/update?id=${id}`);
+                    }
+                  }}
+                >
+                  수정
+                </button>
                 <button
                   className="bg-gray-400 px-4 py-2 text-white"
                   onClick={() => {
-                    deleteBoard(id);
+                    if (authCheck()) {
+                      confirm("정말 삭제하시겠습니까?") && deleteBoard(id);
+                    }
                   }}
                 >
                   삭제
@@ -120,13 +136,15 @@ export default function Detail() {
                 <button
                   className="ml-1  w-20 bg-gray-400  p-4 text-white "
                   onClick={() => {
-                    writeComment({
-                      content: commentV.value,
-                      board_id: id,
-                      target_id: null,
-                      group: null,
-                    });
-                    commentV.onChange("");
+                    if (authCheck()) {
+                      writeComment({
+                        content: commentV.value,
+                        board_id: id,
+                        target_id: null,
+                        group: null,
+                      });
+                      commentV.onChange("");
+                    }
                   }}
                 >
                   등록

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BsHouse } from "react-icons/bs";
 import { BiMessageRounded, BiCalendar } from "react-icons/bi";
 import { GiSteampunkGoggles } from "react-icons/gi";
-import { CiCircleQuestion } from "react-icons/ci";
+import { SlQuestion } from "react-icons/sl";
 
 const BottomNavMenu = [
   {
@@ -27,7 +27,7 @@ const BottomNavMenu = [
   },
   {
     title: "Q&A",
-    icon: <CiCircleQuestion className="inline-block" size={"25"} />,
+    icon: <SlQuestion className="inline-block" size={"25"} />,
     href: "/QnA",
   },
 ];

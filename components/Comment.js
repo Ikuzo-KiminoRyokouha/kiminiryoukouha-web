@@ -1,5 +1,6 @@
 import useBoard from "../hooks/useBoard";
 import { useInput, useToggle } from "../hooks";
+import { getUser } from "../utils/client";
 
 function Inputform({ isVisible, writeComment }) {
   const comment = useInput("", "댓글을 입력해주세요");
@@ -38,6 +39,14 @@ export default function Comment({ data }) {
   const comment = useInput(data.content, "수정할 댓글을 입력해주세요.");
   const { deleteComment, updateComment, writeComment } = useBoard();
 
+  const authCheck = () => {
+    if (!getUser()) {
+      alert("로그인 되지 않은 유저입니다.");
+      return false;
+    }
+    return true;
+  };
+
   return (
     <>
       <div className="  flex  justify-between space-x-3  border-b border-gray-300 p-2 text-base">
@@ -55,12 +64,21 @@ export default function Comment({ data }) {
               <button
                 className="float-right mx-2 "
                 onClick={() => {
-                  deleteComment(data.id);
+                  if (authCheck()) {
+                    confirm("정말 삭제하시겠습니까?") && deleteComment(data.id);
+                  }
                 }}
               >
                 삭제
               </button>
-              <button className="float-right" onClick={updateMode.setTrue}>
+              <button
+                className="float-right"
+                onClick={() => {
+                  if (authCheck()) {
+                    updateMode.setTrue();
+                  }
+                }}
+              >
                 수정
               </button>
             </div>

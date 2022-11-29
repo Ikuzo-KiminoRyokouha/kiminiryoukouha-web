@@ -28,7 +28,7 @@ export default function useBoard() {
 
   // 질의응답 게시판 등록함수
   const { mutate: writeBoard } = useMutation(
-    ["deleteBoardPost"],
+    ["writeBoardPost"],
     mWriteBoard,
     boardMutationOption
   );
