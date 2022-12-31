@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, ReactSVGElement, SetStateAction } from "react";
 import { Info } from "../../types/plan.interface";
 import IProps from "../../types/props.interface";
 
@@ -210,3 +210,52 @@ export default function Stepper({ children, step, setStep, canGoNext }: Props) {
     </div>
   );
 }
+
+Stepper.Circle = function ({
+  currentStep,
+  icon,
+  step,
+}: {
+  step: number;
+  icon: ReactSVGElement;
+  currentStep: number;
+}) {
+  return (
+    <div
+      className={`relative flex items-center ${
+        currentStep > step && "text-teal-600"
+      } ${currentStep === step && " text-white "}`}
+    >
+      <div
+        className={`h-12 w-12 rounded-full border-2 ${
+          currentStep === step && "bg-teal-600"
+        } border-teal-600 py-3 transition duration-500 ease-in-out`}
+      >
+        {icon}
+      </div>
+      <div
+        className={`absolute top-0 -ml-10 mt-16 w-32 text-center text-xs font-medium uppercase ${
+          currentStep >= step && "text-teal-600"
+        }`}
+      >
+        Personal
+      </div>
+    </div>
+  );
+};
+
+Stepper.Line = function ({
+  step,
+  currentStep,
+}: {
+  step: number;
+  currentStep: number;
+}) {
+  return (
+    <div
+      className={`flex-auto border-t-2 ${
+        currentStep >= step && "border-teal-600"
+      } transition duration-500 ease-in-out`}
+    ></div>
+  );
+};
