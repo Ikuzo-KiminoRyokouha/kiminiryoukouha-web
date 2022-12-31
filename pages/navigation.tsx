@@ -44,14 +44,36 @@ export default function Navigation() {
    * @description 네비게이션의 길찾기를 바탕으로 받아온 정보가 있다면, AR상에 해당 좌표를 기반으로 오브젝트 모델을 띄워줌
    */
   // useEffect(() => {
-  //   if (myLatLng && markerLatLngArr.length > 1) {
-  //     removeAllMesh();
-  //     renderToLatLng(myLatLng, markerLatLngArr);
+  //   if (markerLatLngArr.length > 1) {
+  //     markerLatLngArr.forEach((latLng) => {
+  //       ar.createRoadSignBox(myLatLng, latLng);
+  //       alert(latLng.lng + "-" + latLng.lat);
+  //     });
+  //     alert("rendererd");
   //   }
-  // }, [myLatLng, , markerLatLngArr]);
+  // }, [markerLatLngArr]);
 
   useEffect(() => {
-    ar && myLatLng && ar.createRoadSignBox(myLatLng);
+    ar &&
+      ar.createBox(myLatLng, {
+        lat: 35.9474909,
+        lng: 128.4637009,
+      });
+    // ar &&
+    //   ar.createRoadSignBox(myLatLng, {
+    //     lat: 35.9462488,
+    //     lng: 128.4604671,
+    //   });
+    // ar &&
+    //   ar.createRoadSignBox(myLatLng, {
+    //     lat: 35.9460995,
+    //     lng: 128.4607461,
+    //   });
+    // ar &&
+    //   ar.createRoadSignBox(myLatLng, {
+    //     lat: 35.946069,
+    //     lng: 128.4608129,
+    //   });
   }, [ar]);
   return (
     <>

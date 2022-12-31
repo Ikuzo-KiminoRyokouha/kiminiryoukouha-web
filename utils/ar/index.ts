@@ -42,6 +42,8 @@ export default class AR {
     // Enable XR functionality on the renderer
     renderer.xr.enabled = true;
 
+    renderer.xr.getCamera().position.set(1, 2, 1);
+
     ARCustomButton.connectToButton(this.button, renderer, {
       domOverlay: { root: this.domOverlayRoot },
       optionalFeatures: ["dom-overlay", "dom-overlay-for-handheld-ar"],
@@ -72,7 +74,7 @@ export default class AR {
     return (y * this.HALF_EARTH) / 180.0;
   }
   project(latLng: LatLng) {
-    return [this.lonToSphMerc(latLng.lng), -this.latToSphMerc(latLng.lat)];
+    return [this.lonToSphMerc(latLng.lng), this.latToSphMerc(latLng.lat)];
   }
 
   add(object: Mesh, latLng: LatLng) {
@@ -83,10 +85,32 @@ export default class AR {
 
   updatePosition(myLatLng: LatLng) {
     this.scene.children.forEach((child, idx) => {
-      const { x, y, z } = getXYZFromLatLng(myLatLng, this.childrenLatLng[idx]);
-      // [this.camera.position.x, this.camera.position.z] = this.project(myLatLng);
-      child.position.set(x, y, z);
+      // const { x, y, z } = getXYZFromLatLng(myLatLng, this.childrenLatLng[idx]);
+      // [child.position.x, child.position.z] = this.project(myLatLng);
+      // console.log(child.position.x, child.position.z);
+      // child.position.set(x, y, z);
     });
+  }
+
+  lonLatToWorldCoords(latLng: LatLng) {
+    const projectedPos = this.project(latLng);
+    return [projectedPos[0], -projectedPos[1]];
+  }
+
+  setWorldPosition(object: t.Object3D, latLng: LatLng, elev?: number) {
+    const worldCoords = this.lonLatToWorldCoords(latLng);
+    [object.position.x, object.position.z] = worldCoords;
+
+    if (elev !== undefined) {
+      object.position.y = elev;
+    }
+  }
+
+  setARCameraPosition(latLng: LatLng) {
+    const xrCamera = this.renderer.xr.getCamera();
+
+    this.setWorldPosition(xrCamera, latLng);
+    xrCamera.updateMatrixWorld(true);
   }
 
   /**
@@ -96,11 +120,13 @@ export default class AR {
     const scene = new t.Scene();
     this.scene = scene;
     const camera = new t.PerspectiveCamera(
-      70,
-      window.innerWidth / window.innerHeight,
+      80,
+      2, // window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      50000
     );
+    camera.position.x = 200;
+    camera.lookAt(new t.Vector3(0, 0, 0));
     this.camera = camera;
 
     this.animate();
@@ -139,7 +165,7 @@ export default class AR {
     });
 
     const box = new t.Mesh(boxGeometry, boxMaterial);
-    box.position.set(x, y, z);
+    box.position.set(0, 0, -2);
 
     box.name = "box";
 
@@ -150,20 +176,15 @@ export default class AR {
   /**
    * @description 표지만을 만드는 함수입니다. 각종 포인트 마다 표지만을 띄워 해당 포인트까지 얼마나 거리가 먼지를 나타내주는 역할을합니다.
    */
-  createRoadSignBox(myLatLng: LatLng) {
-    const boxGeometry = new t.BoxGeometry(1, 1, 0.2);
-    const distance = computeDistanceMeters(myLatLng, {
-      lat: 35.9474318,
-      lng: 128.4633368,
-    });
-
+  createRoadSignBox(myLatLng: LatLng, destLatLng: LatLng) {
+    const boxGeometry = new t.BoxGeometry(0.1, 0.1, 0.02);
+    const distance = computeDistanceMeters(myLatLng, destLatLng);
     const boxMaterial = createRoadSignMaterial(distance);
     const box = new t.Mesh(boxGeometry, boxMaterial);
-    const { x, y, z } = getXYZFromLatLng(myLatLng, {
-      lat: 35.9474318,
-      lng: 128.4633368,
-    });
-    box.position.set(0, 0, 0.2);
+    // const { x, y, z } = getXYZFromLatLng(myLatLng, destLatLng);
+
+    // box.position.set(x, y, z);
+    this.setWorldPosition(box, destLatLng);
     box.name = "roadSignBox";
 
     this.scene.add(box);
@@ -171,21 +192,15 @@ export default class AR {
     var geo = new t.EdgesGeometry(box.geometry);
     var mat = new t.LineBasicMaterial({ color: 0x000000 });
     var wireframe = new t.LineSegments(geo, mat);
-    this.childrenLatLng.push({
-      lat: 35.9474318,
-      lng: 128.4633368,
-    });
+    this.childrenLatLng.push(destLatLng);
     box.add(wireframe);
   }
 
   /**
    * @description roadSignBox의 위치와 거리를 업데이트 하는 함수입니다.
    */
-  updateRoadSignBox(myLatLng: LatLng) {
-    const distance = computeDistanceMeters(myLatLng, {
-      lat: 35.9474318,
-      lng: 128.4633368,
-    });
+  updateRoadSignBox(myLatLng: LatLng, destLatLng: LatLng) {
+    const distance = computeDistanceMeters(myLatLng, destLatLng);
 
     const boxMaterial = createRoadSignMaterial(Math.round(distance));
     (this.scene.getObjectByName("roadSignBox") as t.Mesh).material =

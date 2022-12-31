@@ -36,6 +36,7 @@ function Inputform({ isVisible, writeComment }) {
 export default function Comment({ data }) {
   const isVisible = useToggle(false);
   const updateMode = useToggle(false);
+  const user = getUser();
   const comment = useInput(data.content, "수정할 댓글을 입력해주세요.");
   const { deleteComment, updateComment, writeComment } = useBoard();
 
@@ -60,28 +61,31 @@ export default function Comment({ data }) {
             >
               {data.content}
             </div>
-            <div className="ml-10 w-fit ">
-              <button
-                className="float-right mx-2 "
-                onClick={() => {
-                  if (authCheck()) {
-                    confirm("정말 삭제하시겠습니까?") && deleteComment(data.id);
-                  }
-                }}
-              >
-                삭제
-              </button>
-              <button
-                className="float-right"
-                onClick={() => {
-                  if (authCheck()) {
-                    updateMode.setTrue();
-                  }
-                }}
-              >
-                수정
-              </button>
-            </div>
+            {data.user.id === user?.id && (
+              <div className="ml-10 w-fit ">
+                <button
+                  className="float-right mx-2 "
+                  onClick={() => {
+                    if (authCheck()) {
+                      confirm("정말 삭제하시겠습니까?") &&
+                        deleteComment(data.id);
+                    }
+                  }}
+                >
+                  삭제
+                </button>
+                <button
+                  className="float-right"
+                  onClick={() => {
+                    if (authCheck()) {
+                      updateMode.setTrue();
+                    }
+                  }}
+                >
+                  수정
+                </button>
+              </div>
+            )}
           </>
         )}
         {updateMode.value && (
