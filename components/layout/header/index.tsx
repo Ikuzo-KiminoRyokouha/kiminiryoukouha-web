@@ -7,10 +7,10 @@ import { RiArrowDropDownFill } from "react-icons/ri";
 
 import useInput from "../../../hooks/useInput";
 import useToggle from "../../../hooks/useToggle";
-import { getUser, useUser } from "../../../utils/client";
+import { useUser } from "../../../utils/client";
 import HeaderNav from "./HeaderNav";
 import headerNavMap from "../../../utils/dataMap/headerNavMap.json";
-import DropDown from "../../dropdown/DropDown";
+import DropDown from "../../common/DropDown";
 import { useMutation } from "@tanstack/react-query";
 import { mLogout } from "../../../utils/fetchFn/mutation/user";
 
