@@ -1,0 +1,22 @@
+[
+  {
+    "step": 1,
+    "title": "PERSONAL",
+    "icon": "SlPeople"
+  },
+  {
+    "step": 2,
+    "title": "ACCOUNT",
+    "icon": "BsPersonPlus"
+  },
+  {
+    "step": 3,
+    "title": "personal",
+    "icon": "SlPeople"
+  },
+  {
+    "step": 4,
+    "title": "personal",
+    "icon": "SlPeople"
+  }
+]

@@ -17,11 +17,11 @@ export default function Index() {
   const activeVisible = useToggle(true);
   const readyVisible = useToggle(true);
 
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<any>([]);
   useEffect(() => {
     axios.get("http://localhost:3001/plan").then((res) => setData(res.data));
   }, []);
-  console.log(data);
+
   return (
     <div className="max-w-8xl mx-auto mb-[53px] flex max-h-full w-full flex-1 lg:mb-0">
       <div className="basis-1/5 border">
@@ -55,7 +55,7 @@ export default function Index() {
             {readyVisible.value && <RiArrowDropDownLine size={18} />}
             <span>準備中の計画</span>
           </div>
-          {data?.map((item) => {
+          {[].map((item) => {
             return (
               <div className="flex space-x-4 border p-2" key={item.id}>
                 <div className="basis-1/12 text-center">

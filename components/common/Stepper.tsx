@@ -1,261 +1,178 @@
-import { Dispatch, ReactSVGElement, SetStateAction } from "react";
+import {
+  ComponentType,
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+} from "react";
 import { Info } from "../../types/plan.interface";
 import IProps from "../../types/props.interface";
+import React from "react";
 
+// Stepper 컴포넌트의 메인 타입
 interface Props extends IProps {
-  step: number;
-  setStep: Dispatch<SetStateAction<number>>;
-  canGoNext: () => void;
+  currentStep: number;
+  setCurrentStep: Dispatch<SetStateAction<number>>;
   info: Info;
+  title: string;
+  sub: string;
 }
 
-export default function Stepper({ children, step, setStep, canGoNext }: Props) {
+// Stepper의 하위컴포넌트에서 공통적으로 쓰는 Props Context
+const StepperContext = createContext<
+  Pick<Props, "currentStep" | "setCurrentStep">
+>({
+  currentStep: 0,
+  setCurrentStep: undefined,
+});
+
+/**
+ * @description 단계적으로 정해진 틀의 무언가를 제시해주는 컴포넌트입니다.
+ */
+export default function Stepper({
+  children,
+  currentStep,
+  setCurrentStep,
+  title,
+  sub,
+}: Props) {
   return (
-    <div className="p-5">
-      <div className="mx-4 p-4">
-        <div className="flex items-center">
-          <div
-            className={`relative flex items-center ${
-              step > 1 && "text-teal-600"
-            } ${step === 1 && " text-white "}`}
-          >
-            <div
-              className={`h-12 w-12 rounded-full border-2 ${
-                step === 1 && "bg-teal-600"
-              } border-teal-600 py-3 transition duration-500 ease-in-out`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="100%"
-                height="100%"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="feather feather-bookmark "
-              >
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-              </svg>
-            </div>
-            <div
-              className={`absolute top-0 -ml-10 mt-16 w-32 text-center text-xs font-medium uppercase ${
-                step >= 1 && "text-teal-600"
-              }`}
-            >
-              Personal
-            </div>
+    <StepperContext.Provider value={{ currentStep, setCurrentStep }}>
+      <div className="flex flex-1 flex-col items-center justify-center p-10">
+        <div className="border p-2 shadow-xl">
+          <div>
+            <p className="text-bold p-2 text-lg">{title}</p>
           </div>
-          <div
-            className={`flex-auto border-t-2 ${
-              step >= 1 && "border-teal-600"
-            } transition duration-500 ease-in-out`}
-          ></div>
-          <div
-            className={`relative flex items-center  ${
-              step >= 2 && "text-teal-600"
-            } ${step > 2 && " text-white"}`}
-          >
-            <div
-              className={`h-12 w-12 rounded-full border-2 ${
-                step >= 2 && "border-teal-600 bg-white"
-              } ${
-                step < 2 && "border-gray-300"
-              }  py-3 transition duration-500 ease-in-out`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="100%"
-                height="100%"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="feather feather-user-plus "
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="8.5" cy="7" r="4"></circle>
-                <line x1="20" y1="8" x2="20" y2="14"></line>
-                <line x1="23" y1="11" x2="17" y2="11"></line>
-              </svg>
-            </div>
-            <div
-              className={`absolute top-0 -ml-10 mt-16 w-32 text-center text-xs font-medium uppercase ${
-                step >= 2 && "text-teal-600"
-              }`}
-            >
-              Account
-            </div>
+          <div>
+            <p className="text-bold p-2 text-base">{sub}</p>
           </div>
-          <div
-            className={`flex-auto border-t-2  ${
-              step >= 2 && "border-teal-600"
-            } border-gray-300 transition duration-500 ease-in-out`}
-          ></div>
-          <div
-            className={`relative flex items-center ${
-              step > 3 && "text-teal-600"
-            } ${step === 3 && " text-white"}`}
-          >
-            <div
-              className={`h-12 w-12 rounded-full border-2 ${
-                step > 3 && "border-teal-600 bg-white"
-              } ${
-                step === 3 && "bg-teal-600"
-              } py-3 transition duration-500 ease-in-out`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="100%"
-                height="100%"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="feather feather-mail "
-              >
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                <polyline points="22,6 12,13 2,6"></polyline>
-              </svg>
-            </div>
-            <div
-              className={`absolute top-0 -ml-10 mt-16 w-32 text-center text-xs font-medium uppercase ${
-                step >= 3 && "text-teal-600"
-              }`}
-            >
-              Message
-            </div>
-          </div>
-          <div
-            className={`flex-auto border-t-2  ${
-              step >= 3 && "border-teal-600"
-            } border-gray-300 transition duration-500 ease-in-out`}
-          ></div>
-          <div
-            className={`relative flex items-center ${
-              step > 4 && "text-teal-600"
-            } ${step >= 4 && " text-white"}`}
-          >
-            <div
-              className={`h-12 w-12 rounded-full border-2 ${
-                step > 4 && "border-teal-600 bg-white"
-              } ${
-                step === 4 && "bg-teal-600"
-              } py-3 transition duration-500 ease-in-out`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="100%"
-                height="100%"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="feather feather-database "
-              >
-                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-              </svg>
-            </div>
-            <div
-              className={`absolute top-0 -ml-10 mt-16 w-32 text-center text-xs font-medium uppercase ${
-                step >= 4 && "text-teal-600"
-              }`}
-            >
-              Confirm
-            </div>
-          </div>
+          <div className="p-5">{children}</div>
         </div>
       </div>
-      <div className="mt-8 p-4">
-        {children}
-        <div className="mt-4 flex p-2">
-          {step < 4 && (
-            <>
-              <button
-                className="flex cursor-pointer justify-center rounded border border-gray-600 bg-gray-100 px-4 py-2 text-base 
-        font-bold  
-        text-gray-700 
-        transition 
-        duration-200 ease-in-out hover:scale-110 
-        hover:bg-gray-200 focus:outline-none"
-              >
-                Previous
-              </button>
-              <div className="flex flex-auto flex-row-reverse">
-                <button
-                  onClick={canGoNext}
-                  className="ml-2  flex  cursor-pointer justify-center rounded border border-teal-600 bg-teal-600 px-4 py-2 text-base 
-        font-bold  
-        text-teal-100 
-        transition 
-        duration-200 ease-in-out hover:scale-110 
-        hover:bg-teal-600 focus:outline-none"
-                >
-                  Next
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+    </StepperContext.Provider>
   );
 }
 
-Stepper.Circle = function ({
-  currentStep,
-  icon,
+/**
+ * @description Stepper의 각 단계별 아이콘과 타이틀을 표시해주는 원 컴포넌트 입니다.
+ */
+Stepper.Circle = ({
+  Icon,
   step,
+  title,
 }: {
   step: number;
-  icon: ReactSVGElement;
-  currentStep: number;
-}) {
+  Icon: ComponentType<{}>;
+  title: string;
+}) => {
+  const { currentStep } = useContext(StepperContext);
   return (
     <div
-      className={`relative flex items-center ${
-        currentStep > step && "text-teal-600"
-      } ${currentStep === step && " text-white "}`}
+      className={`relative flex items-center  ${
+        step > currentStep && "text-teal-600"
+      } ${step === currentStep && " text-white"}
+ `}
     >
       <div
         className={`h-12 w-12 rounded-full border-2 ${
-          currentStep === step && "bg-teal-600"
-        } border-teal-600 py-3 transition duration-500 ease-in-out`}
+          step <= currentStep && "border-teal-600 bg-teal-600"
+        } ${
+          step < currentStep && "border-gray-300 bg-white text-white"
+        }  flex items-center justify-center py-3 transition duration-500 ease-in-out`}
       >
-        {icon}
+        <Icon />
       </div>
       <div
         className={`absolute top-0 -ml-10 mt-16 w-32 text-center text-xs font-medium uppercase ${
-          currentStep >= step && "text-teal-600"
+          step >= currentStep && "text-teal-600"
         }`}
       >
-        Personal
+        {title}
       </div>
     </div>
   );
 };
 
-Stepper.Line = function ({
-  step,
-  currentStep,
-}: {
-  step: number;
-  currentStep: number;
-}) {
+/**
+ * @description Stepper의 원과 원 사이를 이어주는 컴포넌트 입니다.
+ */
+Stepper.Line = ({ step }: { step: number }) => {
+  const { currentStep } = useContext(StepperContext);
   return (
     <div
       className={`flex-auto border-t-2 ${
         currentStep >= step && "border-teal-600"
       } transition duration-500 ease-in-out`}
     ></div>
+  );
+};
+
+interface HeaderProps extends IProps {}
+/**
+ * @description Stepper의 상단 Progress Bar를 감싸는 컴포넌트 입니다.
+ */
+Stepper.Header = ({ children }: HeaderProps) => {
+  return (
+    <div className="mx-4 p-4">
+      <div className="flex items-center">{children}</div>
+    </div>
+  );
+};
+
+interface BodyProps extends IProps {}
+/**
+ * @description Stepper 메인(내용)부분입니다.
+ */
+Stepper.Body = ({ children }: BodyProps) => {
+  return <div className="mt-8 p-4">{children}</div>;
+};
+
+interface StepButtonProps {
+  goNext: () => void;
+  maxStep: number;
+}
+/**
+ * @description Stepper 하단부분의 Step진행 버튼들 입니다.
+ */
+Stepper.StepButton = ({ maxStep, goNext }: StepButtonProps) => {
+  const { currentStep, setCurrentStep } = useContext(StepperContext);
+
+  const goPrev = () => {
+    if (currentStep > maxStep && currentStep <= 0) {
+      setCurrentStep((prev: number) => prev - 1);
+    }
+  };
+
+  return (
+    <div className="mt-4 flex p-2">
+      {currentStep < maxStep && (
+        <>
+          <button
+            onClick={goPrev}
+            className="flex cursor-pointer justify-center rounded border border-gray-600 bg-gray-100 px-4 py-2 text-base 
+font-bold  
+text-gray-700 
+transition 
+duration-200 ease-in-out hover:scale-110 
+hover:bg-gray-200 focus:outline-none"
+          >
+            Previous
+          </button>
+          <div className="flex flex-auto flex-row-reverse">
+            <button
+              onClick={goNext}
+              className="ml-2  flex  cursor-pointer justify-center rounded border border-teal-600 bg-teal-600 px-4 py-2 text-base 
+font-bold  
+text-teal-100 
+transition 
+duration-200 ease-in-out hover:scale-110 
+hover:bg-teal-600 focus:outline-none"
+            >
+              Next
+            </button>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
