@@ -10,11 +10,14 @@ import Header from "../components/layout/header";
 import BottomNavigation from "../components/layout/BottomNavigation";
 import { useMemo } from "react";
 import { queryClient } from "../utils/request/reloadQuery";
+import { ThemeProvider } from "styled-components";
 
 /**
  * @description 로그인 정보가 필요한 페이지 접근 시, 해당 배열에 URL정보를 넣어줄 것
  */
 const NEED_AUTH_URL: Array<string> = ["/QnA/write"];
+
+const theme = {};
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -27,18 +30,20 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [router.pathname]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* 유저 인증 요청이 필요한 페이지에 대해 인증처리를 해주는 Wrapper 컴포넌트 */}
-      <AuthCheck needAuth={needAuth}>
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <Component {...pageProps} />
-          <BottomNavigation />
-          <ReactQueryDevtools initialIsOpen={false} />
-          <ChatBotButton />
-        </div>
-        <Footer />
-      </AuthCheck>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        {/* 유저 인증 요청이 필요한 페이지에 대해 인증처리를 해주는 Wrapper 컴포넌트 */}
+        <AuthCheck needAuth={needAuth}>
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <Component {...pageProps} />
+            <BottomNavigation />
+            <ReactQueryDevtools initialIsOpen={false} />
+            <ChatBotButton />
+          </div>
+          <Footer />
+        </AuthCheck>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
