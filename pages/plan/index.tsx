@@ -7,7 +7,7 @@ import {
   AiOutlinePlusCircle,
 } from "react-icons/ai";
 import { RiArrowDropDownLine, RiArrowDropRightLine } from "react-icons/ri";
-import { useToggle } from "../../hooks";
+import { useToggle } from "@/hooks";
 import Image from "next/image";
 import { BsShare } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";

@@ -3,7 +3,7 @@ import { GiSteampunkGoggles } from "react-icons/gi";
 import { MdAssistantNavigation, MdClose } from "react-icons/md";
 import { TbExchange } from "react-icons/tb";
 
-import NavigationCard from "../components/card/NavigationCard";
+import NavigationCard from "../components/common/card/NavigationCard";
 import AROverlayDom from "../components/layout/AROverlay";
 import { useAR, useToggle, useTMap, useLocation } from "../hooks";
 
