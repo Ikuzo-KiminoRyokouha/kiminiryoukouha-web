@@ -1,13 +1,14 @@
+import NavigationCard from "@/common/card/NavigationCard";
+import { useInput, useLocation, useTMap } from "@/hooks";
+import { Info } from "@/types/plan.interface";
+import { LatLng } from "@/types/tmap.type";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { FiBox } from "react-icons/fi";
-import NavigationCard from "../../../components/card/NavigationCard";
+
 import PlaceByDate from "../../../components/plan/PlaceByDate";
-import { useInput, useLocation, useTMap } from "../../../hooks";
-import { Info } from "../../../types/plan.interface";
-import { LatLng } from "../../../types/tmap.type";
 
 export default function Detail() {
   const router = useRouter();

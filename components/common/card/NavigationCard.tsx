@@ -1,10 +1,10 @@
 import { useMemo, useRef } from "react";
 
-import RatingInput from "../input/RatingInput";
+import RatingInput from "../../input/RatingInput";
 import RatingStar from "./RatingStar";
 
-import type { LatLng, TMapPOIResult } from "../../types/tmap.type";
-import { getDistanceFromLatLon } from "../../utils/math";
+import type { LatLng, TMapPOIResult } from "../../../types/tmap.type";
+import { getDistanceFromLatLon } from "../../../utils/math";
 interface Props {
   poi: TMapPOIResult;
   direction?: "출발" | "도착";

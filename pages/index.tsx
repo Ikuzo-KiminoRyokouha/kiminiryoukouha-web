@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import PlanCarousel from "../components/PlanCarousel";
-import ImageCard from "../components/card/ImageCard";
+import ImageCard from "../components/common/card/ImageCard";
 import { useEffect } from "react";
 
 export default function Home() {

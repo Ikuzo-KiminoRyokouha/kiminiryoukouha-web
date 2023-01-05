@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { useCallback, useEffect, useRef, useState } from "react";
-import useCalendar from "../hooks/useCalendar";
+import useCalendar from "../../hooks/useCalendar";
 
 interface Props {
   getDate?: (date: dayjs.Dayjs) => void;

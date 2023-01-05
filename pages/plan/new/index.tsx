@@ -1,16 +1,16 @@
+import Stepper from "@/common/Stepper";
+import { Info } from "@/types/plan.interface";
+import stepMap from "@/utils/dataMap/planStepperStepMap.json";
 import dynamic from "next/dynamic";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 import React from "react";
 
-import Stepper from "../../../components/common/Stepper";
 import {
   StepFour,
   StepOne,
   StepThree,
   StepTwo,
 } from "../../../components/plan/Step";
-import { Info } from "../../../types/plan.interface";
-import stepMap from "../../../utils/dataMap/planStepperStepMap.json";
 
 const StepInfoContext = createContext<{
   info: Info;

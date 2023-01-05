@@ -12,7 +12,7 @@ import {
 
 import { useInput } from "../../hooks";
 import { Info } from "../../types/plan.interface";
-import Calendar from "../Calendar";
+import Calendar from "../common/Calendar";
 
 interface StepProps {
   ctx: Context<{
