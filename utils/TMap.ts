@@ -11,7 +11,7 @@ export default class TMap {
   private marker_e: any;
   private marker_me: any;
   private totalMarkerArr: any[] = [];
-  private drawInfoArr: any[] = [];
+  drawInfoArr: any[] = [];
   private resultdrawArr: any[] = [];
 
   markerLatLngArr: Array<LatLng> = [];
@@ -210,11 +210,11 @@ export default class TMap {
   /**
    * @description 그러진 Tmap 위에 선을 그리는 함 수 입니다.
    */
-  drawLine(arrPoint: any) {
+  drawLine(arrPoint: any, strokeColor: string = "#DD0000") {
     var polyline_;
     polyline_ = new window.Tmapv2.Polyline({
       path: arrPoint,
-      strokeColor: "#DD0000",
+      strokeColor,
       strokeWeight: 6,
       map: this.map,
     });
@@ -399,5 +399,35 @@ export default class TMap {
   }
   async removeMyMarker() {
     await this.marker_me.setMap(null);
+  }
+
+  pushDrawableMarker(latLng: LatLng) {
+    const pointlatLng = new window.Tmapv2.LatLng(latLng.lat, latLng.lng);
+    this.drawInfoArr.push(pointlatLng);
+  }
+
+  makeStartMarker(latLng: LatLng) {
+    this.marker_s = this.makeMarker(
+      latLng,
+      "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png"
+    );
+    return this.marker_s;
+  }
+  makeEndMarker(latLng: LatLng) {
+    this.marker_e = this.makeMarker(
+      latLng,
+      "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png"
+    );
+    return this.marker_e;
+  }
+  drawLineWithPanning() {
+    const positionBound = new window.Tmapv2.LatLngBounds();
+    this.drawInfoArr.forEach((drawInfo) => {
+      positionBound.extend(drawInfo);
+    });
+    this.map.panToBounds(positionBound);
+
+    this.map.zoomOut();
+    this.drawLine(this.drawInfoArr);
   }
 }
