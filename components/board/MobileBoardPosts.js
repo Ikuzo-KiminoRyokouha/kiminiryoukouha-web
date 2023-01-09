@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { BiLockAlt } from "react-icons/bi";
 import { getUser } from "../../utils/client";
 
-export default function MobileBoardPosts({ datas, boardname }) {
+export default function MobileBoardPosts({ datas }) {
   const router = useRouter();
   return (
     <>
@@ -37,7 +37,7 @@ export default function MobileBoardPosts({ datas, boardname }) {
                     onClick={() => {
                       if (getUser().name === data.user.name) {
                         router.push({
-                          pathname: `/${boardname}/view/${data.id}`,
+                          pathname: `/QnA/view/${data.id}`,
                         });
                       } else {
                         alert("권한이 없습니다.");
@@ -52,7 +52,7 @@ export default function MobileBoardPosts({ datas, boardname }) {
                     className="flex items-center"
                     onClick={() => {
                       router.push({
-                        pathname: `/${boardname}/view/${data.id}`,
+                        pathname: `/QnA/view/${data.id}`,
                       });
                     }}
                   >
