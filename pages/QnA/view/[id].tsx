@@ -1,24 +1,22 @@
 import { useQueries } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
-
 import BoardNav from "../../../components/board/BoardNav";
 import Comment from "../../../components/Comment";
 import { useInput, useBoard } from "../../../hooks";
 import { getUser } from "../../../utils/client";
 import { getBoardPost, getComment } from "../../../utils/fetchFn/query/board";
+import BoardImage from "../../../components/board/BoardImage";
+import axios from "axios";
 
 //얘가 밑에 댓글 맵으로 뿌려주는거
-export default function Detail() {
+export default function Detail({}) {
   const router = useRouter();
   const id = router.query?.id as string;
   const { deleteBoard } = useBoard();
-
-  const commentV = useInput("", "댓글을 입력해주세요");
-
-  const [{ data: post, isLoading, error }, { data: comment }] = useQueries({
+  const { writeComment } = useBoard();
+  const comment = useInput("", "댓글을 입력해주세요");
+  const [{ data: post, isLoading, error }, { data: comments }] = useQueries({
     queries: [
       {
         queryKey: ["getBoardPost", id],
@@ -31,8 +29,6 @@ export default function Detail() {
     ],
   });
 
-  const { writeComment } = useBoard();
-
   const authCheck = () => {
     if (!getUser()) {
       alert("로그인 되지 않은 유저입니다.");
@@ -42,7 +38,7 @@ export default function Detail() {
   };
 
   if (isLoading) {
-    return <div></div>;
+    return <div>Loading...</div>;
   } else if (error) {
     return <div>error</div>;
   }
@@ -51,30 +47,24 @@ export default function Detail() {
     <div className="h-full">
       <div>
         <div className="mx-auto max-w-7xl">
-          <div className="relative hidden h-72 md:block">
-            <Image src={"/assets/QnA-bg.png"} layout={"fill"} />
-            {/* inset :0 position: absolute */}
-          </div>
-
+          {/* 배경사진 */}
+          <BoardImage />
           <div className="flex h-full w-full flex-col lg:flex-row">
-            <BoardNav boardname={"QnA"} />
-
+            <BoardNav />
             {/** 게시판 제목 */}
-            <div className="mx-auto w-full max-w-6xl px-2">
-              <div className="bg-gray mx-auto mt-0 hidden h-px w-full  max-w-6xl bg-black md:mt-9 md:block"></div>
+            <div className="mx-auto w-4/5 max-w-6xl px-2">
+              <div className="mx-auto mt-0 hidden h-px w-full  max-w-6xl bg-black md:mt-9 md:block"></div>
               <dl>
-                <div className="flex p-1">
-                  <dt className="mt-2 border-r border-gray-300  pr-6 text-lg">
+                <div className="m-1 flex items-center p-1">
+                  <dt className="border-r border-gray-300  pr-6 text-lg">
                     제목
                   </dt>
-                  <dd className="mt-2 pl-3 text-lg">
-                    {post.data.board[0].title}
-                  </dd>
+                  <dd className="pl-3 text-lg">{post.data.board[0].title}</dd>
                 </div>
 
-                <div className="flex border-y p-1 ">
+                <div className="flex border-y p-1">
                   <div className="flex w-6/12 items-center">
-                    <dt className=" border-r border-gray-300  pr-2  text-lg ">
+                    <dt className=" border-r border-gray-300  pr-2.5  text-lg ">
                       글쓴이
                     </dt>
                     <dd className="pl-3 text-lg">
@@ -95,14 +85,13 @@ export default function Detail() {
                 </div>
               </dl>
               {/**게시판 내용*/}
-              {/* <div className="bg-gray  float-none clear-both my-2 h-px w-full bg-gray-200 "></div> */}
-              <div className="w-5/5 h-auto min-h-[200px]  border-black px-2 pt-1 text-sm md:text-base">
+              <div className="w-5/5 h-auto min-h-[200px] break-all px-2 pt-1 text-sm md:text-base">
                 {post.data.board[0].content}
               </div>
-              {/**댓글 */}
+
               <div className="flex justify-end pt-3">
                 <button
-                  className="mx-2 border px-4 py-2"
+                  className="mx-2 border px-6 py-2"
                   onClick={() => {
                     if (authCheck()) {
                       router.push(`/QnA/update?id=${id}`);
@@ -112,7 +101,7 @@ export default function Detail() {
                   수정
                 </button>
                 <button
-                  className="bg-gray-400 px-4 py-2 text-white"
+                  className="bg-gray-400 px-6 py-2 text-white"
                   onClick={() => {
                     if (authCheck()) {
                       confirm("정말 삭제하시겠습니까?") && deleteBoard(id);
@@ -129,7 +118,7 @@ export default function Detail() {
                 <div className="flex-1  align-text-top ">
                   <textarea
                     rows={4}
-                    {...commentV}
+                    {...comment}
                     className="h-auto w-full resize-none  border p-2 "
                   />
                 </div>
@@ -138,21 +127,22 @@ export default function Detail() {
                   onClick={() => {
                     if (authCheck()) {
                       writeComment({
-                        content: commentV.value,
+                        content: comment.value,
                         board_id: id,
                         target_id: null,
                         group: null,
                       });
-                      commentV.onChange("");
+                      comment.onChange("");
                     }
                   }}
                 >
                   등록
                 </button>
               </form>
+              {/* 댓글 */}
               <div>
-                {comment?.data.comments.map((el, index) => {
-                  return <Comment data={el} key={index} />;
+                {comments?.data?.comments?.map((data, index) => {
+                  return <Comment data={data} key={index} />;
                 })}
               </div>
             </div>
@@ -162,3 +152,22 @@ export default function Detail() {
     </div>
   );
 }
+
+// SSR로 데이터 받아오기
+// export async function getServerSideProps(context) {
+//   try {
+//     const { data } = await axios.get(
+//       `http://localhost:8000/api/comment/${context.query.id}`
+//     );
+
+//     if (!data) {
+//       return {
+//         props: { SScommnet: -1 },
+//       };
+//     }
+
+//     return { props: { SScommnet: data } };
+//   } catch {
+//     return { props: { SScommnet: -1 } };
+//   }
+// }

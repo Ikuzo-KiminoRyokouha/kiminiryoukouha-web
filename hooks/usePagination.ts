@@ -12,12 +12,7 @@ export default function usePagination(
 ) {
   const router = useRouter();
 
-  /**
-   * @description 현재 페이지의 number type 변수입니다.
-   */
-  const currentPage = useMemo(() => {
-    return parseInt(router.query?.page as string);
-  }, [router.query?.page]);
+  const currentPage = parseInt(router.query?.page as string);
 
   /**
    * @description 페이지네이션 왼쪽버튼 onClick 함수

@@ -8,19 +8,12 @@ import MobileBoardPosts from "./MobileBoardPosts";
 import { getUser } from "../../utils/client";
 
 /**
- * @param boardname 어느 게시판인지 ex) QnA게시판인지 FnA게시판인지
  * @param POSTS 서버에서 받아온 게시물 데이터
  * @param MAX_PAGE 서버에서 받아온 전체 페이지 수
  * @param pathname pathname
  * @param searchData 검색시 검색한 게시물 데이터
  */
-export default function MobileBoard({
-  boardname,
-  POSTS,
-  MAX_PAGE,
-  pathname,
-  searchData,
-}) {
+export default function MobileBoard({ POSTS, MAX_PAGE, pathname, searchData }) {
   const router = useRouter();
   const search = useInput("", "검색어를 입력하세요");
   const paginationProps = usePagination(MAX_PAGE, pathname);
@@ -54,12 +47,9 @@ export default function MobileBoard({
       {/* 게시물 컨테이너 */}
       <div className="max-h-full w-full flex-1 overflow-scroll">
         {router.pathname === "/QnA/search" ? (
-          <MobileBoardPosts
-            datas={searchData.searchData.boards || []}
-            boardname={boardname}
-          />
+          <MobileBoardPosts datas={searchData.searchData.boards || []} />
         ) : (
-          <MobileBoardPosts datas={POSTS || []} boardname={boardname} />
+          <MobileBoardPosts datas={POSTS || []} />
         )}
       </div>
       {/* 페이지네이션 & 글쓰기버튼 */}

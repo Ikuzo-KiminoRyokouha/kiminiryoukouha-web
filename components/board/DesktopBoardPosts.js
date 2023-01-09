@@ -4,18 +4,20 @@ import { BiLockAlt } from "react-icons/bi";
 import { getUser } from "../../utils/client";
 
 /**
- *
  * @param {Array} datas 게시물 데이터
- * @param boardname 게시판 이름
  */
-export default function DesktopBoardPosts({ datas, boardname }) {
+export default function DesktopBoardPosts({ datas }) {
   const router = useRouter();
 
+  /**
+   * @description 게시물이 비밀글인지 확인하는 함수
+   */
   const checkPrivate = (data) => {
-    if (getUser()?.id === data?.user.id) {
+    if (data.private === 0 || getUser()?.id === data?.user.id) {
       router.push({
-        pathname: `/${boardname}/view/${data.id}`,
+        pathname: `/QnA/view/${data.id}`,
       });
+      return;
     } else {
       alert("권한이 없습니다.");
     }
@@ -35,11 +37,7 @@ export default function DesktopBoardPosts({ datas, boardname }) {
               <a
                 className="cursor-pointer"
                 onClick={() => {
-                  data.private === 1 && checkPrivate(data);
-                  data.private === 0 &&
-                    router.push({
-                      pathname: `/${boardname}/view/${data.id}`,
-                    });
+                  checkPrivate(data);
                 }}
               >
                 <span className="flex items-center">
