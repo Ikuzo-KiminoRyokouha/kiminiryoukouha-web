@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "baseUrl": ".",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
@@ -13,14 +15,23 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "paths": {
+      "@/common/*": ["components/common/*"],
+      "@/layout/*": ["components/layout/*"],
+      "@/hooks": ["hooks/index.ts"],
+      "@/types/*": ["types/*"],
+      "@/utils/*": ["utils/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "utils/Tmap.js",
-    "pages/write.js"
+    "pages/write.js",
+    "pages/QnA/write.js",
+    "components/Comment.js"
   ],
   "exclude": ["node_modules"]
 }

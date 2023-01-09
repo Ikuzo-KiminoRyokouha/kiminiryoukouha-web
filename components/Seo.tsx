@@ -33,7 +33,7 @@ export default function Seo({
   return (
     <Head>
       {/* 타이틀 */}
-      <title>君の旅行は | {title ? title : Title}</title>
+      <title>君の旅行は</title>
       <meta charSet="UTF - 8" />
       {/* 홈페이지 주제 */}
       <meta name="Subject" content={subject ? subject : Subject} />

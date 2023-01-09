@@ -1,7 +1,6 @@
 import Link from "../node_modules/next/link";
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 import { useRouter } from "next/router";
-import { useLayoutEffect, useState } from "react";
 
 interface Props {
   currentPage: number;
@@ -29,30 +28,54 @@ export default function Pagination({
             <BiLeftArrow className="text-sky-600" />
           </button>
           {Array.from({
-            length: maxPage,
+            length:
+              parseInt((maxPage / 5) as any) >
+              parseInt((currentPage / 5 - 0.1) as any)
+                ? 5
+                : maxPage % 5,
           }).map((_, index) => {
             const page = currentPage
               ? parseInt((currentPage / 5 - 0.1) as any) * 5 + index + 1
               : 1;
             return (
               <li className="p-2" key={index}>
-                <Link
-                  href={{
-                    pathname: `${pathname}`,
-                    query: { page },
-                  }}
-                  legacyBehavior
-                >
-                  <a
-                    className={`text-lg ${
-                      parseInt(router.query?.page as string) === page
-                        ? "text-blue-600"
-                        : ""
-                    }`}
+                {router.pathname === "/QnA/search" ? (
+                  <Link
+                    href={{
+                      pathname: `${pathname}`,
+                      query: { page, search: router.query?.search },
+                    }}
+                    legacyBehavior
                   >
-                    {page}
-                  </a>
-                </Link>
+                    <a
+                      className={`text-lg ${
+                        parseInt(router.query?.page as string) === page
+                          ? "text-blue-600"
+                          : ""
+                      }`}
+                    >
+                      {page}
+                    </a>
+                  </Link>
+                ) : (
+                  <Link
+                    href={{
+                      pathname: `${pathname}`,
+                      query: { page },
+                    }}
+                    legacyBehavior
+                  >
+                    <a
+                      className={`text-lg ${
+                        parseInt(router.query?.page as string) === page
+                          ? "text-blue-600"
+                          : ""
+                      }`}
+                    >
+                      {page}
+                    </a>
+                  </Link>
+                )}
               </li>
             );
           })}

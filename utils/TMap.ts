@@ -14,6 +14,8 @@ export default class TMap {
   private drawInfoArr: any[] = [];
   private resultdrawArr: any[] = [];
 
+  markerLatLngArr: Array<LatLng> = [];
+
   constructor() {}
 
   /**
@@ -47,10 +49,7 @@ export default class TMap {
 
     // 출발지 마킹
     this.marker_s = new window.Tmapv2.Marker({
-      position: new window.Tmapv2.LatLng(
-        parseFloat(start.lat),
-        parseFloat(start.lng)
-      ),
+      position: new window.Tmapv2.LatLng(start.lat, start.lng),
       icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
       iconSize: new window.Tmapv2.Size(24, 38),
       map: this.map,
@@ -60,10 +59,7 @@ export default class TMap {
 
     // 도착지 마킹
     this.marker_e = new window.Tmapv2.Marker({
-      position: new window.Tmapv2.LatLng(
-        parseFloat(end.lat),
-        parseFloat(end.lng)
-      ),
+      position: new window.Tmapv2.LatLng(end.lat, end.lng),
       icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
       iconSize: new window.Tmapv2.Size(24, 38),
       map: this.map,
@@ -124,6 +120,12 @@ export default class TMap {
               let convertPoint =
                 new window.Tmapv2.Projection.convertEPSG3857ToWGS84GEO(latlng);
 
+              // 내가 선언해놓은 LatLng 타입에 맞춰서 받은 마커의 좌표를 배열에 넣어줌
+              // AR 에서 오브젝트를 띄워줄 때 사용할 예정
+              let markerLatLng: LatLng = {
+                lat: convertPoint._lat,
+                lng: convertPoint._lng,
+              };
               // 포인트객체의 정보로 좌표값 변환 객체로 저장
               let convertChange = new window.Tmapv2.LatLng(
                 convertPoint._lat,
@@ -132,6 +134,8 @@ export default class TMap {
 
               // 배열에 담기
               this.drawInfoArr.push(convertChange);
+
+              this.markerLatLngArr.push(markerLatLng);
             }
           } else {
             var markerImg = "";
@@ -217,6 +221,68 @@ export default class TMap {
     this.resultdrawArr.push(polyline_);
   }
 
+  async searchAroundPOI(keyword: string) {
+    await this.resetMarker();
+    const tmapLatLng = this.map.getCenter();
+    console.log(tmapLatLng._lat, tmapLatLng._lng);
+    const res = await axios.get(
+      "https://apis.openapi.sk.com/tmap/pois/search/around?version=1&format=json&callback=result",
+      {
+        params: {
+          version: 1,
+          searchKeyword: keyword,
+          searchType: "name",
+          searchtypCd: "A",
+          radius: 1,
+          centerLon: tmapLatLng._lng,
+          centerLat: tmapLatLng._lat,
+
+          resCoordType: "EPSG3857",
+          reqCoordType: "WGS84GEO",
+          count: 10,
+        },
+        headers: {
+          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
+        },
+      }
+    );
+
+    const positionBound = new window.Tmapv2.LatLngBounds(); // 맵에 결과물을 확인 하기위한 객체 생성
+
+    const data = res.data.searchPoiInfo.pois.poi;
+
+    // 마커 지도상에 띄우기
+    data.forEach((poi: any, idx: number) => {
+      const noorLat = Number(poi.noorLat);
+      const noorLon = Number(poi.noorLon);
+      const { name } = poi;
+
+      var { lat, lng: lon } = this.convertLatLng(noorLat, noorLon);
+
+      var markerPosition = new window.Tmapv2.LatLng(lat, lon);
+
+      const marker = new window.Tmapv2.Marker({
+        position: markerPosition,
+        //icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
+        icon:
+          "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" +
+          idx +
+          ".png",
+        iconSize: new window.Tmapv2.Size(24, 38),
+        title: name,
+        map: this.map,
+      });
+
+      this.resultdrawArr.push(marker);
+      positionBound.extend(markerPosition);
+    });
+
+    this.map.panToBounds(positionBound);
+
+    this.map.zoomOut();
+    return res;
+  }
+
   /**
    * @description 입력받은 장소를 기반으로 장소통합검색을 실시하는 함수입니다.
    * @param {string} keyword 검색하고 싶은 장소입니다
@@ -299,6 +365,8 @@ export default class TMap {
     this.marker_s && (await this.marker_s.setMap(null));
 
     this.drawInfoArr = [];
+
+    this.markerLatLngArr = [];
   }
   /**
    * @description 위도와 경도를 바탕으로 WGS84GEO 형식의 좌표값으로 변환해주는 함수입니다.
@@ -317,10 +385,7 @@ export default class TMap {
    */
   private makeMarker(latLng: LatLng, img_url: string, isCircle?: boolean) {
     return new window.Tmapv2.Marker({
-      position: new window.Tmapv2.LatLng(
-        parseFloat(latLng.lat),
-        parseFloat(latLng.lng)
-      ),
+      position: new window.Tmapv2.LatLng(latLng.lat, latLng.lng),
       icon: img_url,
       iconSize: isCircle
         ? new window.Tmapv2.Size(24, 24)

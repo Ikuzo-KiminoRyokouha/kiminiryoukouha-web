@@ -1,16 +1,21 @@
-import Head from "next/head";
-import useInput from "../hooks/useInput";
-import Link from "next/link";
-import MyInput from "../components/MyInput";
-import MyButton from "../components/MyButton";
 import { useMutation } from "@tanstack/react-query";
-import { mLogin } from "../utils/fetchFn/mutation/user";
+import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useRef } from "react";
+
+import MyInput from "../components/MyInput";
+import useInput from "../hooks/useInput";
+import { mLogin } from "../utils/fetchFn/mutation/user";
+import { reloadUser } from "../utils/request/reloadQuery";
+import React from "react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const submitButton = useRef<HTMLButtonElement>(null);
   const { mutate } = useMutation(["login"], mLogin, {
-    onSuccess() {
+    onSuccess: async () => {
+      reloadUser();
       router.push("/");
     },
     onError(error) {
@@ -35,13 +40,21 @@ export default function LoginPage() {
         <title>Login</title>
         <meta name="description" content="login page" />
       </Head>
-      <div className="flex h-full flex-col items-center justify-center md:w-1/4">
+      <div className="flex h-full w-full flex-col items-center justify-center md:w-2/5">
         <div>
           <h1 className="p-1 pb-5 text-4xl font-bold">Sign in</h1>
         </div>
-        <div className="flex flex-col ">
+        <div className="flex w-full flex-col p-4">
           <MyInput {...id} type="email" />
-          <MyInput {...pwd} type="password" />
+          <MyInput
+            {...pwd}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                submitButton.current?.click();
+              }
+            }}
+            type="password"
+          />
           <div className="flex items-center ">
             <div>
               <input type="checkbox" id="remember" className="h-4 w-4" />
@@ -52,16 +65,23 @@ export default function LoginPage() {
               </label>
             </div>
           </div>
-          <MyButton onClick={onSubmit} name="Sign In" />
+          <button
+            ref={submitButton}
+            onClick={onSubmit}
+            type="submit"
+            className="my-3 rounded bg-sky-600 p-4  text-white"
+          >
+            Sign In
+          </button>
 
           <div className="flex justify-between">
             <Link href="signUp" legacyBehavior>
-              <a className="text-xs text-sky-600 md:text-base">
+              <a className="text-xs text-sky-600 md:text-sm xl:text-base">
                 Create Account
               </a>
             </Link>
             <Link href="findPwd" legacyBehavior>
-              <a className="text-xs text-sky-600 md:text-base">
+              <a className="text-xs text-sky-600 md:text-sm xl:text-base">
                 Forgot Password?
               </a>
             </Link>
