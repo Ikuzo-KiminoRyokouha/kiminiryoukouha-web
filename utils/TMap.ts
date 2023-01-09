@@ -1,4 +1,5 @@
 import axios from "axios";
+import { start } from "repl";
 import { LatLng } from "../types/tmap.type";
 
 /**
@@ -13,7 +14,9 @@ export default class TMap {
   private totalMarkerArr: any[] = [];
   private drawInfoArr: any[] = [];
   private resultdrawArr: any[] = [];
-
+  private routeLayer: any;
+  private markerLayer: any;
+  private markerWaypointLayer: any;
   markerLatLngArr: Array<LatLng> = [];
 
   constructor() {}
@@ -283,6 +286,26 @@ export default class TMap {
     return res;
   }
 
+  async searchTotalPOINoMarker(keyword: string) {
+    const res = await axios.get(
+      "https://apis.openapi.sk.com/tmap/pois?format=json&callback=result",
+      {
+        params: {
+          version: 1,
+          searchKeyword: keyword,
+          searchType: "all",
+          resCoordType: "EPSG3857",
+          reqCoordType: "WGS84GEO",
+          count: 10,
+        },
+        headers: {
+          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
+        },
+      }
+    );
+    return res;
+  }
+
   /**
    * @description 입력받은 장소를 기반으로 장소통합검색을 실시하는 함수입니다.
    * @param {string} keyword 검색하고 싶은 장소입니다
@@ -399,5 +422,85 @@ export default class TMap {
   }
   async removeMyMarker() {
     await this.marker_me.setMap(null);
+  }
+
+  async makeLayerForPlan(
+    startLatLng: LatLng,
+    endLatLng: LatLng,
+    ...wayPointLatLng: Array<LatLng>
+  ) {
+    // this.routeLayer = new window.Tmapv2.Layer.Vector("route"); // 백터 레이어 생성
+    // this.markerLayer = new window.Tmapv2.Layer.Markers("point"); //마커 레이어 생성
+    // this.markerWaypointLayer = new window.Tmapv2.Layer.Markers("waypoint"); // 마커 레이어 생성
+
+    // this.map.addLayer(this.routeLayer); //맵에 레이어 추가
+    // this.map.addLayer(this.markerLayer); //map에 마커 레이어 추가
+    // this.map.addLayer(this.markerWaypointLayer); //map에 마커 레이어 추가
+
+    this.makeStartMarker(startLatLng);
+
+    this.makeEndMarker(endLatLng);
+    wayPointLatLng.forEach((el, idx) => {
+      this.makeMarker(
+        el,
+        `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${idx}.png`
+      );
+    });
+    this.reDefineCenterMap(startLatLng);
+    let viaPoints = wayPointLatLng.map((el) => [
+      {
+        viaPointId: "test01",
+        viaPointName: "test01",
+        viaX: el.lat,
+        viaY: el.lng,
+        viaTime: 600,
+      },
+    ]);
+    const res = await axios.post(
+      "https://apis.openapi.sk.com/tmap/routes/routeOptimization30?version=1&format=json",
+      {
+        reqCoordType: "WGS84GEO",
+        resCoordType: "WGS84GEO",
+        startName: "출발",
+        startX: startLatLng.lat,
+        startY: startLatLng.lng,
+        startTime: "201711121314",
+        endName: "도착",
+        endX: endLatLng.lat,
+        endY: endLatLng.lng,
+        searchOption: "0",
+        viaPoints,
+      },
+      {
+        headers: {
+          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
+        },
+      }
+    );
+    var style_red = {
+      fillColor: "#FF0000",
+      fillOpacity: 0.2,
+      strokeColor: "#FF0000",
+      strokeWidth: 3,
+      strokeDashstyle: "solid",
+      pointRadius: 2,
+      title: "this is a red line",
+    };
+    console.log(res);
+  }
+
+  makeStartMarker(latLng: LatLng) {
+    this.marker_s = this.makeMarker(
+      latLng,
+      "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png"
+    );
+    return this.marker_s;
+  }
+  makeEndMarker(latLng: LatLng) {
+    this.marker_e = this.makeMarker(
+      latLng,
+      "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png"
+    );
+    return this.marker_e;
   }
 }
