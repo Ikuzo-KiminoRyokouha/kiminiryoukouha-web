@@ -96,6 +96,11 @@ export default function useTMap(
     }
   };
 
+  const searchToKeywordNoMarker = async (keyword: string) => {
+    const res = await tmap.searchTotalPOINoMarker(keyword);
+    return res;
+  };
+
   /**
    *@description 위도와 경도를 바탕으로 WGS84GEO 형식의 좌표값으로 변환해주는 함수입니다.
    */
@@ -141,6 +146,13 @@ export default function useTMap(
     setSearchAroundResult(() => res.data.searchPoiInfo.pois.poi);
   };
 
+  const makeLayerForPlan = (
+    startLatLng: LatLng,
+    endLatLng: LatLng,
+    ...wayPointLatLng: Array<LatLng>
+  ) => {
+    tmap.makeLayerForPlan(startLatLng, endLatLng, ...wayPointLatLng);
+  };
   const pushDrawableMarker = (latLng: LatLng) => {
     tmap.pushDrawableMarker(latLng);
   };
@@ -175,6 +187,8 @@ export default function useTMap(
     drawLineWithPanning,
     searchToKeyword,
     searchAroundPOI,
+    searchToKeywordNoMarker,
+    makeLayerForPlan,
     searchResult,
     setResult,
     direction,
