@@ -1,6 +1,4 @@
-import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import {
   AiOutlineDelete,
   AiOutlineHome,
@@ -61,9 +59,9 @@ export default function Index() {
               />
             </div>
             <div className="flex flex-1 flex-col justify-around">
-              <p>計画日時 : 2023-01-10 ~ 2023-01-12</p>
-              <p>予算 :300000원</p>
-              <p>テーマ : 역사여행</p>
+              <p>계획 일시 : 2023-01-10 ~ 2023-01-12</p>
+              <p>예산 :300000원</p>
+              <p>테마 : 역사여행</p>
             </div>
             <div className="relative flex flex-1 flex-col"></div>
             <div className="flex flex-col justify-between space-y-2">
