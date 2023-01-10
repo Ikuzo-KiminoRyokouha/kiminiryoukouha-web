@@ -1,11 +1,10 @@
 import { useTMap } from "@/hooks";
 import fakeData from "@/utils/dataMap/fakeData.json";
 import transfortModeMap from "@/utils/dataMap/transfortModeMap.json";
-import pathTypeMap from "@/utils/dataMap/pathTypeMap.json";
+import { convertSecToTimeObj } from "@/utils/math";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { convertSecToTimeObj } from "../../../utils/math";
-import dayjs from "dayjs";
 
 export default function PlanNavigation() {
   const {
@@ -146,21 +145,33 @@ export default function PlanNavigation() {
                       .add(timeObj.min, "minute")
                       .format("HH:mm")}
                     도착 <ColDivider />
+                    {plan.fare.regular.totalFare} 원
                   </div>
                   <div>
                     {plan.legs.map((leg) => {
                       const transfortTime = convertSecToTimeObj(
                         leg.sectionTime
                       );
-                      console.log(leg.mode);
                       return (
                         <div
                           className="p-2"
                           key={leg.start.name + leg.end.name}
                         >
                           <p>
-                            <span>{transfortModeMap[leg.mode]}</span>
+                            <span>
+                              {leg.route
+                                ? leg.route
+                                : transfortModeMap[leg.mode]}
+                            </span>
                             <span> - </span>
+                            {leg.passStopList?.stationList && (
+                              <>
+                                <span className="text-sm">
+                                  {leg.passStopList?.stationList[0].stationName}
+                                </span>
+                                <span> - </span>
+                              </>
+                            )}
                             <span>
                               <span>
                                 {transfortTime.hour && transfortTime.hour}
@@ -171,6 +182,7 @@ export default function PlanNavigation() {
                               </span>
                               {transfortTime.min != 0 && "분 "}
                             </span>
+                            <span className="cursor-pointer"> {">"} </span>
                           </p>
                         </div>
                       );
