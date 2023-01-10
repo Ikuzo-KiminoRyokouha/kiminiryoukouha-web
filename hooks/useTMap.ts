@@ -10,7 +10,10 @@ import useInput from "./useInput";
  * @param targetDom 돔 상에 TMap을 그려주기 위해 선택되는 id 값입니다.
  * @returns
  */
-export default function useTMap(targetDom: string) {
+export default function useTMap(
+  targetDom: string,
+  needMyPosition: boolean = true
+) {
   /* 출발지 이름 */
   const source = useInput("", "出発地");
   /* 도착지 이름 */
@@ -46,7 +49,7 @@ export default function useTMap(targetDom: string) {
         tmap.makeMyMarker(latLng, "http://localhost:3000/assets/my-marker.png");
         setStart(latLng);
         source.onChange("내 위치");
-        tmap.reDefineCenterMap(latLng);
+        // tmap.reDefineCenterMap(latLng);
       },
       () => {
         alert("GPS 에 연결할 수 없습니다.");
@@ -58,7 +61,7 @@ export default function useTMap(targetDom: string) {
     // useScript로 해당 tmap 스크립트가 불러와져야 tmap을 그려줍니다.
     if (additionalScriptLoaing) {
       tmap.initTmap(targetDom);
-      getMyPosition();
+      needMyPosition && getMyPosition();
     }
   }, [additionalScriptLoaing]);
 
@@ -138,7 +141,38 @@ export default function useTMap(targetDom: string) {
     setSearchAroundResult(() => res.data.searchPoiInfo.pois.poi);
   };
 
+  const pushDrawableMarker = (latLng: LatLng) => {
+    tmap.pushDrawableMarker(latLng);
+  };
+
+  const drawLineWithPanning = () => {
+    tmap.drawLineWithPanning();
+  };
+
+  const reDefineCenterMap = (latLng: LatLng) => {
+    tmap.reDefineCenterMap(latLng);
+  };
+
+  const makeStartMarker = (latLng: LatLng) => {
+    tmap.makeStartMarker(latLng);
+  };
+
+  const makeEndMarker = (latLng: LatLng) => {
+    tmap.makeEndMarker(latLng);
+  };
+
+  const resetMarker = async () => {
+    await tmap.resetMarker();
+  };
+
   return {
+    additionalScriptLoaing,
+    resetMarker,
+    pushDrawableMarker,
+    makeStartMarker,
+    makeEndMarker,
+    reDefineCenterMap,
+    drawLineWithPanning,
     searchToKeyword,
     searchAroundPOI,
     searchResult,

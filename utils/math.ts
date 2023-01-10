@@ -21,3 +21,21 @@ export const getDistanceFromLatLon = (start: LatLng, end: LatLng): number => {
   var d = R * c; // Distance in km
   return d;
 };
+
+/**
+ * @description 초 정보를 받아 문자열로 리턴해주는 함수입니다.
+ * @param {number} sec 초 정보
+ */
+export const convertSecToTimeObj = (sec: number) => {
+  let min = Math.floor(sec / 60);
+  if (min < 0) {
+    return { sec };
+  }
+  if (min < 60) {
+    return { min, sec };
+  }
+  let hour = Math.floor(min / 60);
+  min -= hour * 60;
+
+  return { hour, min, sec };
+};
