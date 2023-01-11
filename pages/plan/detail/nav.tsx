@@ -2,11 +2,12 @@ import { useTMap } from "@/hooks";
 import fakeData from "@/utils/dataMap/fakeData.json";
 import transfortModeMap from "@/utils/dataMap/transfortModeMap.json";
 import { convertSecToTimeObj } from "@/utils/math";
+import Image from "next/image";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-export default function PlanNavigation() {
+export default function PlanNavigation({ query }: { query: any }) {
   const {
     pushDrawableMarker,
     makeStartMarker,
@@ -20,6 +21,8 @@ export default function PlanNavigation() {
   const [mode, setMode] = useState(0);
   const [planIdx, setPlanIdx] = useState(0);
   const [plans, setPlans] = useState(undefined);
+
+  const [destination, setDestination] = useState(query?.place);
 
   useEffect(() => {
     if (mode) {
@@ -80,12 +83,30 @@ export default function PlanNavigation() {
       className="max-w-8xl max- mx-auto mb-[53px] flex
     h-full w-full flex-1 lg:mb-0"
     >
-      <div className="basis-3/4">
+      <div className="relative basis-3/4">
+        <div className="absolute z-10 flex h-full w-full items-end p-2">
+          <div className="flex space-x-3">
+            <div
+              onClick={() => setDestination("안녕")}
+              className="flex cursor-pointer items-center space-x-3 rounded-lg bg-white p-2 text-lg tracking-wider"
+            >
+              <div className="h-24 w-24">
+                <Image
+                  src="/assets/main-img.png"
+                  layout="responsive"
+                  width={1}
+                  height={1}
+                />
+              </div>
+              <span className="text-lg">석굴암</span>
+            </div>
+          </div>
+        </div>
         <div id="map"></div>
       </div>
       <div className="relative flex basis-1/4 flex-col border-r">
         <div className="absolute flex max-h-full min-h-full w-full flex-col">
-          <div className="border p-2">~ 까지의 경로</div>
+          <div className="border p-2">{destination} 까지의 경로</div>
           <div className="space-x-2">
             <ModeButton
               color={`${mode === 0 && "blue"}`}
@@ -196,6 +217,14 @@ export default function PlanNavigation() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      query: context.query,
+    }, // will be passed to the page component as props
+  };
 }
 
 const ModeButton = styled.button`

@@ -1,8 +1,7 @@
 export interface Info {
-  theme: Array<string>;
-  contry: string;
+  tag: Array<string>;
+  region: string;
   startDate: string;
   endDate: string;
-  people: number;
   money: number;
 }

@@ -22,14 +22,14 @@ interface StepProps {
 }
 
 export function StepOne({ ctx }: StepProps) {
-  const theme = useInput("", "選べたいテーマを入力してください");
+  const tag = useInput("", "테마를 입력해주세요");
   const { info, setInfo } = useContext(ctx);
 
   const inputTag = () => {
-    if (theme.value.startsWith("#")) {
-      const v = theme.value.substring(1);
-      setInfo((prev) => ({ ...prev, theme: [...prev.theme, v] }));
-      theme.onChange("");
+    if (tag.value.startsWith("#")) {
+      const v = tag.value.substring(1);
+      setInfo((prev) => ({ ...prev, tag: [...prev.tag, v] }));
+      tag.onChange("");
     }
   };
 
@@ -40,28 +40,28 @@ export function StepOne({ ctx }: StepProps) {
           htmlFor="countries"
           className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
         >
-          Select an option
+          Region
         </label>
         <select
           onChange={(e) =>
             e.target.value &&
-            setInfo((prev) => ({ ...prev, contry: e.target.value }))
+            setInfo((prev) => ({ ...prev, region: e.target.value }))
           }
           id="countries"
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         >
           <option selected value={""}>
-            Choose a country
+            Choose a region
           </option>
-          <option value="KR">Korea</option>
+          <option value="경주">경주</option>
         </select>
       </div>
       <div className="p-2">
         <label
-          htmlFor="theme"
+          htmlFor="tag"
           className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
         >
-          お遊びテーマは何ですか
+          여행 테마를 입력해주세요
         </label>
         <input
           onKeyDown={(e) => {
@@ -69,13 +69,13 @@ export function StepOne({ ctx }: StepProps) {
               inputTag();
             }
           }}
-          {...theme}
+          {...tag}
           className=" block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
         ></input>
         <p className="p-2 text-xs text-gray-500">
-          #の後に選べたいテーマを入力し、エンターキーを押したらテーマが選べます
+          #을 앞에 붙이고 써서 Enter를 누르면 테마가 추가됩니다!
         </p>
-        {info.theme.map((el) => (
+        {info.tag.map((el) => (
           <span className="mr-2 rounded bg-gray-400 px-2.5 py-0.5 text-sm font-medium text-white dark:bg-gray-700 dark:text-gray-300">
             {el}
           </span>
@@ -115,23 +115,10 @@ export function StepTwo({ ctx }: StepProps) {
         </label>
         <div className="min-h-[48px] border text-center">
           <span className="m-auto text-lg">
-            {startDate?.format("YYYY-MM-DD")} -{endDate?.format("YYYY-MM-DD")}
+            <span className="min-w-96">{startDate?.format("YYYY-MM-DD")}</span>{" "}
+            ~<span>{endDate?.format("YYYY-MM-DD")}</span>
           </span>
         </div>
-        <label className="mb-2 block text-lg font-medium text-gray-900">
-          予想人数
-        </label>
-        <input
-          type={"number"}
-          value={info.people}
-          onChange={(e) => {
-            setInfo((prev) => ({
-              ...prev,
-              people: parseInt(e.target.value),
-            }));
-          }}
-          className=" block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
-        ></input>
       </div>
     </div>
   );
@@ -141,11 +128,11 @@ export function StepThree({ ctx }: StepProps) {
   const { info, setInfo } = useContext(ctx);
   return (
     <div className="flex flex-1 flex-col">
-      <p>これが最後の項目です！もうちょっと頑張りましょう</p>
+      <p className="text-sm">이게 마지막이에요! 화이팅!!</p>
       <div className="flex-1">
         <div>
           <label className="mb-2 block pt-4 text-sm font-medium text-gray-900">
-            送金額
+            총금액
           </label>
           <input
             type={"number"}
@@ -177,12 +164,12 @@ export function StepFour({ ctx }: StepProps) {
           onClick={() =>
             router.replace(
               {
-                pathname: "/plan/new/detail",
+                pathname: "/plan/new/planDetail",
                 query: {
                   info: JSON.stringify(info),
                 },
               },
-              "/plan/detail"
+              "/plan/new/planDetail"
             )
           }
           className=" mt-9 bg-sky-600 px-6 py-3 text-white"

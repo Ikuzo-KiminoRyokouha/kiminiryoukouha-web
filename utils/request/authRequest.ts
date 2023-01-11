@@ -24,7 +24,6 @@ authRequest.interceptors.response.use(
           withCredentials: true,
         }
       );
-
       // authRequest header에 authorization의 default 값을 refresh 된 accessToken 으로 교체
       authRequest.defaults.headers.common["Authorization"] =
         res.data.accessToken;

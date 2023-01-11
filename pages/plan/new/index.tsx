@@ -22,23 +22,22 @@ const StepInfoContext = createContext<{
 
 export default function New() {
   const [info, setInfo] = useState<Info>({
-    theme: [],
-    contry: "",
+    tag: [],
+    region: "",
     startDate: "",
     endDate: "",
-    people: 0,
     money: 0,
   });
   const [step, setStep] = useState<number>(1);
 
   const goNext = () => {
     if (step === 1) {
-      if (info.theme.length == 0 || !info.contry) {
+      if (info.tag.length == 0 || !info.region) {
         return;
       }
       setStep(2);
     } else if (step === 2) {
-      if (!info.people || !info.startDate || !info.endDate) {
+      if (!info.startDate || !info.endDate) {
         return;
       }
       setStep(3);
