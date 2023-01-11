@@ -1,31 +1,41 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function DecidedPlanCard() {
+interface Props {
+  img: string;
+  title: string;
+  days: string;
+  description: string;
+}
+
+export default function DecidedPlanCard({
+  img,
+  title,
+  days,
+  description,
+}: Props) {
   return (
     <>
       {/* 카드 */}
       <div className="h-96 w-60 rounded-lg border border-black ">
         {/* 미리보기 이미지 */}
         <div className="relative h-[45%]">
-          <Image src={"/assets/budda.JPG"} layout={"fill"} />
+          <Image src={`${img}`} layout={"fill"} />
         </div>
         {/* 텍스트부분 */}
         <div className="flex h-[55%] flex-col items-center">
           <div className="flex h-1/4 w-[90%] items-center justify-between ">
             <Link href={"/plan/new/planDetail"} legacyBehavior>
               <a>
-                <h3>역사탐방</h3>
+                <h3>{title}</h3>
               </a>
             </Link>
-            <p className="text-[10px] text-gray-400">당일치기</p>
+            <p className="text-[10px] text-gray-400">{days}</p>
           </div>
           <div className="h-[65%] w-[90%]">
             <Link href={"/plan/new/planDetail"} legacyBehavior>
               <a>
-                <p className="text-sm text-gray-400">
-                  석굴암을 비롯한 경주의 역사를 경험해보세요.
-                </p>
+                <p className="text-sm text-gray-400">{description}</p>
               </a>
             </Link>
           </div>
