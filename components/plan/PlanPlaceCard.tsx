@@ -1,9 +1,11 @@
 import { Modal, Portal } from "@/common/modal";
 import { useToggle } from "@/hooks";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdArrowRight } from "react-icons/md";
 import { TbFileDescription, TbMap } from "react-icons/tb";
+import { getDescriptionFromAPI } from "../../utils/apiQuery";
 
 export default function PlanPlaceCard() {
   const show = useToggle(false);
@@ -56,7 +58,7 @@ export default function PlanPlaceCard() {
       {show.value && (
         <PlaceDescModal
           title={"석굴암"}
-          src={"/assets/main-img.png"}
+          src={"/assets/budda.JPG"}
           description={
             "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos, magnam. Eaque libero ea repudiandae in dolores vitae eos, aut omnis non beatae tenetur nisi consequatur voluptatem, iusto, accusamus maiores necessitatibus!"
           }
@@ -74,7 +76,14 @@ interface ModalProps {
   description: string;
 }
 
-const PlaceDescModal = ({ hide, title, src, description }: ModalProps) => {
+const PlaceDescModal = ({ hide, title, src }: ModalProps) => {
+  const [description, setDescription] = useState<string>("");
+  useEffect(() => {
+    getDescriptionFromAPI(126216, 12).then((res) => {
+      setDescription(res);
+    });
+  }, []);
+
   return (
     <Portal qs={"#__next"}>
       <Modal>
@@ -82,7 +91,7 @@ const PlaceDescModal = ({ hide, title, src, description }: ModalProps) => {
           <Modal.Title text={title} />
         </Modal.Header>
         <Modal.Image src={src} />
-        <Modal.Description text={description} />
+        {description && <Modal.Description text={description} />}
       </Modal>
     </Portal>
   );

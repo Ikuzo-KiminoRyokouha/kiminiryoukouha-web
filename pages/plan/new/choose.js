@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import BoardNav from "../../../components/board/BoardNav";
 import DecidedPlanCard from "../../../components/plan/DecidedPlanCard";
 
 export default function Choose() {
+  // Props로 받아온 3개의 데이터를 저장하고 각 링크별로 정보로 뿌려준다.
   return (
     <>
       <div className="flex h-screen w-full justify-center">
