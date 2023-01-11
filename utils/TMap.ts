@@ -459,6 +459,7 @@ export default class TMap {
     endLatLng: LatLng,
     ...wayPointLatLng: Array<LatLng>
   ) {
+    await this.resetMarker();
     // this.routeLayer = new window.Tmapv2.Layer.Vector("route"); // 백터 레이어 생성
     // this.markerLayer = new window.Tmapv2.Layer.Markers("point"); //마커 레이어 생성
     // this.markerWaypointLayer = new window.Tmapv2.Layer.Markers("waypoint"); // 마커 레이어 생성
@@ -467,55 +468,71 @@ export default class TMap {
     // this.map.addLayer(this.markerLayer); //map에 마커 레이어 추가
     // this.map.addLayer(this.markerWaypointLayer); //map에 마커 레이어 추가
 
-    this.makeStartMarker(startLatLng);
+    this.marker_s = this.makeStartMarker(startLatLng);
 
-    this.makeEndMarker(endLatLng);
+    this.marker_e = this.makeEndMarker(endLatLng);
     wayPointLatLng.forEach((el, idx) => {
       this.makeMarker(
         el,
         `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${idx}.png`
       );
     });
+
     this.reDefineCenterMap(startLatLng);
-    let viaPoints = wayPointLatLng.map((el) => [
-      {
-        viaPointId: "test01",
-        viaPointName: "test01",
-        viaX: el.lat,
-        viaY: el.lng,
-        viaTime: 600,
-      },
-    ]);
-    const res = await axios.post(
-      "https://apis.openapi.sk.com/tmap/routes/routeOptimization30?version=1&format=json",
-      {
-        reqCoordType: "WGS84GEO",
-        resCoordType: "WGS84GEO",
-        startName: "출발",
-        startX: startLatLng.lat,
-        startY: startLatLng.lng,
-        startTime: "201711121314",
-        endName: "도착",
-        endX: endLatLng.lat,
-        endY: endLatLng.lng,
-        searchOption: "0",
-        viaPoints,
-      },
-      {
-        headers: {
-          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
+
+    const latLngArr = [
+      new window.Tmapv2.LatLng(startLatLng.lat, startLatLng.lng),
+      ...wayPointLatLng.map((el) => new window.Tmapv2.LatLng(el.lat, el.lng)),
+      new window.Tmapv2.LatLng(endLatLng.lat, endLatLng.lng),
+    ];
+
+    this.drawInfoArr = latLngArr;
+
+    this.drawLineWithPanning();
+
+    let viaPoints = wayPointLatLng.map((el) => {
+      return [
+        {
+          viaPointId: "test01",
+          viaPointName: "test01",
+          viaX: el.lat,
+          viaY: el.lng,
+          viaTime: 600,
         },
-      }
-    );
-    var style_red = {
-      fillColor: "#FF0000",
-      fillOpacity: 0.2,
-      strokeColor: "#FF0000",
-      strokeWidth: 3,
-      strokeDashstyle: "solid",
-      pointRadius: 2,
-      title: "this is a red line",
-    };
-    console.log(res);
+      ];
+    });
+
+    this.drawLineWithPanning();
+    // const res = await axios.post(
+    //   "https://apis.openapi.sk.com/tmap/routes/routeOptimization30?version=1&format=json",
+    //   {
+    //     reqCoordType: "WGS84GEO",
+    //     resCoordType: "WGS84GEO",
+    //     startName: "출발",
+    //     startX: startLatLng.lat,
+    //     startY: startLatLng.lng,
+    //     startTime: "201711121314",
+    //     endName: "도착",
+    //     endX: endLatLng.lat,
+    //     endY: endLatLng.lng,
+    //     searchOption: "0",
+    //     viaPoints,
+    //   },
+    //   {
+    //     headers: {
+    //       appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
+    //     },
+    //   }
+    // );
+    // var style_red = {
+    //   fillColor: "#FF0000",
+    //   fillOpacity: 0.2,
+    //   strokeColor: "#FF0000",
+    //   strokeWidth: 3,
+    //   strokeDashstyle: "solid",
+    //   pointRadius: 2,
+    //   title: "this is a red line",
+    // };
+    // console.log("response : ", res);
   }
 }

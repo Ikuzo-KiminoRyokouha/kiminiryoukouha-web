@@ -1,7 +1,7 @@
-import mainRequest from "../../request/mainRequest";
+import authRequest from "../../request/authRequest";
 
 export const getUser = () => {
-  return mainRequest.get("/api/user", {
+  return authRequest.get("/api/user", {
     timeout: 3000,
   });
 };

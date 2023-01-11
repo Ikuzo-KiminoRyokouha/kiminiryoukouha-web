@@ -16,8 +16,8 @@ export default function PlanDetail() {
         lng: 129.33247253051985,
       },
       {
-        lat: 35.78681255436075,
-        lng: 129.33247253051985,
+        lat: 35.795303,
+        lng: 129.349698,
       },
       {
         lat: 35.83313867650138,
@@ -28,36 +28,9 @@ export default function PlanDetail() {
         lng: 129.21573137667983,
       },
     ];
-    //  const res1 = await searchToKeywordNoMarker("불국사");
-    //  var latLng = {
-    //    lat: res1.data.searchPoiInfo.pois.poi[0].frontLat,
-    //    lon: res1.data.searchPoiInfo.pois.poi[0].frontLon,
-    //  };
-    //  latLngArr = [...latLngArr, convertLatLng(latLng.lat, latLng.lon)];
-
-    //  const res2 = await searchToKeywordNoMarker("불국사");
-    //  var latLng = {
-    //    lat: res2.data.searchPoiInfo.pois.poi[0].frontLat,
-    //    lon: res2.data.searchPoiInfo.pois.poi[0].frontLon,
-    //  };
-    //  latLngArr = [...latLngArr, convertLatLng(latLng.lat, latLng.lon)];
-
-    //  const res3 = await searchToKeywordNoMarker("동궁과 월지");
-    //  var latLng = {
-    //    lat: res3.data.searchPoiInfo.pois.poi[0].frontLat,
-    //    lon: res3.data.searchPoiInfo.pois.poi[0].frontLon,
-    //  };
-    //  latLngArr = [...latLngArr, convertLatLng(latLng.lat, latLng.lon)];
-
-    //  const res4 = await searchToKeywordNoMarker("첨성대");
-    //  var latLng = {
-    //    lat: res4.data.searchPoiInfo.pois.poi[0].frontLat,
-    //    lon: res4.data.searchPoiInfo.pois.poi[0].frontLon,
-    //  };
-    //  latLngArr = [...latLngArr, convertLatLng(latLng.lat, latLng.lon)];
-    //  console.log("좌표 : ", latLngArr);
     return latLngArr;
   };
+
   useEffect(() => {
     if (additionalScriptLoaing) {
       tempSearch().then((res) =>
@@ -114,6 +87,11 @@ export default function PlanDetail() {
                   </button>
                 </div>
               </div>
+            </div>
+            <div className="mt-12 flex w-full justify-center font-bold">
+              <button className="rounded-lg bg-white py-6 px-24">
+                계획생성
+              </button>
             </div>
           </div>
         </div>

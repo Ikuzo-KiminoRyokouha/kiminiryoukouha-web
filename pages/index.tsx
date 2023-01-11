@@ -3,8 +3,10 @@ import Image from "next/image";
 import PlanCarousel from "../components/PlanCarousel";
 import ImageCard from "../components/common/card/ImageCard";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function Home() {
+  const router = useRouter();
   useEffect(() => {
     const observer = new IntersectionObserver((e) => {
       e.forEach((el) => {
@@ -42,14 +44,17 @@ export default function Home() {
                 Do You Wanna Go To Travel?
               </p>
               <div className="flex space-x-6">
-                <button className="bg-gray-300 bg-opacity-30 py-3 pl-2 pr-12">
+                <button
+                  onClick={() => router.push("/plan/new")}
+                  className="bg-gray-300 bg-opacity-30 py-3 pl-2 pr-12"
+                >
                   <span className="bg-opacity-100 text-2xl text-white">
                     Start Your Journey &#10132;
                   </span>
                 </button>
-                <div className="bg-gray-300 p-4">
+                {/* <div className="bg-gray-300 p-4">
                   <span>ランダム国 / 地域</span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
