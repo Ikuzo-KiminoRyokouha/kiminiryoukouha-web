@@ -1,14 +1,8 @@
 import BoardUI from "../../components/board/Board";
 import Seo from "../../components/Seo";
-import { getSearch } from "../../utils/fetchFn/query/board";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
 import axios from "axios";
 
 export default function Search({ searchedItems }) {
-  const router = useRouter();
-
   return (
     <>
       <Seo

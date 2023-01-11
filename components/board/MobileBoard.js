@@ -6,6 +6,7 @@ import { FiSearch } from "react-icons/fi";
 import { BiLockAlt } from "react-icons/bi";
 import MobileBoardPosts from "./MobileBoardPosts";
 import { getUser } from "../../utils/client";
+import SearchNotFound from "./SearchNotFound";
 
 /**
  * @param POSTS 서버에서 받아온 게시물 데이터
@@ -18,14 +19,22 @@ export default function MobileBoard({ POSTS, MAX_PAGE, pathname, searchData }) {
   const search = useInput("", "검색어를 입력하세요");
   const paginationProps = usePagination(MAX_PAGE, pathname);
 
-  /**
-   * @description 검색창 돋보기 아이콘 클릭시 검색 실행 해주는 onClick 함수
-   */
-  const searching = () => {
-    router.push({
-      pathname: `${pathname}/search`,
-      query: { search: search.value, page: 1 },
-    });
+  const onClick = {
+    searching: () => {
+      router.push({
+        pathname: `${pathname}/search`,
+        query: { search: search.value, page: 1 },
+      });
+    },
+    write: () => {
+      if (getUser()) {
+        router.push({
+          pathname: `${pathname}/write`,
+        });
+      } else {
+        router.push("/login");
+      }
+    },
   };
 
   return (
@@ -38,20 +47,25 @@ export default function MobileBoard({ POSTS, MAX_PAGE, pathname, searchData }) {
       >
         <input {...search} className="focus: w-full border-black p-2" />
         <div
-          onClick={searching}
+          onClick={onClick.searching}
           className="absolute right-1 top-1 mr-2 flex items-center"
         >
           <FiSearch size={35} color={"#E0E0E0"} />
         </div>
       </form>
       {/* 게시물 컨테이너 */}
-      <div className="max-h-full w-full flex-1 overflow-scroll">
-        {router.pathname === "/QnA/search" ? (
-          <MobileBoardPosts datas={searchData.searchData.boards || []} />
-        ) : (
-          <MobileBoardPosts datas={POSTS || []} />
-        )}
-      </div>
+      {/* 검색된 게시물 없을시 */}
+      {searchData?.searchData?.page == -1 ? (
+        <SearchNotFound onWrite={onClick.write} />
+      ) : (
+        <div className="max-h-full w-full flex-1 overflow-scroll">
+          {router.pathname === "/QnA/search" ? (
+            <MobileBoardPosts datas={searchData.searchData.boards || []} />
+          ) : (
+            <MobileBoardPosts datas={POSTS || []} />
+          )}
+        </div>
+      )}
       {/* 페이지네이션 & 글쓰기버튼 */}
       <div className="mb-9 flex w-full justify-between p-2">
         <div className="pl-2">
@@ -69,18 +83,8 @@ export default function MobileBoard({ POSTS, MAX_PAGE, pathname, searchData }) {
             />
           )}
         </div>
-        <div
-          className="mt-6 pr-2"
-          onClick={() => {
-            if (getUser()) {
-              router.push({
-                pathname: `${pathname}/write`,
-              });
-            } else {
-              router.push("/login");
-            }
-          }}
-        >
+
+        <div className="mt-6 pr-2" onClick={onClick.write}>
           <button className="rounded bg-sky-600 p-1 text-center  text-lg text-white">
             글쓰기
           </button>

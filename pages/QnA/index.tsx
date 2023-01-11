@@ -31,17 +31,24 @@ export default function QnA({ data }) {
 }
 
 export async function getServerSideProps(context) {
-  const { data } = await axios.get(
-    `http://localhost:8000/api/board/all/${context.query.page || 1}`
-  );
+  try {
+    const { data } = await axios.get(
+      `http://localhost:8000/api/board/all/${context.query.page || 1}`
+    );
 
-  if (!data) {
+    if (!data) {
+      return {
+        props: {
+          data: [],
+        },
+      };
+    }
+    return { props: { data: data } };
+  } catch {
     return {
       props: {
         data: [],
       },
     };
   }
-
-  return { props: { data: data } };
 }
