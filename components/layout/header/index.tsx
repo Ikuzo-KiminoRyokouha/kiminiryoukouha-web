@@ -88,7 +88,9 @@ export default function Header() {
                   <DropDown visible={dropdown.value}>
                     <DropDown.Header>
                       <div>Sign Up as</div>
-                      <div className="truncate font-medium">{user.name}</div>
+                      <div className="truncate font-medium">
+                        {user.nickname}
+                      </div>
                     </DropDown.Header>
 
                     <DropDown.ItemContainer>

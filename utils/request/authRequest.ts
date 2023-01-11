@@ -8,6 +8,16 @@ import { getJWTToken, setJWTToken } from "../client";
 const authRequest = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL });
 authRequest.defaults.withCredentials = true;
 
+authRequest.interceptors.request.use(
+  (cfg) => {
+    cfg.headers["Authorization"] = "Bearer " + getJWTToken();
+    return cfg;
+  },
+  (err) => {
+    return Promise.reject(err);
+  }
+);
+
 // axios 인스턴스의 응답을 캐치
 authRequest.interceptors.response.use(
   (res) => {
@@ -19,20 +29,19 @@ authRequest.interceptors.response.use(
     if (err.response.status === 401) {
       // 401 Unauthorized Error 가 발생하면 Token 을 refresh 한다.
       const res = await axios.get(
-        process.env.NEXT_PUBLIC_API_URL + "/token/refresh",
+        process.env.NEXT_PUBLIC_API_URL + "/auth/token/refresh",
         {
           withCredentials: true,
         }
       );
       // authRequest header에 authorization의 default 값을 refresh 된 accessToken 으로 교체
-      authRequest.defaults.headers.common["Authorization"] =
-        res.data.accessToken;
+      authRequest.defaults.headers["Authorization"] = res.data.accessToken;
       // 전역 accessToken에 저장
       setJWTToken(res.data.accessToken);
       // 실패한 요청 재전송
-      return axios(err.request, {
+      return axios(err.request.responseURL, {
         headers: {
-          authorization: getJWTToken(),
+          authorization: "Bearer " + res.data.accessToken,
         },
       });
     }

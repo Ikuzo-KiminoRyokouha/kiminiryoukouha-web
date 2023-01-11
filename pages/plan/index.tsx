@@ -1,9 +1,5 @@
 import { useRouter } from "next/router";
-import {
-  AiOutlineDelete,
-  AiOutlineHome,
-  AiOutlinePlusCircle,
-} from "react-icons/ai";
+import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { RiArrowDropDownLine, RiArrowDropRightLine } from "react-icons/ri";
 import { useToggle } from "@/hooks";
 import Image from "next/image";

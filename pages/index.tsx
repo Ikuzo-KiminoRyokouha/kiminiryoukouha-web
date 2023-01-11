@@ -4,6 +4,9 @@ import PlanCarousel from "../components/PlanCarousel";
 import ImageCard from "../components/common/card/ImageCard";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { getJWTToken } from "../utils/client";
+import axios from "axios";
+import authRequest from "../utils/request/authRequest";
 
 export default function Home() {
   const router = useRouter();
