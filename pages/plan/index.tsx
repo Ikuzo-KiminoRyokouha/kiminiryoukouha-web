@@ -9,6 +9,7 @@ import { useToggle } from "@/hooks";
 import Image from "next/image";
 import { BsShare } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
+import SideBar from "../../components/plan/SideBar";
 
 export default function Index() {
   const router = useRouter();
@@ -17,16 +18,9 @@ export default function Index() {
 
   return (
     <div className="max-w-8xl mx-auto mb-[53px] flex max-h-full w-full flex-1 lg:mb-0">
-      <div className="basis-1/5 border">
-        <ul className="p-2">
-          <li className="flex w-full space-x-3 border bg-sky-600 p-2 text-white">
-            <AiOutlineHome />
-            <span>Home</span>
-          </li>
-        </ul>
-      </div>
+      <SideBar />
       <div className="basis-4/5 space-y-4 p-4">
-        <div className="text-xl font-semibold">計画</div>
+        <div className="text-xl font-semibold">계획</div>
         <div>
           <div
             onClick={activeVisible.onClick}
@@ -35,7 +29,7 @@ export default function Index() {
           >
             {!activeVisible.value && <RiArrowDropRightLine size={18} />}
             {activeVisible.value && <RiArrowDropDownLine size={18} />}
-            <span>活性化されている計画</span>
+            <span>활성화 되어 있는 계획</span>
           </div>
         </div>
         <div className="">
@@ -46,7 +40,7 @@ export default function Index() {
           >
             {!readyVisible.value && <RiArrowDropRightLine size={18} />}
             {readyVisible.value && <RiArrowDropDownLine size={18} />}
-            <span>準備中の計画</span>
+            <span>준비중인 계획</span>
           </div>
           <div className="flex space-x-4 border p-2">
             <div className="basis-1/12 text-center">
@@ -77,7 +71,7 @@ export default function Index() {
                 </button>
               </div>
               <button
-                onClick={() => router.push(`/plan/detail/nav`)}
+                onClick={() => router.push("/plan/detail")}
                 className="bg-gray-500 px-2 py-1 text-white"
               >
                 詳しく見る

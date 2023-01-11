@@ -13,7 +13,7 @@ export default function DecidedPlanCard() {
         {/* 텍스트부분 */}
         <div className="flex h-[55%] flex-col items-center">
           <div className="flex h-1/4 w-[90%] items-center justify-between ">
-            <Link href={"/plan/new/choose"} legacyBehavior>
+            <Link href={"/plan/new/planDetail"} legacyBehavior>
               <a>
                 <h3>역사탐방</h3>
               </a>
@@ -21,7 +21,7 @@ export default function DecidedPlanCard() {
             <p className="text-[10px] text-gray-400">당일치기</p>
           </div>
           <div className="h-[65%] w-[90%]">
-            <Link href={"/plan/new/choose"} legacyBehavior>
+            <Link href={"/plan/new/planDetail"} legacyBehavior>
               <a>
                 <p className="text-sm text-gray-400">
                   석굴암을 비롯한 경주의 역사를 경험해보세요.
@@ -30,7 +30,7 @@ export default function DecidedPlanCard() {
             </Link>
           </div>
           <div className="flex w-[90%] justify-end">
-            <Link href={"/plan/new/choose"} legacyBehavior>
+            <Link href={"/plan/new/planDetail"} legacyBehavior>
               <a>
                 <p className="text-[10px] text-gray-400">자세히보기</p>
               </a>

@@ -30,9 +30,9 @@ export default function SignUp() {
   const onSubmit = () => {
     mutate({
       email: id.value,
-      name: nick.value,
+      nickname: nick.value,
       password: pwd.value,
-      role: "user",
+      role: "Client",
     });
   };
 
