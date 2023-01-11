@@ -1,6 +1,8 @@
 import Image from "next/image";
 import IProps from "../../../types/props.interface";
 import { FiX } from "react-icons/fi";
+import { useMemo, useRef } from "react";
+import { FaTimes } from "react-icons/fa";
 
 interface Props extends IProps {}
 
@@ -12,7 +14,7 @@ export default function Modal({ children }: Props) {
     z-50 flex items-center justify-center overflow-auto backdrop-blur-sm transition-all"
     >
       {/* main modal window */}
-      <div className="flex min-h-fit w-full flex-col space-y-4 overflow-hidden border bg-white p-6 lg:w-1/6 lg:max-w-xl">
+      <div className="flex min-h-fit w-full flex-col space-y-4 overflow-hidden border bg-white p-6  lg:max-w-md">
         {children}
       </div>
     </div>
@@ -24,7 +26,7 @@ Modal.Header = function ({ children, hide }: Props & { hide: () => void }) {
     <div className="flex">
       <div className="flex-1">{children}</div>
       <div className="cursor-pointer" onClick={hide}>
-        <FiX />
+        <FaTimes />
       </div>
     </div>
   );
@@ -53,5 +55,29 @@ Modal.Image = function ({ src }: { src: string }) {
 };
 
 Modal.Description = function ({ text }: { text: string }) {
-  return <span className="overflow-hidden">{text}</span>;
+  const ref = useRef(0);
+  const descriptionArr = useMemo(
+    () =>
+      text.split("<br />").filter((el) => {
+        if (!el) ref.current++;
+
+        return ref.current < 3;
+      }),
+    [text]
+  );
+
+  console.log(descriptionArr);
+
+  return (
+    <span className="overflow-hidden text-xs">
+      {descriptionArr.map((description) => {
+        return (
+          <span>
+            {description}
+            <br />
+          </span>
+        );
+      })}
+    </span>
+  );
 };

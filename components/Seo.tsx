@@ -7,7 +7,6 @@ interface Props {
   keyword: string;
   classification: string;
 }
-
 /**
  *
  * @param {string} title - 타이틀

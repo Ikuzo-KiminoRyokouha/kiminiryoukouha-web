@@ -164,12 +164,12 @@ export function StepFour({ ctx }: StepProps) {
           onClick={() =>
             router.replace(
               {
-                pathname: "/plan/new/planDetail",
+                pathname: "/plan/new/choose",
                 query: {
                   info: JSON.stringify(info),
                 },
               },
-              "/plan/new/planDetail"
+              "/plan/new/choose"
             )
           }
           className=" mt-9 bg-sky-600 px-6 py-3 text-white"
