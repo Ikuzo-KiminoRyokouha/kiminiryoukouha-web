@@ -24,14 +24,14 @@ export default function MobileBoardPosts({ datas }) {
                     <span className="text-xs text-gray-300">답변대기중</span>
                   )}
                   <span className="text-xs text-gray-300">
-                    {data.created_at}
+                    {data.createdAt.slice(0, 11)}
                   </span>
                   <span className="text-xs text-gray-300">
                     {data.user.name}
                   </span>
                 </div>
                 {/* 제목 */}
-                {data.private == 1 ? (
+                {data.secret == true ? (
                   <div
                     className="flex items-center"
                     onClick={() => {

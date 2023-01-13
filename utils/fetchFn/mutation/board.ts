@@ -1,29 +1,32 @@
-import mainRequest from "../../request/mainRequest";
+import authRequest from "@/utils/request/authRequest";
 interface writeBoardBody {
   id: string;
   title: string;
   content: string;
-  private: number;
+  secret: boolean;
 }
 
 export const mWriteBoard = (body: Omit<writeBoardBody, "id">) => {
-  return mainRequest.post("/api/board", body);
+  return authRequest.post("/board", body);
 };
 
-export const mUpdateBoard = (body: Omit<writeBoardBody, "private">) => {
-  return mainRequest.put(`/api/board/${body.id}`, body);
+export const mUpdateBoard = ({
+  id,
+  ...body
+}: Omit<writeBoardBody, "private">) => {
+  return authRequest.put(`/board/${id}`, body);
 };
 
 export const mDeleteBoard = (id: string) => {
-  return mainRequest.delete(`/api/board/${id}`);
+  return authRequest.delete(`/board/${id}`);
 };
 export const mWriteComment = (body: any) => {
-  return mainRequest.post(`/api/comment`, body);
+  return authRequest.post(`/comment`, body);
 };
 
-export const mUpdateComment = (body: any) => {
-  return mainRequest.put(`/api/comment/${body.id}`, body);
+export const mUpdateComment = ({ id, ...body }: any) => {
+  return authRequest.put(`/comment/${id}`, body);
 };
 export const mDeleteComment = (id: string) => {
-  return mainRequest.delete(`/api/comment/${id}`);
+  return authRequest.delete(`/comment/${id}`);
 };

@@ -1,8 +1,11 @@
 import useBoard from "../hooks/useBoard";
 import { useInput, useToggle } from "../hooks";
 import { getUser } from "../utils/client";
+import { useRouter } from "next/router";
 
 function Inputform({ isVisible, writeComment }) {
+  const router = useRouter();
+  const id = router.query.id;
   const comment = useInput("", "댓글을 입력해주세요");
   return (
     <>
@@ -99,7 +102,10 @@ export default function Comment({ data }) {
               <button
                 className="flex-1 bg-sky-600 p-1 px-2"
                 onClick={() => {
-                  updateComment({ id: data.id, content: comment.value });
+                  updateComment({
+                    id: data.id,
+                    content: comment.value,
+                  });
                   updateMode.setFalse();
                 }}
               >

@@ -5,23 +5,19 @@ import BoardNav from "../../../components/board/BoardNav";
 import Comment from "../../../components/Comment";
 import { useInput, useBoard } from "../../../hooks";
 import { getUser } from "../../../utils/client";
-import { getBoardPost, getComment } from "../../../utils/fetchFn/query/board";
+import { getComment } from "../../../utils/fetchFn/query/board";
 import BoardImage from "../../../components/board/BoardImage";
 import axios from "axios";
 
 //얘가 밑에 댓글 맵으로 뿌려주는거
-export default function Detail({}) {
+export default function Detail({ boardData }) {
   const router = useRouter();
   const id = router.query?.id as string;
   const { deleteBoard } = useBoard();
   const { writeComment } = useBoard();
   const comment = useInput("", "댓글을 입력해주세요");
-  const [{ data: post, isLoading, error }, { data: comments }] = useQueries({
+  const [{ data: comments }] = useQueries({
     queries: [
-      {
-        queryKey: ["getBoardPost", id],
-        queryFn: getBoardPost,
-      },
       {
         queryKey: ["getComment", id],
         queryFn: getComment,
@@ -37,11 +33,29 @@ export default function Detail({}) {
     return true;
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  } else if (error) {
-    return <div>error</div>;
-  }
+  const onClick = {
+    routing: (url) => {
+      if (authCheck()) {
+        router.push(url);
+      }
+    },
+    delete: () => {
+      if (authCheck()) {
+        confirm("정말 삭제하시겠습니까?") && deleteBoard(id);
+      }
+    },
+    registerComment: () => {
+      if (authCheck()) {
+        writeComment({
+          boardId: Number(id),
+          group: null,
+          targetId: null,
+          content: comment.value,
+        });
+        comment.onChange("");
+      }
+    },
+  };
 
   return (
     <div className="h-full">
@@ -59,57 +73,63 @@ export default function Detail({}) {
                   <dt className="border-r border-gray-300  pr-6 text-lg">
                     제목
                   </dt>
-                  <dd className="pl-3 text-lg">{post.data.board[0].title}</dd>
+                  <dd className="pl-3 text-lg">{boardData?.board?.title}</dd>
                 </div>
 
                 <div className="flex border-y p-1">
-                  <div className="flex w-6/12 items-center">
+                  <div className="flex w-full items-center">
                     <dt className=" border-r border-gray-300  pr-2.5  text-lg ">
                       글쓴이
                     </dt>
                     <dd className="pl-3 text-lg">
-                      {post.data.board[0].user.name}
-                    </dd>
-                  </div>
-
-                  <div className="flex w-6/12 p-1">
-                    <dt className="border-r border-gray-300  pr-2 text-lg ">
-                      작성일
-                    </dt>
-                    <dd className="pl-3 text-lg ">
-                      {dayjs(post.data.board[0].created_at).format(
-                        "YYYY.MM.DD"
-                      )}
+                      {boardData?.board?.user?.nickname}
                     </dd>
                   </div>
                 </div>
+
+                <div className="flex w-full p-1">
+                  <dt className="border-r border-gray-300  pr-2 text-lg ">
+                    작성일
+                  </dt>
+                  <dd className="pl-3 text-lg ">
+                    {dayjs(boardData?.board?.created_at).format("YYYY.MM.DD")}
+                  </dd>
+                </div>
               </dl>
               {/**게시판 내용*/}
-              <div className="w-5/5 h-auto min-h-[200px] break-all px-2 pt-1 text-sm md:text-base">
-                {post.data.board[0].content}
+              <div className="w-5/5 h-auto min-h-[200px] break-all px-1 pt-4 text-base md:text-lg">
+                {boardData?.board?.content}
               </div>
 
               <div className="flex justify-end pt-3">
                 <button
+                  className="border px-6 py-2"
+                  onClick={() => {
+                    onClick.routing("/QnA");
+                  }}
+                >
+                  목록
+                </button>
+                <button
                   className="mx-2 border px-6 py-2"
                   onClick={() => {
-                    if (authCheck()) {
-                      router.push(`/QnA/update?id=${id}`);
-                    }
+                    onClick.routing(`/QnA/update?id=${id}`);
                   }}
                 >
                   수정
                 </button>
                 <button
                   className="bg-gray-400 px-6 py-2 text-white"
-                  onClick={() => {
-                    if (authCheck()) {
-                      confirm("정말 삭제하시겠습니까?") && deleteBoard(id);
-                    }
-                  }}
+                  onClick={onClick.delete}
                 >
                   삭제
                 </button>
+              </div>
+              {/* 댓글 */}
+              <div>
+                {comments?.data?.comments?.map((data, index) => {
+                  return <Comment data={data} key={index} />;
+                })}
               </div>
               <form
                 className="my-6 flex flex-row "
@@ -124,27 +144,11 @@ export default function Detail({}) {
                 </div>
                 <button
                   className="ml-1  w-20 bg-gray-400  p-4 text-white "
-                  onClick={() => {
-                    if (authCheck()) {
-                      writeComment({
-                        content: comment.value,
-                        board_id: id,
-                        target_id: null,
-                        group: null,
-                      });
-                      comment.onChange("");
-                    }
-                  }}
+                  onClick={onClick.registerComment}
                 >
                   등록
                 </button>
               </form>
-              {/* 댓글 */}
-              <div>
-                {comments?.data?.comments?.map((data, index) => {
-                  return <Comment data={data} key={index} />;
-                })}
-              </div>
             </div>
           </div>
         </div>
@@ -154,20 +158,22 @@ export default function Detail({}) {
 }
 
 // SSR로 데이터 받아오기
-// export async function getServerSideProps(context) {
-//   try {
-//     const { data } = await axios.get(
-//       `http://localhost:8000/api/comment/${context.query.id}`
-//     );
+export async function getServerSideProps(context: any) {
+  try {
+    const { data: boardData } = await axios.get(
+      `http://localhost:8000/board/${context.params.id}`
+    );
 
-//     if (!data) {
-//       return {
-//         props: { SScommnet: -1 },
-//       };
-//     }
+    if (!boardData) {
+      console.log("boardData is not found");
+      return {
+        props: { boardData: -1 },
+      };
+    }
 
-//     return { props: { SScommnet: data } };
-//   } catch {
-//     return { props: { SScommnet: -1 } };
-//   }
-// }
+    return { props: { boardData } };
+  } catch {
+    console.log("error occured");
+    return { props: { boardData: -1 } };
+  }
+}

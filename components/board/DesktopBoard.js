@@ -4,6 +4,7 @@ import useInput from "../../hooks/useInput";
 import Pagination from "../Pagination";
 import DesktopBoardPosts from "./DesktopBoardPosts";
 import { getUser } from "../../utils/client";
+import SearchNotFound from "./SearchNotFound";
 
 /**
  * @param POSTS 서버에서 받아온 게시물 데이터
@@ -21,21 +22,18 @@ export default function DesktopBoard({
   const search = useInput("", "검색어를 입력하세요");
   const paginationProps = usePagination(MAX_PAGE, pathname);
 
-  /**
-   * @description 검색버튼 onClick 함수
-   */
-  const searchBtn = () => {
-    router.push({
-      pathname: `${pathname}/search`,
-      query: { search: search.value, page: 1 },
-    });
-  };
-
-  /**
-   * @description 글쓰기 버튼 onClick 함수 로그인시에만 가능
-   */
-  const onWrite = () => {
-    getUser() ? router.push(`/QnA/write`) : router.push(`/login`);
+  const onClick = {
+    // 검색버튼 onClick 함수
+    searchBtn: () => {
+      router.push({
+        pathname: `${pathname}/search`,
+        query: { search: search.value, page: 1 },
+      });
+    },
+    //글쓰기 버튼 onClick 함수 로그인시에만 가능
+    onWrite: () => {
+      getUser() ? router.push(`/QnA/write`) : router.push(`/login`);
+    },
   };
 
   return (
@@ -57,7 +55,7 @@ export default function DesktopBoard({
             />
             <button
               className="rounded border-2 border-solid border-sky-600 bg-sky-600 p-3 text-white"
-              onClick={searchBtn}
+              onClick={onClick.searchBtn}
             >
               검색
             </button>
@@ -66,19 +64,7 @@ export default function DesktopBoard({
       </div>
       {/* 검색된 게시물 없을시 */}
       {searchData?.searchData?.page == -1 ? (
-        <div>
-          <div className="flex h-56 items-center justify-center">
-            <h1 className="text-xl">검색된 게시물이 없습니다.</h1>
-          </div>
-          <div className="flex justify-end pt-3">
-            <button
-              className="rounded bg-sky-600 p-3 text-white"
-              onClick={onWrite}
-            >
-              글쓰기
-            </button>
-          </div>
-        </div>
+        <SearchNotFound onWrite={onClick.onWrite} />
       ) : (
         // 게시판 테이블
         <div>
@@ -119,7 +105,7 @@ export default function DesktopBoard({
           <div className="flex justify-end pt-3">
             <button
               className="rounded bg-sky-600 p-3 text-white"
-              onClick={onWrite}
+              onClick={onClick.onWrite}
             >
               글쓰기
             </button>
