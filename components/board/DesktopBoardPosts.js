@@ -42,21 +42,21 @@ export default function DesktopBoardPosts({ datas }) {
               >
                 <span className="flex items-center">
                   <span>{data.title}</span>
-                  {data.private === 1 && <BiLockAlt className="mt-1 pl-1" />}
+                  {data.secret == true && <BiLockAlt className="mt-1 pl-1" />}
                 </span>
               </a>
             </td>
             {/* 유저이름 */}
             <td className="whitespace-nowrap break-keep p-2 text-xl font-normal">
-              {data.user.name}
+              {data.user.nickname}
             </td>
             {/* 게시일 */}
             <td className="whitespace-nowrap p-2 text-xl font-normal">
-              {data.created_at}
+              {data.createdAt.slice(0, 10)}
             </td>
             {/* 답변상태 */}
             <td className="whitespace-nowrap p-2 text-xl font-normal">
-              {data.complete === 0 ? "답변대기중" : "답변완료"}
+              {data.complete == false ? "답변대기중" : "답변완료"}
             </td>
           </tr>
         );

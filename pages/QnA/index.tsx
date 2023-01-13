@@ -33,7 +33,7 @@ export default function QnA({ data }) {
 export async function getServerSideProps(context) {
   try {
     const { data } = await axios.get(
-      `http://localhost:8000/api/board/all/${context.query.page || 1}`
+      `http://localhost:8000/board/all/${context.query.page || 1}`
     );
 
     if (!data) {

@@ -20,7 +20,7 @@ export default function Search({ searchedItems }) {
 export async function getServerSideProps(context) {
   try {
     const { data } = await axios.get(
-      `http://localhost:8000/api/board/search/${context.query.search}/${context.query.page}`
+      `http://localhost:8000/board/search/${context.query.search}/${context.query.page}`
     );
 
     if (!data) {

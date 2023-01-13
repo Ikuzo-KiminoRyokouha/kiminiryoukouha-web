@@ -5,23 +5,19 @@ import BoardNav from "../../../components/board/BoardNav";
 import Comment from "../../../components/Comment";
 import { useInput, useBoard } from "../../../hooks";
 import { getUser } from "../../../utils/client";
-import { getBoardPost, getComment } from "../../../utils/fetchFn/query/board";
+import { getComment } from "../../../utils/fetchFn/query/board";
 import BoardImage from "../../../components/board/BoardImage";
 import axios from "axios";
 
 //얘가 밑에 댓글 맵으로 뿌려주는거
-export default function Detail({}) {
+export default function Detail({ boardData }) {
   const router = useRouter();
   const id = router.query?.id as string;
   const { deleteBoard } = useBoard();
   const { writeComment } = useBoard();
   const comment = useInput("", "댓글을 입력해주세요");
-  const [{ data: post, isLoading, error }, { data: comments }] = useQueries({
+  const [{ data: comments }] = useQueries({
     queries: [
-      {
-        queryKey: ["getBoardPost", id],
-        queryFn: getBoardPost,
-      },
       {
         queryKey: ["getComment", id],
         queryFn: getComment,
@@ -51,21 +47,15 @@ export default function Detail({}) {
     registerComment: () => {
       if (authCheck()) {
         writeComment({
-          content: comment.value,
-          board_id: id,
-          target_id: null,
+          boardId: Number(id),
           group: null,
+          targetId: null,
+          content: comment.value,
         });
         comment.onChange("");
       }
     },
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  } else if (error) {
-    return <div>error</div>;
-  }
 
   return (
     <div className="h-full">
@@ -83,7 +73,7 @@ export default function Detail({}) {
                   <dt className="border-r border-gray-300  pr-6 text-lg">
                     제목
                   </dt>
-                  <dd className="pl-3 text-lg">{post.data.board[0].title}</dd>
+                  <dd className="pl-3 text-lg">{boardData?.board?.title}</dd>
                 </div>
 
                 <div className="flex border-y p-1">
@@ -92,7 +82,7 @@ export default function Detail({}) {
                       글쓴이
                     </dt>
                     <dd className="pl-3 text-lg">
-                      {post.data.board[0].user.name}
+                      {boardData?.board?.user?.nickname}
                     </dd>
                   </div>
                 </div>
@@ -102,13 +92,13 @@ export default function Detail({}) {
                     작성일
                   </dt>
                   <dd className="pl-3 text-lg ">
-                    {dayjs(post.data.board[0].created_at).format("YYYY.MM.DD")}
+                    {dayjs(boardData?.board?.created_at).format("YYYY.MM.DD")}
                   </dd>
                 </div>
               </dl>
               {/**게시판 내용*/}
               <div className="w-5/5 h-auto min-h-[200px] break-all px-1 pt-4 text-base md:text-lg">
-                {post.data.board[0].content}
+                {boardData?.board?.content}
               </div>
 
               <div className="flex justify-end pt-3">
@@ -168,20 +158,22 @@ export default function Detail({}) {
 }
 
 // SSR로 데이터 받아오기
-// export async function getServerSideProps(context) {
-//   try {
-//     const { data } = await axios.get(
-//       `http://localhost:8000/api/comment/${context.query.id}`
-//     );
+export async function getServerSideProps(context: any) {
+  try {
+    const { data: boardData } = await axios.get(
+      `http://localhost:8000/board/${context.params.id}`
+    );
 
-//     if (!data) {
-//       return {
-//         props: { SScommnet: -1 },
-//       };
-//     }
+    if (!boardData) {
+      console.log("boardData is not found");
+      return {
+        props: { boardData: -1 },
+      };
+    }
 
-//     return { props: { SScommnet: data } };
-//   } catch {
-//     return { props: { SScommnet: -1 } };
-//   }
-// }
+    return { props: { boardData } };
+  } catch {
+    console.log("error occured");
+    return { props: { boardData: -1 } };
+  }
+}
