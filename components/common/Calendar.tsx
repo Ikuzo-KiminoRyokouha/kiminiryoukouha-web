@@ -42,12 +42,12 @@ export default function Calendar({
 
   /* mode가 startEnd일떄 시작 날짜가 바뀔때마다 바뀐 날짜를 반환해주는 effect*/
   useEffect(() => {
-    getStartDate && getStartDate(startDate);
+    startDate && getStartDate && getStartDate(startDate);
   }, [startDate]);
 
   /* mode가 startEnd일떄 시작 날짜가 바뀔때마다 바뀐 날짜를 반환해주는 effect*/
   useEffect(() => {
-    getEndDate && getEndDate(endDate);
+    endDate && getEndDate && getEndDate(endDate);
   }, [endDate]);
 
   const [count, setCount] = useState<number>(0);
@@ -152,16 +152,16 @@ export default function Calendar({
                 <div
                   key={idx}
                   className={`${
-                    startDate?.isBefore(dayjs(`${y}-${m}-${date}`)) &&
-                    endDate?.isAfter(dayjs(`${y}-${m}-${date}`))
+                    startDate?.isBefore(dayjs(`${y}-${m + 1}-${date}`)) &&
+                    endDate?.isAfter(dayjs(`${y}-${m + 1}-${date}`))
                       ? "bg-sky-200"
                       : ""
                   } ${
-                    startDate?.isSame(dayjs(`${y}-${m}-${date}`))
+                    startDate?.isSame(dayjs(`${y}-${m + 1}-${date}`))
                       ? " rounded-l-full bg-sky-200 text-white"
                       : ""
                   } ${
-                    endDate?.isSame(dayjs(`${y}-${m}-${date}`))
+                    endDate?.isSame(dayjs(`${y}-${m + 1}-${date}`))
                       ? " rounded-r-full bg-sky-200 text-white"
                       : ""
                   }`}
@@ -172,14 +172,14 @@ export default function Calendar({
                       if (mode === "single") {
                         setDate(date);
                       } else if (mode === "startEnd") {
-                        setMultiDateFn(dayjs(`${y}-${m}-${date}`));
+                        setMultiDateFn(dayjs(`${y}-${m + 1}-${date}`));
                       }
                     }}
                     className={`flex h-10 w-10 items-center  justify-center rounded-full ${
                       d === date ? "bg-teal-200 text-white" : ""
                     }  ${
-                      startDate?.isSame(dayjs(`${y}-${m}-${date}`)) ||
-                      endDate?.isSame(dayjs(`${y}-${m}-${date}`))
+                      startDate?.isSame(dayjs(`${y}-${m + 1}-${date}`)) ||
+                      endDate?.isSame(dayjs(`${y}-${m + 1}-${date}`))
                         ? "bg-sky-500 text-white"
                         : ""
                     }`}

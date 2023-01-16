@@ -8,6 +8,9 @@ const withPWA = require("next-pwa")({
 module.exports = async (phase) => {
   /** @type {import('next').NextConfig} */
   const nextConfig = {
+    images: {
+      domains: ["tong.visitkorea.or.kr", "picsum.photos"],
+    },
     reactStrictMode: true,
     swcMinify: true,
     webpack5: true,

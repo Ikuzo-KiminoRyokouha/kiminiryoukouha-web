@@ -39,7 +39,6 @@ export default function AuthCheck({ children, needAuth }: Props) {
     }
     // 데이터 페칭 성공시 전역 변수에 저장
     else if (isSuccess) {
-      console.log(data);
       setUser({
         email: data.data.username,
         nickname: data.data.username,

@@ -11,7 +11,7 @@ export default function Modal({ children }: Props) {
     /* background blur window */
     <div
       className="fixed inset-0
-    z-50 flex items-center justify-center overflow-auto backdrop-blur-sm transition-all"
+    z-50 flex items-center justify-center backdrop-blur-sm transition-all"
     >
       {/* main modal window */}
       <div className="flex min-h-fit w-full flex-col space-y-4 overflow-hidden border bg-white p-6  lg:max-w-md">
@@ -61,7 +61,7 @@ Modal.Description = function ({ text }: { text: string }) {
       text.split("<br />").filter((el) => {
         if (!el) ref.current++;
 
-        return ref.current < 3;
+        return ref.current < 1;
       }),
     [text]
   );

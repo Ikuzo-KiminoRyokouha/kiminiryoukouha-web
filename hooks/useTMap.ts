@@ -177,6 +177,13 @@ export default function useTMap(
     await tmap.resetMarker();
   };
 
+  const getDirectionUseTransfort = async (
+    startLatLng: LatLng,
+    endLatLng: LatLng
+  ) => {
+    return tmap.getDirectionUseTransfort(startLatLng, endLatLng);
+  };
+
   return {
     additionalScriptLoaing,
     resetMarker,
@@ -186,6 +193,7 @@ export default function useTMap(
     reDefineCenterMap,
     drawLineWithPanning,
     searchToKeyword,
+    getDirectionUseTransfort,
     searchAroundPOI,
     searchToKeywordNoMarker,
     makeLayerForPlan,
