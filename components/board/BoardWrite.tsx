@@ -1,9 +1,24 @@
 import { useRouter } from "next/router";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { useToggle, useInput } from "../../hooks";
+import { useInput, useToggle } from "../../hooks";
 import useBoard from "../../hooks/useBoard";
 
-export default function BoardWrite({ title, contents, isSecret }) {
+interface Props {
+  initTitle: string;
+  initContents: string;
+  isSecret?: boolean;
+}
+
+export default function BoardWrite({
+  initTitle,
+  initContents,
+  isSecret,
+}: Props) {
+  // 제목
+  const title = useInput(initTitle, "제목을 입력하세요.");
+  // 내용
+  const contents = useInput(initContents, "내용을 입력하세요.");
+
   const router = useRouter();
 
   const initSecret = isSecret ? isSecret : false;
@@ -36,7 +51,7 @@ export default function BoardWrite({ title, contents, isSecret }) {
     update: () => {
       if (title.value && contents.value) {
         updateBoard({
-          id: router.query.id,
+          id: router.query.id as string,
           title: title.value,
           content: contents.value,
           secret: secret.value,

@@ -24,14 +24,6 @@
       "@/utils/*": ["utils/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "utils/Tmap.js",
-    "pages/write.js",
-    "pages/QnA/write.js",
-    "components/Comment.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/Tmap.js"],
   "exclude": ["node_modules"]
 }

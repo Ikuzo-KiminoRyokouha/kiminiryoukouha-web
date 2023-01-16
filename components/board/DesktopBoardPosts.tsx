@@ -1,13 +1,19 @@
-import Link from "next/link";
+import { Boards } from "@/types/boardPosts.interface";
 import { useRouter } from "next/router";
 import { BiLockAlt } from "react-icons/bi";
 import { getUser } from "../../utils/client";
 
+interface Props {
+  posts: Boards[];
+}
+
 /**
- * @param {Array} datas 게시물 데이터
+ * @param {Array} posts 게시물 데이터
  */
-export default function DesktopBoardPosts({ datas }) {
+export default function DesktopBoardPosts({ posts }: Props) {
   const router = useRouter();
+
+  console.log("posts", posts);
 
   /**
    * @description 게시물이 비밀글인지 확인하는 함수
@@ -25,7 +31,7 @@ export default function DesktopBoardPosts({ datas }) {
 
   return (
     <>
-      {datas.map((data, index) => {
+      {posts.map((data, index) => {
         return (
           <tr className="border-b-2 border-solid" key={index}>
             {/* 게시물 번호 */}
@@ -52,7 +58,7 @@ export default function DesktopBoardPosts({ datas }) {
             </td>
             {/* 게시일 */}
             <td className="whitespace-nowrap p-2 text-xl font-normal">
-              {data.createdAt.slice(0, 10)}
+              {data.createdAt?.slice(0, 10) as string | "0"}
             </td>
             {/* 답변상태 */}
             <td className="whitespace-nowrap p-2 text-xl font-normal">

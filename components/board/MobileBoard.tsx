@@ -9,15 +9,15 @@ import { getUser } from "../../utils/client";
 import SearchNotFound from "./SearchNotFound";
 
 /**
- * @param POSTS 서버에서 받아온 게시물 데이터
- * @param MAX_PAGE 서버에서 받아온 전체 페이지 수
+ * @param posts 서버에서 받아온 게시물 데이터
+ * @param maxPage 서버에서 받아온 전체 페이지 수
  * @param pathname pathname
  * @param searchData 검색시 검색한 게시물 데이터
  */
-export default function MobileBoard({ POSTS, MAX_PAGE, pathname, searchData }) {
+export default function MobileBoard({ posts, maxPage, pathname, searchData }) {
   const router = useRouter();
   const search = useInput("", "검색어를 입력하세요");
-  const paginationProps = usePagination(MAX_PAGE, pathname);
+  const paginationProps = usePagination(maxPage, pathname);
 
   const onClick = {
     searching: () => {
@@ -55,14 +55,14 @@ export default function MobileBoard({ POSTS, MAX_PAGE, pathname, searchData }) {
       </form>
       {/* 게시물 컨테이너 */}
       {/* 검색된 게시물 없을시 */}
-      {searchData?.searchData?.page == -1 ? (
+      {searchData?.page == -1 ? (
         <SearchNotFound onWrite={onClick.write} />
       ) : (
         <div className="max-h-full w-full flex-1 overflow-scroll">
           {router.pathname === "/QnA/search" ? (
-            <MobileBoardPosts datas={searchData.searchData.boards || []} />
+            <MobileBoardPosts datas={searchData.boards || []} />
           ) : (
-            <MobileBoardPosts datas={POSTS || []} />
+            <MobileBoardPosts datas={posts || []} />
           )}
         </div>
       )}
@@ -71,14 +71,14 @@ export default function MobileBoard({ POSTS, MAX_PAGE, pathname, searchData }) {
         <div className="pl-2">
           {router.pathname === "/QnA/search" ? (
             <Pagination
-              {...usePagination(searchData.searchData.pages, pathname)}
-              maxPage={searchData.searchData.pages}
+              {...usePagination(searchData.pages, pathname)}
+              maxPage={searchData.pages}
               pathname={`${pathname}/search`}
             />
           ) : (
             <Pagination
               {...paginationProps}
-              maxPage={MAX_PAGE}
+              maxPage={maxPage}
               pathname={pathname}
             />
           )}

@@ -3,11 +3,17 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 import BoardNav from "./BoardNav";
 import BoardImage from "./BoardImage";
+import { BoardPosts } from "@/types/boardPosts.interface";
+
+interface Props {
+  posts?: BoardPosts;
+  searchData?: BoardPosts;
+}
 
 /**
  * @param searchData 게시판에서 검색했을시의 데이터 선택적 파라미터
  */
-export default function BoardUI({ posts, ...searchData }) {
+export default function BoardUI({ posts, searchData }: Props) {
   const router = useRouter();
 
   const pathname = useMemo(() => {
@@ -27,14 +33,14 @@ export default function BoardUI({ posts, ...searchData }) {
           <BoardNav />
           {/* 게시판 박스 */}
           <DesktopBoard
-            POSTS={posts?.boards || []}
-            MAX_PAGE={posts?.pages || 0}
+            posts={posts?.boards || []}
+            maxPage={posts?.pages || 0}
             pathname={pathname}
             searchData={searchData}
           />
           <MobileBoard
-            POSTS={posts?.boards || []}
-            MAX_PAGE={posts?.pages || 0}
+            posts={posts?.boards || []}
+            maxPage={posts?.pages || 0}
             pathname={pathname}
             searchData={searchData}
           />

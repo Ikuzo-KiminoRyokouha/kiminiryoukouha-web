@@ -1,3 +1,7 @@
+interface Props {
+  onWrite: () => void;
+}
+
 export default function SearchNotFound({ onWrite }) {
   return (
     <>
