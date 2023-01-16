@@ -1,13 +1,25 @@
-import { useTMap } from "@/hooks";
+import { useLocation, useTMap } from "@/hooks";
+import { Destination, Plan } from "@/types/plan.interface";
 import fakeData from "@/utils/dataMap/fakeData.json";
 import transfortModeMap from "@/utils/dataMap/transfortModeMap.json";
 import { convertSecToTimeObj } from "@/utils/math";
-import Image from "next/image";
 import dayjs from "dayjs";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-export default function PlanNavigation({ query }: { query: any }) {
+import mainRequest from "../../../utils/request/mainRequest";
+
+interface Props {
+  query: {
+    planId: number;
+    travelId: number;
+  };
+  plan: Plan;
+}
+
+export default function PlanNavigation({ query, plan }: Props) {
+  console.log(query, plan);
   const {
     pushDrawableMarker,
     makeStartMarker,
@@ -16,13 +28,39 @@ export default function PlanNavigation({ query }: { query: any }) {
     drawLineWithPanning,
     reDefineCenterMap,
     resetMarker,
+    getDirectionUseTransfort,
   } = useTMap("map", false);
+
+  const { myLatLng } = useLocation();
 
   const [mode, setMode] = useState(0);
   const [planIdx, setPlanIdx] = useState(0);
   const [plans, setPlans] = useState(undefined);
 
-  const [destination, setDestination] = useState(query?.place);
+  const [destination, setDestination] = useState<Destination>(
+    plan.travels.filter((el) => {
+      return el.id === Number(query.travelId);
+    })[0].destination
+  );
+
+  const drawRoute = async () => {
+    const destLatLng = {
+      lat: Number(destination.mapy),
+      lng: Number(destination.mapx),
+    };
+    console.log(myLatLng, destLatLng);
+
+    const data = await getDirectionUseTransfort(myLatLng, destLatLng);
+    console.log(data);
+  };
+  useEffect(() => {
+    const destLatLng = {
+      lat: Number(destination.mapy),
+      lng: Number(destination.mapx),
+    };
+    console.log(myLatLng, destLatLng);
+    myLatLng && drawRoute();
+  }, [myLatLng]);
 
   useEffect(() => {
     if (mode) {
@@ -86,10 +124,7 @@ export default function PlanNavigation({ query }: { query: any }) {
       <div className="relative basis-3/4">
         <div className="absolute z-10 flex h-full w-full items-end p-2">
           <div className="flex space-x-3">
-            <div
-              onClick={() => setDestination("안녕")}
-              className="flex cursor-pointer items-center space-x-3 rounded-lg bg-white p-2 text-lg tracking-wider"
-            >
+            <div className="flex cursor-pointer items-center space-x-3 rounded-lg bg-white p-2 text-lg tracking-wider">
               <div className="h-24 w-24">
                 <Image
                   src="/assets/main-img.png"
@@ -106,7 +141,7 @@ export default function PlanNavigation({ query }: { query: any }) {
       </div>
       <div className="relative flex basis-1/4 flex-col border-r">
         <div className="absolute flex max-h-full min-h-full w-full flex-col">
-          <div className="border p-2">{destination} 까지의 경로</div>
+          <div className="border p-2">{destination.title} 까지의 경로</div>
           <div className="space-x-2">
             <ModeButton
               color={`${mode === 0 && "blue"}`}
@@ -219,10 +254,15 @@ export default function PlanNavigation({ query }: { query: any }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({ query }: Props) {
+  const plan = await mainRequest
+    .get(`/plan/${query?.planId}`)
+    .then((res) => res.data.plan);
+
   return {
     props: {
-      query: context.query,
+      query,
+      plan,
     }, // will be passed to the page component as props
   };
 }
