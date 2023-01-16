@@ -24,7 +24,7 @@ export default function MobileBoardPosts({ datas }) {
                     <span className="text-xs text-gray-300">답변대기중</span>
                   )}
                   <span className="text-xs text-gray-300">
-                    {data.createdAt.slice(0, 11)}
+                    {data.createdAt?.slice(0, 11) | 0}
                   </span>
                   <span className="text-xs text-gray-300">
                     {data.user.name}

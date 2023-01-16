@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useRouter } from "../node_modules/next/router";
 
 /**
@@ -8,7 +7,7 @@ import { useRouter } from "../node_modules/next/router";
 export default function usePagination(
   totalPages: number,
   pathname: string,
-  search: string
+  search?: string
 ) {
   const router = useRouter();
 

@@ -5,22 +5,30 @@ import Pagination from "../Pagination";
 import DesktopBoardPosts from "./DesktopBoardPosts";
 import { getUser } from "../../utils/client";
 import SearchNotFound from "./SearchNotFound";
+import { BoardPosts, Boards } from "@/types/boardPosts.interface";
+
+interface Props {
+  posts: Boards[];
+  maxPage: number;
+  pathname: string;
+  searchData: BoardPosts;
+}
 
 /**
- * @param POSTS 서버에서 받아온 게시물 데이터
- * @param MAX_PAGE 서버에서 받아온 전체 페이지 수
+ * @param posts 서버에서 받아온 게시물 데이터
+ * @param maxPage 서버에서 받아온 전체 페이지 수
  * @param pathname pathname
  * @param searchData 검색시 검색한 게시물 데이터
  */
 export default function DesktopBoard({
-  POSTS,
-  MAX_PAGE,
+  posts,
+  maxPage,
   pathname,
   searchData,
-}) {
+}: Props) {
   const router = useRouter();
   const search = useInput("", "검색어를 입력하세요");
-  const paginationProps = usePagination(MAX_PAGE, pathname);
+  const paginationProps = usePagination(maxPage, pathname);
 
   const onClick = {
     // 검색버튼 onClick 함수
@@ -63,7 +71,7 @@ export default function DesktopBoard({
         </form>
       </div>
       {/* 검색된 게시물 없을시 */}
-      {searchData?.searchData?.page == -1 ? (
+      {searchData?.pages == -1 ? (
         <SearchNotFound onWrite={onClick.onWrite} />
       ) : (
         // 게시판 테이블
@@ -92,11 +100,9 @@ export default function DesktopBoard({
               <tbody className="text-center">
                 {/* 게시판 테이블 내 게시물들 */}
                 {router.pathname === "/QnA/search" ? (
-                  <DesktopBoardPosts
-                    datas={searchData.searchData.boards || []}
-                  />
+                  <DesktopBoardPosts posts={searchData.boards || []} />
                 ) : (
-                  <DesktopBoardPosts datas={POSTS} />
+                  <DesktopBoardPosts posts={posts} />
                 )}
               </tbody>
             </table>
@@ -113,17 +119,14 @@ export default function DesktopBoard({
           {/* 페이지네이션 */}
           {router.pathname === "/QnA/search" ? (
             <Pagination
-              {...usePagination(
-                searchData.searchData.pages,
-                `${router.pathname}`
-              )}
-              maxPage={searchData.searchData.pages}
+              {...usePagination(searchData.pages, `${router.pathname}`)}
+              maxPage={searchData.pages}
               pathname={`${pathname}/search`}
             />
           ) : (
             <Pagination
               {...paginationProps}
-              maxPage={MAX_PAGE}
+              maxPage={maxPage}
               pathname={pathname}
             />
           )}

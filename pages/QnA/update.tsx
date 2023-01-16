@@ -1,18 +1,14 @@
 import axios from "axios";
 import BoardWrite from "components/board/BoardWrite";
-import { useInput } from "../../hooks";
 
 export default function Update({ boardData }) {
-  // 제목
-  const title = useInput(boardData.board.title, "제목을 입력하세요.");
-  // 내용
-  const contents = useInput(boardData.board.content, "내용을 입력하세요.");
-  // 비밀글
-  const secret = boardData.board.secret;
-
   return (
     <>
-      <BoardWrite title={title} contents={contents} isSecret={secret} />
+      <BoardWrite
+        initTitle={boardData.board.title}
+        initContents={boardData.board.content}
+        isSecret={boardData.board.secret}
+      />
     </>
   );
 }
