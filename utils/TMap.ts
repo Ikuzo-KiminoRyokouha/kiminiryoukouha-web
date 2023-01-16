@@ -503,36 +503,25 @@ export default class TMap {
     });
 
     this.drawLineWithPanning();
-    // const res = await axios.post(
-    //   "https://apis.openapi.sk.com/tmap/routes/routeOptimization30?version=1&format=json",
-    //   {
-    //     reqCoordType: "WGS84GEO",
-    //     resCoordType: "WGS84GEO",
-    //     startName: "출발",
-    //     startX: startLatLng.lat,
-    //     startY: startLatLng.lng,
-    //     startTime: "201711121314",
-    //     endName: "도착",
-    //     endX: endLatLng.lat,
-    //     endY: endLatLng.lng,
-    //     searchOption: "0",
-    //     viaPoints,
-    //   },
-    //   {
-    //     headers: {
-    //       appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
-    //     },
-    //   }
-    // );
-    // var style_red = {
-    //   fillColor: "#FF0000",
-    //   fillOpacity: 0.2,
-    //   strokeColor: "#FF0000",
-    //   strokeWidth: 3,
-    //   strokeDashstyle: "solid",
-    //   pointRadius: 2,
-    //   title: "this is a red line",
-    // };
-    // console.log("response : ", res);
+  }
+
+  async getDirectionUseTransfort(startLatLng: LatLng, endLatLng: LatLng) {
+    return await axios.post(
+      "https://apis.openapi.sk.com/transit/routes",
+      {
+        startX: startLatLng.lat,
+        startY: startLatLng.lng,
+        endX: startLatLng.lat,
+        endY: startLatLng.lng,
+        lang: 0,
+        format: "json",
+        count: 10,
+      },
+      {
+        headers: {
+          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
+        },
+      }
+    );
   }
 }

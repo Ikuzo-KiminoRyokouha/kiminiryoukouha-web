@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTMap } from "../../../hooks";
+import { Router, useRouter } from "next/router";
+import axios from "axios";
+import dayjs from "dayjs";
+import { convertDateToKorean } from "../../../utils/common";
 
-export default function PlanDetail() {
+export default function PlanDetail({ travels, plan }) {
   const {
     searchToKeywordNoMarker,
     convertLatLng,
@@ -9,34 +13,44 @@ export default function PlanDetail() {
     additionalScriptLoaing,
   } = useTMap("map");
 
-  const tempSearch = async () => {
-    let latLngArr = [
-      {
-        lat: 35.78681255436075,
-        lng: 129.33247253051985,
-      },
-      {
-        lat: 35.795303,
-        lng: 129.349698,
-      },
-      {
-        lat: 35.83313867650138,
-        lng: 129.2275359539618,
-      },
-      {
-        lat: 35.83511045324921,
-        lng: 129.21573137667983,
-      },
-    ];
-    return latLngArr;
+  const router = useRouter();
+  const isSave = useRef(false);
+
+  const createPlan = () => {};
+  const handleRouteChange = async () => {
+    !isSave.current &&
+      (await axios.delete(`http://localhost:8000/plan/${plan.id}`));
+    return;
   };
 
   useEffect(() => {
+    const handleWindowClose = async (e: BeforeUnloadEvent) => {
+      !isSave.current &&
+        (await axios.delete(`http://localhost:8000/plan/${plan.id}`));
+      return;
+    };
+    router.events.on("beforeHistoryChange", handleRouteChange);
+    window.addEventListener("beforeunload", handleWindowClose);
+    return () => {
+      window.removeEventListener("beforeunload", handleWindowClose);
+      router.events.off("beforeHistoryChange", handleRouteChange);
+    };
+  }, []);
+
+  useEffect(() => {
     if (additionalScriptLoaing) {
-      tempSearch().then((res) =>
-        makeLayerForPlan(res[0], res[3], res[1], res[2])
+      const destLatLng = [];
+      travels.map((el) => {
+        destLatLng.push({ lat: el.destination.mapy, lng: el.destination.mapx });
+      });
+
+      makeLayerForPlan(
+        destLatLng[0],
+        destLatLng[destLatLng.length - 1],
+        ...destLatLng.filter(
+          (v, idx) => idx != 0 || idx != destLatLng.length - 1
+        )
       );
-      // makeLayerForPlan(latLngArr[0], latLngArr[3], latLngArr[1], latLngArr[2]);
     }
   }, [additionalScriptLoaing]);
   return (
@@ -47,7 +61,12 @@ export default function PlanDetail() {
             경주 역사탐방
           </h1>
           <h2 className="text-2xl text-white">
-            석굴암, 불국사, 동궁과 월지, 첨성대 등
+            {travels.map((el, idx) => {
+              if (idx > 2) return;
+              if (idx === 2) return el.destination.title;
+              return el.destination.title + ", ";
+            })}
+            등
           </h2>
           <h2 className="text-2xl text-white">
             신라시대의 유적들이 가득한 경주의 역사를 경험해 보세요
@@ -55,11 +74,16 @@ export default function PlanDetail() {
           <div className="flex w-full justify-around pt-12">
             <div className="flex flex-col items-center justify-center">
               <p className="text-lg text-white">일정</p>
-              <p className="pt-3 text-2xl font-semibold text-white">당일치기</p>
+              <p className="pt-3 text-2xl font-semibold text-white">
+                {convertDateToKorean(plan.start, plan.end)}
+              </p>
             </div>
             <div className="flex flex-col items-center justify-center">
               <p className="text-lg text-white">예상경비</p>
               <p className="pt-3 text-2xl font-semibold text-white">약7만원</p>
+              <p className="text-sm text-blue-500">
+                예산보다 3만원 더 적습니다!
+              </p>
             </div>
             <div className="flex flex-col items-center justify-center">
               <p className="text-lg text-white">관광시간</p>
@@ -72,24 +96,30 @@ export default function PlanDetail() {
                 <div className="h-full w-3/4 rounded-lg">
                   <div id="map">{/* tmap */}</div>
                 </div>
-                <div className="flex h-full w-1/4 flex-col items-start justify-evenly pl-4 md:pl-12">
+                <div className="flex h-full w-1/4 flex-col items-start items-center justify-evenly space-y-2 pl-4 md:pl-12">
                   <button className="text-2xl font-semibold text-white">
-                    석굴암
+                    {travels[0].destination.title}
                   </button>
                   <button className="text-2xl font-semibold text-white">
-                    불국사
+                    {travels[1].destination.title}
                   </button>
                   <button className="text-2xl font-semibold text-white">
-                    동궁과 월지
+                    {/* {travels[2].destination.title} */}
                   </button>
                   <button className="text-2xl font-semibold text-white">
-                    첨성대
+                    {/* {travels[3].destination.title} */}
                   </button>
                 </div>
               </div>
             </div>
             <div className="mt-12 flex w-full justify-center font-bold">
-              <button className="rounded-lg bg-white py-6 px-24">
+              <button
+                onClick={() => {
+                  isSave.current = true;
+                  router.push("/plan");
+                }}
+                className="rounded-lg bg-white py-6 px-24"
+              >
                 계획생성
               </button>
             </div>
@@ -98,4 +128,29 @@ export default function PlanDetail() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ query }) {
+  const info = JSON.parse(query.info);
+
+  const { travels, ...plan } = await axios
+    .post(`http://localhost:8000/plan/random`, {
+      // destination: "경주",
+      // dayPerDes: 3,
+      start: info.startDate,
+      end: info.endDate,
+      city: info.region,
+      tag: info.tag,
+    })
+    .then((res) => {
+      if (res.data.ok) return res.data.plan;
+      return [];
+    });
+
+  return {
+    props: {
+      plan,
+      travels,
+    },
+  };
 }

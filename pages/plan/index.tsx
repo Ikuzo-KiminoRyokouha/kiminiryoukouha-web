@@ -6,11 +6,29 @@ import Image from "next/image";
 import { BsShare } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import SideBar from "../../components/plan/SideBar";
+import axios from "axios";
+import { useLayoutEffect, useState } from "react";
+import { Plan } from "../../types/plan.interface";
+import dayjs from "dayjs";
+import SimplePlanCard from "../../components/plan/SimplePlanCard";
 
-export default function Index() {
+export default function Index({ plans }) {
   const router = useRouter();
   const activeVisible = useToggle(true);
   const readyVisible = useToggle(true);
+
+  const [activatedPlans, setActivatedPlans] = useState<Array<Plan>>();
+  const [waitingPlans, setWaitingPlans] = useState<Array<Plan>>();
+
+  useLayoutEffect(() => {
+    setActivatedPlans(() => {
+      return plans.filter((plan) => dayjs(plan.start).isBefore(dayjs()));
+    });
+
+    setWaitingPlans(() => {
+      return plans.filter((plan) => dayjs(plan.start).isAfter(dayjs()));
+    });
+  }, []);
 
   return (
     <div className="max-w-8xl mx-auto mb-[53px] flex max-h-full w-full flex-1 lg:mb-0">
@@ -27,6 +45,9 @@ export default function Index() {
             {activeVisible.value && <RiArrowDropDownLine size={18} />}
             <span>활성화 되어 있는 계획</span>
           </div>
+          {activatedPlans?.map((plan: Plan, idx) => (
+            <SimplePlanCard key={plan.title + idx} plan={plan} />
+          ))}
         </div>
         <div className="">
           <div
@@ -38,42 +59,9 @@ export default function Index() {
             {readyVisible.value && <RiArrowDropDownLine size={18} />}
             <span>준비중인 계획</span>
           </div>
-          <div className="flex space-x-4 border p-2">
-            <div className="basis-1/12 text-center">
-              <p className="text-xl font-semibold">경주</p>
-              <Image
-                src="/assets/main-img.png"
-                width={1}
-                height={1}
-                layout="responsive"
-              />
-            </div>
-            <div className="flex flex-1 flex-col justify-around">
-              <p>계획 일시 : 2023-01-10 ~ 2023-01-12</p>
-              <p>예산 :300000원</p>
-              <p>테마 : 역사여행</p>
-            </div>
-            <div className="relative flex flex-1 flex-col"></div>
-            <div className="flex flex-col justify-between space-y-2">
-              <div className="space-x-3">
-                <button className="bg-sky-600 p-1 text-white">
-                  <BsShare />
-                </button>
-                <button className="bg-teal-600 p-1 text-white">
-                  <FiEdit />
-                </button>
-                <button className="bg-red-400 p-1 text-white">
-                  <AiOutlineDelete />
-                </button>
-              </div>
-              <button
-                onClick={() => router.push("/plan/detail")}
-                className="bg-gray-500 px-2 py-1 text-white"
-              >
-                詳しく見る
-              </button>
-            </div>
-          </div>
+          {waitingPlans?.map((plan: Plan, idx) => (
+            <SimplePlanCard key={plan.title + idx} plan={plan} />
+          ))}
           {/* {!data && (
             <p className="p-3 text-lg font-bold">
               おや、まだ旅行計画がありませんね、一緒に立ててみませんか
@@ -94,4 +82,14 @@ export default function Index() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps({ query }) {
+  const res = await axios.get(`http://localhost:8000/plan/all/1`);
+
+  return {
+    props: {
+      plans: res.data.plans,
+    },
+  };
 }

@@ -22,7 +22,7 @@ const StepInfoContext = createContext<{
 
 export default function New() {
   const [info, setInfo] = useState<Info>({
-    tag: [],
+    tag: undefined,
     region: "",
     startDate: "",
     endDate: "",
@@ -32,12 +32,12 @@ export default function New() {
 
   const goNext = () => {
     if (step === 1) {
-      if (info.tag.length == 0 || !info.region) {
+      if (!info.startDate || !info.endDate) {
         return;
       }
       setStep(2);
     } else if (step === 2) {
-      if (!info.startDate || !info.endDate) {
+      if (!info.region) {
         return;
       }
       setStep(3);
@@ -52,25 +52,17 @@ export default function New() {
   return (
     <StepInfoContext.Provider value={{ info, setInfo }}>
       <Stepper
-        title={"旅行事前設定"}
-        sub={"お客様の便利な旅行のために必要な情報を集めております"}
+        title={"여행 사전 설정"}
+        sub={"여행 계획을 위한 사전정보를 입력해주세요"}
         info={info}
         currentStep={step}
         setCurrentStep={setStep}
       >
         <Stepper.Header>
           {stepMap.map((step, idx) => {
-            const icon = dynamic(() =>
-              import(
-                `react-icons/${step.icon
-                  .substring(0, 2)
-                  .toLowerCase()}/index.js`
-              ).then((module) => module[step.icon])
-            );
-
             return (
               <React.Fragment key={idx}>
-                <Stepper.Circle {...step} Icon={icon} />
+                <Stepper.Circle {...step} />
                 {idx + 1 < stepMap.length && <Stepper.Line step={step.step} />}
               </React.Fragment>
             );

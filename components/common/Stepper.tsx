@@ -8,6 +8,7 @@ import {
 import { Info } from "../../types/plan.interface";
 import IProps from "../../types/props.interface";
 import React from "react";
+import dynamic from "next/dynamic";
 
 // Stepper 컴포넌트의 메인 타입
 interface Props extends IProps {
@@ -38,15 +39,15 @@ export default function Stepper({
 }: Props) {
   return (
     <StepperContext.Provider value={{ currentStep, setCurrentStep }}>
-      <div className="flex flex-1 flex-col items-center justify-center p-10">
-        <div className="border p-2 shadow-xl">
+      <div className="flex flex-1 flex-col items-center justify-center p-10 ">
+        <div className="w-full max-w-2xl border p-2 shadow-xl ">
           <div>
             <p className="text-bold p-2 text-lg">{title}</p>
           </div>
           <div>
             <p className="text-bold p-2 text-base">{sub}</p>
           </div>
-          <div className="p-5">{children}</div>
+          <div className="p-0 md:p-5">{children}</div>
         </div>
       </div>
     </StepperContext.Provider>
@@ -57,15 +58,21 @@ export default function Stepper({
  * @description Stepper의 각 단계별 아이콘과 타이틀을 표시해주는 원 컴포넌트 입니다.
  */
 Stepper.Circle = ({
-  Icon,
+  icon,
   step,
   title,
 }: {
   step: number;
-  Icon: ComponentType<{}>;
+  icon: string;
   title: string;
 }) => {
   const { currentStep } = useContext(StepperContext);
+  const Icon = dynamic(() =>
+    import(`react-icons/${icon.substring(0, 2).toLowerCase()}/index.js`).then(
+      (module) => module[icon]
+    )
+  );
+
   return (
     <div
       className={`relative flex items-center  ${
@@ -138,8 +145,12 @@ Stepper.StepButton = ({ maxStep, goNext }: StepButtonProps) => {
   const { currentStep, setCurrentStep } = useContext(StepperContext);
 
   const goPrev = () => {
-    if (currentStep > maxStep && currentStep <= 0) {
-      setCurrentStep((prev: number) => prev - 1);
+    console.log(currentStep > maxStep && currentStep > 0);
+
+    if (currentStep < maxStep && currentStep > 0) {
+      setCurrentStep((prev) => {
+        return prev - 1;
+      });
     }
   };
 

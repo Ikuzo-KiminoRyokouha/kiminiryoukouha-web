@@ -1,28 +1,31 @@
 import Image from "next/image";
 import DecidedPlanCard from "../../../components/plan/DecidedPlanCard";
 import PlanNav from "../../../components/plan/PlanNav";
+import axios from "axios";
+import { useEffect } from "react";
+import dayjs from "dayjs";
+
+interface plancard {
+  img: string;
+  title: string;
+  days: string;
+  description: string;
+}
+const gyeongjuHistory: plancard = {
+  img: "/assets/budda.JPG",
+  title: "역사탐방",
+  days: "당일치기",
+  description: "석굴암을 비롯한 경주의 역사를 경험해보세요.",
+};
+
+const test2: plancard = {
+  img: "/assets/done.png",
+  title: "test1",
+  days: "1day 2nights",
+  description: "this is test broooooo.",
+};
 
 export default function Choose() {
-  interface plancard {
-    img: string;
-    title: string;
-    days: string;
-    description: string;
-  }
-  const gyeongjuHistory: plancard = {
-    img: "/assets/budda.JPG",
-    title: "역사탐방",
-    days: "당일치기",
-    description: "석굴암을 비롯한 경주의 역사를 경험해보세요.",
-  };
-
-  const test2: plancard = {
-    img: "/assets/done.png",
-    title: "test1",
-    days: "1day 2nights",
-    description: "this is test broooooo.",
-  };
-
   return (
     <>
       <div className="flex h-screen w-full justify-center">
