@@ -6,11 +6,13 @@ import Image from "next/image";
 import { BsShare } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import SideBar from "../../components/plan/SideBar";
+import MyModal from "components/MyModal";
 
 export default function Index() {
   const router = useRouter();
   const activeVisible = useToggle(true);
   const readyVisible = useToggle(true);
+  const deleting = useToggle(false);
 
   return (
     <div className="max-w-8xl mx-auto mb-[53px] flex max-h-full w-full flex-1 lg:mb-0">
@@ -62,7 +64,10 @@ export default function Index() {
                 <button className="bg-teal-600 p-1 text-white">
                   <FiEdit />
                 </button>
-                <button className="bg-red-400 p-1 text-white">
+                <button
+                  className="bg-red-400 p-1 text-white"
+                  onClick={deleting.setTrue}
+                >
                   <AiOutlineDelete />
                 </button>
               </div>
@@ -92,6 +97,15 @@ export default function Index() {
           </div>
         </div>
       </div>
+      {deleting.value ? (
+        <MyModal
+          title={"경주"}
+          date={"2023-01-10 ~ 2023-01-12"}
+          offModal={deleting.setFalse}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
