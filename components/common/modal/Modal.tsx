@@ -70,9 +70,9 @@ Modal.Description = function ({ text }: { text: string }) {
 
   return (
     <span className="overflow-hidden text-xs">
-      {descriptionArr.map((description) => {
+      {descriptionArr.map((description, idx) => {
         return (
-          <span>
+          <span key={idx}>
             {description}
             <br />
           </span>
