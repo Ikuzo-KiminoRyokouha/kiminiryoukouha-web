@@ -17,7 +17,7 @@ export default function MyModal({ title, date, offModal }: Props) {
   return (
     <>
       <Portal qs={"#__next"}>
-        <Modal>
+        <Modal hide={offModal}>
           <div className="flex flex-row justify-end">
             <div className="" onClick={offModal}>
               <FaTimes />

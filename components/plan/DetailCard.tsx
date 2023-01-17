@@ -109,7 +109,7 @@ interface ModalProps {
 const PlaceDescModal = ({ hide, title, src, description }: ModalProps) => {
   return (
     <Portal qs={"#__next"}>
-      <Modal>
+      <Modal hide={hide}>
         <Modal.Header hide={hide}>
           <Modal.Title text={title} />
         </Modal.Header>

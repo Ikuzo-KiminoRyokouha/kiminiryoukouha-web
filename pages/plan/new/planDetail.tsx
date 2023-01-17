@@ -4,6 +4,7 @@ import { Router, useRouter } from "next/router";
 import axios from "axios";
 import dayjs from "dayjs";
 import { convertDateToKorean } from "../../../utils/common";
+import { Info } from "../../../types/plan.interface";
 
 export default function PlanDetail({ travels, plan }) {
   const {
@@ -131,7 +132,7 @@ export default function PlanDetail({ travels, plan }) {
 }
 
 export async function getServerSideProps({ query }) {
-  const info = JSON.parse(query.info);
+  const info: Info = JSON.parse(query.info);
 
   const { travels, ...plan } = await axios
     .post(`http://localhost:8000/plan/random`, {
@@ -141,6 +142,7 @@ export async function getServerSideProps({ query }) {
       end: info.endDate,
       city: info.region,
       tag: info.tag,
+      totalCost: info.money,
     })
     .then((res) => {
       if (res.data.ok) return res.data.plan;

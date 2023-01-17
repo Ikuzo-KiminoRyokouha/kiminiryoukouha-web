@@ -1,6 +1,5 @@
-import axios from "axios";
-import { start } from "repl";
 import { LatLng } from "../types/tmap.type";
+import apiRequest from "./request/apiRequest";
 
 /**
  * @description TMap 관련 전반적인 처리를 다루는 클래스입니다.
@@ -69,8 +68,8 @@ export default class TMap {
     });
 
     try {
-      const result = await axios.post(
-        "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
+      const result = await apiRequest.post(
+        "/tmap/routes/pedestrian?version=1&format=json&callback=result",
         {
           startX: start.lng,
           startY: start.lat,
@@ -80,11 +79,6 @@ export default class TMap {
           resCoordType: "EPSG3857",
           startName: "출발지",
           endName: "도착지",
-        },
-        {
-          headers: {
-            appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
-          },
         }
       );
       const data = result.data.features;
@@ -228,8 +222,8 @@ export default class TMap {
     await this.resetMarker();
     const tmapLatLng = this.map.getCenter();
     console.log(tmapLatLng._lat, tmapLatLng._lng);
-    const res = await axios.get(
-      "https://apis.openapi.sk.com/tmap/pois/search/around?version=1&format=json&callback=result",
+    const res = await apiRequest.get(
+      "/tmap/pois/search/around?version=1&format=json&callback=result",
       {
         params: {
           version: 1,
@@ -243,9 +237,6 @@ export default class TMap {
           resCoordType: "EPSG3857",
           reqCoordType: "WGS84GEO",
           count: 10,
-        },
-        headers: {
-          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
         },
       }
     );
@@ -287,22 +278,16 @@ export default class TMap {
   }
 
   async searchTotalPOINoMarker(keyword: string) {
-    const res = await axios.get(
-      "https://apis.openapi.sk.com/tmap/pois?format=json&callback=result",
-      {
-        params: {
-          version: 1,
-          searchKeyword: keyword,
-          searchType: "all",
-          resCoordType: "EPSG3857",
-          reqCoordType: "WGS84GEO",
-          count: 10,
-        },
-        headers: {
-          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
-        },
-      }
-    );
+    const res = await apiRequest.get("/tmap/pois?format=json&callback=result", {
+      params: {
+        version: 1,
+        searchKeyword: keyword,
+        searchType: "all",
+        resCoordType: "EPSG3857",
+        reqCoordType: "WGS84GEO",
+        count: 10,
+      },
+    });
     return res;
   }
 
@@ -313,22 +298,16 @@ export default class TMap {
   async searchTotalPOI(keyword: string) {
     await this.resetMarker();
 
-    const res = await axios.get(
-      "https://apis.openapi.sk.com/tmap/pois?format=json&callback=result",
-      {
-        params: {
-          version: 1,
-          searchKeyword: keyword,
-          searchType: "all",
-          resCoordType: "EPSG3857",
-          reqCoordType: "WGS84GEO",
-          count: 10,
-        },
-        headers: {
-          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
-        },
-      }
-    );
+    const res = await apiRequest.get("/tmap/pois?format=json&callback=result", {
+      params: {
+        version: 1,
+        searchKeyword: keyword,
+        searchType: "all",
+        resCoordType: "EPSG3857",
+        reqCoordType: "WGS84GEO",
+        count: 10,
+      },
+    });
     // 마커 리셋
 
     const positionBound = new window.Tmapv2.LatLngBounds(); // 맵에 결과물을 확인 하기위한 객체 생성
@@ -506,22 +485,18 @@ export default class TMap {
   }
 
   async getDirectionUseTransfort(startLatLng: LatLng, endLatLng: LatLng) {
-    return await axios.post(
-      "https://apis.openapi.sk.com/transit/routes",
-      {
-        startX: startLatLng.lat,
-        startY: startLatLng.lng,
-        endX: startLatLng.lat,
-        endY: startLatLng.lng,
+    try {
+      return await apiRequest.post("/transit/routes", {
+        startX: "128.4538673",
+        startY: "35.9442657",
+        endX: "129.3892089957",
+        endY: "35.7951432974",
         lang: 0,
         format: "json",
         count: 10,
-      },
-      {
-        headers: {
-          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
-        },
-      }
-    );
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
