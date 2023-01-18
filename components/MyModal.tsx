@@ -17,12 +17,8 @@ export default function MyModal({ title, date, offModal }: Props) {
   return (
     <>
       <Portal qs={"#__next"}>
-        <Modal>
-          <div className="flex flex-row justify-end">
-            <div className="" onClick={offModal}>
-              <FaTimes />
-            </div>
-          </div>
+        <Modal hide={offModal}>
+          <Modal.Header hide={offModal} />
           <div className="flex h-28">
             <div className="h-full w-1/3 bg-blue-200">
               <Modal.Image src="/assets/main-img.png" />
@@ -38,7 +34,7 @@ export default function MyModal({ title, date, offModal }: Props) {
               정말 이 계획을 삭제하시겠습니까?
             </span>
           </div>
-          <div className="flex justify-center border-2">
+          <Modal.Footer>
             <button
               className="h-10 flex-1 border-r-2 bg-sky-600 text-lg font-bold text-white"
               onClick={onClick.deleteing}
@@ -51,7 +47,7 @@ export default function MyModal({ title, date, offModal }: Props) {
             >
               취소
             </button>
-          </div>
+          </Modal.Footer>
         </Modal>
       </Portal>
     </>

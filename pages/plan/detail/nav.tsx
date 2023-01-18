@@ -19,7 +19,6 @@ interface Props {
 }
 
 export default function PlanNavigation({ query, plan }: Props) {
-  console.log(query, plan);
   const {
     pushDrawableMarker,
     makeStartMarker,
@@ -43,24 +42,24 @@ export default function PlanNavigation({ query, plan }: Props) {
     })[0].destination
   );
 
-  const drawRoute = async () => {
-    const destLatLng = {
-      lat: Number(destination.mapy),
-      lng: Number(destination.mapx),
-    };
-    console.log(myLatLng, destLatLng);
+  // const drawRoute = async () => {
+  //   const destLatLng = {
+  //     lat: Number(destination.mapy),
+  //     lng: Number(destination.mapx),
+  //   };
 
-    const data = await getDirectionUseTransfort(myLatLng, destLatLng);
-    console.log(data);
-  };
-  useEffect(() => {
-    const destLatLng = {
-      lat: Number(destination.mapy),
-      lng: Number(destination.mapx),
-    };
-    console.log(myLatLng, destLatLng);
-    myLatLng && drawRoute();
-  }, [myLatLng]);
+  //   console.log(destLatLng, myLatLng);
+
+  //   const data = await getDirectionUseTransfort(myLatLng, destLatLng);
+  //   // console.log("data", data);
+  // };
+  // useEffect(() => {
+  //   const destLatLng = {
+  //     lat: Number(destination.mapy),
+  //     lng: Number(destination.mapx),
+  //   };
+  //   myLatLng && drawRoute();
+  // }, [myLatLng]);
 
   useEffect(() => {
     if (mode) {
@@ -255,6 +254,15 @@ export default function PlanNavigation({ query, plan }: Props) {
 }
 
 export async function getServerSideProps({ query }: Props) {
+  if (!query?.planId) {
+    return {
+      redirect: {
+        destination: "/plan",
+        permanent: false,
+      },
+    };
+  }
+
   const plan = await mainRequest
     .get(`/plan/${query?.planId}`)
     .then((res) => res.data.plan);

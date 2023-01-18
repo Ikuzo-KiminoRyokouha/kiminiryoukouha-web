@@ -1,22 +1,22 @@
 [
   {
     "step": 1,
-    "title": "PERSONAL",
-    "icon": "SlPeople"
+    "title": "기간",
+    "icon": "SlCalender"
   },
   {
     "step": 2,
-    "title": "ACCOUNT",
-    "icon": "BsPersonPlus"
+    "title": "개인정보",
+    "icon": "SlPeople"
   },
   {
     "step": 3,
-    "title": "personal",
-    "icon": "SlPeople"
+    "title": "예산",
+    "icon": "MdOutlineAttachMoney"
   },
   {
     "step": 4,
-    "title": "personal",
-    "icon": "SlPeople"
+    "title": "완료",
+    "icon": "MdDoneOutline"
   }
 ]

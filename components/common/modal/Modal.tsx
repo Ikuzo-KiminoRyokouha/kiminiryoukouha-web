@@ -6,15 +6,22 @@ import { FaTimes } from "react-icons/fa";
 
 interface Props extends IProps {}
 
-export default function Modal({ children }: Props) {
+export default function Modal({
+  children,
+  hide,
+}: Props & { hide: () => void }) {
   return (
     /* background blur window */
     <div
+      onClick={hide}
       className="fixed inset-0
     z-50 flex items-center justify-center backdrop-blur-sm transition-all"
     >
       {/* main modal window */}
-      <div className="flex min-h-fit w-full flex-col space-y-4 overflow-hidden border bg-white p-6  lg:max-w-md">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="flex min-h-fit w-full flex-col space-y-4 overflow-hidden border bg-white p-6  lg:max-w-md"
+      >
         {children}
       </div>
     </div>
@@ -66,8 +73,6 @@ Modal.Description = function ({ text }: { text: string }) {
     [text]
   );
 
-  console.log(descriptionArr);
-
   return (
     <span className="overflow-hidden text-xs">
       {descriptionArr.map((description, idx) => {
@@ -80,4 +85,8 @@ Modal.Description = function ({ text }: { text: string }) {
       })}
     </span>
   );
+};
+
+Modal.Footer = ({ children }: Props) => {
+  return <div className="flex justify-center border-2">{children}</div>;
 };
