@@ -15,7 +15,6 @@ export default function Index({ plans }) {
   const router = useRouter();
   const activeVisible = useToggle(true);
   const readyVisible = useToggle(true);
-  const deleting = useToggle(false);
 
   const [activatedPlans, setActivatedPlans] = useState<Array<Plan>>();
   const [waitingPlans, setWaitingPlans] = useState<Array<Plan>>();
@@ -86,15 +85,6 @@ export default function Index({ plans }) {
           </div>
         </div>
       </div>
-      {deleting.value ? (
-        <MyModal
-          title={"경주"}
-          date={"2023-01-10 ~ 2023-01-12"}
-          offModal={deleting.setFalse}
-        />
-      ) : (
-        <></>
-      )}
     </div>
   );
 }

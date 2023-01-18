@@ -135,23 +135,23 @@ Stepper.Body = ({ children }: BodyProps) => {
 };
 
 interface StepButtonProps {
-  goNext: () => void;
   maxStep: number;
+  canNext: boolean;
 }
 /**
  * @description Stepper 하단부분의 Step진행 버튼들 입니다.
  */
-Stepper.StepButton = ({ maxStep, goNext }: StepButtonProps) => {
+Stepper.StepButton = ({ maxStep, canNext }: StepButtonProps) => {
   const { currentStep, setCurrentStep } = useContext(StepperContext);
 
   const goPrev = () => {
-    console.log(currentStep > maxStep && currentStep > 0);
-
     if (currentStep < maxStep && currentStep > 0) {
-      setCurrentStep((prev) => {
-        return prev - 1;
-      });
+      setCurrentStep((prev) => prev - 1);
     }
+  };
+
+  const goNext = () => {
+    canNext && setCurrentStep((prev) => prev + 1);
   };
 
   return (

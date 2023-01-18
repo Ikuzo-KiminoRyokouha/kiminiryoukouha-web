@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useCallback } from "react";
 import { useRouter } from "next/router";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
@@ -6,6 +7,8 @@ import { FiEdit } from "react-icons/fi";
 import { Plan } from "../../types/plan.interface";
 import dayjs from "dayjs";
 import { useToggle } from "../../hooks";
+import { Modal, Portal } from "../common/modal";
+import mainRequest from "../../utils/request/mainRequest";
 
 interface Props {
   plan: Plan;
@@ -13,7 +16,7 @@ interface Props {
 
 export default function SimplePlanCard({ plan }: Props) {
   const router = useRouter();
-  const toggle = useToggle(false);
+  const deleting = useToggle(false);
 
   return (
     <div className="flex space-x-4 border p-2">
@@ -44,7 +47,7 @@ export default function SimplePlanCard({ plan }: Props) {
             <FiEdit />
           </button>
           <button
-            onClick={() => toggle.setTrue()}
+            onClick={() => deleting.setTrue()}
             className="bg-red-400 p-1 text-white"
           >
             <AiOutlineDelete />
@@ -67,6 +70,75 @@ export default function SimplePlanCard({ plan }: Props) {
           詳しく見る
         </button>
       </div>
+      {deleting.value && (
+        <DeletingModal
+          planId={plan.id}
+          title={"경주"}
+          date={
+            dayjs(plan.start).format("YYYY-MM-DD") +
+            "~" +
+            dayjs(plan.end).format("YYYY-MM-DD")
+          }
+          hide={deleting.setFalse}
+        />
+      )}
     </div>
   );
+}
+
+interface ModalProps {
+  planId: number;
+  title: string;
+  date: string;
+  hide: () => void;
+}
+
+function DeletingModal({ title, date, planId, hide }: ModalProps) {
+  const router = useRouter();
+  const deletePlan = useCallback(async () => {
+    try {
+      const res = await mainRequest.delete(`/plan/${planId}`);
+      router.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  }, [planId]);
+  return (
+    <>
+      <Portal qs={"#__next"}>
+        <Modal hide={hide}>
+          <Modal.Header hide={hide} />
+          <div className="flex h-28">
+            <div className="h-full w-1/3 bg-blue-200">
+              <Modal.Image src="/assets/main-img.png" />
+            </div>
+            <div className="flex flex-col justify-around pl-4">
+              <span className="text-lg">계획이름 : {title}</span>
+              <span className="text-lg">계획일시 : </span>
+              <span className="text-base">{date}</span>
+            </div>
+          </div>
+          <div className="flex justify-center pt-6">
+            <span className="py-5 text-xl">
+              정말 이 계획을 삭제하시겠습니까?
+            </span>
+          </div>
+          <Modal.Footer>
+            <button
+              onClick={deletePlan}
+              className="h-10 flex-1 border-r-2 bg-sky-600 text-lg font-bold text-white"
+            >
+              삭제
+            </button>
+            <button className="h-10 flex-1 text-lg font-bold" onClick={hide}>
+              취소
+            </button>
+          </Modal.Footer>
+        </Modal>
+      </Portal>
+    </>
+  );
+}
+function useCallBack(arg0: () => void, arg1: undefined[]) {
+  throw new Error("Function not implemented.");
 }

@@ -1,7 +1,6 @@
 import Stepper from "@/common/Stepper";
 import { Info } from "@/types/plan.interface";
 import stepMap from "@/utils/dataMap/planStepperStepMap.json";
-import dynamic from "next/dynamic";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 import React from "react";
 
@@ -15,9 +14,11 @@ import {
 const StepInfoContext = createContext<{
   info: Info;
   setInfo: Dispatch<SetStateAction<Info>>;
+  setCanNext: Dispatch<SetStateAction<boolean>>;
 }>({
   info: undefined,
   setInfo: undefined,
+  setCanNext: undefined,
 });
 
 export default function New() {
@@ -29,28 +30,10 @@ export default function New() {
     money: 0,
   });
   const [step, setStep] = useState<number>(1);
-
-  const goNext = () => {
-    if (step === 1) {
-      if (!info.startDate || !info.endDate) {
-        return;
-      }
-      setStep(2);
-    } else if (step === 2) {
-      if (!info.region) {
-        return;
-      }
-      setStep(3);
-    } else if (step === 3) {
-      if (!info.money) {
-        return;
-      }
-      setStep(4);
-    }
-  };
+  const [canNext, setCanNext] = useState<boolean>(false);
 
   return (
-    <StepInfoContext.Provider value={{ info, setInfo }}>
+    <StepInfoContext.Provider value={{ info, setInfo, setCanNext }}>
       <Stepper
         title={"여행 사전 설정"}
         sub={"여행 계획을 위한 사전정보를 입력해주세요"}
@@ -76,8 +59,8 @@ export default function New() {
           {step === 4 && <StepFour ctx={StepInfoContext} />}
         </Stepper.Body>
         <Stepper.StepButton
+          canNext={canNext}
           maxStep={stepMap.length}
-          goNext={goNext}
         ></Stepper.StepButton>
       </Stepper>
     </StepInfoContext.Provider>

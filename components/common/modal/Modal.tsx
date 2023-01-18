@@ -73,8 +73,6 @@ Modal.Description = function ({ text }: { text: string }) {
     [text]
   );
 
-  console.log(descriptionArr);
-
   return (
     <span className="overflow-hidden text-xs">
       {descriptionArr.map((description, idx) => {
@@ -87,4 +85,8 @@ Modal.Description = function ({ text }: { text: string }) {
       })}
     </span>
   );
+};
+
+Modal.Footer = ({ children }: Props) => {
+  return <div className="flex justify-center border-2">{children}</div>;
 };

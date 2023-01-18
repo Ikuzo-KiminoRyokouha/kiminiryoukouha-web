@@ -7,24 +7,27 @@ import {
   SetStateAction,
   useContext,
   useEffect,
-  useLayoutEffect,
   useState,
 } from "react";
 
 import { Info } from "../../types/plan.interface";
 import Calendar from "../common/Calendar";
-import planTagTypeMap from "@/utils/dataMap/planTagTypeMap.json";
 import styled from "styled-components";
+import mainRequest from "../../utils/request/mainRequest";
+import { AiOutlineWarning } from "react-icons/ai";
+import { useToggle } from "../../hooks";
+import "@/utils/extension/array.extension";
 
 interface StepProps {
   ctx: Context<{
     info: Info;
     setInfo: Dispatch<SetStateAction<Info>>;
+    setCanNext: Dispatch<SetStateAction<boolean>>;
   }>;
 }
 
 export function StepOne({ ctx }: StepProps) {
-  const { info, setInfo } = useContext(ctx);
+  const { info, setInfo, setCanNext } = useContext(ctx);
 
   const [startDate, setStartDate] = useState<dayjs.Dayjs>(
     info.startDate ? dayjs(info.startDate) : undefined
@@ -47,8 +50,15 @@ export function StepOne({ ctx }: StepProps) {
         endDate: endDate?.format("YYYY-MM-DD"),
         tag: { ...tagObj },
       }));
+      setCanNext(true);
+    } else {
+      setCanNext(false);
     }
   }, [startDate, endDate]);
+
+  useEffect(() => {
+    setEndDate(undefined);
+  }, [startDate]);
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center p-2 md:flex-row">
@@ -59,16 +69,23 @@ export function StepOne({ ctx }: StepProps) {
         getEndDate={(date) => setEndDate(date)}
       />
       <div className="flex flex-1 flex-col justify-center pl-10">
-        <label className="text-md mb-2 block font-medium text-gray-900">
-          예상 시간
-        </label>
         <div className="flex min-h-[48px] items-center justify-between">
-          <span className="w-28 border p-3">
-            {startDate?.format("YYYY-MM-DD")}
-          </span>
-          <span className="w-28 border p-3">
-            {endDate?.format("YYYY-MM-DD")}
-          </span>
+          <div className="flex flex-col">
+            <label className="mb-2 block text-xs font-medium text-gray-900">
+              시작날짜
+            </label>
+            <span className="h-10 w-28 border p-3">
+              {startDate?.format("YYYY-MM-DD")}
+            </span>
+          </div>
+          <div className="flex flex-col">
+            <label className="mb-2 block text-xs font-medium text-gray-900">
+              종료날짜
+            </label>
+            <span className="h-10 w-28 border p-3">
+              {endDate?.format("YYYY-MM-DD")}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -76,42 +93,63 @@ export function StepOne({ ctx }: StepProps) {
 }
 
 export function StepTwo({ ctx }: StepProps) {
-  const { info, setInfo } = useContext(ctx);
-  const [revealTag, setRevealTag] = useState([]);
+  const { info, setInfo, setCanNext } = useContext(ctx);
   const [key, setKey] = useState<string>("1");
   const [tag, setTag] = useState(info.tag);
-
-  useLayoutEffect(() => {
-    if (revealTag.length === 0) {
-      const revealTag = Array.from(Object.keys(planTagTypeMap)).map(
-        (key) => planTagTypeMap[key]
-      );
-      setRevealTag((prev) =>
-        [...prev, ...revealTag].reduce(
-          (ac, v) => (ac.includes(v) ? ac : [...ac, v]),
-          []
-        )
-      );
-    }
-  }, []);
-
-  console.log(tag);
+  const [revealTag, setRevealTag] = useState<
+    Array<{ tag: string; tagCount: string }>
+  >([]);
+  const [hintMessage, setHintMessage] = useState<Array<String>>([]);
+  const toggle = useToggle(false);
 
   const updateTag = (targetTag: string) => {
     const isInclude = tag[key].includes(targetTag);
     setTag((prev) => {
       const newObj: any = { ...prev };
-      console.log(newObj);
       isInclude
-        ? (newObj[key] = prev[key].filter((tag) => tag != targetTag))
+        ? (newObj[key] = prev[key].filterTarget(targetTag))
         : newObj[key].push(targetTag);
-      newObj[key] = newObj[key].reduce(
-        (ac, v) => (ac.includes(v) ? ac : [...ac, v]),
-        []
-      );
+      newObj[key] = newObj[key].deduplication();
       return newObj;
     });
   };
+
+  // 태그안에 포함되어 있는
+  useEffect(() => {
+    const obj = {};
+    Array.from(Object.keys(tag)).map((key) => {
+      obj[key] = 0;
+      tag[key].map((value) => {
+        revealTag.some((el) => {
+          if (el.tag === value) {
+            obj[key] += Number(el.tagCount);
+            return true;
+          }
+        });
+      });
+    });
+    let canNext = true;
+    Array.from(Object.keys(obj)).map((key) => {
+      if (obj[key] < 2) {
+        !hintMessage.includes(key) &&
+          setHintMessage((prev) => [...prev, key].deduplication());
+        canNext = false;
+      }
+      if (canNext) {
+        setHintMessage((prev) => [...prev].filterTarget(key));
+      }
+    });
+    setCanNext(canNext);
+  }, [tag]);
+
+  useEffect(() => {
+    setCanNext(false);
+    mainRequest.get("/destination/tag").then((res) => {
+      if (res.data.ok) {
+        setRevealTag(res.data.tags);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -163,17 +201,37 @@ export function StepTwo({ ctx }: StepProps) {
           })}
         </div>
         <div className="py-3">tag</div>
-        {revealTag.map((el, idx) => (
+        {revealTag?.map((el, idx) => (
           <button
-            onClick={() => updateTag(el)}
-            key={el}
+            onClick={() => updateTag(el.tag)}
+            key={el.tag + idx}
             className={`m-2 rounded bg-gray-400 ${
-              tag[key].includes(el) ? "bg-emerald-500" : "bg-gray-400"
+              tag[key].includes(el.tag) ? "bg-emerald-500" : "bg-gray-400"
             } px-2 py-2 text-sm font-medium text-white`}
           >
-            {el}
+            {el.tag + " " + el.tagCount}
           </button>
         ))}
+        <div className="flex items-start space-x-3">
+          {hintMessage.length != 0 && (
+            <>
+              <button onClick={toggle.onClick}>
+                <AiOutlineWarning size={20} color={"red"} />
+              </button>
+              <div className="text-sm text-red-500">
+                {toggle.value &&
+                  hintMessage.map((el) => {
+                    return (
+                      <p key={`${el}`}>
+                        {el}차 일정갯수가 1개 이하입니다. 다른 태그도
+                        골라보세요!
+                      </p>
+                    );
+                  })}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </>
   );
@@ -187,7 +245,17 @@ const DateButton = styled.button`
 `;
 
 export function StepThree({ ctx }: StepProps) {
-  const { info, setInfo } = useContext(ctx);
+  const { info, setInfo, setCanNext } = useContext(ctx);
+
+  useEffect(() => {
+    setCanNext(false);
+  }, []);
+
+  useEffect(() => {
+    if (typeof info.money === "number") setCanNext(true);
+    else setCanNext(false);
+  }, [info.money]);
+
   return (
     <div className="flex flex-1 flex-col">
       <p className="text-sm">이게 마지막이에요! 화이팅!!</p>
