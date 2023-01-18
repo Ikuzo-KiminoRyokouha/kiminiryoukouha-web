@@ -1,7 +1,5 @@
 import Image from "next/image";
-import { useRouter } from "next/router";
 export default function ThreadSummary() {
-  const router = useRouter();
   return (
     <>
       <div className="m-4 flex border p-1 shadow-sm">
@@ -22,7 +20,12 @@ export default function ThreadSummary() {
           </p>
           <p className="p-1">テーマ: テーマパーク、静かな、アンニョン</p>
         </div>
-        <div className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white" onClick={() => {console.log("계획보기 clicked")}}>
+        <div
+          className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white"
+          onClick={() => {
+            console.log("계획보기 clicked");
+          }}
+        >
           <span>계획보기</span>
         </div>
       </div>

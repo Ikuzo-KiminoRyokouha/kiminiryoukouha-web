@@ -1,11 +1,8 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import ThreadCard from "components/ThreadCard";
-import ThreadSummary from "components/ThreadSummary";
 import useObserver from "hooks/useObserver";
 import { useRef } from "react";
-import { FaRegThumbsUp, FaUserCircle } from "react-icons/fa";
-import { MdSaveAlt } from "react-icons/md";
 
 export default function Thread() {
   const bottom = useRef(null);
