@@ -7,7 +7,7 @@ import { RiArrowDropDownFill } from "react-icons/ri";
 
 import useInput from "../../../hooks/useInput";
 import useToggle from "../../../hooks/useToggle";
-import { useUser } from "../../../utils/client";
+import { getUser, useUser } from "../../../utils/client";
 import HeaderNav from "./HeaderNav";
 import headerNavMap from "../../../utils/dataMap/headerNavMap.json";
 import DropDown from "../../common/DropDown";
@@ -94,8 +94,13 @@ export default function Header() {
                     </DropDown.Header>
 
                     <DropDown.ItemContainer>
-                      <DropDown.Item text={"My Page"} />
-                      <DropDown.Item text={"Setting"} />
+                      <DropDown.Item
+                        text={"My Page"}
+                        onClick={() => {
+                          router.push(`/mypage/${getUser().nickname}`);
+                        }}
+                      />
+                      <DropDown.Item text={"Setting"} onClick={() => {}} />
                     </DropDown.ItemContainer>
                     <DropDown.Tail>
                       <span
