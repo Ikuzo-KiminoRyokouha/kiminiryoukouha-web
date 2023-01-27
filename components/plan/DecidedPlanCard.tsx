@@ -33,7 +33,6 @@ export default function DecidedPlanCard({
         city: "경주",
       })
       .then((res) => {
-        console.log(res.data.id);
         axios
           .get(`http://localhost:8000/plan/${res.data.id}`)
           .then((res) => {
@@ -45,8 +44,6 @@ export default function DecidedPlanCard({
         console.log(err);
       });
   }, []);
-
-  console.log(plan);
 
   return (
     <>
