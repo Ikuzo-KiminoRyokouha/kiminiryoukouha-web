@@ -70,7 +70,7 @@ export default function useCalendar() {
   const [monthEndDate, setMonthEndDate] = useState<number>(DateOfMonth[m + 1]);
 
   useEffect(() => {
-    setStartDay(dayjs().set("month", m).set("date", 1).day());
+    setStartDay(dayjs().set("month", m).set("year", y).set("date", 1).day());
     setMonthEndDate(DateOfMonth[m + 1]);
   }, [m]);
 
@@ -102,7 +102,7 @@ export default function useCalendar() {
    * @description 저번 달로 달력을 이동시켜주는 함수
    */
   const prevMonth = () => {
-    if (m == 1) {
+    if (m == 0) {
       setM(11);
       setY((prev) => prev - 1);
       setD(undefined);

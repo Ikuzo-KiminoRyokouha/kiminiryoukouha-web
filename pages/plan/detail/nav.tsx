@@ -121,9 +121,9 @@ export default function PlanNavigation({ query, plan }: Props) {
     h-full w-full flex-1 lg:mb-0"
     >
       <div className="relative basis-3/4">
-        <div className="absolute z-10 flex h-full w-full items-end p-2">
+        <div className="absolute z-10 flex h-full w-full flex-col justify-end space-y-3 p-2">
           <div className="flex space-x-3">
-            <div className="flex cursor-pointer items-center space-x-3 rounded-lg bg-white p-2 text-lg tracking-wider">
+            {/* <div className="flex cursor-pointer items-center space-x-3 rounded-lg bg-white p-2 text-lg tracking-wider">
               <div className="h-24 w-24">
                 <Image
                   src="/assets/main-img.png"
@@ -133,7 +133,15 @@ export default function PlanNavigation({ query, plan }: Props) {
                 />
               </div>
               <span className="text-lg">석굴암</span>
-            </div>
+            </div> */}
+          </div>
+          <div className="flex space-x-3">
+            <span className="bg-white p-2"> 1일차</span>
+            <span className="bg-white p-2"> 2일차</span>
+            <span className="bg-white p-2"> 3일차</span>
+            <span className="bg-white p-2"> 4일차</span>
+            <span className="bg-white p-2"> 5일차</span>
+            <span className="bg-white p-2"> 6일차</span>
           </div>
         </div>
         <div id="map"></div>

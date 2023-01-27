@@ -12,7 +12,7 @@ export interface Plan {
   updatedAt: string;
   deletedAt: null;
   title: string;
-  tag: { [key: string]: string };
+  tag: { [key: string]: Array<string> };
   start: string;
   end: string;
   city: string;

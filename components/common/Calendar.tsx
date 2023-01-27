@@ -142,7 +142,7 @@ export default function Calendar({
                     key={idx}
                     className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-300"
                   >
-                    {idx - startDay - monthEndDate}
+                    {idx - startDay - monthEndDate + 1}
                   </span>
                 );
               }
@@ -166,7 +166,7 @@ export default function Calendar({
                       : ""
                   }`}
                 >
-                  <button
+                  <div
                     id="bt"
                     onClick={() => {
                       if (mode === "single") {
@@ -175,17 +175,19 @@ export default function Calendar({
                         setMultiDateFn(dayjs(`${y}-${m + 1}-${date}`));
                       }
                     }}
-                    className={`flex h-10 w-10 items-center  justify-center rounded-full ${
-                      d === date ? "bg-teal-200 text-white" : ""
-                    }  ${
+                    className={`flex h-10 w-10 cursor-pointer items-center  justify-center rounded-full
+                    ${
+                      dayjs(`${y}-${m + 1}-${date + 1}`).isBefore(dayjs()) &&
+                      "cursor-default text-gray-400"
+                    } ${d === date ? "bg-teal-200 text-white" : ""}  ${
                       startDate?.isSame(dayjs(`${y}-${m + 1}-${date}`)) ||
                       endDate?.isSame(dayjs(`${y}-${m + 1}-${date}`))
-                        ? "bg-sky-500 text-white"
+                        ? " bg-sky-500 text-white"
                         : ""
                     }`}
                   >
                     {date}
-                  </button>
+                  </div>
                 </div>
               );
             })}

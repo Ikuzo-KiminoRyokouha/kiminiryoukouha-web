@@ -55,9 +55,6 @@ export default function Home() {
                     Start Your Journey &#10132;
                   </span>
                 </button>
-                {/* <div className="bg-gray-300 p-4">
-                  <span>ランダム国 / 地域</span>
-                </div> */}
               </div>
             </div>
           </div>
