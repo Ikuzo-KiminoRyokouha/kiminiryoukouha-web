@@ -13,7 +13,7 @@ export default function ThreadSummary() {
         </div>
         <div className="mx-2 flex flex-1 flex-col justify-around overflow-hidden text-ellipsis">
           <p className="p-1">場所 : 韓国</p>
-          <p className=" whitespace-nowrap p-1">
+          <p className="line-clamp-2 leading-2 m-1 block">
             内容 : Lorem ipsum dolor sit amet consectetur adipisicing elit.
             Cumque a aperiam aspernatur labore laboriosam vitae soluta animi
             quibusdam ipsam est ab odio hic, adipisci vel. Autem et quo ipsa in.

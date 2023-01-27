@@ -7,13 +7,13 @@ export default function ThreadCard({ pokemon, onClick }) {
   const readmore = useToggle(false);
   return (
     <>
-      <div className="w-full" key={pokemon.name}>
+      <div className="w-full" key={pokemon?.name || 0}>
         <div className="">
-          <div className="m-2 w-auto border shadow-md">
+          <div className="m-2 border shadow-md">
             <div className="flex h-auto w-full items-center space-x-3 p-2">
               <FaUserCircle size={40} onClick={onClick.showUser} />
               <span className="" onClick={onClick.showUser}>
-                {pokemon.name}
+                {pokemon?.name || "hello"}
               </span>
             </div>
             <div className="pl-2 text-sm">{"날짜"}</div>
@@ -23,7 +23,7 @@ export default function ThreadCard({ pokemon, onClick }) {
                   readmore.value ? "" : "line-clamp-4"
                 } block leading-6`}
               >
-                {pokemon.url} Lorem ipsum dolor sit amet, consectetur
+                {pokemon?.url || "asdf"} Lorem ipsum dolor sit amet, consectetur
                 adipisicing elit. Dolor, tempore magnam voluptate nobis, illum
                 quas fuga pariatur neque ipsam inventore sequi. Vero
                 reprehenderit sapiente labore dolore. Sint molestiae quasi

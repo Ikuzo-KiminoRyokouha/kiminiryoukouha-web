@@ -31,9 +31,15 @@ DropDown.ItemContainer = function ({ children }: IProps) {
   );
 };
 
-DropDown.Item = function ({ text }: { text: string }) {
+DropDown.Item = function ({
+  text,
+  onClick,
+}: {
+  text: string;
+  onClick: () => void;
+}) {
   return (
-    <li>
+    <li onClick={onClick}>
       <span className="block cursor-pointer  py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
         {text}
       </span>
