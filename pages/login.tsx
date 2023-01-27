@@ -2,16 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 import MyInput from "../components/MyInput";
 import useInput from "../hooks/useInput";
 import { mLogin } from "../utils/fetchFn/mutation/user";
-import { reloadUser } from "../utils/request/reloadQuery";
 import React from "react";
 import { setJWTToken } from "../utils/client";
-import dayjs from "dayjs";
-import axios from "axios";
 
 export default function LoginPage() {
   const router = useRouter();

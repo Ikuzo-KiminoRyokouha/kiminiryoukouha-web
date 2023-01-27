@@ -19,11 +19,15 @@ export default function SimplePlanCard({ plan }: Props) {
   const deleting = useToggle(false);
 
   return (
-    <div className="flex space-x-4 border p-2">
+    <div className="flex w-full space-x-4 border p-2 shadow-md drop-shadow-sm">
       <div className="basis-1/12 text-center">
         <p className="text-lg">{plan.title.split(" ")[0]}</p>
         <Image
-          src="/assets/main-img.png"
+          className="rounded-full"
+          src={
+            plan.travels.filter((el) => el.destination.firstimage != "")[0]
+              .destination.firstimage
+          }
           width={1}
           height={1}
           layout="responsive"
@@ -35,20 +39,27 @@ export default function SimplePlanCard({ plan }: Props) {
           {dayjs(plan.end).format("YYYY-MM-DD")}
         </p>
         <p>예산 :{plan.totalCost} 원</p>
-        <p>테마 : 역사여행</p>
+        <p>
+          테마 :
+          {Object.keys(plan.tag)
+            .map((key, idx) => {
+              return plan.tag[key];
+            })
+            .join(", ")}
+        </p>
       </div>
       <div className="relative flex flex-1 flex-col"></div>
       <div className="flex flex-col justify-between space-y-2">
         <div className="space-x-3">
-          <button className="bg-sky-600 p-1 text-white">
+          <button className="p-1 text-sky-600">
             <BsShare />
           </button>
-          <button className="bg-teal-600 p-1 text-white">
+          <button className="p-1 text-teal-600">
             <FiEdit />
           </button>
           <button
             onClick={() => deleting.setTrue()}
-            className="bg-red-400 p-1 text-white"
+            className=" p-1 text-red-400"
           >
             <AiOutlineDelete />
           </button>
@@ -65,9 +76,9 @@ export default function SimplePlanCard({ plan }: Props) {
               "/plan/detail"
             )
           }
-          className="bg-gray-500 px-2 py-1 text-white"
+          className=" px-2 py-1 text-gray-500"
         >
-          詳しく見る
+          자세히 보기
         </button>
       </div>
       {deleting.value && (
