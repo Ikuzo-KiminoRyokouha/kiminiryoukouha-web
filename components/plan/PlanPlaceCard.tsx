@@ -14,8 +14,6 @@ export default function PlanPlaceCard() {
   /**
    * @description 서버에 장소 완료 했다고 보내는 함수
    */
-  const planComplete = () => {};
-
   return (
     <div className="relative">
       <div className="flex items-center justify-between border p-2">
@@ -86,7 +84,7 @@ const PlaceDescModal = ({ hide, title, src }: ModalProps) => {
 
   return (
     <Portal qs={"#__next"}>
-      <Modal>
+      <Modal hide={hide}>
         <Modal.Header hide={hide}>
           <Modal.Title text={title} />
         </Modal.Header>

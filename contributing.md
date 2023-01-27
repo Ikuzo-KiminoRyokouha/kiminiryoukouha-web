@@ -90,4 +90,4 @@
 
   // /utils/request/mainRequest => 인증정보가 필요 없는 요청
 
-  // <span style="color:red">라라벨 연동시에는 mainRequest만 사용할 것</span>
+  // /utils/request/apiRequest => TmapAPI 요청시 필요한 AXIOS 인스턴스

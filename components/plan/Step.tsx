@@ -15,7 +15,7 @@ import Calendar from "../common/Calendar";
 import styled from "styled-components";
 import mainRequest from "../../utils/request/mainRequest";
 import { AiOutlineWarning } from "react-icons/ai";
-import { useToggle } from "../../hooks";
+import { useInput, useToggle } from "../../hooks";
 import "@/utils/extension/array.extension";
 
 interface StepProps {
@@ -246,33 +246,46 @@ const DateButton = styled.button`
 
 export function StepThree({ ctx }: StepProps) {
   const { info, setInfo, setCanNext } = useContext(ctx);
+  const money = useInput<number>(
+    info.money,
+    "예상 경비를 입력해주세요",
+    "number"
+  );
 
   useEffect(() => {
     setCanNext(false);
   }, []);
 
   useEffect(() => {
-    if (typeof info.money === "number") setCanNext(true);
+    if (money.value) setCanNext(true);
     else setCanNext(false);
-  }, [info.money]);
+    return () => {
+      setInfo((prev) => {
+        return { ...prev, money: money.value * 10000 };
+      });
+    };
+  }, [money.value]);
 
   return (
     <div className="flex flex-1 flex-col">
       <p className="text-sm">이게 마지막이에요! 화이팅!!</p>
-      <div className="flex-1">
+      <div className="flex flex-1 justify-between">
+        <div>
+          <label className="mb-2 block pt-4 text-sm font-medium text-gray-900">
+            입력값 (만원)
+          </label>
+          <input
+            {...money}
+            className=" block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
+          ></input>
+        </div>
         <div>
           <label className="mb-2 block pt-4 text-sm font-medium text-gray-900">
             총금액
           </label>
           <input
-            type={"number"}
-            value={info.money}
-            onChange={(e) => {
-              setInfo((prev) => ({
-                ...prev,
-                money: parseInt(e.target.value),
-              }));
-            }}
+            value={money.value * 10000}
+            readOnly
             className=" block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
           ></input>
         </div>
@@ -284,7 +297,6 @@ export function StepThree({ ctx }: StepProps) {
 export function StepFour({ ctx }: StepProps) {
   const router = useRouter();
   const { info } = useContext(ctx);
-
   const onClick = () => {
     router.replace(
       {
