@@ -1,4 +1,4 @@
-import { LatLng } from "../types/tmap.type";
+import { LatLng, Orientation } from "../types/tmap.type";
 import apiRequest from "./request/apiRequest";
 
 /**
@@ -400,7 +400,7 @@ export default class TMap {
     this.marker_me = this.makeMarker(latLng, img_url, true);
   }
   async removeMyMarker() {
-    await this.marker_me.setMap(null);
+    await this.marker_me?.setMap(null);
   }
 
   pushDrawableMarker(latLng: LatLng) {
@@ -498,5 +498,30 @@ export default class TMap {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  polygon;
+  async drawPolygonWithOrientation(orientation: Orientation, myLatLng: LatLng) {
+    const { alpha, beta, gamma } = orientation;
+    if (this.polygon) await this.polygon.setMap(null);
+    this.polygon = new window.Tmapv2.Polygon({
+      paths: [
+        new window.Tmapv2.LatLng(myLatLng.lat, myLatLng.lng),
+        new window.Tmapv2.LatLng(
+          myLatLng.lat +
+            Math.cos((Math.PI / 180) * (-alpha + 45 - 22.5)) * 0.001,
+          myLatLng.lng +
+            Math.sin((Math.PI / 180) * (-alpha + 45 - 22.5)) * 0.001
+        ),
+        new window.Tmapv2.LatLng(
+          myLatLng.lat +
+            Math.cos((Math.PI / 180) * (-alpha - 45 - 22.5)) * 0.001,
+          myLatLng.lng +
+            Math.sin((Math.PI / 180) * (-alpha - 45 - 22.5)) * 0.001
+        ),
+      ],
+      fillColor: "pink", // 다각형 내부 색상
+      map: this.map,
+    });
   }
 }
