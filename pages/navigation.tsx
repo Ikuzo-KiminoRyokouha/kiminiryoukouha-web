@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GiSteampunkGoggles } from "react-icons/gi";
 import { MdAssistantNavigation, MdClose } from "react-icons/md";
 import { TbExchange } from "react-icons/tb";
@@ -6,6 +6,8 @@ import { TbExchange } from "react-icons/tb";
 import NavigationCard from "../components/common/card/NavigationCard";
 import AROverlayDom from "../components/layout/AROverlay";
 import { useAR, useToggle, useTMap, useLocation } from "../hooks";
+import { getOrientation, stopOrientation } from "../utils/common";
+import { Orientation } from "../types/tmap.type";
 
 export default function Navigation() {
   const {
@@ -17,15 +19,12 @@ export default function Navigation() {
     setResultToReserve,
     direction,
     convertLatLng,
+    drawMyMarker,
+    drawPolygonWithOrientation,
     start,
     end,
-    markerLatLngArr,
+    pending,
   } = useTMap("map");
-
-  useEffect(() => {
-    start && end && isVisible.setFalse();
-  }, [start, end]);
-
   /* 모바일 상에서 Navigation Toggle State */
   const isVisible = useToggle(false);
   /* ar 진입 버튼 */
@@ -34,11 +33,31 @@ export default function Navigation() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   /* ar 진입 오버레이 돔에 대한 ref */
   const overlayDom = useRef<HTMLDivElement>(null);
+  /* 디바이스의 방향 정보를 담는 객체입니다. */
+  const [orientation, setOrientation] = useState<Orientation>(undefined);
 
   const { renderToLatLng, removeAllMesh, ar, myLatLng, accuracy } = useAR(
     buttonRef,
     overlayDom
   );
+
+  useEffect(() => {
+    getOrientation(setOrientation);
+    return () => {
+      stopOrientation();
+    };
+  }, []);
+
+  useEffect(() => {
+    start && end && isVisible.setFalse();
+  }, [start, end]);
+
+  useEffect(() => {
+    if (pending && myLatLng) {
+      drawMyMarker(myLatLng);
+      drawPolygonWithOrientation(orientation, myLatLng);
+    }
+  }, [myLatLng, pending, orientation?.alpha]);
 
   /**
    * @description 네비게이션의 길찾기를 바탕으로 받아온 정보가 있다면, AR상에 해당 좌표를 기반으로 오브젝트 모델을 띄워줌
@@ -146,7 +165,7 @@ export default function Navigation() {
                 className="z-10 rounded-lg border border-gray-300 bg-white p-1 text-sky-600"
                 onClick={isVisible.setTrue}
               >
-                <MdAssistantNavigation size={36}></MdAssistantNavigation>
+                <MdAssistantNavigation size={36} />
               </button>
             </div>
             <div className="flex justify-end">
@@ -158,8 +177,18 @@ export default function Navigation() {
                 <GiSteampunkGoggles size={36}></GiSteampunkGoggles>
               </button>
             </div>
-            <div className="flex justify-end">
+            <div className="flex flex-col justify-end">
+              <span className="z-10">{myLatLng?.lat}</span>
+              <span className="z-10">{myLatLng?.lng}</span>
               <span className="z-10">{accuracy}</span>
+            </div>
+            <div className="flex flex-col justify-end">
+              <p className="z-10">alpha : {orientation?.alpha || "null"}</p>
+              <p className="z-10">beta : {orientation?.beta || "null"}</p>
+              <p className="z-10">gamma : {orientation?.gamma || "null"}</p>
+              <p className="z-10">
+                absoulte : {String(orientation?.absolute) || "null"}
+              </p>
             </div>
             {/* <button
               ref={buttonRef}
