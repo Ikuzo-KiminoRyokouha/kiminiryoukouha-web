@@ -5,31 +5,31 @@ import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
 
-const MyPage1Context = createContext<{
+const MyPageContext = createContext<{
   arr: Array<number>;
 }>(undefined);
 
-export default function MyPage1({ children }) {
+export default function MyPage({ children }) {
   const arr = [, , , , , , , , , , , , , ,].fill(0);
 
   return (
-    <MyPage1Context.Provider value={{ arr }}>
+    <MyPageContext.Provider value={{ arr }}>
       <div className="flex w-full flex-1">
         <div className="mx-auto flex max-w-7xl flex-1 flex-col">{children}</div>
       </div>
-    </MyPage1Context.Provider>
+    </MyPageContext.Provider>
   );
 }
 
-MyPage1.Header = ({ children }) => {
+MyPage.Header = ({ children }) => {
   return <div className="flex h-1/3 min-h-[286px]">{children}</div>;
 };
 
-MyPage1.Body = ({ children }) => {
+MyPage.Body = ({ children }) => {
   return <div className="flex h-full flex-col">{children}</div>;
 };
 
-MyPage1.Image = () => {
+MyPage.Image = () => {
   return (
     <div className="flex h-full w-1/5 justify-center py-10">
       <div className="relative hidden w-4/5 overflow-hidden rounded after:block after:pb-[100%] md:block">
@@ -39,14 +39,14 @@ MyPage1.Image = () => {
   );
 };
 
-MyPage1.Info = ({ username, description }) => {
+MyPage.Info = ({ username, description }) => {
   return (
     <div className="flex h-full w-3/5 flex-col py-10">
       <div className="flex h-1/3 w-full ">
         <div className="w-5/6">
           <span className="text-4xl">{username}</span>
         </div>
-        <MyPage1.Button title={"follow"} onClick={() => {}} />
+        <MyPage.Button title={"follow"} onClick={() => {}} />
       </div>
       <div className="flex h-2/3 w-full flex-col">
         <div className="h-1/6 w-5/6"></div>
@@ -60,7 +60,7 @@ MyPage1.Info = ({ username, description }) => {
   );
 };
 
-MyPage1.Button = ({ title, onClick }) => {
+MyPage.Button = ({ title, onClick }) => {
   return (
     <div className="pl-5">
       <button
@@ -73,7 +73,7 @@ MyPage1.Button = ({ title, onClick }) => {
   );
 };
 
-MyPage1.Follower = () => {
+MyPage.Follower = () => {
   const router = useRouter();
   const onClick = () => {
     router.push({
@@ -95,7 +95,7 @@ MyPage1.Follower = () => {
   );
 };
 
-MyPage1.Nav = ({ children, navItemWidth, navPage }) => {
+MyPage.Nav = ({ children, navItemWidth, navPage }) => {
   return (
     <nav className="m-2">
       <div className="mx-2 flex">{children}</div>
@@ -131,8 +131,8 @@ const ActionBar = styled.div<{
   transition-duration: 150ms;
 `;
 
-MyPage1.Contents = ({ navPage }) => {
-  const { arr } = useContext(MyPage1Context);
+MyPage.Contents = ({ navPage }) => {
+  const { arr } = useContext(MyPageContext);
 
   return (
     <div className="mx-auto ml-8 w-full">
@@ -144,7 +144,7 @@ MyPage1.Contents = ({ navPage }) => {
   );
 };
 
-MyPage1.NavButton = ({ title, onClick, setNavItemWidth }) => {
+MyPage.NavButton = ({ title, onClick, setNavItemWidth }) => {
   const ref = useRef();
 
   useEffect(() => {
