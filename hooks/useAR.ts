@@ -33,9 +33,9 @@ export default function useAR(
     gpsReceived(myLatLng);
     if (minAccuracy > accuracy) {
       setMinAccuracy(accuracy);
-      // ar.updatePosition(myLatLng);
+      ar.updatePosition(myLatLng);
     }
-    // gpsReceived();
+    gpsReceived(myLatLng);
   }, [accuracy]);
 
   /**
@@ -61,7 +61,6 @@ export default function useAR(
 
   const gpsReceived = (myLatLng: LatLng) => {
     let distMoved = Number.MAX_VALUE;
-    console.log(accuracy);
     if (accuracy <= minAccuracy) {
       if (!lastLatLng) {
         setLastLatLng(myLatLng);
@@ -71,7 +70,7 @@ export default function useAR(
       if (distMoved >= 0) {
         setLastLatLng(myLatLng);
         ar.setARCameraPosition(myLatLng);
-        ar.updatePosition(myLatLng);
+        // ar.updatePosition(myLatLng);
       }
     }
   };
