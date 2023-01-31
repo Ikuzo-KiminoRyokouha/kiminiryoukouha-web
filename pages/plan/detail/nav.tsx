@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { IoIosAirplane } from "react-icons/io";
 
 import mainRequest from "../../../utils/request/mainRequest";
 
@@ -17,6 +18,7 @@ interface Props {
   };
   plan: Plan;
 }
+
 
 export default function PlanNavigation({ query, plan }: Props) {
   const {
@@ -29,12 +31,18 @@ export default function PlanNavigation({ query, plan }: Props) {
     resetMarker,
     getDirectionUseTransfort,
   } = useTMap("map", false);
+  
 
+  console.log(plan)
+
+
+  
   const { myLatLng } = useLocation();
-
+ 
   const [mode, setMode] = useState(0);
   const [planIdx, setPlanIdx] = useState(0);
   const [plans, setPlans] = useState(undefined);
+  const [currentmode,setCurrentmode]=useState(0);
 
   const [destination, setDestination] = useState<Destination>(
     plan.travels.filter((el) => {
@@ -121,33 +129,30 @@ export default function PlanNavigation({ query, plan }: Props) {
     h-full w-full flex-1 lg:mb-0"
     >
       <div className="relative basis-3/4">
-        <div className="absolute z-10 flex h-full w-full flex-col justify-end space-y-3 p-2">
-          <div className="flex space-x-3">
-            {/* <div className="flex cursor-pointer items-center space-x-3 rounded-lg bg-white p-2 text-lg tracking-wider">
-              <div className="h-24 w-24">
-                <Image
-                  src="/assets/main-img.png"
-                  layout="responsive"
-                  width={1}
-                  height={1}
-                />
-              </div>
-              <span className="text-lg">석굴암</span>
-            </div> */}
-          </div>
-          <div className="flex space-x-3">
-            <span className="bg-white p-2"> 1일차</span>
-            <span className="bg-white p-2"> 2일차</span>
-            <span className="bg-white p-2"> 3일차</span>
-            <span className="bg-white p-2"> 4일차</span>
-            <span className="bg-white p-2"> 5일차</span>
-            <span className="bg-white p-2"> 6일차</span>
+        <div className="absolute z-10 flex h-full w-full flex-col justify-end space-y-3 p-1 bg-gray-200">
+         
+          <button className=" ml-auto text-white mb-auto p-4 bg-slate-500  rounded-2xl">
+           <IoIosAirplane></IoIosAirplane>
+          </button>
+            
+          <div className="flex space-x-2 bg-white p-1">
+           {
+            Array(dayjs(plan.end).diff(plan.start,"d")+1).fill(0).map((el,i)=>{
+              return <button className={`${currentmode === i ? "bg-green-200 border-1 p-4 font-bold " 
+              : "  font-bold bg-gray-200 p-4"}`} onClick={()=>{setCurrentmode(i)}}>{i+1}일차</button>
+            })
+
+           }
+       
+    
+           
+           
           </div>
         </div>
         <div id="map"></div>
       </div>
       <div className="relative flex basis-1/4 flex-col border-r">
-        <div className="absolute flex max-h-full min-h-full w-full flex-col">
+        <div className="absolute flex max-h-full min-h-full w-full flex-col ">
           <div className="border p-2">{destination.title} 까지의 경로</div>
           <div className="space-x-2">
             <ModeButton
@@ -301,3 +306,5 @@ const TimeText = styled.span`
   line-height: 2rem /* 32px */;
   font-weight: 700;
 `;
+
+

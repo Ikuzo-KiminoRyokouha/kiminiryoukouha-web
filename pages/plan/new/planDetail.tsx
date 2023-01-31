@@ -7,12 +7,19 @@ import { useRouter } from "next/router";
 import { convertDateToKorean } from "../../../utils/common";
 import { getDescriptionFromAPI } from "../../../utils/apiQuery";
 import styled from "styled-components";
+import dayjs from "dayjs";
+
 
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
 
   const router = useRouter();
   const isSave = useRef(false);
+ 
+
+  const [selectedDate, setSelectedDate] = useState(dayjs(plan.start));
+  //선택된 날짜를 시작값으로 함 
+  
 
   const rerollePlan = async () => {
     await axios.delete(`http://localhost:8000/plan/${plan.id}`);
@@ -90,18 +97,43 @@ export default function PlanDetail({ travels, plan, info }) {
             <InfoCard title="관광시간" sub="약5시간" />
           </div>
           <div className="mt-20 w-full max-w-2xl md:max-w-5xl">
+          <div className=" flex  space-x-1  mr-5 " >
+{/* 2023 02 05 - 2023 02 03 하면 2개가 남지 여기서 fill은 그냥 몇번반복할지만 나오게하는거네   지금은 배열이  let x=[0,0,0]
+map은 배열의 인데스만큼 도니까 3번이 생성됨 
+2023 02 03 +0
+ dayjs(plan.start).add(i,"d"))
+시작날짜에서 0번쨰가 첫쩃날
++1번쨰가 둘쨋날
++2번쨰가 셋쩃날
+
+*/}
+{
+  Array(dayjs(plan.end).diff(plan.start,"d") +1).fill(0).map((el,i)=>{
+    return             <Tapbutton date={dayjs(plan.start).add(i,"d").format('YYYY-MM-DD')}
+    selectedDate={selectedDate.format('YYYY-MM-DD')}
+    onClick={() => {
+      setSelectedDate(()=>dayjs(plan.start).add(i,"d"))
+    }}>Day{i+1}</Tapbutton>   
+  })
+} 
+            </div>
             <div className="flex h-80 w-full items-center justify-center rounded-lg  shadow-[0_0_60px_-15px_rgba(0,0,0,0.3)]">
               <div className="flex h-[85%] w-[92%]">
                 <div className="h-full w-3/4 rounded-lg">
-                  <div id="map">{/* tmap */}</div>
+                  <div id="map" className="bg-black">{/* tmap */}</div>
                 </div>
+                
                 <div className="flex h-full w-1/4 flex-col items-start justify-evenly rounded-r-lg pl-4 md:pl-12 ">
-                  <DestinationButton>
-                    {travels[0].destination.title}
-                  </DestinationButton>
-                  <DestinationButton>
-                    {travels[1].destination.title}
-                  </DestinationButton>
+                  {
+                    travels.filter(el => {
+                     return selectedDate.format('YYYY-MM-DD') === dayjs(el.startDay).format("YYYY-MM-DD")
+                    }).map((travel)=>{
+                      return <DestinationButton>
+                      {travel.destination.title}
+                    </DestinationButton>
+                    })
+                  }
+
                 </div>
               </div>
             </div>
@@ -131,6 +163,34 @@ export default function PlanDetail({ travels, plan, info }) {
     </>
   );
 }
+interface ButtonProps {
+  date: string;
+  selectedDate: string;
+}
+
+const Tapbutton =styled.button<ButtonProps>`
+  margin-left: auto;
+  --tw-bg-opacity: 1;
+  /* 32px */;
+  cursor: pointer;
+  border-width: ${(props) => props.date != props.selectedDate && "1px"};
+  padding: 1rem /* 16px */;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  color: ${(props) =>
+    props.date === props.selectedDate &&
+    "rgb(255 255 255 / var(--tw-text-opacity))"};
+  background-color: ${(props) =>
+    props.date === props.selectedDate &&
+    "rgb(2 132 199 / var(--tw-bg-opacity))"};
+  &:hover {
+    background-color: rgb(2 132 199 / var(--tw-bg-opacity));
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+  }
+`;
+
 
 const DestinationButton = styled.button`
   font-size: 1.5rem /* 24px */;
@@ -159,6 +219,7 @@ function InfoCard({ title, sub }) {
 
 function IntroduceCard({ travel }) {
   const [description, setDescription] = useState<string>("");
+  console.log(description)
   useLayoutEffect(() => {
     getDescriptionFromAPI(
       Number(travel.destination.contentid),
@@ -181,7 +242,7 @@ function IntroduceCard({ travel }) {
         />
       </div>
       <p className="line-clamp-4 my-10 text-center leading-6">
-        {description.split("<br />").join().split("<br>")[0]}
+        {description?.split("<br/>").join().split("<br>")[0]}
       </p>
     </div>
   );
