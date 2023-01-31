@@ -12,8 +12,9 @@ import { computeDistanceMeters, getXYZFromLatLng } from "./threeHelper";
 export default class AR {
   private button: HTMLButtonElement;
   private domOverlayRoot: HTMLDivElement;
-  private renderer: t.WebGLRenderer;
   private childrenLatLng: Array<LatLng> = [];
+  group: t.Group;
+  renderer: t.WebGLRenderer;
   scene: t.Scene;
   camera: t.PerspectiveCamera;
   myLatLng: LatLng = { lat: 0, lng: 0 };
@@ -41,8 +42,7 @@ export default class AR {
 
     // Enable XR functionality on the renderer
     renderer.xr.enabled = true;
-
-    renderer.xr.getCamera().position.set(1, 2, 1);
+    renderer.xr.getCamera().position.set(0, 0, 0);
 
     ARCustomButton.connectToButton(this.button, renderer, {
       domOverlay: { root: this.domOverlayRoot },
@@ -62,7 +62,7 @@ export default class AR {
     // Initailize app if supported.
     return immersiveArSupported
       ? this.initXRApp()
-      : console.log(" xr feature is not supported for your browser");
+      : console.log("xr feature is not supported for your browser");
   }
 
   lonToSphMerc(lon: number) {
@@ -78,14 +78,17 @@ export default class AR {
   }
 
   add(object: Mesh, latLng: LatLng) {
-    const worldCoords = this.project(latLng);
-    [object.position.x, object.position.z] = worldCoords;
+    this.setWorldPosition(object, latLng);
+
     this.scene.add(object);
   }
 
   updatePosition(myLatLng: LatLng) {
     this.scene.children.forEach((child, idx) => {
       // const { x, y, z } = getXYZFromLatLng(myLatLng, this.childrenLatLng[idx]);
+      // alert(idx);
+      // alert(this.childrenLatLng[idx].lat + " " + this.childrenLatLng[idx].lng);
+      // alert(`x : ${x}, y : ${y}, z : ${z}`);
       // [child.position.x, child.position.z] = this.project(myLatLng);
       // console.log(child.position.x, child.position.z);
       // child.position.set(x, y, z);
@@ -99,6 +102,7 @@ export default class AR {
 
   setWorldPosition(object: t.Object3D, latLng: LatLng, elev?: number) {
     const worldCoords = this.lonLatToWorldCoords(latLng);
+    // alert(worldCoords);
     [object.position.x, object.position.z] = worldCoords;
 
     if (elev !== undefined) {
@@ -107,10 +111,13 @@ export default class AR {
   }
 
   setARCameraPosition(latLng: LatLng) {
-    const xrCamera = this.renderer.xr.getCamera();
+    // const xrCamera = this.renderer.xr.getCamera();
 
-    this.setWorldPosition(xrCamera, latLng);
-    xrCamera.updateMatrixWorld(true);
+    this.setWorldPosition(this.group, latLng);
+
+    // xrCamera.updateMatrixWorld(true);
+    // this.renderer.xr.updateCamera(this.camera);
+    // this.renderer.xr.updateCamera(xrCamera);
   }
 
   /**
@@ -125,10 +132,12 @@ export default class AR {
       0.1,
       50000
     );
-    camera.position.x = 200;
-    camera.lookAt(new t.Vector3(0, 0, 0));
+    // camera.lookAt(0, 0, 0);
     this.camera = camera;
+    this.group = new t.Group();
+    this.group.add(camera);
 
+    scene.add(this.group);
     this.animate();
   }
 
@@ -165,12 +174,8 @@ export default class AR {
     });
 
     const box = new t.Mesh(boxGeometry, boxMaterial);
-    box.position.set(0, 0, -2);
 
-    box.name = "box";
-
-    this.childrenLatLng.push(latLng);
-    this.scene.add(box);
+    this.add(box, latLng);
   }
 
   /**
@@ -205,5 +210,20 @@ export default class AR {
     const boxMaterial = createRoadSignMaterial(Math.round(distance));
     (this.scene.getObjectByName("roadSignBox") as t.Mesh).material =
       boxMaterial;
+  }
+
+  drawLine() {
+    const material = new t.LineBasicMaterial({ color: 0x0000ff });
+
+    const points = [];
+
+    points.push(new t.Vector3(-10, 0, 0));
+    points.push(new t.Vector3(0, 10, 0));
+    points.push(new t.Vector3(10, 0, 0));
+
+    const geometry = new t.BufferGeometry().setFromPoints(points);
+    const line = new t.Line(geometry, material);
+
+    this.scene.add(line);
   }
 }

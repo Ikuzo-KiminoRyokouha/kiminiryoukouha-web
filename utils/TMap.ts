@@ -399,8 +399,8 @@ export default class TMap {
   makeMyMarker(latLng: LatLng, img_url: string) {
     this.marker_me = this.makeMarker(latLng, img_url, true);
   }
-  async removeMyMarker() {
-    await this.marker_me?.setMap(null);
+  removeMyMarker() {
+    this.marker_me?.setMap(null);
   }
 
   pushDrawableMarker(latLng: LatLng) {
@@ -501,27 +501,27 @@ export default class TMap {
   }
 
   polygon;
-  async drawPolygonWithOrientation(orientation: Orientation, myLatLng: LatLng) {
+  drawPolygonWithOrientation(orientation: Orientation, myLatLng: LatLng) {
     const { alpha, beta, gamma } = orientation;
-    if (this.polygon) await this.polygon.setMap(null);
+
     this.polygon = new window.Tmapv2.Polygon({
       paths: [
         new window.Tmapv2.LatLng(myLatLng.lat, myLatLng.lng),
         new window.Tmapv2.LatLng(
-          myLatLng.lat +
-            Math.cos((Math.PI / 180) * (-alpha + 45 - 22.5)) * 0.001,
-          myLatLng.lng +
-            Math.sin((Math.PI / 180) * (-alpha + 45 - 22.5)) * 0.001
+          myLatLng.lat + Math.cos((Math.PI / 180) * (-alpha + 45)) * 0.001,
+          myLatLng.lng + Math.sin((Math.PI / 180) * (-alpha + 45)) * 0.001
         ),
         new window.Tmapv2.LatLng(
-          myLatLng.lat +
-            Math.cos((Math.PI / 180) * (-alpha - 45 - 22.5)) * 0.001,
-          myLatLng.lng +
-            Math.sin((Math.PI / 180) * (-alpha - 45 - 22.5)) * 0.001
+          myLatLng.lat + Math.cos((Math.PI / 180) * (-alpha - 45)) * 0.001,
+          myLatLng.lng + Math.sin((Math.PI / 180) * (-alpha - 45)) * 0.001
         ),
       ],
       fillColor: "pink", // 다각형 내부 색상
       map: this.map,
     });
+  }
+
+  async removePolygon() {
+    this.polygon && this.polygon.setMap(null);
   }
 }

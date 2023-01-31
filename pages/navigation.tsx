@@ -73,11 +73,19 @@ export default function Navigation() {
   // }, [markerLatLngArr]);
 
   useEffect(() => {
+    // if (ar) {
+    //   ar.drawLine();
+    // }
     ar &&
       ar.createBox(myLatLng, {
-        lat: 35.9474909,
-        lng: 128.4637009,
+        lat: myLatLng?.lat + 0.00001,
+        lng: myLatLng?.lng + 0.00001,
       });
+    // ar &&
+    //   ar.createBox(myLatLng, {
+    //     lat: 35.9476906,
+    //     lng: 128.4636521,
+    //   });
     // ar &&
     //   ar.createRoadSignBox(myLatLng, {
     //     lat: 35.9462488,
@@ -181,6 +189,17 @@ export default function Navigation() {
               <span className="z-10">{myLatLng?.lat}</span>
               <span className="z-10">{myLatLng?.lng}</span>
               <span className="z-10">{accuracy}</span>
+              <div style={{ color: "blue", zIndex: 10 }}>
+                <span className="z-10">
+                  {ar?.renderer.xr.getCamera().position.x}
+                </span>
+                <span className="z-10">
+                  {ar?.renderer.xr.getCamera().position.z}
+                </span>
+                <span className="z-10">
+                  {ar?.renderer.xr.getCamera().position.z}
+                </span>
+              </div>
             </div>
             <div className="flex flex-col justify-end">
               <p className="z-10">alpha : {orientation?.alpha || "null"}</p>
