@@ -157,12 +157,14 @@ export default function useTMap(
     setSearchAroundResult(() => res.data.searchPoiInfo.pois.poi);
   };
 
-  const makeLayerForPlan = (
-    startLatLng: LatLng,
-    endLatLng: LatLng,
-    ...wayPointLatLng: Array<LatLng>
-  ) => {
-    tmap.makeLayerForPlan(startLatLng, endLatLng, ...wayPointLatLng);
+  /**
+   * @description 위도 경도를 기반으로 지도상에 마커와 선을 그어준다.
+   * @param startLatLng 시작 위도경도
+   * @param endLatLng 끝 위도경도
+   * @param wayPointLatLng  교차점 위도경도
+   */
+  const makeLayerForPlan = (...wayPointLatLng: Array<LatLng>) => {
+    tmap.makeLayerForPlan(...wayPointLatLng);
   };
   const pushDrawableMarker = (latLng: LatLng) => {
     tmap.pushDrawableMarker(latLng);
