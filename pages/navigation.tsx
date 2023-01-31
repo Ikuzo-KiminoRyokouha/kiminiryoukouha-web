@@ -7,7 +7,7 @@ import NavigationCard from "../components/common/card/NavigationCard";
 import AROverlayDom from "../components/layout/AROverlay";
 import { useAR, useToggle, useTMap, useLocation } from "../hooks";
 import { getOrientation, stopOrientation } from "../utils/common";
-import { Orientation } from "../types/tmap.type";
+import { LatLng, Orientation } from "../types/tmap.type";
 
 export default function Navigation() {
   const {
@@ -71,36 +71,31 @@ export default function Navigation() {
   //     alert("rendererd");
   //   }
   // }, [markerLatLngArr]);
+  const renderObject = async () => {
+    const color = ["skyblue", "red", "green", "yellow"];
+    const latLngArr: Array<LatLng> = [
+      {
+        lat: myLatLng?.lat + 0.00001,
+        lng: myLatLng?.lng + 0.00001,
+      },
+      {
+        lat: myLatLng?.lat + 0.00001,
+        lng: myLatLng?.lng - 0.00001,
+      },
+    ];
+
+    latLngArr.forEach(async (latLng, idx) => {
+      await ar.createBox(myLatLng, latLng, color[idx]);
+    });
+
+    ar.drawLine(myLatLng, ...latLngArr);
+  };
 
   useEffect(() => {
     // if (ar) {
     //   ar.drawLine();
     // }
-    ar &&
-      ar.createBox(myLatLng, {
-        lat: myLatLng?.lat + 0.00001,
-        lng: myLatLng?.lng + 0.00001,
-      });
-    // ar &&
-    //   ar.createBox(myLatLng, {
-    //     lat: 35.9476906,
-    //     lng: 128.4636521,
-    //   });
-    // ar &&
-    //   ar.createRoadSignBox(myLatLng, {
-    //     lat: 35.9462488,
-    //     lng: 128.4604671,
-    //   });
-    // ar &&
-    //   ar.createRoadSignBox(myLatLng, {
-    //     lat: 35.9460995,
-    //     lng: 128.4607461,
-    //   });
-    // ar &&
-    //   ar.createRoadSignBox(myLatLng, {
-    //     lat: 35.946069,
-    //     lng: 128.4608129,
-    //   });
+    if (ar && myLatLng) renderObject();
   }, [ar]);
   return (
     <>

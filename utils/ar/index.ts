@@ -163,11 +163,11 @@ export default class AR {
    * @param latLng  박스가 위치할 위도와 경로
    * @description 위도와 경도와 나의 위치를 기반으로 가상세계에 박스를 로딩해줍니다.
    */
-  async createBox(myLatLng: LatLng, latLng: LatLng) {
-    const { x, y, z } = getXYZFromLatLng(myLatLng, latLng);
+  async createBox(myLatLng: LatLng, latLng: LatLng, color: string = "skyblue") {
+    // const { x, y, z } = getXYZFromLatLng(myLatLng, latLng);
     const distance = computeDistanceMeters(myLatLng, latLng);
     const boxGeometry = new t.BoxGeometry(0.1, 0.1, 0.1);
-    const texture = createDistanceTexture(distance);
+    const texture = createDistanceTexture(distance, color);
     const boxMaterial = new t.MeshBasicMaterial({
       map: texture,
       side: t.DoubleSide,
@@ -212,15 +212,20 @@ export default class AR {
       boxMaterial;
   }
 
-  drawLine() {
-    const material = new t.LineBasicMaterial({ color: 0x0000ff });
+  /**
+   * @description 위도 경도를 바탕으로 사이에 선을 그려주는 함수입니다.
+   */
+  drawLine(...latLngArr: Array<LatLng>) {
+    const material = new t.LineBasicMaterial({ color: 0x0000ff, linewidth: 3 });
 
     const points = [];
 
-    points.push(new t.Vector3(-10, 0, 0));
-    points.push(new t.Vector3(0, 10, 0));
-    points.push(new t.Vector3(10, 0, 0));
-
+    latLngArr.forEach((latLng) => {
+      const worldCoords = this.lonLatToWorldCoords(latLng);
+      const [x, z] = worldCoords;
+      const vector = new t.Vector3(x, 0, z);
+      points.push(vector);
+    });
     const geometry = new t.BufferGeometry().setFromPoints(points);
     const line = new t.Line(geometry, material);
 
