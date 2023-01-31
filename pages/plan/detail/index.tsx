@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { useLayoutEffect, useState } from "react";
-import { MdArrowRight } from "react-icons/md";
+import { MdArrowRight, MdArrowDropDown } from "react-icons/md";
 
 import DetailCard from "../../../components/plan/DetailCard";
 import { Plan } from "../../../types/plan.interface";
@@ -12,6 +12,11 @@ interface Props {
 
 export default function PlanDetail({ plan }: Props) {
   const [period, setPeriod] = useState<number>(0);
+  console.log(period+"period")
+  console.log(plan)
+
+
+  
 
   useLayoutEffect(() => {
     setPeriod(dayjs(plan.end).diff(dayjs(plan.start), "d") + 1);
@@ -19,7 +24,7 @@ export default function PlanDetail({ plan }: Props) {
 
   return (
     <div className="mx-auto mb-[53px] flex max-h-full w-full max-w-7xl flex-1 lg:mb-0 ">
-      <div className="max-w-full space-y-4 p-4 ">
+      <div className="w-full space-y-4 p-4 ">
         <div className="rounded-lg bg-gradient-to-r from-[#5FA7E8] to-[#0078EF]">
           <div className="mb-4 pt-4 text-center text-4xl font-semibold text-white">
             {plan.title}
@@ -38,34 +43,46 @@ export default function PlanDetail({ plan }: Props) {
         <div>
           {Array.from(Array(period)).map((_, idx) => {
             return (
-              <>
-                <div className="flex items-center justify-between border p-2">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-xl font-bold">{idx + 1}일차</span>
-                    <span>
-                      {dayjs(plan.start).add(idx, "d").format("YYYY-MM-DD")}
-                    </span>
-                  </div>
-                  <div>
-                    <MdArrowRight size={30} />
-                  </div>
-                </div>
-                <div className="flex flex-wrap">
-                  {plan.travels.map((travel) => {
-                    if (
-                      dayjs(travel.startDay).format("YYYY-MM-DD") ===
-                      dayjs(plan.start).add(idx, "d").format("YYYY-MM-DD")
-                    )
-                      return <DetailCard planId={plan.id} travel={travel} />;
-                  })}
-                </div>
-              </>
+              <DayPlanList plan={plan} idx={idx}/>
             );
           })}
         </div>
       </div>
     </div>
   );
+}
+
+const DayPlanList = ({plan,idx}) => {
+  const [test,setTest]=useState(true)
+
+return  <> <div className="flex items-center justify-between border p-2">
+<div className="flex items-center space-x-4">
+  <span className="text-xl font-bold">{idx + 1}일차</span>
+  <span>
+    {dayjs(plan.start).add(idx, "d").format("YYYY-MM-DD")}
+  </span>
+</div>
+<div>
+  {
+    test===true?
+      <MdArrowRight onClick={()=>{setTest(!test)}} size={30} ></MdArrowRight>
+    :<MdArrowDropDown onClick={()=>{setTest(!test)}} size={30}  ></MdArrowDropDown>
+  }
+  
+
+</div>
+</div>
+<div className="flex flex-wrap">
+{test===true?
+plan.travels.map((travel) => {
+  if (
+    dayjs(travel.startDay).format("YYYY-MM-DD") ===
+    dayjs(plan.start).add(idx, "d").format("YYYY-MM-DD")
+  )
+    return <DetailCard planId={plan.id} travel={travel}   />;
+}):null
+}
+</div></>
 }
 
 export async function getServerSideProps({ query }) {

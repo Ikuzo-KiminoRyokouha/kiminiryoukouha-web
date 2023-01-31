@@ -11,6 +11,7 @@ import "@/utils/extension/array.extension";
 
 export default function Index({ plans }) {
   let [mode, setMode] = useState(0);
+  
 
   const router = useRouter();
 

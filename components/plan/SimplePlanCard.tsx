@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useRouter } from "next/router";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
@@ -17,6 +17,11 @@ interface Props {
 export default function SimplePlanCard({ plan }: Props) {
   const router = useRouter();
   const deleting = useToggle(false);
+const src = useMemo(() => {
+  const arr = plan.travels.filter((el) => el.destination.firstimage != "")
+  if(arr.length === 0) return "/assets/main-img.png";
+  return arr[0].destination.firstimage
+},[])
 
   return (
     <div className="flex w-full space-x-4 border p-2 shadow-md drop-shadow-sm">
@@ -24,10 +29,7 @@ export default function SimplePlanCard({ plan }: Props) {
         <p className="text-lg">{plan.title.split(" ")[0]}</p>
         <Image
           className="rounded-full"
-          src={
-            plan.travels.filter((el) => el.destination.firstimage != "")[0]
-              .destination.firstimage
-          }
+          src={src}
           width={1}
           height={1}
           layout="responsive"

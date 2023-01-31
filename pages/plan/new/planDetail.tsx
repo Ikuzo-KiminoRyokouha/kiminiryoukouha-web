@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import { convertDateToKorean } from "../../../utils/common";
 import { getDescriptionFromAPI } from "../../../utils/apiQuery";
 import styled from "styled-components";
+import dayjs from "dayjs";
+import { LatLng } from "../../../types/tmap.type";
 
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
@@ -14,6 +16,10 @@ export default function PlanDetail({ travels, plan, info }) {
   const router = useRouter();
   const isSave = useRef(false);
 
+  const [selectedDate, setSelectedDate] = useState(dayjs(plan.start));
+  //선택된 날짜를 시작값으로 함
+
+  // 계획 재생성하는 함수
   const rerollePlan = async () => {
     await axios.delete(`http://localhost:8000/plan/${plan.id}`);
     router.push(
@@ -40,30 +46,29 @@ export default function PlanDetail({ travels, plan, info }) {
         (await axios.delete(`http://localhost:8000/plan/${plan.id}`));
       return;
     };
+    /* 이벤트리스너 등록 */
     router.events.on("beforeHistoryChange", handleRouteChange);
     window.addEventListener("beforeunload", handleWindowClose);
     return () => {
+      /* 이벤트리스너 삭제 */
       window.removeEventListener("beforeunload", handleWindowClose);
       router.events.off("beforeHistoryChange", handleRouteChange);
     };
   }, []);
 
+  /** 계획에 따라 지도에 장소를 띄워 주는 로직 */
   useEffect(() => {
-    if (additionalScriptLoaing) {
-      const destLatLng = [];
+    if (additionalScriptLoaing && travels) {
+      const destLatLng: Array<LatLng> = [];
+      /**여형지의 모든 정보를 받아와서 목적지 위도경도에 넣는다 */
       travels.map((el) => {
         destLatLng.push({ lat: el.destination.mapy, lng: el.destination.mapx });
       });
 
-      makeLayerForPlan(
-        destLatLng[0],
-        destLatLng[destLatLng.length - 1],
-        ...destLatLng.filter(
-          (v, idx) => idx != 0 || idx != destLatLng.length - 1
-        )
-      );
+      /**모든 정보를 지도 상에 띄워 준다. */
+      makeLayerForPlan(...destLatLng);
     }
-  }, [additionalScriptLoaing]);
+  }, [additionalScriptLoaing, travels]);
 
   return (
     <>
@@ -90,18 +95,46 @@ export default function PlanDetail({ travels, plan, info }) {
             <InfoCard title="관광시간" sub="약5시간" />
           </div>
           <div className="mt-20 w-full max-w-2xl md:max-w-5xl">
+            <div className=" mr-5  flex  space-x-1 ">
+              {Array(dayjs(plan.end).diff(plan.start, "d") + 1)
+                .fill(0)
+                .map((el, i) => {
+                  return (
+                    <Tapbutton
+                      date={dayjs(plan.start).add(i, "d").format("YYYY-MM-DD")}
+                      selectedDate={selectedDate.format("YYYY-MM-DD")}
+                      onClick={() => {
+                        setSelectedDate(() => dayjs(plan.start).add(i, "d"));
+                      }}
+                    >
+                      Day{i + 1}
+                    </Tapbutton>
+                  );
+                })}
+            </div>
             <div className="flex h-80 w-full items-center justify-center rounded-lg  shadow-[0_0_60px_-15px_rgba(0,0,0,0.3)]">
               <div className="flex h-[85%] w-[92%]">
                 <div className="h-full w-3/4 rounded-lg">
-                  <div id="map">{/* tmap */}</div>
+                  <div id="map" className="bg-black">
+                    {/* tmap */}
+                  </div>
                 </div>
+
                 <div className="flex h-full w-1/4 flex-col items-start justify-evenly rounded-r-lg pl-4 md:pl-12 ">
-                  <DestinationButton>
-                    {travels[0].destination.title}
-                  </DestinationButton>
-                  <DestinationButton>
-                    {travels[1].destination.title}
-                  </DestinationButton>
+                  {travels
+                    .filter((el) => {
+                      return (
+                        selectedDate.format("YYYY-MM-DD") ===
+                        dayjs(el.startDay).format("YYYY-MM-DD")
+                      );
+                    })
+                    .map((travel) => {
+                      return (
+                        <DestinationButton>
+                          {travel.destination.title}
+                        </DestinationButton>
+                      );
+                    })}
                 </div>
               </div>
             </div>
@@ -131,6 +164,33 @@ export default function PlanDetail({ travels, plan, info }) {
     </>
   );
 }
+interface ButtonProps {
+  date: string;
+  selectedDate: string;
+}
+
+const Tapbutton = styled.button<ButtonProps>`
+  margin-left: auto;
+  --tw-bg-opacity: 1;
+  /* 32px */
+  cursor: pointer;
+  border-width: ${(props) => props.date != props.selectedDate && "1px"};
+  padding: 1rem /* 16px */;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  color: ${(props) =>
+    props.date === props.selectedDate &&
+    "rgb(255 255 255 / var(--tw-text-opacity))"};
+  background-color: ${(props) =>
+    props.date === props.selectedDate &&
+    "rgb(2 132 199 / var(--tw-bg-opacity))"};
+  &:hover {
+    background-color: rgb(2 132 199 / var(--tw-bg-opacity));
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+  }
+`;
 
 const DestinationButton = styled.button`
   font-size: 1.5rem /* 24px */;
@@ -159,6 +219,7 @@ function InfoCard({ title, sub }) {
 
 function IntroduceCard({ travel }) {
   const [description, setDescription] = useState<string>("");
+  console.log(description);
   useLayoutEffect(() => {
     getDescriptionFromAPI(
       Number(travel.destination.contentid),
@@ -181,7 +242,7 @@ function IntroduceCard({ travel }) {
         />
       </div>
       <p className="line-clamp-4 my-10 text-center leading-6">
-        {description.split("<br />").join().split("<br>")[0]}
+        {description?.split("<br/>").join().split("<br>")[0]}
       </p>
     </div>
   );

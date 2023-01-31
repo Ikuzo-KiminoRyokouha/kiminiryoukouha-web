@@ -27,7 +27,9 @@ export default function DetailCard({ planId, travel }: Props) {
   }, []);
 
   return (
+    
     <>
+   
       <div className="w-1/2 p-4 lg:w-1/3">
         <div
           className="h-full overflow-hidden rounded-lg border-2
@@ -95,7 +97,9 @@ export default function DetailCard({ planId, travel }: Props) {
           hide={show.setFalse}
         />
       )}
+        
     </>
+
   );
 }
 

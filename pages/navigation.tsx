@@ -7,7 +7,7 @@ import NavigationCard from "../components/common/card/NavigationCard";
 import AROverlayDom from "../components/layout/AROverlay";
 import { useAR, useToggle, useTMap, useLocation } from "../hooks";
 import { getOrientation, stopOrientation } from "../utils/common";
-import { Orientation } from "../types/tmap.type";
+import { LatLng, Orientation } from "../types/tmap.type";
 
 export default function Navigation() {
   const {
@@ -71,28 +71,31 @@ export default function Navigation() {
   //     alert("rendererd");
   //   }
   // }, [markerLatLngArr]);
+  const renderObject = async () => {
+    const color = ["skyblue", "red", "green", "yellow"];
+    const latLngArr: Array<LatLng> = [
+      {
+        lat: myLatLng?.lat + 0.00001,
+        lng: myLatLng?.lng + 0.00001,
+      },
+      {
+        lat: myLatLng?.lat + 0.00001,
+        lng: myLatLng?.lng - 0.00001,
+      },
+    ];
+
+    latLngArr.forEach(async (latLng, idx) => {
+      await ar.createBox(myLatLng, latLng, color[idx]);
+    });
+
+    ar.drawLine(myLatLng, ...latLngArr);
+  };
 
   useEffect(() => {
-    ar &&
-      ar.createBox(myLatLng, {
-        lat: 35.9474909,
-        lng: 128.4637009,
-      });
-    // ar &&
-    //   ar.createRoadSignBox(myLatLng, {
-    //     lat: 35.9462488,
-    //     lng: 128.4604671,
-    //   });
-    // ar &&
-    //   ar.createRoadSignBox(myLatLng, {
-    //     lat: 35.9460995,
-    //     lng: 128.4607461,
-    //   });
-    // ar &&
-    //   ar.createRoadSignBox(myLatLng, {
-    //     lat: 35.946069,
-    //     lng: 128.4608129,
-    //   });
+    // if (ar) {
+    //   ar.drawLine();
+    // }
+    if (ar && myLatLng) renderObject();
   }, [ar]);
   return (
     <>
@@ -181,6 +184,17 @@ export default function Navigation() {
               <span className="z-10">{myLatLng?.lat}</span>
               <span className="z-10">{myLatLng?.lng}</span>
               <span className="z-10">{accuracy}</span>
+              <div style={{ color: "blue", zIndex: 10 }}>
+                <span className="z-10">
+                  {ar?.renderer.xr.getCamera().position.x}
+                </span>
+                <span className="z-10">
+                  {ar?.renderer.xr.getCamera().position.z}
+                </span>
+                <span className="z-10">
+                  {ar?.renderer.xr.getCamera().position.z}
+                </span>
+              </div>
             </div>
             <div className="flex flex-col justify-end">
               <p className="z-10">alpha : {orientation?.alpha || "null"}</p>
