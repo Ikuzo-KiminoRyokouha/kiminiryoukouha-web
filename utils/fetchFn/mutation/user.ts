@@ -1,3 +1,4 @@
+import authRequest from "@/utils/request/authRequest";
 import { IUser } from "../../../types/user.interface";
 import mainRequest from "../../request/mainRequest";
 // ===============================================
@@ -28,5 +29,5 @@ export const mLogin = (body: Pick<IUser, "email" | "password">) => {
 };
 
 export const mLogout = () => {
-  return mainRequest.get("/auth/logout");
+  return authRequest.get("/auth/logout");
 };
