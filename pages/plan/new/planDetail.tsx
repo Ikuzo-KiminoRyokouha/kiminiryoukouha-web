@@ -254,7 +254,6 @@ function IntroduceCard({ travel }) {
 }
 
 export async function getServerSideProps({ query }) {
-  console.log("query", query);
   const info: Info = JSON.parse(query.info);
 
   const { travels, ...plan } = await axios
