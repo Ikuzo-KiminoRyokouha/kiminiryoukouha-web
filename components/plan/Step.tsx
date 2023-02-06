@@ -169,6 +169,7 @@ export function StepTwo({ ctx }: StepProps) {
           Region
         </label>
         <select
+          value={info.region}
           onChange={(e) =>
             e.target.value &&
             setInfo((prev) => ({ ...prev, region: e.target.value }))
@@ -176,12 +177,8 @@ export function StepTwo({ ctx }: StepProps) {
           id="countries"
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         >
-          <option selected={info.region ? true : false} value={""}>
-            Choose a region
-          </option>
-          <option selected={info.region === "경주" ? true : false} value="경주">
-            경주
-          </option>
+          <option value="Default">Choose a region</option>
+          <option value="GyeongJu">경주</option>
         </select>
       </div>
       <div className="p-2">
