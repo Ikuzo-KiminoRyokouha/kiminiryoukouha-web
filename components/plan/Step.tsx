@@ -314,7 +314,12 @@ export function StepFour({ ctx }: StepProps) {
       <div className="flex w-full justify-center">
         <button
           onClick={onClick}
-          className=" mt-9 bg-sky-600 px-6 py-3 text-white"
+          className=" ml-2  flex  cursor-pointer justify-center rounded border border-teal-600 bg-teal-600 px-4 py-2 text-base 
+          font-bold  
+          text-teal-100 
+          transition 
+          duration-200 ease-in-out hover:scale-110 
+          hover:bg-teal-600 focus:outline-none"
         >
           complete
         </button>

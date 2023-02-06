@@ -17,11 +17,11 @@ interface Props {
 export default function SimplePlanCard({ plan }: Props) {
   const router = useRouter();
   const deleting = useToggle(false);
-const src = useMemo(() => {
-  const arr = plan.travels.filter((el) => el.destination.firstimage != "")
-  if(arr.length === 0) return "/assets/main-img.png";
-  return arr[0].destination.firstimage
-},[])
+  const src = useMemo(() => {
+    const arr = plan.travels.filter((el) => el.destination.firstimage != "");
+    if (arr.length === 0) return "/assets/main-img.png";
+    return arr[0].destination.firstimage;
+  }, []);
 
   return (
     <div className="flex w-full space-x-4 border p-2 shadow-md drop-shadow-sm">
@@ -40,9 +40,9 @@ const src = useMemo(() => {
           계획 일시 : {dayjs(plan.start).format("YYYY-MM-DD")} ~
           {dayjs(plan.end).format("YYYY-MM-DD")}
         </p>
-        <p>예산 :{plan.totalCost} 원</p>
+        <p>예산 : {plan.totalCost} 원</p>
         <p>
-          테마 :
+          테마 :{" "}
           {Object.keys(plan.tag)
             .map((key, idx) => {
               return plan.tag[key];

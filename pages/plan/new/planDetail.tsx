@@ -19,6 +19,8 @@ export default function PlanDetail({ travels, plan, info }) {
   const [selectedDate, setSelectedDate] = useState(dayjs(plan.start));
   //선택된 날짜를 시작값으로 함
 
+  const [dayPlan, setDayPlan] = useState(1);
+
   // 계획 재생성하는 함수
   const rerollePlan = async () => {
     await axios.delete(`http://localhost:8000/plan/${plan.id}`);
@@ -65,10 +67,12 @@ export default function PlanDetail({ travels, plan, info }) {
         destLatLng.push({ lat: el.destination.mapy, lng: el.destination.mapx });
       });
 
+      const testArr: Array<LatLng> = [];
+
       /**모든 정보를 지도 상에 띄워 준다. */
-      makeLayerForPlan(...destLatLng);
+      makeLayerForPlan(...destLatLng.slice((dayPlan - 1) * 2, dayPlan * 2));
     }
-  }, [additionalScriptLoaing, travels]);
+  }, [additionalScriptLoaing, travels, dayPlan]);
 
   return (
     <>
@@ -104,6 +108,7 @@ export default function PlanDetail({ travels, plan, info }) {
                       date={dayjs(plan.start).add(i, "d").format("YYYY-MM-DD")}
                       selectedDate={selectedDate.format("YYYY-MM-DD")}
                       onClick={() => {
+                        setDayPlan(i + 1);
                         setSelectedDate(() => dayjs(plan.start).add(i, "d"));
                       }}
                     >
@@ -249,6 +254,7 @@ function IntroduceCard({ travel }) {
 }
 
 export async function getServerSideProps({ query }) {
+  console.log("query", query);
   const info: Info = JSON.parse(query.info);
 
   const { travels, ...plan } = await axios
