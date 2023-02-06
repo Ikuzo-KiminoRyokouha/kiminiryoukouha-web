@@ -22,7 +22,7 @@ export default function PlaceByDate({
           selected && "bg-sky-600 text-white"
         }`}
         onClick={(e) => {
-          visible.onClick(e);
+          visible.onClick();
           onClick();
         }}
       >

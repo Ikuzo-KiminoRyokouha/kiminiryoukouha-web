@@ -19,7 +19,6 @@ interface Props {
   plan: Plan;
 }
 
-
 export default function PlanNavigation({ query, plan }: Props) {
   const {
     pushDrawableMarker,
@@ -31,18 +30,13 @@ export default function PlanNavigation({ query, plan }: Props) {
     resetMarker,
     getDirectionUseTransfort,
   } = useTMap("map", false);
-  
 
-  console.log(plan)
-
-
-  
   const { myLatLng } = useLocation();
- 
+
   const [mode, setMode] = useState(0);
   const [planIdx, setPlanIdx] = useState(0);
   const [plans, setPlans] = useState(undefined);
-  const [currentmode,setCurrentmode]=useState(0);
+  const [currentmode, setCurrentmode] = useState(0);
 
   const [destination, setDestination] = useState<Destination>(
     plan.travels.filter((el) => {
@@ -129,24 +123,30 @@ export default function PlanNavigation({ query, plan }: Props) {
     h-full w-full flex-1 lg:mb-0"
     >
       <div className="relative basis-3/4">
-        <div className="absolute z-10 flex h-full w-full flex-col justify-end space-y-3 p-1 bg-gray-200">
-         
-          <button className=" ml-auto text-white mb-auto p-4 bg-slate-500  rounded-2xl">
-           <IoIosAirplane></IoIosAirplane>
+        <div className="absolute z-10 flex h-full w-full flex-col justify-end space-y-3 bg-gray-200 p-1">
+          <button className=" ml-auto mb-auto rounded-2xl bg-slate-500 p-4  text-white">
+            <IoIosAirplane></IoIosAirplane>
           </button>
-            
-          <div className="flex space-x-2 bg-white p-1">
-           {
-            Array(dayjs(plan.end).diff(plan.start,"d")+1).fill(0).map((el,i)=>{
-              return <button className={`${currentmode === i ? "bg-green-200 border-1 p-4 font-bold " 
-              : "  font-bold bg-gray-200 p-4"}`} onClick={()=>{setCurrentmode(i)}}>{i+1}일차</button>
-            })
 
-           }
-       
-    
-           
-           
+          <div className="flex space-x-2 bg-white p-1">
+            {Array(dayjs(plan.end).diff(plan.start, "d") + 1)
+              .fill(0)
+              .map((el, i) => {
+                return (
+                  <button
+                    className={`${
+                      currentmode === i
+                        ? "border-1 bg-green-200 p-4 font-bold "
+                        : "  bg-gray-200 p-4 font-bold"
+                    }`}
+                    onClick={() => {
+                      setCurrentmode(i);
+                    }}
+                  >
+                    {i + 1}일차
+                  </button>
+                );
+              })}
           </div>
         </div>
         <div id="map"></div>
@@ -306,5 +306,3 @@ const TimeText = styled.span`
   line-height: 2rem /* 32px */;
   font-weight: 700;
 `;
-
-
