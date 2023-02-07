@@ -39,7 +39,7 @@ export default function Stepper({
 }: Props) {
   return (
     <StepperContext.Provider value={{ currentStep, setCurrentStep }}>
-      <div className="flex flex-1 flex-col items-center justify-center p-10 ">
+      <div className="flex flex-1 flex-col items-center md:justify-center md:p-10 ">
         <div className="w-full max-w-2xl border p-2 shadow-xl ">
           <div>
             <p className="text-bold p-2 text-lg">{title}</p>
@@ -155,7 +155,7 @@ Stepper.StepButton = ({ maxStep, canNext }: StepButtonProps) => {
   };
 
   return (
-    <div className="mt-4 flex p-2">
+    <div className="mt-4 flex  p-2">
       {currentStep < maxStep && (
         <>
           <button

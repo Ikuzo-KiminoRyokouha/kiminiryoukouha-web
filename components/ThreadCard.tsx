@@ -36,14 +36,14 @@ export default function ThreadCard({ pokemon, onClick }) {
 
   return (
     <>
-      <div className="w-full" key={pokemon.name}>
+      <div className="w-full" key={pokemon?.name}>
         <div className="">
           <div className="m-2 w-auto rounded-3xl border shadow-md">
             <div className="flex h-auto w-full items-center space-x-3 p-2">
               <FaUserCircle size={40} onClick={onClick.showUser} />
               <span className="" onClick={onClick.showUser}>
-                {/* {pokemon.name + "・" + "23/1/25"} */}
-                {pokemon.name + "・" + "2시간 전"}
+                {/* {pokemon?.name + "・" + "23/1/25"} */}
+                {pokemon?.name + "・" + "2시간 전"}
               </span>
             </div>
             {/* <div className="pl-2 text-sm">{"날짜"}</div> */}
@@ -53,7 +53,7 @@ export default function ThreadCard({ pokemon, onClick }) {
                   readmore.value ? "" : "line-clamp-4"
                 } block leading-6`}
               >
-                {pokemon.url} Lorem ipsum dolor sit amet, consectetur
+                {pokemon?.url} Lorem ipsum dolor sit amet, consectetur
                 adipisicing elit. Dolor, tempore magnam voluptate nobis, illum
                 quas fuga pariatur neque ipsam inventore sequi. Vero
                 reprehenderit sapiente labore dolore. Sint molestiae quasi

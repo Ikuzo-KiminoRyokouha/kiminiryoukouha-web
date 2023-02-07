@@ -19,6 +19,8 @@ export default function PlanDetail({ travels, plan, info }) {
   const [selectedDate, setSelectedDate] = useState(dayjs(plan.start));
   //선택된 날짜를 시작값으로 함
 
+  const [dayPlan, setDayPlan] = useState(1);
+
   // 계획 재생성하는 함수
   const rerollePlan = async () => {
     await axios.delete(`http://localhost:8000/plan/${plan.id}`);
@@ -66,9 +68,9 @@ export default function PlanDetail({ travels, plan, info }) {
       });
 
       /**모든 정보를 지도 상에 띄워 준다. */
-      makeLayerForPlan(...destLatLng);
+      makeLayerForPlan(...destLatLng.slice((dayPlan - 1) * 2, dayPlan * 2));
     }
-  }, [additionalScriptLoaing, travels]);
+  }, [additionalScriptLoaing, travels, dayPlan]);
 
   return (
     <>
@@ -83,7 +85,7 @@ export default function PlanDetail({ travels, plan, info }) {
             })}
             등
           </h2>
-          <h2 className="text-2xl">
+          <h2 className="px-2 pt-2 text-2xl md:px-0">
             신라시대의 유적들이 가득한 경주의 역사를 경험해 보세요
           </h2>
           <div className="flex w-full justify-around py-5 shadow-lg">
@@ -104,6 +106,7 @@ export default function PlanDetail({ travels, plan, info }) {
                       date={dayjs(plan.start).add(i, "d").format("YYYY-MM-DD")}
                       selectedDate={selectedDate.format("YYYY-MM-DD")}
                       onClick={() => {
+                        setDayPlan(i + 1);
                         setSelectedDate(() => dayjs(plan.start).add(i, "d"));
                       }}
                     >
@@ -138,10 +141,10 @@ export default function PlanDetail({ travels, plan, info }) {
                 </div>
               </div>
             </div>
-            <div className="mt-20 flex w-full justify-center space-x-40 font-bold text-white ">
+            <div className="mt-20 flex w-full justify-around font-bold text-white">
               <button
                 onClick={rerollePlan}
-                className="rounded-lg border-2 bg-amber-500 py-6 px-24 transition duration-150 ease-in hover:bg-yellow-600 "
+                className="rounded-lg border-2 bg-amber-500 py-6 px-9 transition duration-150 ease-in hover:shadow-xl md:px-24"
               >
                 재생성
               </button>
@@ -150,7 +153,7 @@ export default function PlanDetail({ travels, plan, info }) {
                   isSave.current = true;
                   router.push("/plan");
                 }}
-                className="rounded-lg border-2 bg-sky-600 py-6 px-24 transition duration-150 ease-in hover:bg-sky-700"
+                className="rounded-lg border-2 bg-sky-600 py-6 px-7 transition duration-150 ease-in hover:shadow-xl md:px-24"
               >
                 계획생성
               </button>
@@ -228,9 +231,10 @@ function IntroduceCard({ travel }) {
   }, []);
 
   return (
+    // 사진박스
     <div className="mt-10 flex flex-col items-center justify-center">
       <h1 className="py-5 text-2xl font-bold">{travel.destination.title}</h1>
-      <div className="w-1/2">
+      <div className="w-4/5 md:w-1/2">
         <Image
           src={
             travel.destination.firstimage ||
