@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { LatLng } from "../types/tmap.type";
 
-export default function useLocation() {
+export default function useLocation(keepWatch: boolean = true) {
   /* 내 좌표 */
   const [myLatLng, setMyLatLng] = useState<LatLng>();
   /* navigator 의 정확도 변수 DEBUG용 */
@@ -43,9 +43,9 @@ export default function useLocation() {
   };
 
   useEffect(() => {
-    watchMyPosition();
+    keepWatch && watchMyPosition();
     return () => {
-      stopWatchMyPosition();
+      keepWatch && stopWatchMyPosition();
     };
   }, []);
 

@@ -4,7 +4,7 @@ import BoardUI from "../../components/board/Board";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-export default function QnA({ data }) {
+export default function QnA({ posts }) {
   const router = useRouter();
 
   useEffect(() => {
@@ -25,23 +25,32 @@ export default function QnA({ data }) {
         classification="여행, ar네비게이션, 네비게이션, 여행플랜, 무료, Q&A, QnA, 질의응답"
         description={""}
       />
-      <BoardUI posts={data} />
+      <BoardUI posts={posts} />
     </>
   );
 }
 
 export async function getServerSideProps(context) {
-  const { data } = await axios.get(
-    `http://localhost:8000/api/board/all/${context.query.page || 1}`
-  );
+  try {
+    const { data: posts } = await axios.get(
+      `http://localhost:8000/board/all/${context.query.page || 1}`
+    );
 
-  if (!data) {
+    if (!posts) {
+      console.log("posts is not found");
+      return {
+        props: {
+          posts: -1,
+        },
+      };
+    }
+    return { props: { posts } };
+  } catch {
+    console.log("error occured");
     return {
       props: {
-        data: [],
+        posts: -1,
       },
     };
   }
-
-  return { props: { data: data } };
 }

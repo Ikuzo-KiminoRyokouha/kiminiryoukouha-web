@@ -1,5 +1,5 @@
-import axios from "axios";
-import { LatLng } from "../types/tmap.type";
+import { LatLng, Orientation } from "../types/tmap.type";
+import apiRequest from "./request/apiRequest";
 
 /**
  * @description TMap 관련 전반적인 처리를 다루는 클래스입니다.
@@ -13,7 +13,9 @@ export default class TMap {
   private totalMarkerArr: any[] = [];
   drawInfoArr: any[] = [];
   private resultdrawArr: any[] = [];
-
+  private routeLayer: any;
+  private markerLayer: any;
+  private markerWaypointLayer: any;
   markerLatLngArr: Array<LatLng> = [];
 
   constructor() {}
@@ -66,8 +68,8 @@ export default class TMap {
     });
 
     try {
-      const result = await axios.post(
-        "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
+      const result = await apiRequest.post(
+        "/tmap/routes/pedestrian?version=1&format=json&callback=result",
         {
           startX: start.lng,
           startY: start.lat,
@@ -77,11 +79,6 @@ export default class TMap {
           resCoordType: "EPSG3857",
           startName: "출발지",
           endName: "도착지",
-        },
-        {
-          headers: {
-            appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
-          },
         }
       );
       const data = result.data.features;
@@ -225,8 +222,8 @@ export default class TMap {
     await this.resetMarker();
     const tmapLatLng = this.map.getCenter();
     console.log(tmapLatLng._lat, tmapLatLng._lng);
-    const res = await axios.get(
-      "https://apis.openapi.sk.com/tmap/pois/search/around?version=1&format=json&callback=result",
+    const res = await apiRequest.get(
+      "/tmap/pois/search/around?version=1&format=json&callback=result",
       {
         params: {
           version: 1,
@@ -240,9 +237,6 @@ export default class TMap {
           resCoordType: "EPSG3857",
           reqCoordType: "WGS84GEO",
           count: 10,
-        },
-        headers: {
-          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
         },
       }
     );
@@ -283,6 +277,20 @@ export default class TMap {
     return res;
   }
 
+  async searchTotalPOINoMarker(keyword: string) {
+    const res = await apiRequest.get("/tmap/pois?format=json&callback=result", {
+      params: {
+        version: 1,
+        searchKeyword: keyword,
+        searchType: "all",
+        resCoordType: "EPSG3857",
+        reqCoordType: "WGS84GEO",
+        count: 10,
+      },
+    });
+    return res;
+  }
+
   /**
    * @description 입력받은 장소를 기반으로 장소통합검색을 실시하는 함수입니다.
    * @param {string} keyword 검색하고 싶은 장소입니다
@@ -290,22 +298,16 @@ export default class TMap {
   async searchTotalPOI(keyword: string) {
     await this.resetMarker();
 
-    const res = await axios.get(
-      "https://apis.openapi.sk.com/tmap/pois?format=json&callback=result",
-      {
-        params: {
-          version: 1,
-          searchKeyword: keyword,
-          searchType: "all",
-          resCoordType: "EPSG3857",
-          reqCoordType: "WGS84GEO",
-          count: 10,
-        },
-        headers: {
-          appKey: process.env.NEXT_PUBLIC_TMAP_API_KEY,
-        },
-      }
-    );
+    const res = await apiRequest.get("/tmap/pois?format=json&callback=result", {
+      params: {
+        version: 1,
+        searchKeyword: keyword,
+        searchType: "all",
+        resCoordType: "EPSG3857",
+        reqCoordType: "WGS84GEO",
+        count: 10,
+      },
+    });
     // 마커 리셋
 
     const positionBound = new window.Tmapv2.LatLngBounds(); // 맵에 결과물을 확인 하기위한 객체 생성
@@ -347,22 +349,20 @@ export default class TMap {
 
   async resetMarker() {
     // 기존 그려진 마크가 있다면 초기화
-    if (this.resultdrawArr.length > 0) {
-      for (var i in this.resultdrawArr) {
-        await this.resultdrawArr[i].setMap(null);
-      }
-      this.resultdrawArr = [];
-    }
+    this.resultdrawArr.forEach((el) => {
+      el.setMap(null);
+    });
+    this.resultdrawArr = [];
 
     if (this.totalMarkerArr.length > 0) {
       for (var i in this.totalMarkerArr) {
-        await this.totalMarkerArr[i].setMap(null);
+        await this.totalMarkerArr[i]?.setMap(null);
       }
     }
     this.totalMarkerArr = [];
 
-    this.marker_e && (await this.marker_e.setMap(null));
-    this.marker_s && (await this.marker_s.setMap(null));
+    this.marker_e && (await this.marker_e?.setMap(null));
+    this.marker_s && (await this.marker_s?.setMap(null));
 
     this.drawInfoArr = [];
 
@@ -397,8 +397,8 @@ export default class TMap {
   makeMyMarker(latLng: LatLng, img_url: string) {
     this.marker_me = this.makeMarker(latLng, img_url, true);
   }
-  async removeMyMarker() {
-    await this.marker_me.setMap(null);
+  removeMyMarker() {
+    this.marker_me?.setMap(null);
   }
 
   pushDrawableMarker(latLng: LatLng) {
@@ -429,5 +429,84 @@ export default class TMap {
 
     this.map.zoomOut();
     this.drawLine(this.drawInfoArr);
+  }
+
+  async makeLayerForPlan(...wayPointLatLng: Array<LatLng>) {
+    await this.resetMarker();
+    wayPointLatLng.forEach((el, idx) => {
+      this.resultdrawArr.push(
+        this.makeMarker(
+          el,
+          `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${idx}.png`
+        )
+      );
+    });
+
+    this.reDefineCenterMap(wayPointLatLng[0]);
+
+    const latLngArr = [
+      ...wayPointLatLng.map((el) => new window.Tmapv2.LatLng(el.lat, el.lng)),
+    ];
+
+    latLngArr.forEach((latLng) => {
+      this.drawInfoArr.push(latLng);
+    });
+
+    this.drawLineWithPanning();
+
+    let viaPoints = wayPointLatLng.map((el) => {
+      return [
+        {
+          viaPointId: "test01",
+          viaPointName: "test01",
+          viaX: el.lat,
+          viaY: el.lng,
+          viaTime: 600,
+        },
+      ];
+    });
+
+    this.drawLineWithPanning();
+  }
+
+  async getDirectionUseTransfort(startLatLng: LatLng, endLatLng: LatLng) {
+    try {
+      return await apiRequest.post("/transit/routes", {
+        startX: "128.4538673",
+        startY: "35.9442657",
+        endX: "129.3892089957",
+        endY: "35.7951432974",
+        lang: 0,
+        format: "json",
+        count: 10,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  polygon;
+  drawPolygonWithOrientation(orientation: Orientation, myLatLng: LatLng) {
+    const { alpha, beta, gamma } = orientation;
+
+    this.polygon = new window.Tmapv2.Polygon({
+      paths: [
+        new window.Tmapv2.LatLng(myLatLng.lat, myLatLng.lng),
+        new window.Tmapv2.LatLng(
+          myLatLng.lat + Math.cos((Math.PI / 180) * (-alpha + 45)) * 0.001,
+          myLatLng.lng + Math.sin((Math.PI / 180) * (-alpha + 45)) * 0.001
+        ),
+        new window.Tmapv2.LatLng(
+          myLatLng.lat + Math.cos((Math.PI / 180) * (-alpha - 45)) * 0.001,
+          myLatLng.lng + Math.sin((Math.PI / 180) * (-alpha - 45)) * 0.001
+        ),
+      ],
+      fillColor: "pink", // 다각형 내부 색상
+      map: this.map,
+    });
+  }
+
+  async removePolygon() {
+    this.polygon && this.polygon.setMap(null);
   }
 }

@@ -1,4 +1,7 @@
 const withPlugins = require("next-compose-plugins");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
@@ -8,6 +11,9 @@ const withPWA = require("next-pwa")({
 module.exports = async (phase) => {
   /** @type {import('next').NextConfig} */
   const nextConfig = {
+    images: {
+      domains: ["tong.visitkorea.or.kr", "picsum.photos"],
+    },
     reactStrictMode: true,
     swcMinify: true,
     webpack5: true,
@@ -21,6 +27,7 @@ module.exports = async (phase) => {
   const defaultConfig = {};
   return withPlugins(
     [
+      [withBundleAnalyzer],
       [
         withPWA,
         {

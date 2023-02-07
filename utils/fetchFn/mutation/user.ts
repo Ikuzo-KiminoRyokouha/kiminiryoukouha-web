@@ -1,3 +1,4 @@
+import authRequest from "@/utils/request/authRequest";
 import { IUser } from "../../../types/user.interface";
 import mainRequest from "../../request/mainRequest";
 // ===============================================
@@ -11,7 +12,7 @@ import mainRequest from "../../request/mainRequest";
  */
 export const mSignUp = (body: IUser) => {
   return mainRequest.post(
-    process.env.NEXT_PUBLIC_API_URL + "/api/auth/register",
+    process.env.NEXT_PUBLIC_API_URL + "/auth/signup",
     body
   );
 };
@@ -24,9 +25,9 @@ export const mSignUp = (body: IUser) => {
  * @param {string} password 사용자 패스워드
  */
 export const mLogin = (body: Pick<IUser, "email" | "password">) => {
-  return mainRequest.post("/api/auth/login", body);
+  return mainRequest.post("/auth/signin", body);
 };
 
 export const mLogout = () => {
-  return mainRequest.get("/api/auth/logout");
+  return authRequest.get("/auth/logout");
 };

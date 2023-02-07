@@ -1,109 +1,154 @@
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import {
-  AiOutlineDelete,
-  AiOutlineHome,
-  AiOutlinePlusCircle,
-} from "react-icons/ai";
-import { RiArrowDropDownLine, RiArrowDropRightLine } from "react-icons/ri";
-import { useToggle } from "@/hooks";
-import Image from "next/image";
-import { BsShare } from "react-icons/bs";
-import { FiEdit } from "react-icons/fi";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
-export default function Index() {
+import { useLayoutEffect, useState } from "react";
+import axios from "axios";
+import styled from "styled-components";
+import { Plan } from "../../types/plan.interface";
+import dayjs from "dayjs";
+import SimplePlanCard from "../../components/plan/SimplePlanCard";
+import { useRouter } from "next/router";
+import "@/utils/extension/array.extension";
+
+export default function Index({ plans }) {
+  let [mode, setMode] = useState(0);
+
   const router = useRouter();
-  const activeVisible = useToggle(true);
-  const readyVisible = useToggle(true);
+
+  const [activatedPlans, setActivatedPlans] = useState<Array<Plan>>();
+  const [waitingPlans, setWaitingPlans] = useState<Array<Plan>>();
+  const [endPlans, setEndPlans] = useState<Array<Plan>>();
+
+  useLayoutEffect(() => {
+    setEndPlans(() => {
+      return plans?.filter((plan) => dayjs().isAfter(dayjs(plan.end)));
+    });
+
+    setActivatedPlans(() => {
+      return plans?.filter(
+        (plan) =>
+          dayjs(plan.start).isBefore(dayjs()) &&
+          dayjs(plan.end).isAfter(dayjs())
+      );
+    });
+
+    setWaitingPlans(() => {
+      return plans?.filter((plan) => dayjs(plan.start).isAfter(dayjs()));
+    });
+  }, []);
 
   return (
-    <div className="max-w-8xl mx-auto mb-[53px] flex max-h-full w-full flex-1 lg:mb-0">
-      <div className="basis-1/5 border">
-        <ul className="p-2">
-          <li className="flex w-full space-x-3 border bg-sky-600 p-2 text-white">
-            <AiOutlineHome />
-            <span>Home</span>
-          </li>
-        </ul>
-      </div>
-      <div className="basis-4/5 space-y-4 p-4">
-        <div className="text-xl font-semibold">計画</div>
-        <div>
-          <div
-            onClick={activeVisible.onClick}
-            onMouseDown={(e) => e.preventDefault()}
-            className="flex w-full cursor-pointer space-x-2 border p-4"
-          >
-            {!activeVisible.value && <RiArrowDropRightLine size={18} />}
-            {activeVisible.value && <RiArrowDropDownLine size={18} />}
-            <span>活性化されている計画</span>
+    <>
+      <div className="mx-auto mb-[53px] flex w-full  max-w-6xl  flex-wrap">
+        {/* <img className="  w-full h-80 opacity-50 bg-cover "  src="/assets/test1.jpg" alt="12" /> */}
+        <div className=" flex h-48  w-full">
+          <span className="  mx-auto my-auto grid  h-28 w-28  place-items-center rounded-full bg-black text-center text-lg text-white">
+            닉네임
+          </span>
+        </div>
+
+        <div className="mx-auto h-32 w-full">
+          <div className=" mx-auto  h-full    ">
+            <div className="space-x-1  text-center">
+              <strong className="inline-block cursor-pointer space-y-4 border-2 p-10">
+                <p>나의계획</p>
+                <p>{plans.length}개</p>
+              </strong>
+              <strong className="inline-block cursor-pointer space-y-4 border-2 p-10">
+                <p>계획 리뷰</p>
+                <p>0개</p>
+              </strong>
+            </div>
           </div>
         </div>
-        <div className="">
-          <div
-            onClick={readyVisible.onClick}
-            onMouseDown={(e) => e.preventDefault()}
-            className="flex w-full space-x-2 border p-4"
+
+        <strong className="pl-4 pt-6 text-3xl">나의계획</strong>
+
+        <div className=" block w-full  space-x-4 space-y-3 p-4">
+          <ModeChangeButton
+            mode={0}
+            currentMode={mode}
+            onClick={() => {
+              setMode(0);
+            }}
           >
-            {!readyVisible.value && <RiArrowDropRightLine size={18} />}
-            {readyVisible.value && <RiArrowDropDownLine size={18} />}
-            <span>準備中の計画</span>
-          </div>
-          <div className="flex space-x-4 border p-2">
-            <div className="basis-1/12 text-center">
-              <p className="text-xl font-semibold">경주</p>
-              <Image
-                src="/assets/main-img.png"
-                width={1}
-                height={1}
-                layout="responsive"
-              />
-            </div>
-            <div className="flex flex-1 flex-col justify-around">
-              <p>計画日時 : 2023-01-10 ~ 2023-01-12</p>
-              <p>予算 :300000원</p>
-              <p>テーマ : 역사여행</p>
-            </div>
-            <div className="relative flex flex-1 flex-col"></div>
-            <div className="flex flex-col justify-between space-y-2">
-              <div className="space-x-3">
-                <button className="bg-sky-600 p-1 text-white">
-                  <BsShare />
-                </button>
-                <button className="bg-teal-600 p-1 text-white">
-                  <FiEdit />
-                </button>
-                <button className="bg-red-400 p-1 text-white">
-                  <AiOutlineDelete />
-                </button>
-              </div>
-              <button
-                onClick={() => router.push(`/plan/detail/nav`)}
-                className="bg-gray-500 px-2 py-1 text-white"
-              >
-                詳しく見る
-              </button>
-            </div>
-          </div>
-          {/* {!data && (
-            <p className="p-3 text-lg font-bold">
-              おや、まだ旅行計画がありませんね、一緒に立ててみませんか
-            </p>
-          )} */}
+            진행중인 계획
+          </ModeChangeButton>
+          <ModeChangeButton
+            mode={1}
+            currentMode={mode}
+            onClick={() => {
+              setMode(1);
+            }}
+          >
+            다가오는 계획
+          </ModeChangeButton>
+          <ModeChangeButton
+            mode={2}
+            currentMode={mode}
+            onClick={() => {
+              setMode(2);
+            }}
+          >
+            끝난계획
+          </ModeChangeButton>
+        </div>
+        <div className="mx-2 w-full space-y-2">
+          {mode === 0 &&
+            activatedPlans?.map((plan) => <SimplePlanCard plan={plan} />)}
+          {mode === 1 &&
+            waitingPlans?.map((plan) => <SimplePlanCard plan={plan} />)}
+          {mode === 2 &&
+            endPlans?.map((plan) => <SimplePlanCard plan={plan} />)}
+
           <div
             onClick={(e) => router.push("/plan/new")}
-            className="flex w-full cursor-pointer border px-4 py-2"
+            className="flex w-full  cursor-pointer border  shadow-lg duration-500 hover:border-sky-600 hover:text-sky-600"
           >
             <div className="flex items-center justify-center p-6">
               <AiOutlinePlusCircle size={24} />
             </div>
             <div className="flex items-center justify-center p-6">
-              <span>新しい計画を立てる</span>
+              <span>새로운 계획 세우기</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
+}
+
+interface ButtonProps {
+  mode: number;
+  currentMode: number;
+}
+
+const ModeChangeButton = styled.button<ButtonProps>`
+  border-radius: 2rem /* 32px */;
+  cursor: pointer;
+  border-width: ${(props) => props.mode != props.currentMode && "1px"};
+  padding: 1rem /* 16px */;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  color: ${(props) =>
+    props.mode === props.currentMode &&
+    "rgb(255 255 255 / var(--tw-text-opacity))"};
+  background-color: ${(props) =>
+    props.mode === props.currentMode &&
+    "rgb(2 132 199 / var(--tw-bg-opacity))"};
+  &:hover {
+    background-color: rgb(2 132 199 / var(--tw-bg-opacity));
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+  }
+`;
+
+export async function getServerSideProps({ query }) {
+  const res = await axios.get(`http://localhost:8000/plan/all/1`);
+
+  return {
+    props: {
+      plans: res.data.plans || [],
+    },
+  };
 }

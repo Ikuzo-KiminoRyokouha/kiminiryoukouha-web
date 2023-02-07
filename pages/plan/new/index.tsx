@@ -1,7 +1,6 @@
 import Stepper from "@/common/Stepper";
 import { Info } from "@/types/plan.interface";
 import stepMap from "@/utils/dataMap/planStepperStepMap.json";
-import dynamic from "next/dynamic";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 import React from "react";
 
@@ -15,63 +14,38 @@ import {
 const StepInfoContext = createContext<{
   info: Info;
   setInfo: Dispatch<SetStateAction<Info>>;
+  setCanNext: Dispatch<SetStateAction<boolean>>;
 }>({
   info: undefined,
   setInfo: undefined,
+  setCanNext: undefined,
 });
 
 export default function New() {
   const [info, setInfo] = useState<Info>({
-    theme: [],
-    contry: "",
+    tag: undefined,
+    region: "",
     startDate: "",
     endDate: "",
-    people: 0,
     money: 0,
   });
   const [step, setStep] = useState<number>(1);
-
-  const goNext = () => {
-    if (step === 1) {
-      if (info.theme.length == 0 || !info.contry) {
-        return;
-      }
-      setStep(2);
-    } else if (step === 2) {
-      if (!info.people || !info.startDate || !info.endDate) {
-        return;
-      }
-      setStep(3);
-    } else if (step === 3) {
-      if (!info.money) {
-        return;
-      }
-      setStep(4);
-    }
-  };
+  const [canNext, setCanNext] = useState<boolean>(false);
 
   return (
-    <StepInfoContext.Provider value={{ info, setInfo }}>
+    <StepInfoContext.Provider value={{ info, setInfo, setCanNext }}>
       <Stepper
-        title={"旅行事前設定"}
-        sub={"お客様の便利な旅行のために必要な情報を集めております"}
+        title={"여행 사전 설정"}
+        sub={"여행 계획을 위한 사전정보를 입력해주세요"}
         info={info}
         currentStep={step}
         setCurrentStep={setStep}
       >
         <Stepper.Header>
           {stepMap.map((step, idx) => {
-            const icon = dynamic(() =>
-              import(
-                `react-icons/${step.icon
-                  .substring(0, 2)
-                  .toLowerCase()}/index.js`
-              ).then((module) => module[step.icon])
-            );
-
             return (
               <React.Fragment key={idx}>
-                <Stepper.Circle {...step} Icon={icon} />
+                <Stepper.Circle {...step} />
                 {idx + 1 < stepMap.length && <Stepper.Line step={step.step} />}
               </React.Fragment>
             );
@@ -85,8 +59,8 @@ export default function New() {
           {step === 4 && <StepFour ctx={StepInfoContext} />}
         </Stepper.Body>
         <Stepper.StepButton
+          canNext={canNext}
           maxStep={stepMap.length}
-          goNext={goNext}
         ></Stepper.StepButton>
       </Stepper>
     </StepInfoContext.Provider>

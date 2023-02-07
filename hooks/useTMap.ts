@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import TMap from "../utils/TMap";
 import useScript from "./useScript";
 
-import type { LatLng, TMapPOIResult } from "../types/tmap.type";
+import type { LatLng, Orientation, TMapPOIResult } from "../types/tmap.type";
 import useInput from "./useInput";
 /**
  * @description TMap Class를 다루기 위한 비지니스 로직을 모아놓은 hook 입니다.
@@ -28,6 +28,8 @@ export default function useTMap(
   const [direction, setDirection] = useState<"도착" | "출발">();
   /* TMap instance */
   const [tmap, setTmap] = useState<TMap>(new TMap());
+  /* Tmap이  생성됐는지 안됐는지 식별하기 위한 변수 */
+  const [pending, setPending] = useState<boolean>(false);
 
   const [searchAroundResult, setSearchAroundResult] =
     useState<Array<TMapPOIResult>>();
@@ -46,10 +48,10 @@ export default function useTMap(
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-        tmap.makeMyMarker(latLng, "http://localhost:3000/assets/my-marker.png");
         setStart(latLng);
         source.onChange("내 위치");
-        // tmap.reDefineCenterMap(latLng);
+        needMyPosition && drawMyMarker(latLng);
+        needMyPosition && tmap.reDefineCenterMap(latLng);
       },
       () => {
         alert("GPS 에 연결할 수 없습니다.");
@@ -57,11 +59,20 @@ export default function useTMap(
     );
   };
 
+  /**
+   * @description 지도상에 나의 마커를 띄워주는 함수입니다.
+   */
+  const drawMyMarker = (latLng: LatLng) => {
+    tmap.removeMyMarker();
+    tmap.makeMyMarker(latLng, "http://localhost:3000/assets/my-marker.png");
+  };
+
   useEffect(() => {
     // useScript로 해당 tmap 스크립트가 불러와져야 tmap을 그려줍니다.
     if (additionalScriptLoaing) {
       tmap.initTmap(targetDom);
       needMyPosition && getMyPosition();
+      setPending(true);
     }
   }, [additionalScriptLoaing]);
 
@@ -94,6 +105,11 @@ export default function useTMap(
         setResult(latLng, direction, res.data.searchPoiInfo.pois.poi[0].name);
       }
     }
+  };
+
+  const searchToKeywordNoMarker = async (keyword: string) => {
+    const res = await tmap.searchTotalPOINoMarker(keyword);
+    return res;
   };
 
   /**
@@ -141,6 +157,15 @@ export default function useTMap(
     setSearchAroundResult(() => res.data.searchPoiInfo.pois.poi);
   };
 
+  /**
+   * @description 위도 경도를 기반으로 지도상에 마커와 선을 그어준다.
+   * @param startLatLng 시작 위도경도
+   * @param endLatLng 끝 위도경도
+   * @param wayPointLatLng  교차점 위도경도
+   */
+  const makeLayerForPlan = (...wayPointLatLng: Array<LatLng>) => {
+    tmap.makeLayerForPlan(...wayPointLatLng);
+  };
   const pushDrawableMarker = (latLng: LatLng) => {
     tmap.pushDrawableMarker(latLng);
   };
@@ -165,16 +190,35 @@ export default function useTMap(
     await tmap.resetMarker();
   };
 
+  const getDirectionUseTransfort = async (
+    startLatLng: LatLng,
+    endLatLng: LatLng
+  ) => {
+    return tmap.getDirectionUseTransfort(startLatLng, endLatLng);
+  };
+
+  const drawPolygonWithOrientation = async (
+    orientation: Orientation,
+    myLatLng: LatLng
+  ) => {
+    await tmap.removePolygon();
+    tmap.drawPolygonWithOrientation(orientation, myLatLng);
+  };
+
   return {
     additionalScriptLoaing,
     resetMarker,
     pushDrawableMarker,
+    drawMyMarker,
     makeStartMarker,
     makeEndMarker,
     reDefineCenterMap,
     drawLineWithPanning,
     searchToKeyword,
+    getDirectionUseTransfort,
     searchAroundPOI,
+    searchToKeywordNoMarker,
+    makeLayerForPlan,
     searchResult,
     setResult,
     direction,
@@ -187,5 +231,7 @@ export default function useTMap(
     end,
     markerLatLngArr: tmap.markerLatLngArr,
     tmap,
+    pending,
+    drawPolygonWithOrientation,
   };
 }

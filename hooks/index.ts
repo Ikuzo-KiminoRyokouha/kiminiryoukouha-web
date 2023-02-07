@@ -6,6 +6,7 @@ import useTMap from "./useTMap";
 import useToggle from "./useToggle";
 import useLocation from "./useLocation";
 import useBoard from "./useBoard";
+import useObserver from "./useObserver";
 
 export {
   useAR,
@@ -16,4 +17,5 @@ export {
   useToggle,
   useLocation,
   useBoard,
+  useObserver,
 };

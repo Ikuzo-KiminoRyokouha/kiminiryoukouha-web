@@ -6,6 +6,13 @@ export type LatLng = {
   lng: number;
 };
 
+export type Orientation = {
+  alpha?: number;
+  beta?: number;
+  gamma?: number;
+  absolute: boolean;
+};
+
 /**
  * @description TMap POI 검색 결과 중 필요한 타입
  */

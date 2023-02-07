@@ -11,6 +11,8 @@ import BottomNavigation from "../components/layout/BottomNavigation";
 import { useMemo } from "react";
 import { queryClient } from "../utils/request/reloadQuery";
 import { ThemeProvider } from "styled-components";
+import mainRequest from "../utils/request/mainRequest";
+import authRequest from "../utils/request/authRequest";
 
 /**
  * @description 로그인 정보가 필요한 페이지 접근 시, 해당 배열에 URL정보를 넣어줄 것

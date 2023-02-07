@@ -1,13 +1,25 @@
-import { useTMap } from "@/hooks";
+import { useLocation, useTMap } from "@/hooks";
+import { Destination, Plan } from "@/types/plan.interface";
 import fakeData from "@/utils/dataMap/fakeData.json";
 import transfortModeMap from "@/utils/dataMap/transfortModeMap.json";
-import pathTypeMap from "@/utils/dataMap/pathTypeMap.json";
+import { convertSecToTimeObj } from "@/utils/math";
+import dayjs from "dayjs";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { convertSecToTimeObj } from "../../../utils/math";
-import dayjs from "dayjs";
+import { IoIosAirplane } from "react-icons/io";
 
-export default function PlanNavigation() {
+import mainRequest from "../../../utils/request/mainRequest";
+
+interface Props {
+  query: {
+    planId: number;
+    travelId: number;
+  };
+  plan: Plan;
+}
+
+export default function PlanNavigation({ query, plan }: Props) {
   const {
     pushDrawableMarker,
     makeStartMarker,
@@ -16,11 +28,40 @@ export default function PlanNavigation() {
     drawLineWithPanning,
     reDefineCenterMap,
     resetMarker,
+    getDirectionUseTransfort,
   } = useTMap("map", false);
+
+  const { myLatLng } = useLocation();
 
   const [mode, setMode] = useState(0);
   const [planIdx, setPlanIdx] = useState(0);
   const [plans, setPlans] = useState(undefined);
+  const [currentmode, setCurrentmode] = useState(0);
+
+  const [destination, setDestination] = useState<Destination>(
+    plan.travels.filter((el) => {
+      return el.id === Number(query.travelId);
+    })[0].destination
+  );
+
+  // const drawRoute = async () => {
+  //   const destLatLng = {
+  //     lat: Number(destination.mapy),
+  //     lng: Number(destination.mapx),
+  //   };
+
+  //   console.log(destLatLng, myLatLng);
+
+  //   const data = await getDirectionUseTransfort(myLatLng, destLatLng);
+  //   // console.log("data", data);
+  // };
+  // useEffect(() => {
+  //   const destLatLng = {
+  //     lat: Number(destination.mapy),
+  //     lng: Number(destination.mapx),
+  //   };
+  //   myLatLng && drawRoute();
+  // }, [myLatLng]);
 
   useEffect(() => {
     if (mode) {
@@ -81,12 +122,38 @@ export default function PlanNavigation() {
       className="max-w-8xl max- mx-auto mb-[53px] flex
     h-full w-full flex-1 lg:mb-0"
     >
-      <div className="basis-3/4">
+      <div className="relative basis-3/4">
+        <div className="absolute z-10 flex h-full w-full flex-col justify-end space-y-3 bg-gray-200 p-1">
+          <button className=" ml-auto mb-auto rounded-2xl bg-slate-500 p-4  text-white">
+            <IoIosAirplane></IoIosAirplane>
+          </button>
+
+          <div className="flex space-x-2 bg-white p-1">
+            {Array(dayjs(plan.end).diff(plan.start, "d") + 1)
+              .fill(0)
+              .map((el, i) => {
+                return (
+                  <button
+                    className={`${
+                      currentmode === i
+                        ? "border-1 bg-green-200 p-4 font-bold "
+                        : "  bg-gray-200 p-4 font-bold"
+                    }`}
+                    onClick={() => {
+                      setCurrentmode(i);
+                    }}
+                  >
+                    {i + 1}일차
+                  </button>
+                );
+              })}
+          </div>
+        </div>
         <div id="map"></div>
       </div>
       <div className="relative flex basis-1/4 flex-col border-r">
-        <div className="absolute flex max-h-full min-h-full w-full flex-col">
-          <div className="border p-2">~ 까지의 경로</div>
+        <div className="absolute flex max-h-full min-h-full w-full flex-col ">
+          <div className="border p-2">{destination.title} 까지의 경로</div>
           <div className="space-x-2">
             <ModeButton
               color={`${mode === 0 && "blue"}`}
@@ -146,21 +213,33 @@ export default function PlanNavigation() {
                       .add(timeObj.min, "minute")
                       .format("HH:mm")}
                     도착 <ColDivider />
+                    {plan.fare.regular.totalFare} 원
                   </div>
                   <div>
                     {plan.legs.map((leg) => {
                       const transfortTime = convertSecToTimeObj(
                         leg.sectionTime
                       );
-                      console.log(leg.mode);
                       return (
                         <div
                           className="p-2"
                           key={leg.start.name + leg.end.name}
                         >
                           <p>
-                            <span>{transfortModeMap[leg.mode]}</span>
+                            <span>
+                              {leg.route
+                                ? leg.route
+                                : transfortModeMap[leg.mode]}
+                            </span>
                             <span> - </span>
+                            {leg.passStopList?.stationList && (
+                              <>
+                                <span className="text-sm">
+                                  {leg.passStopList?.stationList[0].stationName}
+                                </span>
+                                <span> - </span>
+                              </>
+                            )}
                             <span>
                               <span>
                                 {transfortTime.hour && transfortTime.hour}
@@ -171,6 +250,7 @@ export default function PlanNavigation() {
                               </span>
                               {transfortTime.min != 0 && "분 "}
                             </span>
+                            <span className="cursor-pointer"> {">"} </span>
                           </p>
                         </div>
                       );
@@ -184,6 +264,28 @@ export default function PlanNavigation() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps({ query }: Props) {
+  if (!query?.planId) {
+    return {
+      redirect: {
+        destination: "/plan",
+        permanent: false,
+      },
+    };
+  }
+
+  const plan = await mainRequest
+    .get(`/plan/${query?.planId}`)
+    .then((res) => res.data.plan);
+
+  return {
+    props: {
+      query,
+      plan,
+    }, // will be passed to the page component as props
+  };
 }
 
 const ModeButton = styled.button`

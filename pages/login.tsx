@@ -7,15 +7,16 @@ import { useRef } from "react";
 import MyInput from "../components/MyInput";
 import useInput from "../hooks/useInput";
 import { mLogin } from "../utils/fetchFn/mutation/user";
-import { reloadUser } from "../utils/request/reloadQuery";
 import React from "react";
+import { setJWTToken } from "../utils/client";
 
 export default function LoginPage() {
   const router = useRouter();
   const submitButton = useRef<HTMLButtonElement>(null);
   const { mutate } = useMutation(["login"], mLogin, {
-    onSuccess: async () => {
-      reloadUser();
+    onSuccess: async (res) => {
+      setJWTToken(res.data.accessToken);
+      // reloadUser();
       router.push("/");
     },
     onError(error) {
@@ -23,7 +24,6 @@ export default function LoginPage() {
       console.log(error);
     },
   });
-
   const id = useInput("", "id");
   const pwd = useInput("", "password");
 
