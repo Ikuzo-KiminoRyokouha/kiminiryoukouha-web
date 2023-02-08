@@ -51,6 +51,7 @@ export default function PlanNavigation({ query, plan }: Props) {
     })[0].destination
   );
   
+  //console.log(plan.travels[4]?.destination.firstimage+"12")
   //console.log(plan.travels[0]?.destination)
   //1일차 누르면 이게 currentmode 가 0이면 ===  console.log(plan.travels[0]?.destination.firstimage)
   //console.log(plan.travels[1]?.destination.firstimage)
@@ -152,32 +153,49 @@ export default function PlanNavigation({ query, plan }: Props) {
    
 
        <div className="flex  w-full h-32  ">
-         {plan?.travels &&( plan.travels.map((el,i)=>{
+         {/* {plan?.travels &&( plan.travels.map((el,i)=>{
             return<>            
             <Image
-            src={plan.travels[i]?.destination.firstimage}
+            src={plan.travels[i]?.destination.firstimage ||
+              "https://picsum.photos/id/188/720/400/"}
             layout={"intrinsic"}
             width={200}
             height={200}
+            alt="user profile picture"
             />
           </>
-          }
-          )
-          )
-         }
-       
-       
-        
-       
+          }))
+         } */}
+         
+        {//currentmode 는 배열에서 가져온 값 
+Array(dayjs(plan.end).diff(plan.start,"d")+1).fill(0).map((el,i)=>{
+  return (<> 
+  {i===currentmode?<> <Image
+            src={plan.travels[i*2]?.destination.firstimage ||
+              "https://picsum.photos/id/188/720/400/"}
+            layout={"intrinsic"}
+            width={200}
+            height={200}
+            alt="user profile picture"
+            />
+            <Image
+            src={plan.travels[i*2+1]?.destination.firstimage ||
+              "https://picsum.photos/id/188/720/400/"}
+            layout={"intrinsic"}
+            width={200}
+            height={200}
+            alt="user profile picture"
+            />
+            </> :null}
+  
+  
+  </>)
+})
 
-           
+}
+
        </div>
-        
-
           <div className="flex space-x-2 bg-white p-1">
-       
-          
-
            {
             Array(dayjs(plan.end).diff(plan.start,"d")+1).fill(0).map((el,i)=>{
               return <button className={`${currentmode === i ? "bg-green-200 border-1 p-4 font-bold " 
