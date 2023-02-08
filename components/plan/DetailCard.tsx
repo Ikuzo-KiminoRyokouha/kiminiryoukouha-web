@@ -30,11 +30,11 @@ export default function DetailCard({ planId, travel }: Props) {
     
     <>
    
-      <div className="w-1/2 p-4 lg:w-1/3">
+      <div className="w-1/2 p-4 lg:w-1/3 ">
         <div
           className="h-full overflow-hidden rounded-lg border-2
-                        border-gray-200 border-opacity-60"
-        >
+                        border-gray-200 border-opacity-60 "
+         >
           <img
             className="w-full object-cover object-center 
                        md:h-48 lg:h-72"

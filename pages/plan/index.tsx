@@ -23,7 +23,7 @@ export default function Index({ plans }) {
     setEndPlans(() => {
       return plans?.filter((plan) => dayjs().isAfter(dayjs(plan.end)));
     });
-
+// useEffect인데 layout이라먼저실행함       plan에서 시작이랑 끝이랑 사이에있는거만 저장함 초기값 설정 
     setActivatedPlans(() => {
       return plans?.filter(
         (plan) =>

@@ -1,5 +1,5 @@
 import { useLocation, useTMap } from "@/hooks";
-import { Destination, Plan } from "@/types/plan.interface";
+import { Destination, Plan, Travel } from "@/types/plan.interface";
 import fakeData from "@/utils/dataMap/fakeData.json";
 import transfortModeMap from "@/utils/dataMap/transfortModeMap.json";
 import { convertSecToTimeObj } from "@/utils/math";
@@ -17,6 +17,7 @@ interface Props {
     travelId: number;
   };
   plan: Plan;
+  
 }
 
 
@@ -33,7 +34,7 @@ export default function PlanNavigation({ query, plan }: Props) {
   } = useTMap("map", false);
   
 
-  console.log(plan)
+  
 
 
   
@@ -49,6 +50,20 @@ export default function PlanNavigation({ query, plan }: Props) {
       return el.id === Number(query.travelId);
     })[0].destination
   );
+  
+  //console.log(plan.travels[0]?.destination)
+  //1일차 누르면 이게 currentmode 가 0이면 ===  console.log(plan.travels[0]?.destination.firstimage)
+  //console.log(plan.travels[1]?.destination.firstimage)
+//근데 이렇게 하지말라고 해서 한게 
+
+// travels.filter(el => {
+//   return selectedDate.format('YYYY-MM-DD') === dayjs(el.startDay).format("YYYY-MM-DD")
+//  }).map((travel)=>{
+//    return <DestinationButton>
+//    {travel.destination.title}
+//  </DestinationButton>
+//  })
+
 
   // const drawRoute = async () => {
   //   const destLatLng = {
@@ -134,19 +149,41 @@ export default function PlanNavigation({ query, plan }: Props) {
           <button className=" ml-auto text-white mb-auto p-4 bg-slate-500  rounded-2xl">
            <IoIosAirplane></IoIosAirplane>
           </button>
-            
+   
+
+       <div className="flex  w-full h-32  ">
+         {plan?.travels &&( plan.travels.map((el,i)=>{
+            return<>            
+            <Image
+            src={plan.travels[i]?.destination.firstimage}
+            layout={"intrinsic"}
+            width={200}
+            height={200}
+            />
+          </>
+          }
+          )
+          )
+         }
+       
+       
+        
+       
+
+           
+       </div>
+        
+
           <div className="flex space-x-2 bg-white p-1">
+       
+          
+
            {
             Array(dayjs(plan.end).diff(plan.start,"d")+1).fill(0).map((el,i)=>{
               return <button className={`${currentmode === i ? "bg-green-200 border-1 p-4 font-bold " 
               : "  font-bold bg-gray-200 p-4"}`} onClick={()=>{setCurrentmode(i)}}>{i+1}일차</button>
             })
-
-           }
-       
-    
-           
-           
+            }
           </div>
         </div>
         <div id="map"></div>

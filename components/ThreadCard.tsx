@@ -6,7 +6,7 @@ import { AiOutlineSend } from "react-icons/ai";
 import ThreadSummary from "./ThreadSummary";
 import useInput from "hooks/useInput";
 
-export default function ThreadCard({ pokemon, onClick }) {
+export default function ThreadCard({ content, onClick }) {
   const readmore = useToggle(false);
   // 좋아요 담는 용도
   const like = useToggle(false);
@@ -33,17 +33,18 @@ export default function ThreadCard({ pokemon, onClick }) {
       location.reload();
     }
   };
+  //console.log(content)
 
   return (
     <>
-      <div className="w-full" key={pokemon.name}>
+      <div className="w-full" key={content.name}>
         <div className="">
           <div className="m-2 w-auto rounded-3xl border shadow-md">
             <div className="flex h-auto w-full items-center space-x-3 p-2">
               <FaUserCircle size={40} onClick={onClick.showUser} />
               <span className="" onClick={onClick.showUser}>
-                {/* {pokemon.name + "・" + "23/1/25"} */}
-                {pokemon.name + "・" + "2시간 전"}
+                {/* {content.name + "・" + "23/1/25"} */}
+                {user.name + "・" + "2시간 전"}
               </span>
             </div>
             {/* <div className="pl-2 text-sm">{"날짜"}</div> */}
@@ -53,18 +54,7 @@ export default function ThreadCard({ pokemon, onClick }) {
                   readmore.value ? "" : "line-clamp-4"
                 } block leading-6`}
               >
-                {pokemon.url} Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit. Dolor, tempore magnam voluptate nobis, illum
-                quas fuga pariatur neque ipsam inventore sequi. Vero
-                reprehenderit sapiente labore dolore. Sint molestiae quasi
-                commodi. Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Cum vitae nemo expedita magnam distinctio quos cumque
-                harum. Eveniet, quos vel, quasi odit modi molestiae praesentium,
-                voluptatum sapiente nulla voluptatibus sit. Lorem ipsum dolor
-                sit amet consectetur adipisicing elit. Illum ducimus optio
-                quaerat, placeat deleniti in consequatur reiciendis, nisi
-                dignissimos rem natus a minima sunt ipsum reprehenderit animi?
-                Vitae, corrupti possimus!
+                {content.content} 
               </span>
               <div className="flex justify-end">
                 <span
@@ -75,7 +65,7 @@ export default function ThreadCard({ pokemon, onClick }) {
                 </span>
               </div>
             </div>
-            <ThreadSummary />
+            <ThreadSummary   plan={content} />
             <div>
               <p className="border border-solid border-neutral-200"></p>
             </div>

@@ -25,17 +25,17 @@ export default function PlanDetail({ plan }: Props) {
   return (
     <div className="mx-auto mb-[53px] flex max-h-full w-full max-w-7xl flex-1 lg:mb-0 ">
       <div className="w-full space-y-4 p-4 ">
-        <div className="rounded-lg bg-gradient-to-r from-[#5FA7E8] to-[#0078EF]">
-          <div className="mb-4 pt-4 text-center text-4xl font-semibold text-white">
+        <div className="rounded-lg border-2">
+          <div className="mb-4 pt-4 text-center text-4xl font-bold ">
             {plan.title}
           </div>
 
           <div className="flex ">
-            <nav className="ml-auto font-mono text-lg text-white ">
+            <nav className="ml-auto font-mono text-lg  ">
               <span className=" mr-2 cursor-pointer rounded-lg pl-1 hover:text-[#E8A45F]">
                 체크리스트
               </span>
-              <span className=" mr-2 rounded-lg px-1">가계부</span>
+              <span className=" mr-2 rounded-lg px-1 ">가계부</span>
               <span className=" mr-2 rounded-lg px-1">메모하기</span>
             </nav>
           </div>

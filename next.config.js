@@ -9,7 +9,7 @@ module.exports = async (phase) => {
   /** @type {import('next').NextConfig} */
   const nextConfig = {
     images: {
-      domains: ["tong.visitkorea.or.kr", "picsum.photos"],
+      domains: ["www.tong.visitkorea.or.kr", "picsum.photos","tong.visitkorea.or.kr"],
     },
     reactStrictMode: true,
     swcMinify: true,
