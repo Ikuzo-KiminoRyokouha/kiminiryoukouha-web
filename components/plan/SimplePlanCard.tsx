@@ -36,10 +36,17 @@ export default function SimplePlanCard({ plan }: Props) {
         />
       </div>
       <div className="flex flex-1 flex-col justify-around">
-        <p>
-          계획 일시 : {dayjs(plan.start).format("YYYY-MM-DD")} ~
-          {dayjs(plan.end).format("YYYY-MM-DD")}
+        <p className="hidden md:block">
+          계획 일시 : {dayjs(plan.start).format("MM-DD")} ~
+          {dayjs(plan.end).format("MM-DD")}
         </p>
+        <div className="block md:hidden">
+          <p>계획 일시</p>
+          <p className="leading-6">
+            {dayjs(plan.start).format("MM-DD")} ~
+            {dayjs(plan.end).format("MM-DD")}
+          </p>
+        </div>
         <p>예산 : {plan.totalCost} 원</p>
         <p>
           테마 :{" "}
@@ -50,7 +57,7 @@ export default function SimplePlanCard({ plan }: Props) {
             .join(", ")}
         </p>
       </div>
-      <div className="relative flex flex-1 flex-col"></div>
+      {/* <div className="relative flex flex-1 flex-col"></div> */}
       <div className="flex flex-col justify-between space-y-2">
         <div className="space-x-3">
           <button className="p-1 text-sky-600">
