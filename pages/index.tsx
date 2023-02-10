@@ -137,16 +137,3 @@ export default function Home() {
     </div>
   );
 }
-
-export async function getServerSideProps({ req }) {
-  try {
-    const cookie = req ? req.headers.cookie : "";
-
-    const data = await authRequest.get("/users/info?userId=4", {
-      cookie,
-    });
-  } catch (err) {}
-  return {
-    props: {},
-  };
-}
