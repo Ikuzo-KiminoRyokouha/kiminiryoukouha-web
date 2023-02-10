@@ -63,14 +63,14 @@ export default function Header() {
               <HeaderNav items={headerNavMap} />
               {/* 검색 */}
               <input
-                className="mx-4 hidden rounded-lg border border-black p-1 focus:outline-0 focus:ring-0 lg:block "
+                className="mx-4 hidden rounded-lg border border-black py-2 px-4 focus:outline-0 focus:ring-0 lg:block "
                 {...keyword}
               />
               {/* 로그인 버튼 */}
               {!user && (
                 <button
                   onClick={() => router.push("/login")}
-                  className="rounded-lg bg-sky-600 p-2 px-4"
+                  className="rounded-lg bg-sky-600 p-2 px-4 shadow-lg"
                 >
                   <span className="text-white">Login</span>
                 </button>
