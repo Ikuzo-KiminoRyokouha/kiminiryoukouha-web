@@ -14,6 +14,21 @@ export const convertDateToKorean = (start: string, end: string): string => {
   return diffDate + "박" + Number(diffDate + 1) + "일";
 };
 
+export const cookieStringToObject = (cookieString: string | string[]): any => {
+  if (!cookieString) {
+    return "";
+  } else {
+    cookieString = (cookieString as string).split("; ");
+    let result = {};
+
+    for (var i = 0; i < cookieString.length; i++) {
+      var cur = cookieString[i].split("=");
+      result[cur[0]] = cur[1];
+    }
+    return result;
+  }
+};
+
 /**
  * @description 디바이스의 방향정보를 받아오기 위한 이벤트 리스너 입니다.
  */

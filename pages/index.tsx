@@ -4,6 +4,8 @@ import PlanCarousel from "../components/PlanCarousel";
 import ImageCard from "../components/common/card/ImageCard";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import authRequest from "../utils/request/authRequest";
+import { cookieStringToObject } from "../utils/common";
 
 export default function Home() {
   const router = useRouter();
@@ -134,4 +136,17 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  try {
+    const cookie = req ? req.headers.cookie : "";
+
+    const data = await authRequest.get("/users/info?userId=4", {
+      cookie,
+    });
+  } catch (err) {}
+  return {
+    props: {},
+  };
 }

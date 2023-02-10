@@ -8,4 +8,9 @@ declare global {
   }
 }
 
+declare module "axios" {
+  interface AxiosRequestConfig extends AxiosRequestConfig {
+    cookie?: string;
+  }
+}
 export default {};
