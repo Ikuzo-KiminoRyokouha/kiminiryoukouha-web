@@ -1,15 +1,26 @@
+import IProps from "@/types/props.interface";
 import MyPagePlan from "components/mypage/MyPagePlan";
 import MyPagePosts from "components/mypage/MyPagePosts";
+import useMypage from "hooks/useMypage";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { createContext, useContext, useEffect, useMemo, useRef } from "react";
+import {
+  createContext,
+  SetStateAction,
+  useContext,
+  Dispatch,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 import styled from "styled-components";
+import { HiPencil } from "react-icons/hi";
 
 const MyPageContext = createContext<{
   arr: Array<number>;
 }>(undefined);
 
-export default function MyPage({ children }) {
+export default function MyPage({ children }: IProps) {
   const arr = [, , , , , , , , , , , , , ,].fill(0);
 
   return (
@@ -21,11 +32,11 @@ export default function MyPage({ children }) {
   );
 }
 
-MyPage.Header = ({ children }) => {
+MyPage.Header = ({ children }: IProps) => {
   return <div className="flex h-1/3 min-h-[286px]">{children}</div>;
 };
 
-MyPage.Body = ({ children }) => {
+MyPage.Body = ({ children }: IProps) => {
   return <div className="flex h-full flex-col">{children}</div>;
 };
 
@@ -38,20 +49,95 @@ MyPage.Image = () => {
     </div>
   );
 };
+interface InfoProps {
+  nickname: string;
+  description: string;
+  follower: number;
+  following: number;
+}
 
-MyPage.Info = ({ username, description }) => {
+MyPage.Info = ({ nickname, description, follower, following }: InfoProps) => {
+  const { writeDescription, userFollow, userUnfollow } = useMypage();
+
+  const onClick = {
+    writeDescription: () => {
+      // 닉네임옆 연필 아이콘 누를시 모달창띄워주기
+      console.log("writeDescription function launched");
+    },
+    following: () => {
+      // following 클릭시 팔로우중인 사람들 모달창으로 띄워줌
+      console.log("following function launched");
+    },
+    follower: () => {
+      // follower클릭시 팔로워들 모달창으로 띄워줌
+      console.log("follower function launched");
+    },
+    followUser: () => {
+      // 버튼에 들어가는 유저 팔로우 함수
+      console.log("followUser function launched");
+      // userFollow({
+      //   targetId: 2,
+      // });
+    },
+    unfollowUser: () => {
+      // 유저 언팔 함수
+      console.log("unfollowUser function launched");
+      // userUnfollow({
+      //   targetId: 1,
+      // });
+    },
+  };
   return (
-    <div className="flex h-full w-3/5 flex-col py-10">
-      <div className="flex h-1/3 w-full ">
+    <div className="flex h-full w-10/12 flex-col py-10">
+      {/* 상단 닉네임, 팔로우정보 */}
+      <div className="flex h-1/3 w-full justify-between">
         <div className="w-5/6">
-          <span className="text-4xl">{username}</span>
+          {/* 닉네임 */}
+          <div className="flex flex-col">
+            <div className="flex">
+              <span className="text-4xl">{nickname}</span>
+              <HiPencil
+                className="cursor-pointer pl-3 pt-2"
+                size={35}
+                onClick={onClick.writeDescription}
+              />
+            </div>
+            <div className="flex pt-2">
+              {/* 팔로우 팔로워 */}
+              {["follwing", "follower"].map((el) => {
+                return (
+                  <div className="flex">
+                    <span
+                      className="text-md cursor-pointer pr-1 font-semibold leading-8"
+                      onClick={
+                        (el === "follower" && onClick.follower) ||
+                        onClick.following
+                      }
+                    >
+                      {(el === "follower" && follower) || following}
+                    </span>
+                    <span
+                      className="text-md cursor-pointer pr-3 leading-8"
+                      onClick={
+                        (el === "follower" && onClick.follower) ||
+                        onClick.following
+                      }
+                    >
+                      {el}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
-        <MyPage.Button title={"follow"} onClick={() => {}} />
+        <MyPage.Button title={"follow"} onClick={onClick.followUser} />
       </div>
+      {/* 하단 description */}
       <div className="flex h-2/3 w-full flex-col">
         <div className="h-1/6 w-5/6"></div>
         <div className="h-5/6 w-5/6 ">
-          <div className="line-clamp-5 block h-full w-11/12 overflow-hidden pt-3 pl-2">
+          <div className="line-clamp-5 block h-full w-11/12 overflow-hidden pt-3">
             <span className="text-lg leading-5">{description}</span>
           </div>
         </div>
@@ -60,9 +146,14 @@ MyPage.Info = ({ username, description }) => {
   );
 };
 
-MyPage.Button = ({ title, onClick }) => {
+interface ButtonProps {
+  title: string;
+  onClick: () => void;
+}
+MyPage.Button = ({ title, onClick }: ButtonProps) => {
   return (
-    <div className="pl-5">
+    <div className="px-10">
+      {/* 팔로우상태면 언팔로우 뜨게 + 버튼색깔 red */}
       <button
         className="w-20 rounded bg-sky-600 p-2 text-white"
         onClick={onClick}
@@ -95,7 +186,11 @@ MyPage.Follower = () => {
   );
 };
 
-MyPage.Nav = ({ children, navItemWidth, navPage }) => {
+interface NavProps extends IProps {
+  navItemWidth: { [key: string]: number };
+  navPage: string;
+}
+MyPage.Nav = ({ children, navItemWidth, navPage }: NavProps) => {
   return (
     <nav className="m-2">
       <div className="mx-2 flex">{children}</div>
@@ -131,7 +226,11 @@ const ActionBar = styled.div<{
   transition-duration: 150ms;
 `;
 
-MyPage.Contents = ({ navPage }) => {
+interface ContentsProps {
+  navPage: string;
+}
+
+MyPage.Contents = ({ navPage }: ContentsProps) => {
   const { arr } = useContext(MyPageContext);
 
   return (
@@ -144,7 +243,17 @@ MyPage.Contents = ({ navPage }) => {
   );
 };
 
-MyPage.NavButton = ({ title, onClick, setNavItemWidth }) => {
+interface NavButtonProps {
+  title: string;
+  onClick: () => void;
+  setNavItemWidth: Dispatch<
+    SetStateAction<{
+      [key: string]: number;
+    }>
+  >;
+}
+// setNavItemWidth 타입 설정 모르겠음
+MyPage.NavButton = ({ title, onClick, setNavItemWidth }: NavButtonProps) => {
   const ref = useRef();
 
   useEffect(() => {

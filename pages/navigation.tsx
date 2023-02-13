@@ -76,11 +76,11 @@ export default function Navigation() {
     const latLngArr: Array<LatLng> = [
       {
         lat: myLatLng?.lat + 0.00001,
-        lng: myLatLng?.lng + 0.00001,
+        lng: myLatLng?.lng + 0.000005,
       },
       {
         lat: myLatLng?.lat + 0.00001,
-        lng: myLatLng?.lng - 0.00001,
+        lng: myLatLng?.lng - 0.000005,
       },
     ];
 
@@ -88,7 +88,9 @@ export default function Navigation() {
       await ar.createBox(myLatLng, latLng, color[idx]);
     });
 
-    ar.drawLine(myLatLng, ...latLngArr);
+    // console.log("hihi");
+
+    // ar.drawLine(...latLngArr);
   };
 
   useEffect(() => {

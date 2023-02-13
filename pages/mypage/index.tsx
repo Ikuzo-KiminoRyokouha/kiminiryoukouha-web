@@ -1,15 +1,28 @@
-import { getUser, useUser } from "@/utils/client";
+import { useUser } from "@/utils/client";
+import authRequest from "@/utils/request/authRequest";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function MyPageHome() {
   const router = useRouter();
   const [user] = useUser();
+  const [pending, setPending] = useState(false);
+  // console.log("user123", user);
   useEffect(() => {
-    user &&
-      router.push({
-        pathname: `/mypage/${user?.nickname}`,
-      });
+    if (!pending) {
+      setPending(true);
+    } else {
+      console.log(user.sub);
+      user &&
+        router.push({
+          pathname: `/mypage/${user?.nickname}`,
+        });
+
+      !user &&
+        router.push({
+          pathname: `/login`,
+        });
+    }
   }, [user]);
   return (
     <div className="flex flex-1 items-center justify-center">
@@ -35,3 +48,27 @@ export default function MyPageHome() {
     </div>
   );
 }
+
+// export async function getServerSideProps({ req }) {
+//   try {
+//     const cookie = req ? req.headers.cookie : "";
+//     const {data: userInfo} = await authRequest.get(`/users/info?userId=${"1"}`, {
+//       cookie,
+//     });
+
+//     console.log("data123", userInfo?.data.nickname);
+
+//     return {
+//       props: {
+//         nickname: "asdf",
+//       },
+//     };
+//   } catch (error) {
+//     console.log("error", error);
+//     return {
+//       props: {
+//         nickname: "-1",
+//       },
+//     };
+//   }
+// }
