@@ -40,6 +40,7 @@ export default function AuthCheck({ children, needAuth }: Props) {
     // 데이터 페칭 성공시 전역 변수에 저장
     else if (isSuccess) {
       setUser({
+        sub: data.data.sub,
         email: data.data.username,
         nickname: data.data.username,
         role: "Client",
