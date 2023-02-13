@@ -1,7 +1,9 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 export default function ThreadSummary({plan}) {
-console.log(plan?.plan)
+
 //console.log(Object.values(plan?.plan.tag))
+const router =useRouter();
 
   return (
     <>
@@ -17,7 +19,7 @@ console.log(plan?.plan)
         <div className="mx-2 flex flex-1 flex-col justify-around overflow-hidden text-ellipsis">
           <p className="p-1">도시 : {plan?.plan?.city}</p>
           <p className="line-clamp-2 leading-2 m-1 block">
-            내용 : {plan?.plan.title}
+            내용 : {plan?.plan?.title}
             
           </p>
           <p className="p-1">테마:   
@@ -27,7 +29,8 @@ console.log(plan?.plan)
         <div
           className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white"
           onClick={() => {
-            console.log("계획보기 clicked");  
+            router.push(`/thread/${plan.plan.id}`)
+            //일단여기에 페이지 이동을 달아줘야함 그냥여기에다가 컴포넌트 넣으면 되나 아닌데 
           }}
         >
           <span>계획보기</span>

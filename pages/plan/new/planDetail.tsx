@@ -13,8 +13,12 @@ import { LatLng } from "../../../types/tmap.type";
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
 
+console.log(travels,plan)
+  
   const router = useRouter();
   const isSave = useRef(false);
+ 
+
 
   const [selectedDate, setSelectedDate] = useState(dayjs(plan.start));
   //선택된 날짜를 시작값으로 함

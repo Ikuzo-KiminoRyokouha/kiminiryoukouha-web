@@ -10,6 +10,7 @@ export default function ThreadCard({ content, onClick }) {
   const readmore = useToggle(false);
   // 좋아요 담는 용도
   const like = useToggle(false);
+  
 
   const fun_like = () => {
     console.log("좋아요 버튼 클릭");

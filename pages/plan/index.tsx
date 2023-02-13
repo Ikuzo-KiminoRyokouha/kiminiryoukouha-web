@@ -12,7 +12,7 @@ import "@/utils/extension/array.extension";
 export default function Index({ plans }) {
   let [mode, setMode] = useState(0);
   
-
+console.log(plans)
   const router = useRouter();
 
   const [activatedPlans, setActivatedPlans] = useState<Array<Plan>>();
@@ -153,3 +153,4 @@ export async function getServerSideProps({ query }) {
     },
   };
 }
+//얘는 진짜 전체 플랜목록인데 

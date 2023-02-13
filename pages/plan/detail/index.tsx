@@ -14,7 +14,7 @@ export default function PlanDetail({ plan }: Props) {
   const [period, setPeriod] = useState<number>(0);
   console.log(period+"period")
   console.log(plan)
-
+  console.log(plan.travels)
 
   
 

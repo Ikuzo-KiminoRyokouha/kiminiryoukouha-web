@@ -113,7 +113,7 @@ export default function Detail({ boardData }) {
                 <button
                   className="mx-2 border px-6 py-2"
                   onClick={() => {
-                    onClick.routing(`/QnA/update?id=${id}`);
+                    onClick.routing(`/QnA/update?${id}`);
                   }}
                 >
                   수정
