@@ -41,7 +41,8 @@ function orientationHandler(
 }
 
 /**
- * @description 핸들러 삭제를 위해 핸들러에 대한 정보를 답아줄 변수입니다.
+ * @descrip
+ * tion 핸들러 삭제를 위해 핸들러에 대한 정보를 답아줄 변수입니다.
  */
 let handlerWrapper;
 
