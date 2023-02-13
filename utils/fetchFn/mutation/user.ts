@@ -10,7 +10,7 @@ import mainRequest from "../../request/mainRequest";
  * @param {string} name 사용자 닉네임
  * @param {string} role 사용자 역할
  */
-export const mSignUp = (body: IUser) => {
+export const mSignUp = (body: Omit<IUser, "sub">) => {
   return mainRequest.post(
     process.env.NEXT_PUBLIC_API_URL + "/auth/signup",
     body
