@@ -14,18 +14,17 @@ export default function test1() {
     {}
   );
   const [user] = useUser();
-  // console.log("user123", user);
+  // console.log("user123", user?.nickname);
+
+  // 자신의 프로필 페이지인가 아닌가
+  const isMyPage = user?.nickname ? true : false;
 
   const { data: userInfo } = useQuery(["getUserInfo", 1], getUserInfo);
   // console.log("userInfo", userInfo);
-
   const { data: userFollowee } = useQuery(["getUserFollowee"], getUserFollowee);
   // console.log("userFollowee", userFollowee?.data[0].followees?.length);
   const { data: userFollower } = useQuery(["getUserFollower"], getUserFollower);
   // console.log("userFollower", userFollower?.data[0].followers?.length);
-
-  const description =
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae sunt molestias accusantium! Velit quis, et cum dolores eum eos laborum ipsum officiis, tempore adipisci numquam natus labore doloribus laboriosam nam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae sunt molestias accusantium! Velit quis, et cum dolores eum eos laborum ipsum officiis, tempore adipisci numquam natus labore doloribus laboriosam nam?";
 
   const obj = useMemo(
     () => [
@@ -50,8 +49,8 @@ export default function test1() {
           description={userInfo?.data?.description || ""}
           follower={userFollowee?.data[0].followees?.length || -1}
           following={userFollower?.data[0].followers?.length || -1}
+          isMyPage={isMyPage}
         />
-        {/* <MyPage.Follower /> */}
       </MyPage.Header>
       <MyPage.Body>
         <MyPage.Nav navPage={navPage} navItemWidth={navItemWidth}>

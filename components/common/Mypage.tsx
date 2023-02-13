@@ -12,9 +12,14 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import styled from "styled-components";
 import { HiPencil } from "react-icons/hi";
+import { Modal, Portal } from "./modal";
+import mainRequest from "@/utils/request/mainRequest";
+import useToggle from "hooks/useToggle";
+import useInput from "hooks/useInput";
 
 const MyPageContext = createContext<{
   arr: Array<number>;
@@ -54,15 +59,26 @@ interface InfoProps {
   description: string;
   follower: number;
   following: number;
+  isMyPage: boolean;
 }
 
-MyPage.Info = ({ nickname, description, follower, following }: InfoProps) => {
+MyPage.Info = ({
+  nickname,
+  description,
+  follower,
+  following,
+  isMyPage,
+}: InfoProps) => {
   const { writeDescription, userFollow, userUnfollow } = useMypage();
+  // console.log("isMyPage", isMyPage);
+  // HiPencil 아이콘 누를시 모달창 띄워주기 위한 state
+  const isFixing = useToggle(false);
 
   const onClick = {
     writeDescription: () => {
       // 닉네임옆 연필 아이콘 누를시 모달창띄워주기
       console.log("writeDescription function launched");
+      isFixing.setTrue();
     },
     following: () => {
       // following 클릭시 팔로우중인 사람들 모달창으로 띄워줌
@@ -87,6 +103,13 @@ MyPage.Info = ({ nickname, description, follower, following }: InfoProps) => {
       // });
     },
   };
+  const bntObj = useMemo(
+    () => [
+      { title: "follow", onClick: onClick.followUser },
+      { title: "unfollow", onClick: onClick.unfollowUser },
+    ],
+    []
+  );
   return (
     <div className="flex h-full w-10/12 flex-col py-10">
       {/* 상단 닉네임, 팔로우정보 */}
@@ -96,11 +119,13 @@ MyPage.Info = ({ nickname, description, follower, following }: InfoProps) => {
           <div className="flex flex-col">
             <div className="flex">
               <span className="text-4xl">{nickname}</span>
-              <HiPencil
-                className="cursor-pointer pl-3 pt-2"
-                size={35}
-                onClick={onClick.writeDescription}
-              />
+              {isMyPage === true && (
+                <HiPencil
+                  className="cursor-pointer pl-3 pt-2"
+                  size={35}
+                  onClick={onClick.writeDescription}
+                />
+              )}
             </div>
             <div className="flex pt-2">
               {/* 팔로우 팔로워 */}
@@ -131,7 +156,11 @@ MyPage.Info = ({ nickname, description, follower, following }: InfoProps) => {
             </div>
           </div>
         </div>
-        <MyPage.Button title={"follow"} onClick={onClick.followUser} />
+        <MyPage.Button
+          title={"unfollow"}
+          onClick={onClick.followUser}
+          isMyPage={isMyPage}
+        />
       </div>
       {/* 하단 description */}
       <div className="flex h-2/3 w-full flex-col">
@@ -142,6 +171,9 @@ MyPage.Info = ({ nickname, description, follower, following }: InfoProps) => {
           </div>
         </div>
       </div>
+      {isFixing.value && (
+        <FixProfile hide={isFixing.setFalse} description={description} />
+      )}
     </div>
   );
 };
@@ -149,40 +181,23 @@ MyPage.Info = ({ nickname, description, follower, following }: InfoProps) => {
 interface ButtonProps {
   title: string;
   onClick: () => void;
+  isMyPage: boolean;
 }
-MyPage.Button = ({ title, onClick }: ButtonProps) => {
+MyPage.Button = ({ title, onClick, isMyPage }: ButtonProps) => {
   return (
-    <div className="px-10">
-      {/* 팔로우상태면 언팔로우 뜨게 + 버튼색깔 red */}
-      <button
-        className="w-20 rounded bg-sky-600 p-2 text-white"
-        onClick={onClick}
-      >
-        <span className="text-lg">{title}</span>
-      </button>
-    </div>
-  );
-};
-
-MyPage.Follower = () => {
-  const router = useRouter();
-  const onClick = () => {
-    router.push({
-      pathname: "#",
-      // pathname: "/username/followers",
-    });
-  };
-  return (
-    <div className="mx-10 flex h-full flex-col items-center py-10">
-      <div className="flex flex-col items-center py-3">
-        <span className="cursor-pointer text-2xl" onClick={onClick}>
-          Follwers
-        </span>
-        <span className="cursor-pointer pt-3 text-xl" onClick={onClick}>
-          15
-        </span>
-      </div>
-    </div>
+    <>
+      {!isMyPage && (
+        <div className="px-10">
+          {/* 팔로우상태면 언팔로우 뜨게 */}
+          <button
+            className="w-20 rounded bg-sky-600 p-2 text-white"
+            onClick={onClick}
+          >
+            <span className="text-lg">{title}</span>
+          </button>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -270,3 +285,65 @@ MyPage.NavButton = ({ title, onClick, setNavItemWidth }: NavButtonProps) => {
     </span>
   );
 };
+
+interface FixProfileProps {
+  hide: () => void;
+  description: string;
+}
+
+// 프로필 수정 모달에 들어가야할 거 description 수정, 프로필 이미지 수정
+function FixProfile({ hide, description }: FixProfileProps) {
+  const myDescription = useInput(description);
+
+  // 프로필 사진 올리기
+  const submitImage = () => {
+    console.log("submitImage function launched");
+  };
+
+  const submitDescription = () => {
+    console.log("submitDescription function launched");
+  };
+
+  return (
+    <>
+      <Portal qs={"#__next"}>
+        <Modal hide={hide}>
+          <Modal.Header hide={hide} />
+          <div className="flex w-full">
+            <div className="h-40 w-40">
+              <Modal.Image src="/assets/main-img.png" />
+            </div>
+            <div className="flex w-full items-center justify-center">
+              <button
+                className="rounded bg-sky-600 p-2 text-lg font-semibold text-white"
+                onClick={submitImage}
+              >
+                이미지 올리기
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <div>
+              <span className="text-lg font-semibold">Description</span>
+            </div>
+            <div className="relative mt-4 min-h-[10rem] w-full rounded border-2 border-slate-300">
+              <textarea
+                className="absolute inset-0 w-full resize-none border-slate-300 p-1 leading-6"
+                {...myDescription}
+              />
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <button
+              className="h- min-h-[2.5rem] w-full rounded bg-sky-600 text-lg font-semibold text-white"
+              onClick={submitDescription}
+            >
+              수정하기
+            </button>
+          </div>
+        </Modal>
+      </Portal>
+    </>
+  );
+}

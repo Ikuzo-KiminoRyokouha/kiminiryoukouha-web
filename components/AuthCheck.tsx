@@ -26,6 +26,8 @@ export default function AuthCheck({ children, needAuth }: Props) {
     }
   );
 
+  console.log("data123", data);
+
   const router = useRouter();
 
   useEffect(() => {
