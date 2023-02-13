@@ -87,7 +87,6 @@ export default class AR {
     this.scene.children.forEach((child, idx) => {
       if (idx === 0) return;
       this.setWorldPosition(child, this.childrenLatLng[idx]);
-      console.log("box  : ", child.position);
     });
   }
 
