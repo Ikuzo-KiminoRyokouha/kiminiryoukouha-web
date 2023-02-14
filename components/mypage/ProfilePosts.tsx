@@ -4,7 +4,7 @@ interface Props {
   arr: any;
 }
 
-export default function MyPagePosts({ arr }: Props) {
+export default function ProfilePosts({ arr }: Props) {
   return (
     <>
       <div className="flex w-full flex-col items-center justify-center">
