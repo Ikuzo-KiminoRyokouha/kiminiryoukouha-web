@@ -21,7 +21,7 @@ export default function LoginPage() {
     },
     onError(error) {
       alert("something went wrong");
-      console.log(error);
+      console.log("error occured", error);
     },
   });
   const id = useInput("", "id");

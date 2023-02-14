@@ -1,9 +1,5 @@
 import IProps from "@/types/props.interface";
-import MyPagePlan from "components/mypage/MyPagePlan";
-import MyPagePosts from "components/mypage/MyPagePosts";
-import useMypage from "hooks/useMypage";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import {
   createContext,
   SetStateAction,
@@ -17,35 +13,39 @@ import {
 import styled from "styled-components";
 import { HiPencil } from "react-icons/hi";
 import { Modal, Portal } from "./modal";
-import mainRequest from "@/utils/request/mainRequest";
 import useToggle from "hooks/useToggle";
 import useInput from "hooks/useInput";
+import useProfile from "hooks/useProfile";
+import ProfilePlan from "components/mypage/ProfilePlan";
+import ProfilePosts from "components/mypage/ProfilePosts";
+import { FollowingFollowerInfo } from "@/types/profile.interface";
+import { useRouter } from "next/router";
 
-const MyPageContext = createContext<{
+const ProfileContext = createContext<{
   arr: Array<number>;
 }>(undefined);
 
-export default function MyPage({ children }: IProps) {
+export default function Profile({ children }: IProps) {
   const arr = [, , , , , , , , , , , , , ,].fill(0);
 
   return (
-    <MyPageContext.Provider value={{ arr }}>
+    <ProfileContext.Provider value={{ arr }}>
       <div className="flex w-full flex-1">
         <div className="mx-auto flex max-w-7xl flex-1 flex-col">{children}</div>
       </div>
-    </MyPageContext.Provider>
+    </ProfileContext.Provider>
   );
 }
 
-MyPage.Header = ({ children }: IProps) => {
+Profile.Header = ({ children }: IProps) => {
   return <div className="flex h-1/3 min-h-[286px]">{children}</div>;
 };
 
-MyPage.Body = ({ children }: IProps) => {
+Profile.Body = ({ children }: IProps) => {
   return <div className="flex h-full flex-col">{children}</div>;
 };
 
-MyPage.Image = () => {
+Profile.Image = () => {
   return (
     <div className="flex h-full w-1/5 justify-center py-10">
       <div className="relative hidden w-4/5 overflow-hidden rounded after:block after:pb-[100%] md:block">
@@ -57,22 +57,35 @@ MyPage.Image = () => {
 interface InfoProps {
   nickname: string;
   description: string;
-  follower: number;
-  following: number;
-  isMyPage: boolean;
+  followerNum: number;
+  followingNum: number;
+  isMyProfile: boolean;
+  followerInfo: [FollowingFollowerInfo];
+  followingInfo: [FollowingFollowerInfo];
 }
 
-MyPage.Info = ({
+Profile.Info = ({
   nickname,
   description,
-  follower,
-  following,
-  isMyPage,
+  followerNum,
+  followingNum,
+  isMyProfile,
+  followerInfo,
+  followingInfo,
 }: InfoProps) => {
-  const { writeDescription, userFollow, userUnfollow } = useMypage();
-  // console.log("isMyPage", isMyPage);
+  const { writeDescription, userFollow, userUnfollow } = useProfile();
+  // console.log("isMyProfile", isMyProfile);
   // HiPencil 아이콘 누를시 모달창 띄워주기 위한 state
   const isFixing = useToggle(false);
+  // follower 누를시 모달창 띄워주기 위한 state
+  const isShowFollower = useToggle(false);
+  // following 누를시 모달창 띄워주기 위한 state
+  const isShowFollowing = useToggle(false);
+
+  console.log("followerInfo", followerInfo);
+  console.log("followingInfo", followingInfo);
+
+  console.log("nickname", nickname);
 
   const onClick = {
     writeDescription: () => {
@@ -80,13 +93,15 @@ MyPage.Info = ({
       console.log("writeDescription function launched");
       isFixing.setTrue();
     },
-    following: () => {
+    showFollowing: () => {
       // following 클릭시 팔로우중인 사람들 모달창으로 띄워줌
-      console.log("following function launched");
+      console.log("showFollowing function launched");
+      isShowFollowing.setTrue();
     },
-    follower: () => {
+    showFollower: () => {
       // follower클릭시 팔로워들 모달창으로 띄워줌
-      console.log("follower function launched");
+      console.log("showFollower function launched");
+      isShowFollower.setTrue();
     },
     followUser: () => {
       // 버튼에 들어가는 유저 팔로우 함수
@@ -119,7 +134,7 @@ MyPage.Info = ({
           <div className="flex flex-col">
             <div className="flex">
               <span className="text-4xl">{nickname}</span>
-              {isMyPage === true && (
+              {isMyProfile === true && (
                 <HiPencil
                   className="cursor-pointer pl-3 pt-2"
                   size={35}
@@ -135,17 +150,17 @@ MyPage.Info = ({
                     <span
                       className="text-md cursor-pointer pr-1 font-semibold leading-8"
                       onClick={
-                        (el === "follower" && onClick.follower) ||
-                        onClick.following
+                        (el === "follower" && onClick.showFollower) ||
+                        onClick.showFollowing
                       }
                     >
-                      {(el === "follower" && follower) || following}
+                      {(el === "follower" && followerNum) || followingNum}
                     </span>
                     <span
                       className="text-md cursor-pointer pr-3 leading-8"
                       onClick={
-                        (el === "follower" && onClick.follower) ||
-                        onClick.following
+                        (el === "follower" && onClick.showFollower) ||
+                        onClick.showFollowing
                       }
                     >
                       {el}
@@ -156,10 +171,10 @@ MyPage.Info = ({
             </div>
           </div>
         </div>
-        <MyPage.Button
-          title={"unfollow"}
+        <Profile.Button
+          title={"follow"}
           onClick={onClick.followUser}
-          isMyPage={isMyPage}
+          isMyProfile={isMyProfile}
         />
       </div>
       {/* 하단 description */}
@@ -174,6 +189,18 @@ MyPage.Info = ({
       {isFixing.value && (
         <FixProfile hide={isFixing.setFalse} description={description} />
       )}
+      {isShowFollower.value && (
+        <ShowFollower
+          hide={isShowFollower.setFalse}
+          followerInfo={followerInfo}
+        />
+      )}
+      {isShowFollowing.value && (
+        <ShowFollowing
+          hide={isShowFollowing.setFalse}
+          followingInfo={followingInfo}
+        />
+      )}
     </div>
   );
 };
@@ -181,16 +208,16 @@ MyPage.Info = ({
 interface ButtonProps {
   title: string;
   onClick: () => void;
-  isMyPage: boolean;
+  isMyProfile: boolean;
 }
-MyPage.Button = ({ title, onClick, isMyPage }: ButtonProps) => {
+Profile.Button = ({ title, onClick, isMyProfile }: ButtonProps) => {
   return (
     <>
-      {!isMyPage && (
+      {!isMyProfile && (
         <div className="px-10">
           {/* 팔로우상태면 언팔로우 뜨게 */}
           <button
-            className="w-20 rounded bg-sky-600 p-2 text-white"
+            className="w-24 rounded bg-sky-600 p-2 text-white"
             onClick={onClick}
           >
             <span className="text-lg">{title}</span>
@@ -205,7 +232,7 @@ interface NavProps extends IProps {
   navItemWidth: { [key: string]: number };
   navPage: string;
 }
-MyPage.Nav = ({ children, navItemWidth, navPage }: NavProps) => {
+Profile.Nav = ({ children, navItemWidth, navPage }: NavProps) => {
   return (
     <nav className="m-2">
       <div className="mx-2 flex">{children}</div>
@@ -245,15 +272,15 @@ interface ContentsProps {
   navPage: string;
 }
 
-MyPage.Contents = ({ navPage }: ContentsProps) => {
-  const { arr } = useContext(MyPageContext);
+Profile.Contents = ({ navPage }: ContentsProps) => {
+  const { arr } = useContext(ProfileContext);
 
   return (
     <div className="mx-auto ml-8 w-full">
       {/* 계획중인여행 */}
-      {navPage === "계획중인여행" && <MyPagePlan arr={arr} />}
+      {navPage === "계획중인여행" && <ProfilePlan arr={arr} />}
       {/* 내 게시물 */}
-      {navPage === "내 게시물" && <MyPagePosts arr={arr} />}
+      {navPage === "내 게시물" && <ProfilePosts arr={arr} />}
     </div>
   );
 };
@@ -268,7 +295,7 @@ interface NavButtonProps {
   >;
 }
 // setNavItemWidth 타입 설정 모르겠음
-MyPage.NavButton = ({ title, onClick, setNavItemWidth }: NavButtonProps) => {
+Profile.NavButton = ({ title, onClick, setNavItemWidth }: NavButtonProps) => {
   const ref = useRef();
 
   useEffect(() => {
@@ -347,3 +374,77 @@ function FixProfile({ hide, description }: FixProfileProps) {
     </>
   );
 }
+
+function ShowFollowing({ hide, followingInfo }) {
+  console.log("followingInfo123", followingInfo);
+  return (
+    <>
+      <Portal qs="#__next">
+        <Modal hide={hide}>
+          <Modal.Header hide={hide} />
+          <div>this is showFollowing</div>
+          <FollwerFollweeInfo info={followingInfo} hide={hide} />
+        </Modal>
+      </Portal>
+    </>
+  );
+}
+
+function ShowFollower({ hide, followerInfo }) {
+  console.log("followerInfo123", followerInfo);
+  return (
+    <>
+      <Portal qs="#__next">
+        <Modal hide={hide}>
+          <Modal.Header hide={hide} />
+          <div>this is showFollower</div>
+          <FollwerFollweeInfo info={followerInfo} hide={hide} />
+        </Modal>
+      </Portal>
+    </>
+  );
+}
+
+function FollwerFollweeInfo({ info, hide }) {
+  console.log("info123", info);
+
+  const router = useRouter();
+  return (
+    <>
+      <div className="flex flex-col">
+        {info.map((el) => {
+          return (
+            <div className="flex items-center py-3">
+              <div className="relative h-10 w-10">
+                <Image src={"/assets/main-img.png"} layout={"fill"} />
+              </div>
+              <div className="pl-5">
+                <span
+                  className="cursor-pointer text-lg font-semibold leading-8"
+                  onClick={() => {
+                    hide();
+                    router.push({
+                      pathname: `/profile/${el.id}`,
+                    });
+                  }}
+                >
+                  {el.nickname}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+/**
+ * mypage 구현해야 할 것
+ *
+ *  - mypage 보단 profile이 더 적합한 단어라고 생각됨 mypage -> profile 싹다 고치기 -> 완
+ *  - 다른 사람의 프로필에 접근하고 싶을 때 -> 백엔드 고쳐서 나중에 follower, followee 연결만 하면 완
+ *  - following, follower 눌렀을때 모달로 정보 표시 -> 완
+ *  - follow 유무에 따라 follow버튼
+ *  - Profile.Contents arr 오류 수정
+ */
