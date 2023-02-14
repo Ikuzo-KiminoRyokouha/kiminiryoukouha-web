@@ -12,16 +12,13 @@ import { LatLng } from "../../types/tmap.type";
 
 
 
-export default function QWER({ travels, plan }) {
+export default function QWER({ travels, plan } ) {
     const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
     
   
     const router = useRouter();
     const isSave = useRef(false);
-   // console.log(plan)
-    //console.log(travels)
-    //console.log(plan)
-    //console.log(travels)
+  
     
   
     const [selectedDate, setSelectedDate] = useState(dayjs(plan?.start));

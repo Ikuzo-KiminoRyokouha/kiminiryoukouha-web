@@ -5,6 +5,7 @@ import { MdSaveAlt } from "react-icons/md";
 import { AiOutlineSend } from "react-icons/ai";
 import ThreadSummary from "./ThreadSummary";
 import useInput from "hooks/useInput";
+import axios from "axios";
 
 export default function ThreadCard({ content, onClick }) {
   const readmore = useToggle(false);
@@ -47,6 +48,9 @@ export default function ThreadCard({ content, onClick }) {
                 {/* {content.name + "・" + "23/1/25"} */}
                 {user.name + "・" + "2시간 전"}
               </span>
+              <button className="ml-auto" onClick={()=>{
+                
+              }}>X</button>
             </div>
             {/* <div className="pl-2 text-sm">{"날짜"}</div> */}
             <div className="p-2">

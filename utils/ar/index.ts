@@ -12,7 +12,6 @@ import { computeDistanceMeters, getXYZFromLatLng } from "./threeHelper";
 export default class AR {
   private button: HTMLButtonElement;
   private domOverlayRoot: HTMLDivElement;
-  private childrenLatLng: Array<LatLng> = [];
   group: t.Group;
   renderer: t.WebGLRenderer;
   scene: t.Scene;
@@ -20,6 +19,7 @@ export default class AR {
   myLatLng: LatLng = { lat: 0, lng: 0 };
   EARTH = 40075016.68;
   HALF_EARTH = 20037508.34;
+  private childrenLatLng: Array<LatLng> = [this.myLatLng];
 
   constructor(button: HTMLButtonElement, domOverlayRoot: HTMLDivElement) {
     this.button = button;
@@ -85,13 +85,8 @@ export default class AR {
 
   updatePosition(myLatLng: LatLng) {
     this.scene.children.forEach((child, idx) => {
-      // const { x, y, z } = getXYZFromLatLng(myLatLng, this.childrenLatLng[idx]);
-      // alert(idx);
-      // alert(this.childrenLatLng[idx].lat + " " + this.childrenLatLng[idx].lng);
-      // alert(`x : ${x}, y : ${y}, z : ${z}`);
-      // [child.position.x, child.position.z] = this.project(myLatLng);
-      // console.log(child.position.x, child.position.z);
-      // child.position.set(x, y, z);
+      if (idx === 0) return;
+      this.setWorldPosition(child, this.childrenLatLng[idx]);
     });
   }
 
@@ -102,6 +97,7 @@ export default class AR {
 
   setWorldPosition(object: t.Object3D, latLng: LatLng, elev?: number) {
     const worldCoords = this.lonLatToWorldCoords(latLng);
+    // console.log("worldCoords", worldCoords);
     // alert(worldCoords);
     [object.position.x, object.position.z] = worldCoords;
 
@@ -114,7 +110,8 @@ export default class AR {
     // const xrCamera = this.renderer.xr.getCamera();
 
     this.setWorldPosition(this.group, latLng);
-
+    this.group.updateMatrix();
+    console.log("group : ", this.group.position);
     // xrCamera.updateMatrixWorld(true);
     // this.renderer.xr.updateCamera(this.camera);
     // this.renderer.xr.updateCamera(xrCamera);
@@ -168,13 +165,17 @@ export default class AR {
     const distance = computeDistanceMeters(myLatLng, latLng);
     const boxGeometry = new t.BoxGeometry(0.1, 0.1, 0.1);
     const texture = createDistanceTexture(distance, color);
-    const boxMaterial = new t.MeshBasicMaterial({
-      map: texture,
-      side: t.DoubleSide,
-    });
+    const boxMaterial = createRoadSignMaterial(distance, color);
+    // const boxMaterial = new t.MeshBasicMaterial({
+    //   map: texture,
+    //   side: t.DoubleSide,
+    // });
 
     const box = new t.Mesh(boxGeometry, boxMaterial);
+    // box.position.set(0, 0, -5);
+    // this.scene.add(box);
 
+    this.childrenLatLng.push(latLng);
     this.add(box, latLng);
   }
 
@@ -218,7 +219,12 @@ export default class AR {
   drawLine(...latLngArr: Array<LatLng>) {
     const material = new t.LineBasicMaterial({ color: 0x0000ff, linewidth: 3 });
 
-    const points = [];
+    const points = [
+      // new t.Vector3(14304207.259265166, 0, -4293172.723276655),
+      // new t.Vector3(14304209.485654984, 0, -4293172.723276655),
+    ];
+
+    // console.log(this.group.position);
 
     latLngArr.forEach((latLng) => {
       const worldCoords = this.lonLatToWorldCoords(latLng);
@@ -226,6 +232,7 @@ export default class AR {
       const vector = new t.Vector3(x, 0, z);
       points.push(vector);
     });
+
     const geometry = new t.BufferGeometry().setFromPoints(points);
     const line = new t.Line(geometry, material);
 

@@ -5,8 +5,10 @@ import { getJWTToken, setJWTToken } from "../client";
 /**
  * @description 인증요청이 필요한 요청일 때 써야 하는 axiuos 인스턴스
  */
-const authRequest = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL });
-authRequest.defaults.withCredentials = true;
+const authRequest = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
+});
 
 authRequest.interceptors.request.use(
   (cfg) => {
@@ -28,12 +30,9 @@ authRequest.interceptors.response.use(
     // 생성된 인스턴스의 요청 실패 콜백
     if (err.response.status === 401) {
       // 401 Unauthorized Error 가 발생하면 Token 을 refresh 한다.
-      const res = await axios.get(
-        process.env.NEXT_PUBLIC_API_URL + "/auth/token/refresh",
-        {
-          withCredentials: true,
-        }
-      );
+      const res = err.config.cookie
+        ? await forceCookieRefreshTokenRequest(err.config.cookie)
+        : await pureRefreshTokenRequest();
       // authRequest header에 authorization의 default 값을 refresh 된 accessToken 으로 교체
       authRequest.defaults.headers["Authorization"] = res.data.accessToken;
       // 전역 accessToken에 저장
@@ -48,5 +47,28 @@ authRequest.interceptors.response.use(
     return Promise.reject(err);
   }
 );
+
+const forceCookieRefreshTokenRequest = async (cookie: string) => {
+  const res = await axios.get(
+    process.env.NEXT_PUBLIC_API_URL + "/auth/token/refresh",
+    {
+      withCredentials: true,
+      headers: {
+        cookie,
+      },
+    }
+  );
+  return res;
+};
+
+const pureRefreshTokenRequest = async () => {
+  const res = await axios.get(
+    process.env.NEXT_PUBLIC_API_URL + "/auth/token/refresh",
+    {
+      withCredentials: true,
+    }
+  );
+  return res;
+};
 
 export default authRequest;

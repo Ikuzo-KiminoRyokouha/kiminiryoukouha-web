@@ -68,24 +68,21 @@ export function StepOne({ ctx }: StepProps) {
         getStartDate={(date) => setStartDate(date)}
         getEndDate={(date) => setEndDate(date)}
       />
-      <div className="flex flex-1 flex-col justify-center pl-10">
-        <div className="flex min-h-[48px] items-center justify-between">
-          <div className="flex flex-col">
-            <label className="mb-2 block text-xs font-medium text-gray-900">
-              시작날짜
-            </label>
-            <span className="h-10 w-28 border p-3">
-              {startDate?.format("YYYY-MM-DD")}
-            </span>
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 block text-xs font-medium text-gray-900">
-              종료날짜
-            </label>
-            <span className="h-10 w-28 border p-3">
-              {endDate?.format("YYYY-MM-DD")}
-            </span>
-          </div>
+      <div className="flex w-full md:w-auto md:pl-10">
+        <div className="flex w-full justify-around">
+          {["시작", "종료"].map((el) => {
+            return (
+              <div className="flex flex-col items-center pr-3">
+                <label className="my-2 block font-medium text-gray-900">
+                  {el}날짜
+                </label>
+                <span className="h-10 w-28 border p-3">
+                  {el === "시작" && startDate?.format("YYYY-MM-DD")}
+                  {el === "종료" && endDate?.format("YYYY-MM-DD")}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -169,6 +166,7 @@ export function StepTwo({ ctx }: StepProps) {
           Region
         </label>
         <select
+          value={info.region}
           onChange={(e) =>
             e.target.value &&
             setInfo((prev) => ({ ...prev, region: e.target.value }))
@@ -176,15 +174,11 @@ export function StepTwo({ ctx }: StepProps) {
           id="countries"
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         >
-          <option selected={info.region ? true : false} value={""}>
-            Choose a region
-          </option>
-          <option selected={info.region === "경주" ? true : false} value="경주">
-            경주
-          </option>
+          <option value="Default">Choose a region</option>
+          <option value="GyeongJu">경주</option>
         </select>
       </div>
-      <div className="p-2">
+      <div className="p-2 py-8">
         <div className="space-x-3">
           {Array.from(Object.keys(tag)).map((el, idx) => {
             return (
@@ -231,6 +225,11 @@ export function StepTwo({ ctx }: StepProps) {
               </div>
             </>
           )}
+          {hintMessage.length == 0 && (
+            <>
+              <div className="h-5"></div>
+            </>
+          )}
         </div>
       </div>
     </>
@@ -268,25 +267,25 @@ export function StepThree({ ctx }: StepProps) {
 
   return (
     <div className="flex flex-1 flex-col">
-      <p className="text-sm">이게 마지막이에요! 화이팅!!</p>
-      <div className="flex flex-1 justify-between">
+      <p className="py-8 md:text-sm">이게 마지막이에요! 화이팅!!</p>
+      <div className="flex h-96 justify-between md:h-auto md:flex-1">
         <div>
-          <label className="mb-2 block pt-4 text-sm font-medium text-gray-900">
+          <label className="mb-2 block pt-4 font-medium text-gray-900 md:text-sm">
             입력값 (만원)
           </label>
           <input
             {...money}
-            className=" block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
+            className=" block w-full rounded-lg border border-gray-300 p-2.5 text-gray-900 md:text-sm"
           ></input>
         </div>
         <div>
-          <label className="mb-2 block pt-4 text-sm font-medium text-gray-900">
+          <label className="mb-2 block pt-4 font-medium text-gray-900 md:text-sm">
             총금액
           </label>
           <input
             value={money.value * 10000}
             readOnly
-            className=" block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
+            className=" block w-full rounded-lg border border-gray-300 p-2.5 text-gray-900 md:text-sm"
           ></input>
         </div>
       </div>
@@ -311,13 +310,18 @@ export function StepFour({ ctx }: StepProps) {
 
   return (
     <>
-      <div className="relative flex h-72 w-full flex-1 flex-col">
+      <div className="relative my-24 flex h-72 w-full flex-1 flex-col md:my-0">
         <Image src={"/assets/done.png"} layout="fill" />
       </div>
       <div className="flex w-full justify-center">
         <button
           onClick={onClick}
-          className=" mt-9 bg-sky-600 px-6 py-3 text-white"
+          className=" ml-2  flex  cursor-pointer justify-center rounded border border-teal-600 bg-teal-600 px-4 py-2 text-base 
+          font-bold  
+          text-teal-100 
+          transition 
+          duration-200 ease-in-out hover:scale-110 
+          hover:bg-teal-600 focus:outline-none"
         >
           complete
         </button>

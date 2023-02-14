@@ -14,6 +14,21 @@ export const convertDateToKorean = (start: string, end: string): string => {
   return diffDate + "박" + Number(diffDate + 1) + "일";
 };
 
+export const cookieStringToObject = (cookieString: string | string[]): any => {
+  if (!cookieString) {
+    return "";
+  } else {
+    cookieString = (cookieString as string).split("; ");
+    let result = {};
+
+    for (var i = 0; i < cookieString.length; i++) {
+      var cur = cookieString[i].split("=");
+      result[cur[0]] = cur[1];
+    }
+    return result;
+  }
+};
+
 /**
  * @description 디바이스의 방향정보를 받아오기 위한 이벤트 리스너 입니다.
  */
@@ -26,7 +41,8 @@ function orientationHandler(
 }
 
 /**
- * @description 핸들러 삭제를 위해 핸들러에 대한 정보를 답아줄 변수입니다.
+ * @descrip
+ * tion 핸들러 삭제를 위해 핸들러에 대한 정보를 답아줄 변수입니다.
  */
 let handlerWrapper;
 

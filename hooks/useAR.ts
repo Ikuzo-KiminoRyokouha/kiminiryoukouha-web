@@ -31,11 +31,11 @@ export default function useAR(
 
   useEffect(() => {
     gpsReceived(myLatLng);
-    if (minAccuracy > accuracy) {
-      setMinAccuracy(accuracy);
-      ar.updatePosition(myLatLng);
-    }
-    gpsReceived(myLatLng);
+    // if (minAccuracy > accuracy) {
+    //   setMinAccuracy(accuracy);
+    //   ar.updatePosition(myLatLng);
+    // }
+    // gpsReceived(myLatLng);
   }, [accuracy]);
 
   /**
@@ -70,7 +70,7 @@ export default function useAR(
       if (distMoved >= 0) {
         setLastLatLng(myLatLng);
         ar.setARCameraPosition(myLatLng);
-        // ar.updatePosition(myLatLng);
+        ar.updatePosition(myLatLng);
       }
     }
   };

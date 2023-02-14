@@ -11,6 +11,7 @@ import "@/utils/extension/array.extension";
 
 export default function Index({ plans }) {
   let [mode, setMode] = useState(0);
+
   
 console.log(plans)
   const router = useRouter();
@@ -62,7 +63,7 @@ console.log(plans)
           </div>
         </div>
 
-        <strong className="pl-4 text-3xl">나의계획</strong>
+        <strong className="pl-4 pt-6 text-3xl">나의계획</strong>
 
         <div className=" block w-full  space-x-4 space-y-3 p-4">
           <ModeChangeButton

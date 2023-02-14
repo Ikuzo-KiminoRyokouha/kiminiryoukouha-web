@@ -4,6 +4,8 @@ import PlanCarousel from "../components/PlanCarousel";
 import ImageCard from "../components/common/card/ImageCard";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import authRequest from "../utils/request/authRequest";
+import { cookieStringToObject } from "../utils/common";
 
 export default function Home() {
   const router = useRouter();
