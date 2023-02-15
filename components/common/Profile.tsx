@@ -1,15 +1,6 @@
 import IProps from "@/types/props.interface";
 import Image from "next/image";
-import {
-  createContext,
-  SetStateAction,
-  useContext,
-  Dispatch,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
 import { HiPencil } from "react-icons/hi";
 import { Modal, Portal } from "./modal";
@@ -18,7 +9,18 @@ import useInput from "hooks/useInput";
 import useProfile from "hooks/useProfile";
 import ProfilePlan from "components/mypage/ProfilePlan";
 import ProfilePosts from "components/mypage/ProfilePosts";
-import { FollowingFollowerInfo } from "@/types/profile.interface";
+import {
+  ButtonProps,
+  ContentsProps,
+  FixProfileProps,
+  FollowingFollowerInfo,
+  FollwerFollweeInfoProps,
+  InfoProps,
+  NavButtonProps,
+  NavProps,
+  ShowFollowerProps,
+  ShowFollowingProps,
+} from "@/types/profile.interface";
 import { useRouter } from "next/router";
 
 const ProfileContext = createContext<{
@@ -54,15 +56,6 @@ Profile.Image = () => {
     </div>
   );
 };
-interface InfoProps {
-  nickname: string;
-  description: string;
-  followerNum: number;
-  followingNum: number;
-  isMyProfile: boolean;
-  followerInfo: [FollowingFollowerInfo];
-  followingInfo: [FollowingFollowerInfo];
-}
 
 Profile.Info = ({
   nickname,
@@ -205,11 +198,6 @@ Profile.Info = ({
   );
 };
 
-interface ButtonProps {
-  title: string;
-  onClick: () => void;
-  isMyProfile: boolean;
-}
 Profile.Button = ({ title, onClick, isMyProfile }: ButtonProps) => {
   return (
     <>
@@ -228,10 +216,6 @@ Profile.Button = ({ title, onClick, isMyProfile }: ButtonProps) => {
   );
 };
 
-interface NavProps extends IProps {
-  navItemWidth: { [key: string]: number };
-  navPage: string;
-}
 Profile.Nav = ({ children, navItemWidth, navPage }: NavProps) => {
   return (
     <nav className="m-2">
@@ -244,57 +228,19 @@ Profile.Nav = ({ children, navItemWidth, navPage }: NavProps) => {
   );
 };
 
-const ActionBar = styled.div<{
-  navItemWidth: { [key: string]: number };
-  navPage: string;
-}>`
-  width: ${(props) => props.navItemWidth[props.navPage] + "px"};
-  border-width: 2px;
-  --tw-border-opacity: 1;
-  border-color: rgb(186 230 253 / var(--tw-border-opacity));
-  margin-left: ${(props) =>
-    Array.from(Object.keys(props.navItemWidth))
-      .map((el, idx) => {
-        if (
-          idx >=
-          Array.from(Object.keys(props.navItemWidth)).indexOf(props.navPage)
-        )
-          return 0;
-        return props?.navItemWidth[el] + 16;
-      })
-      .reduce((partialSum, a) => partialSum + a, 0) + "px"};
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-`;
-
-interface ContentsProps {
-  navPage: string;
-}
-
-Profile.Contents = ({ navPage }: ContentsProps) => {
-  const { arr } = useContext(ProfileContext);
+Profile.Contents = ({ navPage, planInfo }: ContentsProps) => {
+  // const { arr } = useContext(ProfileContext);
 
   return (
     <div className="mx-auto ml-8 w-full">
       {/* 계획중인여행 */}
-      {navPage === "계획중인여행" && <ProfilePlan arr={arr} />}
+      {navPage === "계획중인여행" && <ProfilePlan planInfo={planInfo} />}
       {/* 내 게시물 */}
-      {navPage === "내 게시물" && <ProfilePosts arr={arr} />}
+      {navPage === "내 게시물" && <ProfilePosts />}
     </div>
   );
 };
 
-interface NavButtonProps {
-  title: string;
-  onClick: () => void;
-  setNavItemWidth: Dispatch<
-    SetStateAction<{
-      [key: string]: number;
-    }>
-  >;
-}
-// setNavItemWidth 타입 설정 모르겠음
 Profile.NavButton = ({ title, onClick, setNavItemWidth }: NavButtonProps) => {
   const ref = useRef();
 
@@ -312,11 +258,6 @@ Profile.NavButton = ({ title, onClick, setNavItemWidth }: NavButtonProps) => {
     </span>
   );
 };
-
-interface FixProfileProps {
-  hide: () => void;
-  description: string;
-}
 
 // 프로필 수정 모달에 들어가야할 거 description 수정, 프로필 이미지 수정
 function FixProfile({ hide, description }: FixProfileProps) {
@@ -345,7 +286,7 @@ function FixProfile({ hide, description }: FixProfileProps) {
                 className="rounded bg-sky-600 p-2 text-lg font-semibold text-white"
                 onClick={submitImage}
               >
-                이미지 올리기
+                Upload Image
               </button>
             </div>
           </div>
@@ -366,7 +307,7 @@ function FixProfile({ hide, description }: FixProfileProps) {
               className="h- min-h-[2.5rem] w-full rounded bg-sky-600 text-lg font-semibold text-white"
               onClick={submitDescription}
             >
-              수정하기
+              Done
             </button>
           </div>
         </Modal>
@@ -375,7 +316,7 @@ function FixProfile({ hide, description }: FixProfileProps) {
   );
 }
 
-function ShowFollowing({ hide, followingInfo }) {
+function ShowFollowing({ hide, followingInfo }: ShowFollowingProps) {
   console.log("followingInfo123", followingInfo);
   return (
     <>
@@ -390,7 +331,7 @@ function ShowFollowing({ hide, followingInfo }) {
   );
 }
 
-function ShowFollower({ hide, followerInfo }) {
+function ShowFollower({ hide, followerInfo }: ShowFollowerProps) {
   console.log("followerInfo123", followerInfo);
   return (
     <>
@@ -405,7 +346,7 @@ function ShowFollower({ hide, followerInfo }) {
   );
 }
 
-function FollwerFollweeInfo({ info, hide }) {
+function FollwerFollweeInfo({ info, hide }: FollwerFollweeInfoProps) {
   console.log("info123", info);
 
   const router = useRouter();
@@ -414,7 +355,7 @@ function FollwerFollweeInfo({ info, hide }) {
       <div className="flex flex-col">
         {info.map((el) => {
           return (
-            <div className="flex items-center py-3">
+            <div className="flex items-center border-b-2 border-b-slate-200 py-3">
               <div className="relative h-10 w-10">
                 <Image src={"/assets/main-img.png"} layout={"fill"} />
               </div>
@@ -439,12 +380,39 @@ function FollwerFollweeInfo({ info, hide }) {
   );
 }
 
+const ActionBar = styled.div<{
+  navItemWidth: { [key: string]: number };
+  navPage: string;
+}>`
+  width: ${(props) => props.navItemWidth[props.navPage] + "px"};
+  border-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(186 230 253 / var(--tw-border-opacity));
+  margin-left: ${(props) =>
+    Array.from(Object.keys(props.navItemWidth))
+      .map((el, idx) => {
+        if (
+          idx >=
+          Array.from(Object.keys(props.navItemWidth)).indexOf(props.navPage)
+        )
+          return 0;
+        return props?.navItemWidth[el] + 16;
+      })
+      .reduce((partialSum, a) => partialSum + a, 0) + "px"};
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+`;
+
 /**
  * mypage 구현해야 할 것
  *
  *  - mypage 보단 profile이 더 적합한 단어라고 생각됨 mypage -> profile 싹다 고치기 -> 완
  *  - 다른 사람의 프로필에 접근하고 싶을 때 -> 백엔드 고쳐서 나중에 follower, followee 연결만 하면 완
  *  - following, follower 눌렀을때 모달로 정보 표시 -> 완
- *  - follow 유무에 따라 follow버튼
+ *  - follow 유무에 따라 follow버튼 또는 unfollow 버튼
  *  - Profile.Contents arr 오류 수정
+ *  - type 지정 -> 완
+ *  - reactQuery로 받아올때 잠깐의 시간동안 로딩창 or 로딩 애니메이션 만들어주기 -> 나중에 ssr로 바꿀계획인데 일다 컴포넌트 만들어놓음 component/commmon/LoadingCircle 완
+ *  - 계획중인여행, 내 게시물 backend 연결 + infinite scroll 구현
  */

@@ -1,13 +1,24 @@
 import ThreadCard from "components/ThreadCard";
 
-interface Props {
-  arr: any;
-}
+export default function ProfilePosts() {
+  function test() {
+    let testArr = [];
+    for (let i = 0; i < 10; i++) {
+      testArr.push(
+        <div className="py-5">
+          <ThreadCard pokemon={undefined} onClick={() => {}} />
+        </div>
+      );
+    }
+    return testArr;
+  }
 
-export default function ProfilePosts({ arr }: Props) {
   return (
     <>
       <div className="flex w-full flex-col items-center justify-center">
+        <div className="w-2/3 pt-10">{test()}</div>
+      </div>
+      {/* <div className="flex w-full flex-col items-center justify-center">
         <div className="w-2/3 pt-10">
           {arr.map(() => {
             return (
@@ -17,7 +28,7 @@ export default function ProfilePosts({ arr }: Props) {
             );
           })}
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

@@ -1,6 +1,7 @@
 import Profile from "@/common/Profile";
 import { getUser, useUser } from "@/utils/client";
 import {
+  getPlans,
   getUserFollowee,
   getUserFollower,
   getUserInfo,
@@ -36,6 +37,8 @@ export default function test1() {
   // console.log("userFollowee", userFollowee?.data[0]?.followees);
   const { data: userFollower } = useQuery(["getUserFollower"], getUserFollower);
   // console.log("userFollower", userFollower?.data[0].followers);
+  const { data: planInfo } = useQuery(["getPlans"], getPlans);
+  // console.log("planInfo", planInfo?.data?.plans);
 
   const obj = useMemo(
     () => [
@@ -63,8 +66,8 @@ export default function test1() {
             userInfo?.data?.description ||
             "Click the pencil icon add your descriptoin"
           }
-          followerNum={userFollower?.data[0].followers?.length || -1}
-          followingNum={userFollowee?.data[0].followees?.length || -1}
+          followerNum={userFollower?.data[0].followers?.length || 0}
+          followingNum={userFollowee?.data[0].followees?.length || 0}
           isMyProfile={isMyProfile}
           followerInfo={userFollower?.data[0].followers}
           followingInfo={userFollowee?.data[0]?.followees}
@@ -78,7 +81,7 @@ export default function test1() {
             </React.Fragment>
           ))}
         </Profile.Nav>
-        {/* <Profile.Contents navPage={navPage} /> */}
+        <Profile.Contents navPage={navPage} planInfo={planInfo?.data?.plans} />
       </Profile.Body>
     </Profile>
   );

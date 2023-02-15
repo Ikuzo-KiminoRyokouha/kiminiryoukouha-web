@@ -12,6 +12,10 @@ export const getUserFollower = ({ queryKey }) => {
   return authRequest.get(`/users/info/follower`);
 };
 
+export const getPlans = ({ queryKey }) => {
+  return authRequest.get(`/plan/all/1`);
+};
+
 export const PostUserDescription = (body: string) => {
   return authRequest.post(`/users/description`, body);
 };
