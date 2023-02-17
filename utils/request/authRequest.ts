@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { getJWTToken, setJWTToken } from "../client";
 
 // axios 인스턴스 생성
@@ -26,7 +26,7 @@ authRequest.interceptors.response.use(
     // 생성된 인스턴스의 요청 성공 콜백
     return res;
   },
-  async (err) => {
+  async (err: AxiosError) => {
     // 생성된 인스턴스의 요청 실패 콜백
     if (err.response.status === 401) {
       // 401 Unauthorized Error 가 발생하면 Token 을 refresh 한다.
@@ -38,7 +38,8 @@ authRequest.interceptors.response.use(
       // 전역 accessToken에 저장
       setJWTToken(res.data.accessToken);
       // 실패한 요청 재전송
-      return axios(err.request.responseURL, {
+      return axios({
+        ...err.config,
         headers: {
           authorization: "Bearer " + res.data.accessToken,
         },
