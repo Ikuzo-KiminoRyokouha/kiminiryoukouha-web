@@ -62,20 +62,22 @@ export default function DecidedPlanCard({
       >
         {/* 미리보기 이미지 */}
         <div className="relative h-[45%]">
-          <Image
+          {/* <Image
             src={`${
               plan?.travels[0].destination.firstimg
                 ? plan?.travels[0].destination.firstimg
                 : "/assets/error_img.png"
             }`}
             layout={"fill"}
-          />
+          /> */}
+          <Image src={img} layout={"fill"} />
         </div>
         {/* 텍스트부분 */}
         <div className="flex h-[55%] flex-col items-center">
           <div className="flex h-1/4 w-[90%] items-center justify-between ">
-            <h3>{plan?.title.split(" ")[0]}</h3>
-            <p className="text-[10px] text-gray-400">{days}</p>
+            {/* <h3>{plan?.title.split(" ")[0]}</h3> */}
+            <h3>{title.split(" ")[0]}</h3>
+            <p className="text-[10px] text-gray-400">{Number(days) / 2} Days</p>
           </div>
           <div className="h-[65%] w-[90%]">
             <p className="text-sm text-gray-400">

@@ -1,4 +1,5 @@
 import authRequest from "@/utils/request/authRequest";
+import mainRequest from "@/utils/request/mainRequest";
 
 export const getUserInfo = ({ queryKey }) => {
   return authRequest.get(`/users/info?userId=${queryKey[1]}`);
@@ -24,4 +25,18 @@ export const PostUserFollow = (body) => {
 };
 export const PostUserUnfollow = (body) => {
   return authRequest.post(`/users/unfollow`, body);
+};
+
+/**
+ * @param queryKey[1] limit
+ * @param queryKey[2] offset
+ */
+export const getCommunityPosts = ({ queryKey }) => {
+  return mainRequest.get(
+    `/community?limit=${queryKey[1]}&offset=${queryKey[2]}`
+  );
+};
+
+export const getMyCommunityPosts = ({ queryKey }) => {
+  return authRequest.get(`/community/my`);
 };

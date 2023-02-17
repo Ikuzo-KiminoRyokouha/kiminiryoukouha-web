@@ -1,6 +1,8 @@
 import Profile from "@/common/Profile";
 import { getUser, useUser } from "@/utils/client";
 import {
+  getCommunityPosts,
+  getMyCommunityPosts,
   getPlans,
   getUserFollowee,
   getUserFollower,
@@ -39,6 +41,16 @@ export default function test1() {
   // console.log("userFollower", userFollower?.data[0].followers);
   const { data: planInfo } = useQuery(["getPlans"], getPlans);
   // console.log("planInfo", planInfo?.data?.plans);
+  const { data: communityPosts } = useQuery(
+    ["getCommunityPosts", 10, 0],
+    getCommunityPosts
+  );
+  // console.log("communityPosts", communityPosts?.data);
+  const { data: myCommunityPosts } = useQuery(
+    ["getMyCommunityPosts"],
+    getMyCommunityPosts
+  );
+  // console.log("myCommunityPosts", myCommunityPosts?.data);
 
   const obj = useMemo(
     () => [
@@ -81,7 +93,12 @@ export default function test1() {
             </React.Fragment>
           ))}
         </Profile.Nav>
-        <Profile.Contents navPage={navPage} planInfo={planInfo?.data?.plans} />
+        <Profile.Contents
+          navPage={navPage}
+          planInfo={planInfo?.data?.plans}
+          communityPosts={communityPosts?.data}
+          myCommunityPosts={myCommunityPosts?.data}
+        />
       </Profile.Body>
     </Profile>
   );

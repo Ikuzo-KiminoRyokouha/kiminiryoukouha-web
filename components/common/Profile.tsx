@@ -205,7 +205,9 @@ Profile.Button = ({ title, onClick, isMyProfile }: ButtonProps) => {
         <div className="px-10">
           {/* 팔로우상태면 언팔로우 뜨게 */}
           <button
-            className="w-24 rounded bg-sky-600 p-2 text-white"
+            className={`w-24 rounded ${
+              title === "follow" ? "bg-sky-600" : "bg-red-500"
+            } p-2 text-white`}
             onClick={onClick}
           >
             <span className="text-lg">{title}</span>
@@ -228,15 +230,26 @@ Profile.Nav = ({ children, navItemWidth, navPage }: NavProps) => {
   );
 };
 
-Profile.Contents = ({ navPage, planInfo }: ContentsProps) => {
-  // const { arr } = useContext(ProfileContext);
+Profile.Contents = ({
+  navPage,
+  planInfo,
+  communityPosts,
+  myCommunityPosts,
+}: ContentsProps) => {
+  // console.log("communityPosts", communityPosts);
+  // console.log("myCommunityPosts", myCommunityPosts);
 
   return (
     <div className="mx-auto ml-8 w-full">
       {/* 계획중인여행 */}
       {navPage === "계획중인여행" && <ProfilePlan planInfo={planInfo} />}
       {/* 내 게시물 */}
-      {navPage === "내 게시물" && <ProfilePosts />}
+      {navPage === "내 게시물" && (
+        <ProfilePosts
+          communityPosts={communityPosts}
+          myCommunityPosts={myCommunityPosts}
+        />
+      )}
     </div>
   );
 };

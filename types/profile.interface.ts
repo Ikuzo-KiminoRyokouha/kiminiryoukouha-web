@@ -14,6 +14,27 @@ export interface FollowingFollowerInfo {
   updateAt: string;
 }
 
+export interface CommunityPostsProps {
+  content: string;
+  createdAt: string;
+  deleteAt?: string;
+  id: number;
+  img: string;
+  plan?: number;
+  updatedAt: string;
+}
+
+export interface MyCommunityPostsProps {
+  content: string;
+  createdAt: string;
+  deleteAt?: string;
+  id: number;
+  img: string;
+  planId: number;
+  updatedAt: string;
+  userId: number;
+}
+
 export interface InfoProps {
   nickname: string;
   description: string;
@@ -38,6 +59,8 @@ export interface NavProps extends IProps {
 export interface ContentsProps {
   navPage: string;
   planInfo: any;
+  communityPosts?: [CommunityPostsProps];
+  myCommunityPosts?: [MyCommunityPostsProps];
 }
 
 export interface NavButtonProps {
