@@ -151,13 +151,21 @@ const ModeChangeButton = styled.button<ButtonProps>`
 `;
 
 export async function getServerSideProps({ query, req }) {
-  const res = await authRequest.get(`/plan/all/1`, {
-    cookie: req.headers.cookie,
-  });
-
-  return {
-    props: {
-      plans: res.data.plans || [],
-    },
-  };
+  try {
+    const res = await authRequest.get(`/plan/all/1`, {
+      cookie: req.headers.cookie,
+    });
+    return {
+      props: {
+        plans: res.data.plans || [],
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
 }

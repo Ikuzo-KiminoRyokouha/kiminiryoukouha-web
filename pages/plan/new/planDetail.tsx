@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useTMap } from "../../../hooks";
 import { Info } from "../../../types/plan.interface";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { convertDateToKorean } from "../../../utils/common";
@@ -9,6 +9,7 @@ import { getDescriptionFromAPI } from "../../../utils/apiQuery";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { LatLng } from "../../../types/tmap.type";
+import authRequest from "../../../utils/request/authRequest";
 
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
@@ -252,22 +253,32 @@ function IntroduceCard({ travel }) {
   );
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, req }) {
+  console.log("query : ", query.info);
   const info: Info = JSON.parse(query.info);
 
-  const { travels, ...plan } = await axios
-    .post(`http://localhost:8000/plan/random`, {
-      // destination: "경주",
-      // dayPerDes: 3,
-      start: info.startDate,
-      end: info.endDate,
-      city: info.region,
-      tag: info.tag,
-      totalCost: info.money,
-    })
+  const { travels, ...plan } = await authRequest
+    .post(
+      `/plan/random`,
+      {
+        // destination: "경주",
+        // dayPerDes: 3,
+        start: info.startDate,
+        end: info.endDate,
+        city: info.region,
+        tag: info.tag,
+        totalCost: info.money,
+      },
+      {
+        cookie: req.headers.cookie,
+      }
+    )
     .then((res) => {
       if (res.data.ok) return res.data.plan;
       return [];
+    })
+    .catch((error: AxiosError) => {
+      console.log(error.message);
     });
 
   return {
