@@ -95,9 +95,9 @@ export default function Header() {
 
                     <DropDown.ItemContainer>
                       <DropDown.Item
-                        text={"My Page"}
+                        text={"My Profile"}
                         onClick={() => {
-                          router.push(`/mypage/${getUser().nickname}`);
+                          router.push(`/profile/${getUser()?.sub}`);
                         }}
                       />
                       <DropDown.Item text={"Setting"} onClick={() => {}} />

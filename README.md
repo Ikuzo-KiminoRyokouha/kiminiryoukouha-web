@@ -7,7 +7,7 @@
 
 ## Tech Stack
 
-- FrontEnd : Next.JS, BABYLON.JS, TAILWIND CSS
+- FrontEnd : Next.JS, BABYLON.JS, TAILWIND CSS, StyledComponents, Three Js
 - BackEnd : Next.JS, MySql
 - Deploy : VERCEL, AWS
 - External Api : TMAP API, Amadeus

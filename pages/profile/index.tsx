@@ -15,7 +15,7 @@ export default function MyPageHome() {
       console.log(user.sub);
       user &&
         router.push({
-          pathname: `/mypage/${user?.nickname}`,
+          pathname: `/mypage/${user?.nickname || "error"}`,
         });
 
       !user &&
