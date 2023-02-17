@@ -1,13 +1,13 @@
 import { AiOutlinePlusCircle } from "react-icons/ai";
 
-import { useLayoutEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Plan } from "../../types/plan.interface";
 import dayjs from "dayjs";
 import SimplePlanCard from "../../components/plan/SimplePlanCard";
 import { useRouter } from "next/router";
 import "@/utils/extension/array.extension";
+import authRequest from "../../utils/request/authRequest";
 
 export default function Index({ plans }) {
   let [mode, setMode] = useState(0);
@@ -18,7 +18,7 @@ export default function Index({ plans }) {
   const [waitingPlans, setWaitingPlans] = useState<Array<Plan>>();
   const [endPlans, setEndPlans] = useState<Array<Plan>>();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setEndPlans(() => {
       return plans?.filter((plan) => dayjs().isAfter(dayjs(plan.end)));
     });
@@ -63,7 +63,7 @@ export default function Index({ plans }) {
 
         <strong className="pl-4 pt-6 text-3xl">나의계획</strong>
 
-        <div className=" block w-full  space-x-4 space-y-3 p-4">
+        <div className=" flex w-full  space-x-4 space-y-3 p-4">
           <ModeChangeButton
             mode={0}
             currentMode={mode}
@@ -125,6 +125,9 @@ interface ButtonProps {
 const ModeChangeButton = styled.button<ButtonProps>`
   border-radius: 2rem /* 32px */;
   cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.75rem /* 12px */;
+  line-height: 1rem /* 16px */;
   border-width: ${(props) => props.mode != props.currentMode && "1px"};
   padding: 1rem /* 16px */;
   transition-duration: 300ms;
@@ -141,10 +144,16 @@ const ModeChangeButton = styled.button<ButtonProps>`
     background-color: rgb(2 132 199 / var(--tw-bg-opacity));
     color: rgb(255 255 255 / var(--tw-text-opacity));
   }
+  @media (min-width: 768px) {
+    font-size: 1.125rem /* 18px */;
+    line-height: 1.75rem /* 28px */;
+  }
 `;
 
-export async function getServerSideProps({ query }) {
-  const res = await axios.get(`http://localhost:8000/plan/all/1`);
+export async function getServerSideProps({ query, req }) {
+  const res = await authRequest.get(`/plan/all/1`, {
+    cookie: req.headers.cookie,
+  });
 
   return {
     props: {
