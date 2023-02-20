@@ -31,10 +31,8 @@ export const PostUserUnfollow = (body) => {
  * @param queryKey[1] limit
  * @param queryKey[2] offset
  */
-export const getCommunityPosts = ({ queryKey }) => {
-  return mainRequest.get(
-    `/community?limit=${queryKey[1]}&offset=${queryKey[2]}`
-  );
+export const getCommunityPostsByUser = ({ queryKey }) => {
+  return authRequest.get(`/community/user?userId=${queryKey[1]}`);
 };
 
 export const getMyCommunityPosts = ({ queryKey }) => {

@@ -1,7 +1,7 @@
 import Profile from "@/common/Profile";
 import { getUser, useUser } from "@/utils/client";
 import {
-  getCommunityPosts,
+  getCommunityPostsByUser,
   getMyCommunityPosts,
   getPlans,
   getUserFollowee,
@@ -42,8 +42,8 @@ export default function test1() {
   const { data: planInfo } = useQuery(["getPlans"], getPlans);
   // console.log("planInfo", planInfo?.data?.plans);
   const { data: communityPosts } = useQuery(
-    ["getCommunityPosts", 10, 0],
-    getCommunityPosts
+    ["getCommunityPostsByUser", router.query.username],
+    getCommunityPostsByUser
   );
   // console.log("communityPosts", communityPosts?.data);
   const { data: myCommunityPosts } = useQuery(
