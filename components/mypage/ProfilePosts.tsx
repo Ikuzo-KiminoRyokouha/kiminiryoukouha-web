@@ -1,39 +1,14 @@
-import {
-  CommunityPostsProps,
-  MyCommunityPostsProps,
-} from "@/types/profile.interface";
+import { CommunityPostsProps } from "@/types/profile.interface";
 import ThreadCard from "components/ThreadCard";
 
 interface ProfilePostsProps {
   communityPosts?: [CommunityPostsProps];
-  myCommunityPosts?: [MyCommunityPostsProps];
 }
 
-export default function ProfilePosts({
-  communityPosts,
-  myCommunityPosts,
-}: ProfilePostsProps) {
+export default function ProfilePosts({ communityPosts }: ProfilePostsProps) {
   // console.log("communityPosts", communityPosts);
   // console.log("myCommunityPosts", myCommunityPosts);
-  function test() {
-    let testArr = [];
-    for (let i = 0; i < 10; i++) {
-      testArr.push(
-        <div className="py-5">
-          <ThreadCard
-            pokemon={undefined}
-            onClick={() => {}}
-            content={undefined}
-            createdAt={undefined}
-            id={undefined}
-            img={undefined}
-            plan={undefined}
-          />
-        </div>
-      );
-    }
-    return testArr;
-  }
+  console.log("communityPosts123", communityPosts);
 
   return (
     <>
@@ -42,6 +17,13 @@ export default function ProfilePosts({
       </div> */}
       <div className="flex w-full flex-col items-center justify-center">
         <div className="w-2/3 pt-10">
+          {!communityPosts.length && (
+            <div className="flex min-h-[8rem] items-center justify-center">
+              <span className="text-2xl font-semibold">
+                There isn't any Posts yet
+              </span>
+            </div>
+          )}
           {communityPosts.map((el) => {
             console.log("el456", el);
             return (

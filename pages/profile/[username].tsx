@@ -2,13 +2,12 @@ import Profile from "@/common/Profile";
 import { getUser, useUser } from "@/utils/client";
 import {
   getCommunityPostsByUser,
-  getMyCommunityPosts,
   getPlans,
   getUserFollowee,
   getUserFollower,
   getUserInfo,
 } from "@/utils/fetchFn/query/profile";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useMemo, useState } from "react";
 
@@ -30,27 +29,31 @@ export default function test1() {
   const isMyProfile = user?.sub == router.query.username ? true : false;
   console.log("isMyProfile", isMyProfile);
 
-  const { data: userInfo } = useQuery(
-    ["getUserInfo", router.query.username],
+  const { data: userInfo, refetch: userInfoRefetch } = useQuery(
+    ["getUserInfo", router.query?.username],
     getUserInfo
   );
   // console.log("userInfo", userInfo);
-  const { data: userFollowee } = useQuery(["getUserFollowee"], getUserFollowee);
+  const { data: userFollowee, refetch: getUserFolloweeRefetch } = useQuery(
+    ["getUserFollowee", router.query?.username],
+    getUserFollowee
+  );
   // console.log("userFollowee", userFollowee?.data[0]?.followees);
-  const { data: userFollower } = useQuery(["getUserFollower"], getUserFollower);
-  // console.log("userFollower", userFollower?.data[0].followers);
-  const { data: planInfo } = useQuery(["getPlans"], getPlans);
+  const { data: userFollower, refetch: getUserFollowerRefetch } = useQuery(
+    ["getUserFollower", router.query?.username],
+    getUserFollower
+  );
+  console.log("userFollower", userFollower?.data[0]?.followers);
+  const { data: planInfo } = useQuery(
+    ["getPlans", router.query?.username],
+    getPlans
+  );
   // console.log("planInfo", planInfo?.data?.plans);
   const { data: communityPosts } = useQuery(
-    ["getCommunityPostsByUser", router.query.username],
+    ["getCommunityPostsByUser", router.query?.username],
     getCommunityPostsByUser
   );
   // console.log("communityPosts", communityPosts?.data);
-  const { data: myCommunityPosts } = useQuery(
-    ["getMyCommunityPosts"],
-    getMyCommunityPosts
-  );
-  // console.log("myCommunityPosts", myCommunityPosts?.data);
 
   const obj = useMemo(
     () => [
@@ -78,11 +81,14 @@ export default function test1() {
             userInfo?.data?.description ||
             "Click the pencil icon add your descriptoin"
           }
-          followerNum={userFollower?.data[0].followers?.length || 0}
-          followingNum={userFollowee?.data[0].followees?.length || 0}
+          followerNum={userFollower?.data[0]?.followers?.length || 0}
+          followingNum={userFollowee?.data[0]?.followees?.length || 0}
           isMyProfile={isMyProfile}
-          followerInfo={userFollower?.data[0].followers}
-          followingInfo={userFollowee?.data[0]?.followees}
+          followerInfo={userFollower?.data[0]?.followers || []}
+          followingInfo={userFollowee?.data[0]?.followees || []}
+          getUserFolloweeRefetch={getUserFolloweeRefetch}
+          getUserFollowerRefetch={getUserFollowerRefetch}
+          userInfoRefetch={userInfoRefetch}
         />
       </Profile.Header>
       <Profile.Body>
@@ -97,7 +103,6 @@ export default function test1() {
           navPage={navPage}
           planInfo={planInfo?.data?.plans}
           communityPosts={communityPosts?.data}
-          myCommunityPosts={myCommunityPosts?.data}
         />
       </Profile.Body>
     </Profile>

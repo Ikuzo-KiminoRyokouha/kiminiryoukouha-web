@@ -6,19 +6,19 @@ export const getUserInfo = ({ queryKey }) => {
 };
 
 export const getUserFollowee = ({ queryKey }) => {
-  return authRequest.get(`/users/info/followee`);
+  return authRequest.get(`/users/info/followee?userId=${queryKey[1]}`);
 };
 
 export const getUserFollower = ({ queryKey }) => {
-  return authRequest.get(`/users/info/follower`);
+  return authRequest.get(`/users/info/follower?userId=${queryKey[1]}`);
 };
 
 export const getPlans = ({ queryKey }) => {
-  return authRequest.get(`/plan/all/1`);
+  return authRequest.get(`/plan/all/${queryKey[1]}`);
 };
 
 export const PostUserDescription = (body: string) => {
-  return authRequest.post(`/users/description`, body);
+  return authRequest.post(`/users/update/description`, body);
 };
 export const PostUserFollow = (body) => {
   return authRequest.post(`/users/follow`, body);
@@ -33,8 +33,4 @@ export const PostUserUnfollow = (body) => {
  */
 export const getCommunityPostsByUser = ({ queryKey }) => {
   return authRequest.get(`/community/user?userId=${queryKey[1]}`);
-};
-
-export const getMyCommunityPosts = ({ queryKey }) => {
-  return authRequest.get(`/community/my`);
 };

@@ -1,3 +1,10 @@
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+  UseMutateFunction,
+} from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
 import { Dispatch, SetStateAction } from "react";
 import IProps from "./props.interface";
 
@@ -43,6 +50,15 @@ export interface InfoProps {
   isMyProfile: boolean;
   followerInfo: [FollowingFollowerInfo];
   followingInfo: [FollowingFollowerInfo];
+  getUserFolloweeRefetch: <TPageData>(
+    options?: RefetchOptions & RefetchQueryFilters<TPageData>
+  ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;
+  getUserFollowerRefetch: <TPageData>(
+    options?: RefetchOptions & RefetchQueryFilters<TPageData>
+  ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;
+  userInfoRefetch: <TPageData>(
+    options?: RefetchOptions & RefetchQueryFilters<TPageData>
+  ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;
 }
 
 export interface ButtonProps {
@@ -76,6 +92,8 @@ export interface NavButtonProps {
 export interface FixProfileProps {
   hide: () => void;
   description: string;
+  writeDescription;
+  userInfoRefetch;
 }
 
 export interface ShowFollowingProps {
