@@ -50,7 +50,7 @@ export default function SimplePlanCard({ plan }: Props) {
         <p>예산 : {plan.totalCost} 원</p>
         <p>
           테마 :{" "}
-          {Object.keys(plan.tag)
+          {Object?.keys(plan?.tag)
             .map((key, idx) => {
               return plan.tag[key];
             })

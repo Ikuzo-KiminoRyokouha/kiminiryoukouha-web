@@ -20,7 +20,7 @@ export default function Modal({
       {/* main modal window */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex min-h-fit w-full flex-col space-y-4 overflow-hidden border bg-white p-6  lg:max-w-md"
+        className="scrollbar-none flex max-h-[32.5rem] min-h-fit w-full flex-col space-y-4 overflow-auto  border bg-white p-6 lg:max-w-md"
       >
         {children}
       </div>

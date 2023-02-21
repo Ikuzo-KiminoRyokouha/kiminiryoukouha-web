@@ -3,7 +3,7 @@ import authRequest from "@/utils/request/authRequest";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function MyPageHome() {
+export default function Profile() {
   const router = useRouter();
   const [user] = useUser();
   const [pending, setPending] = useState(false);

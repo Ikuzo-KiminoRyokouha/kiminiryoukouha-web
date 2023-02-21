@@ -257,7 +257,7 @@ export async function getServerSideProps({ query, req }) {
   console.log("query : ", query.info);
   const info: Info = JSON.parse(query.info);
 
-  const { travels, ...plan } = await authRequest
+  const res = await authRequest
     .post(
       `/plan/random`,
       {
@@ -280,6 +280,8 @@ export async function getServerSideProps({ query, req }) {
     .catch((error: AxiosError) => {
       console.log(error.message);
     });
+
+  const { travels, ...plan } = res;
 
   return {
     props: {

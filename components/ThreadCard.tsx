@@ -5,11 +5,22 @@ import { MdSaveAlt } from "react-icons/md";
 import { AiOutlineSend } from "react-icons/ai";
 import ThreadSummary from "./ThreadSummary";
 import useInput from "hooks/useInput";
+import { useRouter } from "next/dist/client/router";
+import { CommentBox } from "./community/CommentBox";
 
-export default function ThreadCard({ pokemon, onClick }) {
+export default function ThreadCard({
+  pokemon,
+  onClick,
+  content,
+  createdAt,
+  id,
+  img,
+  plan,
+}) {
   const readmore = useToggle(false);
   // 좋아요 담는 용도
   const like = useToggle(false);
+  const router = useRouter();
 
   const fun_like = () => {
     console.log("좋아요 버튼 클릭");
@@ -38,44 +49,37 @@ export default function ThreadCard({ pokemon, onClick }) {
     <>
       <div className="w-full" key={pokemon?.name}>
         <div className="">
-          <div className="m-2 w-auto rounded-3xl border shadow-md">
-            <div className="flex h-auto w-full items-center space-x-3 p-2">
+          <div className="m-2 min-h-[30rem] w-auto rounded-3xl border shadow-md ">
+            <div className="flex h-auto w-full items-center space-x-3 p-4">
               <FaUserCircle size={40} onClick={onClick.showUser} />
               <span className="" onClick={onClick.showUser}>
                 {/* {pokemon?.name + "・" + "23/1/25"} */}
-                {pokemon?.name + "・" + "2시간 전"}
+                {id + "・" + createdAt.slice(5, 10)}
               </span>
             </div>
             {/* <div className="pl-2 text-sm">{"날짜"}</div> */}
-            <div className="p-2">
-              <span
-                className={`${
-                  readmore.value ? "" : "line-clamp-4"
-                } block leading-6`}
-              >
-                {pokemon?.url} Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit. Dolor, tempore magnam voluptate nobis, illum
-                quas fuga pariatur neque ipsam inventore sequi. Vero
-                reprehenderit sapiente labore dolore. Sint molestiae quasi
-                commodi. Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Cum vitae nemo expedita magnam distinctio quos cumque
-                harum. Eveniet, quos vel, quasi odit modi molestiae praesentium,
-                voluptatum sapiente nulla voluptatibus sit. Lorem ipsum dolor
-                sit amet consectetur adipisicing elit. Illum ducimus optio
-                quaerat, placeat deleniti in consequatur reiciendis, nisi
-                dignissimos rem natus a minima sunt ipsum reprehenderit animi?
-                Vitae, corrupti possimus!
-              </span>
-              <div className="flex justify-end">
+            <div className="min-h-[13rem]">
+              <div className="p-4">
                 <span
-                  className="cursor-pointer p-2 text-slate-400"
-                  onClick={readmore.onClick}
+                  className={`${
+                    readmore.value ? "" : "line-clamp-4"
+                  } block text-lg leading-6`}
                 >
-                  {readmore.value ? "close" : "read more"}
+                  {content}
                 </span>
+                <div className="flex justify-end">
+                  <span
+                    className="cursor-pointer p-2 text-slate-400"
+                    onClick={readmore.onClick}
+                  >
+                    {readmore.value ? "close" : "read more"}
+                  </span>
+                </div>
+              </div>
+              <div className="py-4">
+                <ThreadSummary />
               </div>
             </div>
-            <ThreadSummary />
             <div>
               <p className="border border-solid border-neutral-200"></p>
             </div>
@@ -101,34 +105,7 @@ export default function ThreadCard({ pokemon, onClick }) {
               <p className="border border-solid border-neutral-200"></p>
             </div>
             {/* 댓글 불러오기 */}
-            <div>
-              <div className="m-2 flex">
-                <FaUserCircle className="m-2" size={30} />
-                <div>
-                  <div className="resize-none rounded-xl bg-neutral-200 p-2 outline-none">
-                    <div className="flex">
-                      <a href="" className="font-bold hover:underline">
-                        <p className="">{user.id}</p>
-                      </a>
-                      <p className="font-nomal pl-2 text-xs text-slate-400">
-                        {"1시간 전"}
-                      </p>
-                    </div>
-                    <div className="flex py-1">
-                      <p className="pl-1 text-sm">{user.comment}</p>
-                    </div>
-                  </div>
-                  <div className="flex justify-between p-2 py-0">
-                    <div>
-                      <p>좋아요</p>
-                    </div>
-                    <div>
-                      <p>댓글달기</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CommentBox user={user} />
             <div>
               {/* 댓글 작성란 */}
               <div className="flex w-full items-center justify-start p-2">
