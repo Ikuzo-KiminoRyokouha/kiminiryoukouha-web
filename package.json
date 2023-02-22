@@ -36,7 +36,8 @@
     "react-multi-carousel": "^2.8.2",
     "styled-components": "^5.3.6",
     "three": "^0.146.0",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "workbox-strategies": "^6.5.4"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.2",

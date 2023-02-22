@@ -15,6 +15,7 @@ export default function LoginPage() {
   const submitButton = useRef<HTMLButtonElement>(null);
   const { mutate } = useMutation(["login"], mLogin, {
     onSuccess: async (res) => {
+      console.log(res.data.accessToken)
       setJWTToken(res.data.accessToken);
       // reloadUser();
       router.push("/");

@@ -6,11 +6,16 @@ import { AiOutlineSend } from "react-icons/ai";
 import ThreadSummary from "./ThreadSummary";
 import useInput from "hooks/useInput";
 import axios from "axios";
+import { useRouter } from "next/router";
+import authRequest from "@/utils/request/authRequest";
 
-export default function ThreadCard({ content, onClick }) {
+export default function ThreadCard({ content, onClick } ) {
   const readmore = useToggle(false);
   // 좋아요 담는 용도
   const like = useToggle(false);
+  const router=useRouter()
+  
+  
   
 
   const fun_like = () => {
@@ -37,6 +42,18 @@ export default function ThreadCard({ content, onClick }) {
   };
   //console.log(content)
 
+  // const threadDelete=((id)=>{
+  //  await axios.delete(`http://localhost:8000/community/${id}`)
+  //   router.push('http://localhost:8000/community')
+  // })
+   async function onDeleteClick ()  {
+
+    await authRequest.delete(`/community/${content.id}`)
+    router.reload();
+  };
+
+ 
+ 
   return (
     <>
       <div className="w-full" key={content.name}>
@@ -49,8 +66,9 @@ export default function ThreadCard({ content, onClick }) {
                 {user.name + "・" + "2시간 전"}
               </span>
               <button className="ml-auto" onClick={()=>{
-                
-              }}>X</button>
+                router.push(`/thread/update?${content.id}`)
+              }}>수정</button>
+              <button className="ml-auto" onClick={onDeleteClick}>삭제</button>
             </div>
             {/* <div className="pl-2 text-sm">{"날짜"}</div> */}
             <div className="p-2">
@@ -144,3 +162,4 @@ export default function ThreadCard({ content, onClick }) {
     </>
   );
 }
+

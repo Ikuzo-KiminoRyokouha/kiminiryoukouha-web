@@ -13,7 +13,7 @@ import { LatLng } from "../../../types/tmap.type";
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
 
-console.log(travels,plan)
+
   
   const router = useRouter();
   const isSave = useRef(false);
@@ -258,6 +258,7 @@ function IntroduceCard({ travel }) {
 
 export async function getServerSideProps({ query }) {
   const info: Info = JSON.parse(query.info);
+  console.log({query})
 
   const { travels, ...plan } = await axios
     .post(`http://localhost:8000/plan/random`, {

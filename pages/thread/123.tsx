@@ -13,59 +13,40 @@ import { LatLng } from "../../types/tmap.type";
 
 
 export default function QWER({ travels, plan } ) {
-    const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
-    
+  const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
+
+  const router = useRouter();
+  const isSave = useRef(false);
+ 
+  const [startDay,SetStartDay]=useState();
+
+  const [selectedDate, setSelectedDate] = useState(dayjs(plan.start));
+  //선택된 날짜를 시작값으로 함
+
+  const [dayPlan, setDayPlan] = useState(1);
   
-    const router = useRouter();
-    const isSave = useRef(false);
-  
-    
-  
-    const [selectedDate, setSelectedDate] = useState(dayjs(plan?.start));
-    //선택된 날짜를 시작값으로 함
-  
-    // 계획 재생성하는 함수
-    const rerollePlan = async () => {
-      await axios.delete(`http://localhost:8000/plan/${plan.id}`);
-      router.push(
-        {
-          pathname: "/plan/new/planDetail",
-          
-        },
-        "/plan/new/planDetail",
-        {
-          shallow: false,
-        }
-      );
-    };
-  
-    const handleRouteChange = async () => {
-      !isSave.current &&
-        (await axios.delete(`http://localhost:8000/plan/${plan.id}`));
-      return;
-    };
-  
-   
-  
-    /** 계획에 따라 지도에 장소를 띄워 주는 로직 */
-    useEffect(() => {
-      if (additionalScriptLoaing && travels) {
-        const destLatLng: Array<LatLng> = [];
-        /**여형지의 모든 정보를 받아와서 목적지 위도경도에 넣는다 */
-        travels.map((el) => {
-          destLatLng.push({ lat: el.destination.mapy, lng: el.destination.mapx });
-        });
-  
-        /**모든 정보를 지도 상에 띄워 준다. */
-        makeLayerForPlan(...destLatLng);
-      }
-    }, [additionalScriptLoaing, travels]);
-  
+ const onChnage =(e)=>{SetStartDay(e.target.value)}
+
+  /** 계획에 따라 지도에 장소를 띄워 주는 로직 */
+  useEffect(() => {
+    if (additionalScriptLoaing && travels) {
+      const destLatLng: Array<LatLng> = [];
+      /**여형지의 모든 정보를 받아와서 목적지 위도경도에 넣는다 */
+      travels.map((el) => {
+        destLatLng.push({ lat: el.destination.mapy, lng: el.destination.mapx });
+      });
+
+      /**모든 정보를 지도 상에 띄워 준다. */
+      makeLayerForPlan(...destLatLng.slice((dayPlan - 1) * 2, dayPlan * 2));
+    }
+  }, [additionalScriptLoaing, travels, dayPlan]);
     return (
       <>
         <div className="flex h-full w-full justify-center">
           <div className="flex h-full w-full max-w-2xl  flex-col items-center md:max-w-5xl">
             <h1 className="pt-10 pb-10 text-4xl font-bold ">경주 역사탐방</h1>
+          
+
             <h2 className="text-2xl">
               {travels?.map((el, idx) => {
                 if (idx > 2) return;
@@ -129,21 +110,21 @@ export default function QWER({ travels, plan } ) {
                   </div>
                 </div>
               </div>
-              <div className="mt-20 flex w-full justify-center space-x-40 font-bold text-white ">
-                <button
-                  onClick={rerollePlan}
-                  className="rounded-lg border-2 bg-amber-500 py-6 px-24 transition duration-150 ease-in hover:bg-yellow-600 "
-                >
-                  재생성
-                </button>
+              
+              <div className="mt-10 flex w-full justify-center space-x-10 font-bold text-white ">
+                <div className="flex ">
+                <span className="text-black ">여행시작날짜</span>
+              <input onChange={onChnage} value={startDay} className="text-black text-center h-10" placeholder="20230123" />
+              </div>
                 <button
                   onClick={() => {
                     isSave.current = true;
+                    
                     router.push("/plan");
                   }}
                   className="rounded-lg border-2 bg-sky-600 py-6 px-24 transition duration-150 ease-in hover:bg-sky-700"
                 >
-                  계획생성
+                  계획가져오기
                 </button>
               </div>
               {travels?.map((travel) => {
