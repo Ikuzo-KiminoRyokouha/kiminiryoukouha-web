@@ -8,7 +8,15 @@ import useInput from "hooks/useInput";
 import { useRouter } from "next/dist/client/router";
 import { CommentBox } from "./community/CommentBox";
 
-export default function ThreadCard({ pokemon, onClick }) {
+export default function ThreadCard({
+  pokemon,
+  onClick,
+  content,
+  createdAt,
+  id,
+  img,
+  plan,
+}) {
   const readmore = useToggle(false);
   // 좋아요 담는 용도
   const like = useToggle(false);
@@ -43,10 +51,11 @@ export default function ThreadCard({ pokemon, onClick }) {
         <div className="">
           <div className="m-2 min-h-[30rem] w-auto rounded-3xl border shadow-md ">
             <div className="flex h-auto w-full items-center space-x-3 p-4">
-              {/* <FaUserCircle size={40} onClick={onClick.showUser} />
+              <FaUserCircle size={40} onClick={onClick.showUser} />
               <span className="" onClick={onClick.showUser}>
-                {createdAt.slice(5, 10)}
-              </span> */}
+                {/* {pokemon?.name + "・" + "23/1/25"} */}
+                {id + "・" + createdAt.slice(5, 10)}
+              </span>
             </div>
             {/* <div className="pl-2 text-sm">{"날짜"}</div> */}
             <div className="min-h-[13rem]">
@@ -56,7 +65,7 @@ export default function ThreadCard({ pokemon, onClick }) {
                     readmore.value ? "" : "line-clamp-4"
                   } block text-lg leading-6`}
                 >
-                  {/* {content} */}
+                  {content}
                 </span>
                 <div className="flex justify-end">
                   <span
