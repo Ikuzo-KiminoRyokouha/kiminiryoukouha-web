@@ -2,9 +2,7 @@ import IProps from "@/types/props.interface";
 import Image from "next/image";
 import {
   createContext,
-  SetStateAction,
   useContext,
-  Dispatch,
   useEffect,
   useMemo,
   useRef,
@@ -18,8 +16,22 @@ import useInput from "hooks/useInput";
 import useProfile from "hooks/useProfile";
 import ProfilePlan from "components/mypage/ProfilePlan";
 import ProfilePosts from "components/mypage/ProfilePosts";
-import { FollowingFollowerInfo } from "@/types/profile.interface";
+import {
+  ButtonProps,
+  ContentsProps,
+  FixProfileProps,
+  FollowingFollowerInfo,
+  FollwerFollweeInfoProps,
+  InfoProps,
+  NavButtonProps,
+  NavProps,
+  ShowFollowerProps,
+  ShowFollowingProps,
+} from "@/types/profile.interface";
 import { useRouter } from "next/router";
+import { useUser } from "@/utils/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { getUserFollower } from "@/utils/fetchFn/query/profile";
 
 const ProfileContext = createContext<{
   arr: Array<number>;
@@ -54,15 +66,6 @@ Profile.Image = () => {
     </div>
   );
 };
-interface InfoProps {
-  nickname: string;
-  description: string;
-  followerNum: number;
-  followingNum: number;
-  isMyProfile: boolean;
-  followerInfo: [FollowingFollowerInfo];
-  followingInfo: [FollowingFollowerInfo];
-}
 
 Profile.Info = ({
   nickname,
@@ -72,6 +75,9 @@ Profile.Info = ({
   isMyProfile,
   followerInfo,
   followingInfo,
+  getUserFolloweeRefetch,
+  getUserFollowerRefetch,
+  userInfoRefetch,
 }: InfoProps) => {
   const { writeDescription, userFollow, userUnfollow } = useProfile();
   // console.log("isMyProfile", isMyProfile);
@@ -81,11 +87,50 @@ Profile.Info = ({
   const isShowFollower = useToggle(false);
   // following 누를시 모달창 띄워주기 위한 state
   const isShowFollowing = useToggle(false);
+  // follow버튼을 보여줄지 unfollow버튼을 보여줄지 결정하는 state
+  const isFollow = useToggle(false);
 
+  const myName = useUser();
+  console.log("myName", myName[0]?.nickname);
   console.log("followerInfo", followerInfo);
   console.log("followingInfo", followingInfo);
-
+  console.log("followerNum", followerNum);
+  console.log("followingNum", followingNum);
   console.log("nickname", nickname);
+
+  const router = useRouter();
+  console.log("router234", router.query?.username);
+
+  // 이진탐색
+  const binarySearch = function (arr, target) {
+    if (arr === undefined) return false;
+    let start = 0;
+    let end = arr.length - 1;
+    let mid;
+
+    while (start <= end) {
+      mid = parseInt(String((start + end) / 2));
+
+      if (target == arr[mid].nickname) {
+        return true;
+      } else {
+        if (target < arr[mid].nickname) {
+          end = mid - 1;
+        } else {
+          start = mid + 1;
+        }
+      }
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    binarySearch(followerInfo, myName[0]?.nickname)
+      ? isFollow.setTrue()
+      : isFollow.setFalse();
+  }, [followerInfo, myName[0]?.nickname]);
+
+  console.log("isFollow.value", isFollow.value);
 
   const onClick = {
     writeDescription: () => {
@@ -105,26 +150,44 @@ Profile.Info = ({
     },
     followUser: () => {
       // 버튼에 들어가는 유저 팔로우 함수
-      console.log("followUser function launched");
-      // userFollow({
-      //   targetId: 2,
-      // });
+      console.log(
+        `followUser function launched follow ${router.query?.username}`
+      );
+      try {
+        userFollow(
+          {
+            targetId: Number(router.query?.username),
+          },
+          {
+            onSuccess: async () => {
+              await getUserFolloweeRefetch();
+              await getUserFollowerRefetch();
+              isFollow.setTrue();
+            },
+          }
+        );
+      } catch (err) {
+        console.error("followUser function launched" + err);
+      }
     },
     unfollowUser: () => {
       // 유저 언팔 함수
       console.log("unfollowUser function launched");
-      // userUnfollow({
-      //   targetId: 1,
-      // });
+      userUnfollow(
+        {
+          targetId: Number(router.query?.username),
+        },
+        {
+          onSuccess: async () => {
+            await getUserFolloweeRefetch();
+            await getUserFollowerRefetch();
+            isFollow.setFalse();
+          },
+        }
+      );
     },
   };
-  const bntObj = useMemo(
-    () => [
-      { title: "follow", onClick: onClick.followUser },
-      { title: "unfollow", onClick: onClick.unfollowUser },
-    ],
-    []
-  );
+
   return (
     <div className="flex h-full w-10/12 flex-col py-10">
       {/* 상단 닉네임, 팔로우정보 */}
@@ -144,7 +207,7 @@ Profile.Info = ({
             </div>
             <div className="flex pt-2">
               {/* 팔로우 팔로워 */}
-              {["follwing", "follower"].map((el) => {
+              {["following", "follower"].map((el) => {
                 return (
                   <div className="flex">
                     <span
@@ -154,7 +217,8 @@ Profile.Info = ({
                         onClick.showFollowing
                       }
                     >
-                      {(el === "follower" && followerNum) || followingNum}
+                      {el === "follower" && followerNum}
+                      {el === "following" && followingNum}
                     </span>
                     <span
                       className="text-md cursor-pointer pr-3 leading-8"
@@ -171,11 +235,20 @@ Profile.Info = ({
             </div>
           </div>
         </div>
-        <Profile.Button
-          title={"follow"}
-          onClick={onClick.followUser}
-          isMyProfile={isMyProfile}
-        />
+        {isFollow.value && (
+          <Profile.Button
+            title={"unfollow"}
+            onClick={onClick.unfollowUser}
+            isMyProfile={isMyProfile}
+          />
+        )}
+        {!isFollow.value && (
+          <Profile.Button
+            title={"follow"}
+            onClick={onClick.followUser}
+            isMyProfile={isMyProfile}
+          />
+        )}
       </div>
       {/* 하단 description */}
       <div className="flex h-2/3 w-full flex-col">
@@ -187,7 +260,12 @@ Profile.Info = ({
         </div>
       </div>
       {isFixing.value && (
-        <FixProfile hide={isFixing.setFalse} description={description} />
+        <FixProfile
+          hide={isFixing.setFalse}
+          description={description}
+          writeDescription={writeDescription}
+          userInfoRefetch={userInfoRefetch}
+        />
       )}
       {isShowFollower.value && (
         <ShowFollower
@@ -205,11 +283,6 @@ Profile.Info = ({
   );
 };
 
-interface ButtonProps {
-  title: string;
-  onClick: () => void;
-  isMyProfile: boolean;
-}
 Profile.Button = ({ title, onClick, isMyProfile }: ButtonProps) => {
   return (
     <>
@@ -217,7 +290,9 @@ Profile.Button = ({ title, onClick, isMyProfile }: ButtonProps) => {
         <div className="px-10">
           {/* 팔로우상태면 언팔로우 뜨게 */}
           <button
-            className="w-24 rounded bg-sky-600 p-2 text-white"
+            className={`w-24 rounded ${
+              title === "follow" ? "bg-sky-600" : "bg-red-500"
+            } p-2 text-white`}
             onClick={onClick}
           >
             <span className="text-lg">{title}</span>
@@ -228,10 +303,6 @@ Profile.Button = ({ title, onClick, isMyProfile }: ButtonProps) => {
   );
 };
 
-interface NavProps extends IProps {
-  navItemWidth: { [key: string]: number };
-  navPage: string;
-}
 Profile.Nav = ({ children, navItemWidth, navPage }: NavProps) => {
   return (
     <nav className="m-2">
@@ -243,6 +314,179 @@ Profile.Nav = ({ children, navItemWidth, navPage }: NavProps) => {
     </nav>
   );
 };
+
+Profile.Contents = ({ navPage, planInfo, communityPosts }: ContentsProps) => {
+  // console.log("communityPosts", communityPosts);
+  // console.log("myCommunityPosts", myCommunityPosts);
+
+  return (
+    <div className="mx-auto ml-8 w-full">
+      {/* 계획중인여행 */}
+      {navPage === "계획중인여행" && <ProfilePlan planInfo={planInfo} />}
+      {/* 내 게시물 */}
+      {navPage === "내 게시물" && (
+        <ProfilePosts communityPosts={communityPosts} />
+      )}
+    </div>
+  );
+};
+
+Profile.NavButton = ({ title, onClick, setNavItemWidth }: NavButtonProps) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    const { width } = (ref.current as HTMLSpanElement).getClientRects()[0];
+    setNavItemWidth((prev) => {
+      const newObj = {};
+      newObj[title] = width;
+      return { ...prev, ...newObj };
+    });
+  }, []);
+  return (
+    <span ref={ref} className="m-2 cursor-pointer text-xl" onClick={onClick}>
+      {title}
+    </span>
+  );
+};
+
+// 프로필 수정 모달에 들어가야할 거 description 수정, 프로필 이미지 수정
+function FixProfile({
+  hide,
+  description,
+  writeDescription,
+  userInfoRefetch,
+}: FixProfileProps) {
+  const myDescription = useInput(description);
+
+  // 프로필 사진 올리기
+  const submitImage = () => {
+    console.log("submitImage function launched");
+  };
+
+  const submitDescription = () => {
+    console.log("submitDescription function launched");
+    writeDescription(
+      { description: myDescription.value },
+      {
+        onSuccess: async () => {
+          await userInfoRefetch();
+        },
+      }
+    );
+    hide();
+  };
+
+  return (
+    <>
+      <Portal qs={"#__next"}>
+        <Modal hide={hide}>
+          <Modal.Header hide={hide} />
+          <div className="flex w-full">
+            <div className="h-40 w-40">
+              <Modal.Image src="/assets/main-img.png" />
+            </div>
+            <div className="flex w-full items-center justify-center">
+              <button
+                className="rounded bg-sky-600 p-2 text-lg font-semibold text-white"
+                onClick={submitImage}
+              >
+                Upload Image
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <div>
+              <span className="text-lg font-semibold">Description</span>
+            </div>
+            <div className="relative mt-4 min-h-[10rem] w-full rounded border-2 border-slate-300">
+              <textarea
+                className="absolute inset-0 w-full resize-none border-slate-300 p-1 leading-6"
+                {...myDescription}
+              />
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <button
+              className="h- min-h-[2.5rem] w-full rounded bg-sky-600 text-lg font-semibold text-white"
+              onClick={submitDescription}
+            >
+              Done
+            </button>
+          </div>
+        </Modal>
+      </Portal>
+    </>
+  );
+}
+
+function ShowFollowing({ hide, followingInfo }: ShowFollowingProps) {
+  console.log("followingInfo123", followingInfo);
+  return (
+    <>
+      <Portal qs="#__next">
+        <Modal hide={hide}>
+          <Modal.Header hide={hide} />
+          <div>this is showFollowing</div>
+          {!followingInfo.length && <div>There isn't any following yet...</div>}
+          <FollowerFollweeInfo info={followingInfo} hide={hide} />
+        </Modal>
+      </Portal>
+    </>
+  );
+}
+
+function ShowFollower({ hide, followerInfo }: ShowFollowerProps) {
+  console.log("followerInfo123", followerInfo);
+  return (
+    <>
+      <Portal qs="#__next">
+        <Modal hide={hide}>
+          <Modal.Header hide={hide} />
+          <div>this is showFollower</div>
+          {!followerInfo.length && <div>There isn't any following yet...</div>}
+          <FollowerFollweeInfo info={followerInfo} hide={hide} />
+        </Modal>
+      </Portal>
+    </>
+  );
+}
+
+function FollowerFollweeInfo({ info, hide }: FollwerFollweeInfoProps) {
+  console.log("info123", info);
+
+  const router = useRouter();
+  return (
+    <>
+      <div className="flex flex-col">
+        {info &&
+          info.map((el) => {
+            return (
+              <div className="flex items-center border-b-2 border-b-slate-200 py-3">
+                <div className="relative h-10 w-10">
+                  <Image src={"/assets/main-img.png"} layout={"fill"} />
+                </div>
+                <div className="pl-5">
+                  <span
+                    className="cursor-pointer text-lg font-semibold leading-8"
+                    onClick={() => {
+                      hide();
+                      router.push({
+                        pathname: `/profile/${el.id}`,
+                      });
+                    }}
+                  >
+                    {el.nickname}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        {!info && <div>없음</div>}
+      </div>
+    </>
+  );
+}
 
 const ActionBar = styled.div<{
   navItemWidth: { [key: string]: number };
@@ -268,183 +512,17 @@ const ActionBar = styled.div<{
   transition-duration: 150ms;
 `;
 
-interface ContentsProps {
-  navPage: string;
-}
-
-Profile.Contents = ({ navPage }: ContentsProps) => {
-  const { arr } = useContext(ProfileContext);
-
-  return (
-    <div className="mx-auto ml-8 w-full">
-      {/* 계획중인여행 */}
-      {navPage === "계획중인여행" && <ProfilePlan arr={arr} />}
-      {/* 내 게시물 */}
-      {navPage === "내 게시물" && <ProfilePosts arr={arr} />}
-    </div>
-  );
-};
-
-interface NavButtonProps {
-  title: string;
-  onClick: () => void;
-  setNavItemWidth: Dispatch<
-    SetStateAction<{
-      [key: string]: number;
-    }>
-  >;
-}
-// setNavItemWidth 타입 설정 모르겠음
-Profile.NavButton = ({ title, onClick, setNavItemWidth }: NavButtonProps) => {
-  const ref = useRef();
-
-  useEffect(() => {
-    const { width } = (ref.current as HTMLSpanElement).getClientRects()[0];
-    setNavItemWidth((prev) => {
-      const newObj = {};
-      newObj[title] = width;
-      return { ...prev, ...newObj };
-    });
-  }, []);
-  return (
-    <span ref={ref} className="m-2 cursor-pointer text-xl" onClick={onClick}>
-      {title}
-    </span>
-  );
-};
-
-interface FixProfileProps {
-  hide: () => void;
-  description: string;
-}
-
-// 프로필 수정 모달에 들어가야할 거 description 수정, 프로필 이미지 수정
-function FixProfile({ hide, description }: FixProfileProps) {
-  const myDescription = useInput(description);
-
-  // 프로필 사진 올리기
-  const submitImage = () => {
-    console.log("submitImage function launched");
-  };
-
-  const submitDescription = () => {
-    console.log("submitDescription function launched");
-  };
-
-  return (
-    <>
-      <Portal qs={"#__next"}>
-        <Modal hide={hide}>
-          <Modal.Header hide={hide} />
-          <div className="flex w-full">
-            <div className="h-40 w-40">
-              <Modal.Image src="/assets/main-img.png" />
-            </div>
-            <div className="flex w-full items-center justify-center">
-              <button
-                className="rounded bg-sky-600 p-2 text-lg font-semibold text-white"
-                onClick={submitImage}
-              >
-                이미지 올리기
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-col">
-            <div>
-              <span className="text-lg font-semibold">Description</span>
-            </div>
-            <div className="relative mt-4 min-h-[10rem] w-full rounded border-2 border-slate-300">
-              <textarea
-                className="absolute inset-0 w-full resize-none border-slate-300 p-1 leading-6"
-                {...myDescription}
-              />
-            </div>
-          </div>
-          <div className="flex justify-center">
-            <button
-              className="h- min-h-[2.5rem] w-full rounded bg-sky-600 text-lg font-semibold text-white"
-              onClick={submitDescription}
-            >
-              수정하기
-            </button>
-          </div>
-        </Modal>
-      </Portal>
-    </>
-  );
-}
-
-function ShowFollowing({ hide, followingInfo }) {
-  console.log("followingInfo123", followingInfo);
-  return (
-    <>
-      <Portal qs="#__next">
-        <Modal hide={hide}>
-          <Modal.Header hide={hide} />
-          <div>this is showFollowing</div>
-          <FollwerFollweeInfo info={followingInfo} hide={hide} />
-        </Modal>
-      </Portal>
-    </>
-  );
-}
-
-function ShowFollower({ hide, followerInfo }) {
-  console.log("followerInfo123", followerInfo);
-  return (
-    <>
-      <Portal qs="#__next">
-        <Modal hide={hide}>
-          <Modal.Header hide={hide} />
-          <div>this is showFollower</div>
-          <FollwerFollweeInfo info={followerInfo} hide={hide} />
-        </Modal>
-      </Portal>
-    </>
-  );
-}
-
-function FollwerFollweeInfo({ info, hide }) {
-  console.log("info123", info);
-
-  const router = useRouter();
-  return (
-    <>
-      <div className="flex flex-col">
-        {info.map((el) => {
-          return (
-            <div className="flex items-center py-3">
-              <div className="relative h-10 w-10">
-                <Image src={"/assets/main-img.png"} layout={"fill"} />
-              </div>
-              <div className="pl-5">
-                <span
-                  className="cursor-pointer text-lg font-semibold leading-8"
-                  onClick={() => {
-                    hide();
-                    router.push({
-                      pathname: `/profile/${el.id}`,
-                    });
-                  }}
-                >
-                  {el.nickname}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </>
-  );
-}
-
 /**
  * mypage 구현해야 할 것
  *
  *  - mypage 보단 profile이 더 적합한 단어라고 생각됨 mypage -> profile 싹다 고치기 -> 완
  *  - 다른 사람의 프로필에 접근하고 싶을 때 -> 백엔드 고쳐서 나중에 follower, followee 연결만 하면 완
  *  - following, follower 눌렀을때 모달로 정보 표시 -> 완
- *  - follow 유무에 따라 follow버튼
- *  - Profile.Contents arr 오류 수정
+ *  - follow 유무에 따라 follow버튼 또는 unfollow 버튼
+ *  - Profile.Contents arr 오류 수정 -> 완
+ *  - type 지정 -> 완
+ *  - reactQuery로 받아올때 잠깐의 시간동안 로딩창 or 로딩 애니메이션 만들어주기 -> 나중에 ssr로 바꿀계획인데 일다 컴포넌트 만들어놓음 component/commmon/LoadingCircle 완
+ *  - 계획중인여행, 내 게시물 backend 연결 + infinite scroll 구현
+ *  - 연필 -> 완
+ *  - 내계획, 내 게시물 -> 백 수정되면 끝
  */
