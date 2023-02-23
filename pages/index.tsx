@@ -44,7 +44,9 @@ export default function Home() {
             <div className="mb-64 ml-28 space-y-8">
               <p className="text-5xl font-semibold text-white">
                 Do You Wanna Go To Travel?
-                <a href="intent://arvr.google.com/hellomr#Intent;scheme=arvr.google.com;package=com.nreal.helloMR">Test Link</a>
+                <a href="intent://arvr.google.com/hellomr#Intent;scheme=arvr.google.com;package=com.nreal.helloMR">
+                  Test Link
+                </a>
               </p>
               <div className="flex space-x-6">
                 <button
@@ -82,6 +84,10 @@ export default function Home() {
           <p>おすすめプラン</p>
         </div>
       </div>
+      <a href="intent://arvr.google.com/hellomr#Intent;scheme=arvr.google.com;package=com.nreal.helloMR">
+        Test Link
+      </a>
+
       <PlanCarousel />
       {/* 어디로 가고싶은지 */}
       <div
