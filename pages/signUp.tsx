@@ -14,7 +14,8 @@ export default function SignUp() {
       /*  성공 콜백 to login */
       router.replace("/login");
     },
-    onError() {
+    onError(e) {
+      console.log(e)
       alert("どこか間違っている情報があります");
     },
   });
@@ -34,7 +35,10 @@ export default function SignUp() {
       password: pwd.value,
       role: "Client",
     });
+    
+    
   };
+
 
   return (
     <div className="max-w-8xl mx-auto flex w-full flex-1 flex-col items-center justify-center pb-20 md:h-screen">

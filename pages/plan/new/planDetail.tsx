@@ -253,39 +253,25 @@ function IntroduceCard({ travel }) {
   );
 }
 
-export async function getServerSideProps({ query, req }) {
- 
+export async function getServerSideProps({ query }) {
   const info: Info = JSON.parse(query.info);
 
- 
-
-  const res = await authRequest
-    .post(
-      `/plan/random`,
-      {
-        tag: info.tag,
-        start: info.startDate,
-        end: info.endDate,
-        city: info.region,
-        totalCost: info.money,
-      },
-      {
-        cookie: req.headers.cookie,
-      }
-    )
+  const { travels, ...plan } = await axios
+    .post(`http://localhost:8000/plan/random`, {
+      // destination: "경주",
+      // dayPerDes: 3,
+      start: info.startDate,
+      end: info.endDate,
+      city: info.region,
+      tag: info.tag,
+      totalCost: info.money,
+    })
     .then((res) => {
       if (res.data.ok) {
         return res.data.plan
       };
       return [];
-    })
-    .catch((error: AxiosError) => {
-      console.log(error.response);
     });
-    
-
-
-  const { travels, ...plan } = res;
 
   return {
     props: {

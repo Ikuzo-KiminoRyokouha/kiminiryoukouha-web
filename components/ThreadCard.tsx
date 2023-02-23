@@ -15,9 +15,6 @@ export default function ThreadCard({ content, onClick } ) {
   const like = useToggle(false);
   const router=useRouter()
   
-  
-  
-
   const fun_like = () => {
     console.log("좋아요 버튼 클릭");
   };
