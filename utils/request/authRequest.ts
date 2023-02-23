@@ -40,6 +40,7 @@ authRequest.interceptors.response.use(
       // 실패한 요청 재전송
       return axios({
         ...err.config,
+        data : JSON.parse(err.config.data),
         headers: {
           authorization: "Bearer " + res.data.accessToken,
         },
