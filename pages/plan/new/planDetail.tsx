@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useTMap } from "../../../hooks";
 import { Info } from "../../../types/plan.interface";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { convertDateToKorean } from "../../../utils/common";
@@ -9,6 +9,7 @@ import { getDescriptionFromAPI } from "../../../utils/apiQuery";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { LatLng } from "../../../types/tmap.type";
+import authRequest from "../../../utils/request/authRequest";
 
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
@@ -27,29 +28,25 @@ export default function PlanDetail({ travels, plan, info }) {
 
   // 계획 재생성하는 함수
   const rerollePlan = async () => {
-    await axios.delete(`http://localhost:8000/plan/${plan.id}`);
+    await authRequest.delete(`http://localhost:8000/plan/${plan.id}`);
     router.push(
       {
         pathname: "/plan/new/planDetail",
         query: { info },
-      },
-      "/plan/new/planDetail",
-      {
-        shallow: false,
       }
     );
   };
 
   const handleRouteChange = async () => {
     !isSave.current &&
-      (await axios.delete(`http://localhost:8000/plan/${plan.id}`));
+      (await authRequest.delete(`http://localhost:8000/plan/${plan.id}`));
     return;
   };
 
   useEffect(() => {
     const handleWindowClose = async (e: BeforeUnloadEvent) => {
       !isSave.current &&
-        (await axios.delete(`http://localhost:8000/plan/${plan.id}`));
+        (await authRequest.delete(`http://localhost:8000/plan/${plan.id}`));
       return;
     };
     /* 이벤트리스너 등록 */
@@ -226,7 +223,7 @@ function InfoCard({ title, sub }) {
 
 function IntroduceCard({ travel }) {
   const [description, setDescription] = useState<string>("");
-  console.log(description);
+
   useLayoutEffect(() => {
     getDescriptionFromAPI(
       Number(travel.destination.contentid),
@@ -256,28 +253,43 @@ function IntroduceCard({ travel }) {
   );
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, req }) {
+ 
   const info: Info = JSON.parse(query.info);
-  console.log({query})
 
-  const { travels, ...plan } = await axios
-    .post(`http://localhost:8000/plan/random`, {
-      // destination: "경주",
-      // dayPerDes: 3,
-      start: info.startDate,
-      end: info.endDate,
-      city: info.region,
-      tag: info.tag,
-      totalCost: info.money,
-    })
+ 
+
+  const res = await authRequest
+    .post(
+      `/plan/random`,
+      {
+        tag: info.tag,
+        start: info.startDate,
+        end: info.endDate,
+        city: info.region,
+        totalCost: info.money,
+      },
+      {
+        cookie: req.headers.cookie,
+      }
+    )
     .then((res) => {
-      if (res.data.ok) return res.data.plan;
+      if (res.data.ok) {
+        return res.data.plan
+      };
       return [];
+    })
+    .catch((error: AxiosError) => {
+      console.log(error.response);
     });
+    
+
+
+  const { travels, ...plan } = res;
 
   return {
     props: {
-      plan,
+      plan ,
       travels,
       info: query.info,
     },

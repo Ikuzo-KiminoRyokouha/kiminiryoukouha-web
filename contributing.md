@@ -91,3 +91,10 @@
   // /utils/request/mainRequest => 인증정보가 필요 없는 요청
 
   // /utils/request/apiRequest => TmapAPI 요청시 필요한 AXIOS 인스턴스
+
+# 7. Issue
+
+- 기능 구현 개발 할 때
+
+1. Issue템플릿에 맞게 작성
+2. 기능 구현 후 커밋 할 때 git commit -m "#이슈번호 fix: 커밋내용"

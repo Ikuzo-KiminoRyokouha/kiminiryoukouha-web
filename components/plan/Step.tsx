@@ -297,15 +297,12 @@ export function StepFour({ ctx }: StepProps) {
   const router = useRouter();
   const { info } = useContext(ctx);
   const onClick = () => {
-    router.replace(
-      {
-        pathname: "/plan/new/planDetail",
-        query: {
-          info: JSON.stringify(info),
-        },
+    router.replace({
+      pathname: "/plan/new/planDetail",
+      query: {
+        info: JSON.stringify(info),
       },
-      "/plan/new/planDetail"
-    );
+    });
   };
 
   return (

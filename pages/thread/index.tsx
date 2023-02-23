@@ -3,79 +3,244 @@ import axios from "axios";
 import ThreadCard from "components/ThreadCard";
 import useObserver from "hooks/useObserver";
 import { useRef } from "react";
+import React from "react";
+import { useInput, useToggle } from "../../hooks";
+import { FaUserCircle } from "react-icons/fa";
+// import { FiImage } from "react-icons/fi";
+import { FcAddImage } from "react-icons/fc";
+import {
+    MdOutlineArrowForwardIos,
+    MdOutlineArrowBackIosNew,
+} from "react-icons/md";
 
-export default function Thread({}) {
-  const bottom = useRef(null);
-  const LIMIT = 5;
-  const OFFSET = 5;
-//OFFSET 처음부터 얼마나 떨어졌는지 얼마나 보여주는지 
+import { useRouter } from "next/router";
+import { Modal, Portal } from "../../components/common/modal";
+import authRequest from "@/utils/request/authRequest";
+import  ThreadSummary from "../../components/ThreadSummary";
+import { redirect } from "next/dist/server/api-utils";
 
-  
-  const getPoketmons = ({ queryKey, pageParam = OFFSET }) => {
-    return axios
-      .get(
-        `http://localhost:8000/community?limit=${LIMIT}&offset=${pageParam}/`
-      )
-      .then((res) => res.data);
-  };
- //useQuery나 useInfinityQuery나 똑같다 앞에꺼 내가원하는 데이터를 찾는거 두번째껀 axios요청인데 첫번쨰껀 같은걸 계속찾으니까 상관없음
- //pageparam 현재 어떤 페이지인지 확인하는 값 lastpage 호출된 가장 마지막 페이지값
- //getNextPageParam 이게 다음 페이지 보여주는거   lastPage는 useInfiniteQuery를 이용해 호출된 가장 마지막에 있는 페이지 데이터를 의미합니다.
- //여기서 getPoketmons는 axios요청 
-//  //fetchNextPage()는 다음페이지 호출 
-//  [GET] /community
-// 커뮤니티 조회 컨트롤러입니다 Polling 서비스에 쓰기위해 limit 와 offset을 QS로 받아옵니다.
-// params : {limit : number , offset : number}
- 
-const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery(["getPoketmons"], getPoketmons, {
-    getNextPageParam: (lastPage, pages) => {
-      const { next } = lastPage;
-      if (!next) return false;
-//값이 없으면 폴스고 있으면 
-      return Number(new URL(next).searchParams.get("offset"));
-    },
-  });
+export default function Thread() {
+    const bottom = useRef(null);
+    const LIMIT = 5;
+    const OFFSET = 0;
 
-  const onClick = {
-    showUser: () => {},
-  };
+    const getPoketmons = ({ queryKey, pageParam = OFFSET }) => {
+        return axios
+            .get(
+                `http://localhost:8000/community?limit=${LIMIT}&offset=${OFFSET}`
+            )
+            .then((res) => res.data);
+    };
 
-  // useObserver로 넘겨줄 callback, entry로 넘어오는 HTMLElement가
-  // isIntersecting이라면 무한 스크롤을 위한 fetchNextPage가 실행될 것이다.
-  const onIntersect = ([entry]) => entry.isIntersecting && fetchNextPage();
+    const {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        status,
+    } = useInfiniteQuery(["getPoketmons"], getPoketmons, {
+        getNextPageParam: (lastPage, pages) => {
+            const { next } = lastPage;
+            if (!next) return false;
 
-  // useObserver로 bottom ref와 onIntersect를 넘겨 주자.
-  useObserver({
-    target: bottom,
-    onIntersect,
-  });
-  //console.log(data?.pages)
+            return Number(new URL(next).searchParams.get("offset"));
+        },
+    });
+    const onClick = {
+        showUser: () => {},
+    };
 
-  return (
-    <>
-      <div className="mx-auto  mb-[53px] flex max-h-full w-full max-w-2xl flex-1 border lg:mb-0">
-        <div className="max-w-2xl">
-          {data?.pages?.map((group, idx) => (
-            <div key={idx}>
-              {group?.map((el) => (
-                <ThreadCard content={el} onClick={onClick} />
-              ))}
+    // useObserver로 넘겨줄 callback, entry로 넘어오는 HTMLElement가
+    // isIntersecting이라면 무한 스크롤을 위한 fetchNextPage가 실행될 것이다.
+    const onIntersect = ([entry]) => entry.isIntersecting && fetchNextPage();
+
+    // useObserver로 bottom ref와 onIntersect를 넘겨 주자.
+    useObserver({
+        target: bottom,
+        onIntersect,
+    });
+    //
+    const router = useRouter();
+    const deleting = useToggle(false);
+    // 게시글작성 관련
+    //
+    const modal = useToggle(false);
+
+    const showModal = () => {
+        modal.onClick();
+        console.log(modal.value);
+        // 수정요망
+        // modal.setTrue;
+        // router.replace("/dump");
+    };
+
+    return (
+        <>
+            <div className="mx-auto  mb-[53px] max-h-full w-full max-w-2xl flex-1 border lg:mb-0">
+                <div className="max-w-2xl">
+                    {/* community_글작성 */}
+                    <div className="flex w-full items-center justify-start p-1 pt-2">
+                        <FaUserCircle className="m-2" size={40} />
+                        <div className="flex w-full">
+                            <button
+                                className="mr-3 w-3/4 cursor-pointer resize-none rounded-xl bg-neutral-200 p-4 text-left outline-none"
+                                onClick={() => deleting.setTrue()}
+                                // onChange={modalOpen.onClick}
+                            >
+                                게시물을 작성해주세요.
+                            </button>
+                            <input
+                                className="w-1/4 rounded-xl border border-solid border-black bg-slate-100 p-2 outline-none"
+                                type="text"
+                                placeholder="게시물 검색"
+                            />
+                        </div>
+                    </div>
+                    {/* 게시글 아래 아이콘 넣을 예정 */}
+                    {/* 모달창 */}
+                    {deleting.value && (
+                        <PostWrite
+                            img={"adsf"}
+                            content={"경주"}
+                            planId={1}
+                            hide={deleting.setFalse}
+                        />
+                    )}
+                </div>
+                {/* community_글작성 - Modal */}
+                {data?.pages?.map((group, idx) => (
+                    <div key={idx}>
+                        {group?.map((el) => (
+                            <ThreadCard content={el} onClick={onClick} />
+                        ))}
+                    </div>
+                ))}
+                <div ref={bottom} />
+                <div className="flex justify-center p-5">
+                    {isFetchingNextPage && <p>데이터 불러오는중</p>}
+                </div>
             </div>
-          ))}
-          <div ref={bottom} />
-          <div className="flex justify-center p-5">
-            {isFetchingNextPage && <p>데이터 불러오는중</p>}
-          </div>
-        </div>
-      </div>
-    </>
-  );
+        </>
+    );
+}
+
+interface ModalProps {
+    img: string;
+    content: string;
+    planId: number;
+    hide: () => void;
+}
+
+function PostWrite({ img, content, planId, hide }: ModalProps) {
+    const contents = useInput("", "게시물 내용을 입력해주세요");
+
+    const submit = () => {
+        authRequest.post("/community", {
+            img: "1",
+            content: contents.value,
+            planId: 1,
+        });
+        
+
+        alert("커뮤니티 글작성이 완료되었습니다.");
+
+      
+
+    };
+
+    // 이미지 버튼 클릭 시 내용 보이기 / 지우기
+    const classnameAdd = () => {
+        document.getElementsByClassName("test")[0].classList.toggle("hidden");
+        document.getElementsByClassName("test")[0].classList.add("block");
+    };
+
+    return (
+        <>
+            <Portal qs={"#__next"}>
+                <Modal hide={hide}>
+                    <Modal.Header hide={hide} />
+                    <div className=" border-0 text-center text-xl font-black">
+                        <label>게시글 작성</label>
+                    </div>
+                    {/* 디바이더 */}
+                    <div className="h-2">
+                        <p className="w-full border-t"></p>
+                    </div>
+                    <div className="flex ">
+                        <div className=" w-full justify-around">
+                            <div className="flex ">
+                                <div className="flex h-auto w-full items-center space-x-3 p-2">
+                                    <FaUserCircle
+                                        className="cursor-pointer"
+                                        size={40}
+                                        onClick={() => {
+                                            console.log("프로필");
+                                        }}
+                                    />
+                                    <span
+                                        className="cursor-pointer"
+                                        onClick={() => {
+                                            console.log("nickname");
+                                        }}
+                                    >
+                                        nickname
+                                    </span>
+                                </div>
+                            </div>
+                            {/* 게시물 내용 입력 */}
+                            <div className="w-full">
+                                <textarea
+                                    className="w-full resize-none  rounded-md px-2 py-2 text-lg outline-none"
+                                    rows={10}
+                                    {...contents}
+                                />
+                            </div>
+                            {/* img 아이콘 넣기 */}
+                            <div className="flex w-full justify-end">
+                                <FcAddImage
+                                    size={40}
+                                    onClick={() => {
+                                        classnameAdd();
+                                    }}
+                                    className="cursor-pointer"
+                                />
+                            </div>
+                            <div className="test flex hidden items-center">
+                                <div
+                                    className="cursor-pointer p-2"
+                                    onClick={() => {
+                                        console.log("이전버튼");
+                                    }}
+                                >
+                                    <MdOutlineArrowBackIosNew />
+                                </div>
+                                {/* 불러온 계획 ~ */}
+                               
+                                <div
+                                    className="cursor-pointer p-2"
+                                    onClick={() => {
+                                        console.log("다음버튼");
+                                    }}
+                                >
+                                    <MdOutlineArrowForwardIos />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <Modal.Footer>
+                        <button
+                            onClick={() => {
+                                submit();
+                            }}
+                            className="h-10 flex-1 border-0 bg-sky-600 text-lg font-bold text-white"
+                        >
+                            완료
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+            </Portal>
+        </>
+    );
 }
