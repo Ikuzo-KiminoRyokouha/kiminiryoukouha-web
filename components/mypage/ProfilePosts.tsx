@@ -29,8 +29,13 @@ export default function ProfilePosts({ communityPosts }: ProfilePostsProps) {
             return (
               <div className="py-5">
                 <ThreadCard
+                  pokemon={undefined}
                   onClick={() => {}}
                   content={el.content}
+                  createdAt={el.createdAt}
+                  id={el.id}
+                  img={el.img}
+                  plan={el.plan}
                 />
               </div>
             );
