@@ -1,17 +1,9 @@
 import IProps from "@/types/props.interface";
 import Image from "next/image";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { HiPencil } from "react-icons/hi";
 import { Modal, Portal } from "./modal";
-import useToggle from "hooks/useToggle";
 import useInput from "hooks/useInput";
 import useProfile from "hooks/useProfile";
 import ProfilePlan from "components/mypage/ProfilePlan";
@@ -20,28 +12,46 @@ import {
   ButtonProps,
   ContentsProps,
   FixProfileProps,
-  FollowingFollowerInfo,
   FollwerFollweeInfoProps,
-  InfoProps,
   NavButtonProps,
   NavProps,
   ShowFollowerProps,
   ShowFollowingProps,
+  UseProfileProps,
 } from "@/types/profile.interface";
 import { useRouter } from "next/router";
-import { useUser } from "@/utils/client";
-import { useQueryClient } from "@tanstack/react-query";
-import { getUserFollower } from "@/utils/fetchFn/query/profile";
+import { binarySearch } from "@/utils/math";
 
-const ProfileContext = createContext<{
-  arr: Array<number>;
-}>(undefined);
+const ProfileContext = createContext<UseProfileProps>({
+  writeDescription: () => {},
+  userFollow: () => {},
+  userUnfollow: () => {},
+  userInfo: undefined,
+  userInfoRefetch: undefined,
+  userFollowee: undefined,
+  getUserFolloweeRefetch: undefined,
+  userFollower: undefined,
+  getUserFollowerRefetch: undefined,
+  planInfo: undefined,
+  communityPosts: undefined,
+  nickname: "",
+  myName: [],
+  isFollow: { value: false },
+  onClick: {},
+  isFixing: { value: false },
+  isShowFollowing: { value: false },
+  isShowFollower: { value: false },
+  followerInfo: [],
+  followerNum: 0,
+  followingNum: 0,
+  description: "",
+  followingInfo: [],
+});
 
 export default function Profile({ children }: IProps) {
-  const arr = [, , , , , , , , , , , , , ,].fill(0);
-
+  const profileData = useProfile();
   return (
-    <ProfileContext.Provider value={{ arr }}>
+    <ProfileContext.Provider value={{ ...profileData }}>
       <div className="flex w-full flex-1">
         <div className="mx-auto flex max-w-7xl flex-1 flex-col">{children}</div>
       </div>
@@ -67,126 +77,30 @@ Profile.Image = () => {
   );
 };
 
-Profile.Info = ({
-  nickname,
-  description,
-  followerNum,
-  followingNum,
-  isMyProfile,
-  followerInfo,
-  followingInfo,
-  getUserFolloweeRefetch,
-  getUserFollowerRefetch,
-  userInfoRefetch,
-}: InfoProps) => {
-  const { writeDescription, userFollow, userUnfollow } = useProfile();
-  // console.log("isMyProfile", isMyProfile);
-  // HiPencil 아이콘 누를시 모달창 띄워주기 위한 state
-  const isFixing = useToggle(false);
-  // follower 누를시 모달창 띄워주기 위한 state
-  const isShowFollower = useToggle(false);
-  // following 누를시 모달창 띄워주기 위한 state
-  const isShowFollowing = useToggle(false);
-  // follow버튼을 보여줄지 unfollow버튼을 보여줄지 결정하는 state
-  const isFollow = useToggle(false);
-
-  const myName = useUser();
-  console.log("myName", myName[0]?.nickname);
-  console.log("followerInfo", followerInfo);
-  console.log("followingInfo", followingInfo);
-  console.log("followerNum", followerNum);
-  console.log("followingNum", followingNum);
-  console.log("nickname", nickname);
-
-  const router = useRouter();
-  console.log("router234", router.query?.username);
-
-  // 이진탐색
-  const binarySearch = function (arr, target) {
-    if (arr === undefined) return false;
-    let start = 0;
-    let end = arr.length - 1;
-    let mid;
-
-    while (start <= end) {
-      mid = parseInt(String((start + end) / 2));
-
-      if (target == arr[mid].nickname) {
-        return true;
-      } else {
-        if (target < arr[mid].nickname) {
-          end = mid - 1;
-        } else {
-          start = mid + 1;
-        }
-      }
-    }
-    return false;
-  };
+Profile.Info = ({ isMyProfile }) => {
+  const {
+    nickname,
+    writeDescription,
+    userInfoRefetch,
+    myName,
+    isFollow,
+    onClick,
+    isFixing,
+    isShowFollower,
+    isShowFollowing,
+    followerInfo,
+    followerNum,
+    followingNum,
+    description,
+    followingInfo,
+  } = useContext(ProfileContext);
 
   useEffect(() => {
+    // 팔로워 중 로그인한 유저가 있는지 비교해서 팔로우 언팔로우 설정
     binarySearch(followerInfo, myName[0]?.nickname)
       ? isFollow.setTrue()
       : isFollow.setFalse();
   }, [followerInfo, myName[0]?.nickname]);
-
-  console.log("isFollow.value", isFollow.value);
-
-  const onClick = {
-    writeDescription: () => {
-      // 닉네임옆 연필 아이콘 누를시 모달창띄워주기
-      console.log("writeDescription function launched");
-      isFixing.setTrue();
-    },
-    showFollowing: () => {
-      // following 클릭시 팔로우중인 사람들 모달창으로 띄워줌
-      console.log("showFollowing function launched");
-      isShowFollowing.setTrue();
-    },
-    showFollower: () => {
-      // follower클릭시 팔로워들 모달창으로 띄워줌
-      console.log("showFollower function launched");
-      isShowFollower.setTrue();
-    },
-    followUser: () => {
-      // 버튼에 들어가는 유저 팔로우 함수
-      console.log(
-        `followUser function launched follow ${router.query?.username}`
-      );
-      try {
-        userFollow(
-          {
-            targetId: Number(router.query?.username),
-          },
-          {
-            onSuccess: async () => {
-              await getUserFolloweeRefetch();
-              await getUserFollowerRefetch();
-              isFollow.setTrue();
-            },
-          }
-        );
-      } catch (err) {
-        console.error("followUser function launched" + err);
-      }
-    },
-    unfollowUser: () => {
-      // 유저 언팔 함수
-      console.log("unfollowUser function launched");
-      userUnfollow(
-        {
-          targetId: Number(router.query?.username),
-        },
-        {
-          onSuccess: async () => {
-            await getUserFolloweeRefetch();
-            await getUserFollowerRefetch();
-            isFollow.setFalse();
-          },
-        }
-      );
-    },
-  };
 
   return (
     <div className="flex h-full w-10/12 flex-col py-10">
@@ -197,11 +111,12 @@ Profile.Info = ({
           <div className="flex flex-col">
             <div className="flex">
               <span className="text-4xl">{nickname}</span>
+              {/* 로그인한 유저 프로필 수정버튼 */}
               {isMyProfile === true && (
                 <HiPencil
                   className="cursor-pointer pl-3 pt-2"
                   size={35}
-                  onClick={onClick.writeDescription}
+                  onClick={onClick.fixProfile}
                 />
               )}
             </div>
@@ -235,6 +150,7 @@ Profile.Info = ({
             </div>
           </div>
         </div>
+        {/* 팔로우 언팔로우 버튼 */}
         {isFollow.value && (
           <Profile.Button
             title={"unfollow"}
@@ -259,6 +175,7 @@ Profile.Info = ({
           </div>
         </div>
       </div>
+      {/* 프로필 수정 모달 */}
       {isFixing.value && (
         <FixProfile
           hide={isFixing.setFalse}
@@ -267,12 +184,14 @@ Profile.Info = ({
           userInfoRefetch={userInfoRefetch}
         />
       )}
+      {/* 팔로워 정보 모달 */}
       {isShowFollower.value && (
         <ShowFollower
           hide={isShowFollower.setFalse}
           followerInfo={followerInfo}
         />
       )}
+      {/* 팔로잉 정보 모달 */}
       {isShowFollowing.value && (
         <ShowFollowing
           hide={isShowFollowing.setFalse}
@@ -315,7 +234,8 @@ Profile.Nav = ({ children, navItemWidth, navPage }: NavProps) => {
   );
 };
 
-Profile.Contents = ({ navPage, planInfo, communityPosts }: ContentsProps) => {
+Profile.Contents = ({ navPage }: ContentsProps) => {
+  const { planInfo, communityPosts } = useContext(ProfileContext);
   // console.log("communityPosts", communityPosts);
   // console.log("myCommunityPosts", myCommunityPosts);
 
@@ -349,7 +269,9 @@ Profile.NavButton = ({ title, onClick, setNavItemWidth }: NavButtonProps) => {
   );
 };
 
-// 프로필 수정 모달에 들어가야할 거 description 수정, 프로필 이미지 수정
+/**
+ * 프로필 수정 모달
+ */
 function FixProfile({
   hide,
   description,
@@ -365,15 +287,19 @@ function FixProfile({
 
   const submitDescription = () => {
     console.log("submitDescription function launched");
-    writeDescription(
-      { description: myDescription.value },
-      {
-        onSuccess: async () => {
-          await userInfoRefetch();
-        },
-      }
-    );
-    hide();
+    try {
+      writeDescription(
+        { description: myDescription.value },
+        {
+          onSuccess: async () => {
+            await userInfoRefetch();
+          },
+        }
+      );
+      hide();
+    } catch (err) {
+      console.log("submitDescription function err : " + err);
+    }
   };
 
   return (
@@ -420,8 +346,11 @@ function FixProfile({
   );
 }
 
+/**
+ * 팔로잉 정보 모달
+ */
 function ShowFollowing({ hide, followingInfo }: ShowFollowingProps) {
-  console.log("followingInfo123", followingInfo);
+  // console.log("followingInfo123", followingInfo);
   return (
     <>
       <Portal qs="#__next">
@@ -429,15 +358,18 @@ function ShowFollowing({ hide, followingInfo }: ShowFollowingProps) {
           <Modal.Header hide={hide} />
           <div>this is showFollowing</div>
           {!followingInfo.length && <div>There isn't any following yet...</div>}
-          <FollowerFollweeInfo info={followingInfo} hide={hide} />
+          <FollowerFolloweeInfo info={followingInfo} hide={hide} />
         </Modal>
       </Portal>
     </>
   );
 }
 
+/**
+ * 팔로워 정보 모달
+ */
 function ShowFollower({ hide, followerInfo }: ShowFollowerProps) {
-  console.log("followerInfo123", followerInfo);
+  // console.log("followerInfo123", followerInfo);
   return (
     <>
       <Portal qs="#__next">
@@ -445,15 +377,15 @@ function ShowFollower({ hide, followerInfo }: ShowFollowerProps) {
           <Modal.Header hide={hide} />
           <div>this is showFollower</div>
           {!followerInfo.length && <div>There isn't any following yet...</div>}
-          <FollowerFollweeInfo info={followerInfo} hide={hide} />
+          <FollowerFolloweeInfo info={followerInfo} hide={hide} />
         </Modal>
       </Portal>
     </>
   );
 }
 
-function FollowerFollweeInfo({ info, hide }: FollwerFollweeInfoProps) {
-  console.log("info123", info);
+function FollowerFolloweeInfo({ info, hide }: FollwerFollweeInfoProps) {
+  // console.log("info123", info);
 
   const router = useRouter();
   return (
@@ -515,14 +447,6 @@ const ActionBar = styled.div<{
 /**
  * mypage 구현해야 할 것
  *
- *  - mypage 보단 profile이 더 적합한 단어라고 생각됨 mypage -> profile 싹다 고치기 -> 완
- *  - 다른 사람의 프로필에 접근하고 싶을 때 -> 백엔드 고쳐서 나중에 follower, followee 연결만 하면 완
- *  - following, follower 눌렀을때 모달로 정보 표시 -> 완
- *  - follow 유무에 따라 follow버튼 또는 unfollow 버튼
- *  - Profile.Contents arr 오류 수정 -> 완
- *  - type 지정 -> 완
- *  - reactQuery로 받아올때 잠깐의 시간동안 로딩창 or 로딩 애니메이션 만들어주기 -> 나중에 ssr로 바꿀계획인데 일다 컴포넌트 만들어놓음 component/commmon/LoadingCircle 완
  *  - 계획중인여행, 내 게시물 backend 연결 + infinite scroll 구현
- *  - 연필 -> 완
  *  - 내계획, 내 게시물 -> 백 수정되면 끝
  */
