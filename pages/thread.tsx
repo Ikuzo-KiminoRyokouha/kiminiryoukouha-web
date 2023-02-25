@@ -54,9 +54,9 @@ export default function Thread() {
         <div className="max-w-2xl">
           {data?.pages?.map((group, idx) => (
             <div key={idx}>
-              {group?.results?.map((pokemon) => (
+              {/* {group?.results?.map((pokemon) => (
                 <ThreadCard pokemon={pokemon} onClick={onClick} />
-              ))}
+              ))} */}
             </div>
           ))}
           <div ref={bottom} />
