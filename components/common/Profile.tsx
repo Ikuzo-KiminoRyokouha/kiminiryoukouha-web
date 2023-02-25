@@ -449,4 +449,5 @@ const ActionBar = styled.div<{
  *
  *  - 계획중인여행, 내 게시물 backend 연결 + infinite scroll 구현
  *  - 내계획, 내 게시물 -> 백 수정되면 끝
+ *  - 사진 업로드
  */
