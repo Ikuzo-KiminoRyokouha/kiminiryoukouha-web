@@ -13,6 +13,7 @@ import headerNavMap from "../../../utils/dataMap/headerNavMap.json";
 import DropDown from "../../common/DropDown";
 import { useMutation } from "@tanstack/react-query";
 import { mLogout } from "../../../utils/fetchFn/mutation/user";
+import { useEffect, useRef } from "react";
 
 /**
  * @description 모든 화면에 공통적으로 적용 되는 Header 컴포넌트 입니다.
@@ -26,6 +27,19 @@ export default function Header() {
     onSuccess: () => router.reload(),
     onError: () => alert("요청 실패"),
   });
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    function handleOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        dropdown.setFalse();
+        console.log("작동됨");
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <div
@@ -76,7 +90,10 @@ export default function Header() {
                 </button>
               )}
               {user && (
-                <div className="relative flex items-center justify-end space-x-1">
+                <div
+                  className="relative flex items-center justify-end space-x-1"
+                  ref={dropdownRef}
+                >
                   <div
                     onMouseDown={(e) => e.preventDefault()}
                     className="flex cursor-pointer items-center justify-center"

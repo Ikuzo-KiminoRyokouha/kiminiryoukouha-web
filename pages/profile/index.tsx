@@ -1,5 +1,4 @@
 import { useUser } from "@/utils/client";
-import authRequest from "@/utils/request/authRequest";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -7,12 +6,10 @@ export default function Profile() {
   const router = useRouter();
   const [user] = useUser();
   const [pending, setPending] = useState(false);
-  // console.log("user123", user);
   useEffect(() => {
     if (!pending) {
       setPending(true);
     } else {
-      console.log(user.sub);
       user &&
         router.push({
           pathname: `/mypage/${user?.nickname || "error"}`,
@@ -48,27 +45,3 @@ export default function Profile() {
     </div>
   );
 }
-
-// export async function getServerSideProps({ req }) {
-//   try {
-//     const cookie = req ? req.headers.cookie : "";
-//     const {data: userInfo} = await authRequest.get(`/users/info?userId=${"1"}`, {
-//       cookie,
-//     });
-
-//     console.log("data123", userInfo?.data.nickname);
-
-//     return {
-//       props: {
-//         nickname: "asdf",
-//       },
-//     };
-//   } catch (error) {
-//     console.log("error", error);
-//     return {
-//       props: {
-//         nickname: "-1",
-//       },
-//     };
-//   }
-// }
