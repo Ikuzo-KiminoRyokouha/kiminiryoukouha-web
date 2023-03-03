@@ -12,8 +12,6 @@ import { Modal, Portal } from "./common/modal";
 import { FcAddImage } from "react-icons/fc";
 import Router from "next/router";
 import mainRequest from "@/utils/request/mainRequest";
-import { useEffect, useState } from "react";
-import MyPlan from '../components/Myplan'
 
 export default function ThreadCard({
   pokemon,
@@ -33,7 +31,7 @@ export default function ThreadCard({
   // const nick = nickname()
   
 
-  // console.log('pokemon123',pokemon)
+  
   
 
 
@@ -103,7 +101,6 @@ export default function ThreadCard({
                         planId={pokemon.plan.id}
                         hide={deleting.setFalse}
                         id={pokemon.id}
-                      
                     />
                     )}
 
@@ -215,56 +212,33 @@ interface ModalProps {
   id:number;
 }
 
-function PostWrite({ img, content, planId, hide, id }: ModalProps) {
+function PostWrite({ img, content, planId, hide ,id}: ModalProps) {
   const contents = useInput(content, "게시물 내용을 입력해주세요");
+ //여기도 고쳐야함 
   const edit = () => {
-    authRequest.put("/community", {
-        img:"123",
-        content: contents.value,
-        id,
-        planId:planIdNum,
-       
-    });
-    alert("커뮤니티 글수정이 완료되었습니다.");
-};
+      authRequest.put("/community", {
+          img:"123",
+          content: contents.value,
+          id,
+          planId,
+         
+      });
+      alert("커뮤니티 글수정이 완료되었습니다.");
+  };
 
-
-
-  const [planData, setPlanData] = useState<Array<any> | undefined>(); // 데이터 저장 임의
-  useEffect(() => {
-      authRequest
-          .get(`/plan/all/1`)
-          .then((res) => {
-              setPlanData(res.data.plans);
-          })
-          .catch((err) => {
-              console.log(err);
-          });
-  }, []);
-
-  // 커뮤니티 글작성; 모달창 내 이미지 버튼 클릭 시 내용 보이기 / 지우기
-  var write_plan: number = 0;
-
+  // 이미지 버튼 클릭 시 내용 보이기 / 지우기
   const classnameAdd = () => {
-      // 플렌 데이터 불러오기
       document.getElementsByClassName("test")[0].classList.toggle("hidden");
       document.getElementsByClassName("test")[0].classList.add("block");
   };
 
-  const [planIdNum,setPlanIdNum]=useState(0)
-  const getPlanIdNum= (x)=>{
-      setPlanIdNum(x)
-  } 
-  
-
-  
   return (
       <>
           <Portal qs={"#__next"}>
               <Modal hide={hide}>
                   <Modal.Header hide={hide} />
                   <div className=" border-0 text-center text-xl font-black">
-                      <label>게시글 수정</label>
+                      <label>게시글 작성</label>
                   </div>
                   {/* 디바이더 */}
                   <div className="h-2">
@@ -303,15 +277,31 @@ function PostWrite({ img, content, planId, hide, id }: ModalProps) {
                           <div className="flex w-full justify-end">
                               <FcAddImage
                                   size={40}
-                                  onClick={(e) => {
+                                  onClick={() => {
                                       classnameAdd();
-                                      console.log("데이터를 사용해야함");
                                   }}
                                   className="cursor-pointer"
                               />
                           </div>
-                          <div className="test flex hidden items-center">
-                              <MyPlan data={planData} getPlanIdNum={getPlanIdNum} />
+                          <div className="test  hidden items-center">
+                              <div
+                                  className="cursor-pointer p-2"
+                                  onClick={() => {
+                                      console.log("이전버튼");
+                                  }}
+                              >
+                                  <MdOutlineArrowBackIosNew />
+                              </div>
+                              {/* 불러온 계획 ~ */}
+
+                              <div
+                                  className="cursor-pointer p-2"
+                                  onClick={() => {
+                                      console.log("다음버튼");
+                                  }}
+                              >
+                                  <MdOutlineArrowForwardIos />
+                              </div>
                           </div>
                       </div>
                   </div>
@@ -321,7 +311,7 @@ function PostWrite({ img, content, planId, hide, id }: ModalProps) {
                             edit();
                             Router.reload()
                           }}
-                          className="h-10 flex-1 rounded-md border-0 bg-sky-600 text-lg font-bold text-white"
+                          className="h-10 flex-1 border-0 bg-sky-600 text-lg font-bold text-white"
                       >
                           완료
                       </button>
@@ -331,3 +321,10 @@ function PostWrite({ img, content, planId, hide, id }: ModalProps) {
       </>
   );
 }
+
+
+  
+
+
+
+

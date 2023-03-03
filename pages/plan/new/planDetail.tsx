@@ -24,7 +24,7 @@ export default function PlanDetail({ travels, plan, info }) {
 
   // 계획 재생성하는 함수
   const rerollePlan = async () => {
-    await axios.delete(`http://localhost:8000/plan/${plan.id}`);
+    await authRequest.delete(`/plan/${plan.id}`);
     router.push(
       {
         pathname: "/plan/new/planDetail",
@@ -39,14 +39,14 @@ export default function PlanDetail({ travels, plan, info }) {
 
   const handleRouteChange = async () => {
     !isSave.current &&
-      (await axios.delete(`http://localhost:8000/plan/${plan.id}`));
+      (await authRequest.delete(`/plan/${plan.id}`));
     return;
   };
 
   useEffect(() => {
     const handleWindowClose = async (e: BeforeUnloadEvent) => {
       !isSave.current &&
-        (await axios.delete(`http://localhost:8000/plan/${plan.id}`));
+        (await authRequest.delete(`/plan/${plan.id}`));
       return;
     };
     /* 이벤트리스너 등록 */
@@ -223,7 +223,6 @@ function InfoCard({ title, sub }) {
 
 function IntroduceCard({ travel }) {
   const [description, setDescription] = useState<string>("");
-  console.log(description);
   useLayoutEffect(() => {
     getDescriptionFromAPI(
       Number(travel.destination.contentid),
@@ -254,7 +253,7 @@ function IntroduceCard({ travel }) {
 }
 
 export async function getServerSideProps({ query, req }) {
-  console.log("query : ", query.info);
+  
   const info: Info = JSON.parse(query.info);
 
   const res = await authRequest
@@ -278,7 +277,7 @@ export async function getServerSideProps({ query, req }) {
       return [];
     })
     .catch((error: AxiosError) => {
-      console.log(error.message);
+      
     });
 
   const { travels, ...plan } = res;
