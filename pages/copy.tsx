@@ -25,9 +25,9 @@ const responsive = {
  */
 export default function PlanCarousel() {
   return (
-    <div id="block">
+    <div id="block" className="flex h-fit justify-center">
       <Carousel
-        className="mx-auto my-2 max-w-7xl md:my-6"
+        className="my-2 max-w-7xl md:my-6"
         swipeable={false}
         draggable
         showDots={true}
@@ -44,24 +44,23 @@ export default function PlanCarousel() {
         itemClass="carousel-item-padding-40-px"
       >
         {[0, 1, 2, 3, 4, 5, 6].map(() => (
-          <div key="el" className="flex h-[28rem] flex-col space-y-2 p-5">
-            <div className="relative flex-1">
+          <div key="el" className="flex h-auto flex-col space-y-2 p-5">
+            <div className="relative h-60">
               <Image src={"/assets/main-img.png"} layout={"fill"} />
             </div>
-            <div className="shrink space-y-2">
+            <div className="shrink space-y-4">
               <div className="flex justify-between">
-                <span>タイトル</span>
-                <span>場所</span>
+                <span className="font-semibold">タイトル</span>
+                <span className="font-semibold">場所</span>
               </div>
               <p>中村修太郎</p>
               <p>テーマ : 食べ物、見物、買い物</p>
             </div>
             <div className="text-end">
-              <button className="rounded-lg bg-sky-500 p-2 text-white">
+              <button className="rounded-lg bg-sky-500 p-2 text-white duration-300 ease-in hover:bg-sky-600">
                 読み込み
               </button>
             </div>
-            <div className="h-9 w-full"></div>
           </div>
         ))}
       </Carousel>
