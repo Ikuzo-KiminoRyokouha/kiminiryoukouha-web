@@ -17,6 +17,7 @@ import mainRequest from "../../utils/request/mainRequest";
 import { AiOutlineWarning } from "react-icons/ai";
 import { useInput, useToggle } from "../../hooks";
 import "@/utils/extension/array.extension";
+import FireworkEffect from "components/Firework";
 
 interface StepProps {
   ctx: Context<{
@@ -307,8 +308,9 @@ export function StepFour({ ctx }: StepProps) {
 
   return (
     <>
+      <FireworkEffect />
       <div className="relative my-24 flex h-72 w-full flex-1 flex-col md:my-0">
-        <Image src={"/assets/done.png"} layout="fill" />
+        <Image src={"/assets/done.png"} layout="fill" className="z-0" />
       </div>
       <div className="flex w-full justify-center">
         <button
