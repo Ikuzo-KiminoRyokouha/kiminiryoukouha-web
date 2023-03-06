@@ -39,3 +39,28 @@ export const convertSecToTimeObj = (sec: number) => {
 
   return { hour, min, sec };
 };
+
+/**
+ * @description 이진탐색 알고리즘
+ */
+export const binarySearch = function (arr: any[], target: string): boolean {
+  if (arr === undefined) return false;
+  let start = 0;
+  let end = arr.length - 1;
+  let mid: number;
+
+  while (start <= end) {
+    mid = parseInt(String((start + end) / 2));
+
+    if (target == arr[mid].nickname) {
+      return true;
+    } else {
+      if (target < arr[mid].nickname) {
+        end = mid - 1;
+      } else {
+        start = mid + 1;
+      }
+    }
+  }
+  return false;
+};
