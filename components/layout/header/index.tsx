@@ -119,6 +119,12 @@ export default function Header() {
                           router.push(`/profile/${getUser()?.sub}`);
                         }}
                       />
+                      <DropDown.Item
+                        text={"Wallet"}
+                        onClick={() => {
+                          router.push(`/wallet`);
+                        }}
+                      />
                       <DropDown.Item text={"Setting"} onClick={() => {}} />
                     </DropDown.ItemContainer>
                     <DropDown.Tail>
