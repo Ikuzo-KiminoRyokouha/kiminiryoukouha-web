@@ -4,25 +4,39 @@ import {
     MdOutlineArrowBackIosNew,
 } from "react-icons/md";
 import authRequest from "@/utils/request/authRequest";
-import { useState } from "react";
-export default function Myplan({data,getPlanIdNum}) {
+import { useMemo, useState } from "react";
+export default function Myplan({data,getPlanIdNum , getimgSrc}) {
     let [writePlan, setWritePlan] = useState(0);
   
     
-
     const [image,setImage] =useState("")
     
+    // const src = useMemo(() => {
+    //     console.log(data)
+    //     const arr = data.filter((el) => el.destination.firstimage != "");
+    //     if (arr.length === 0) return "/assets/main-img.png";
+    //     return arr[0].destination.firstimage;
+    //   }, [x`]);
+
+//   const src = useMemo(() => {
+//         console.log(data)
+//         const arr = data.filter((el) => el.destination.firstimage != "");
+//         if (arr.length === 0) return "/assets/main-img.png";
+//         return arr[0].destination.firstimage;
+//       }, []);
 
  
     return (
         <>
-            <div
+        {data?<> 
+                <div
                 className="cursor-pointer p-2"
                 onClick={() => {
                     if (writePlan > 0) {
                         setWritePlan(writePlan - 1);
                         getPlanIdNum(data[writePlan]?.id)
                         setImage(data[writePlan].travels[0].destination.firstimage)
+                        getimgSrc(image)
                     }
                   
                 }}
@@ -32,7 +46,7 @@ export default function Myplan({data,getPlanIdNum}) {
             <div className="m-4 flex items-center rounded-md border p-1 shadow-sm">
                 <div className="h-24 w-24">
                     <Image
-                        src= {image || "/assets/main-img.png"}
+                        src= { image ||"/assets/main-img.png"}
                         width={1}
                         height={1}
                         layout="responsive"
@@ -44,7 +58,7 @@ export default function Myplan({data,getPlanIdNum}) {
                             장소 : {data[writePlan]?.city}
                         </p>
                         <p className="line-clamp-2 leading-2 m-1 block">
-                            {writePlan} 
+                            예산 : {data[writePlan].totalCost}
                         </p>
                         <p className="p-1">
                             테마: {Object.values(data[writePlan].tag)}
@@ -59,12 +73,16 @@ export default function Myplan({data,getPlanIdNum}) {
                         setWritePlan(writePlan +1);
                         getPlanIdNum(data[writePlan]?.id)
                         setImage(data[writePlan].travels[0].destination.firstimage)
+                        getimgSrc(image)
                     }
                     
                 }}
             >
                 <MdOutlineArrowForwardIos />
-            </div>
+            </div></>:null}
+
+        
+            
         </>
     );
 }

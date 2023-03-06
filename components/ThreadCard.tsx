@@ -219,12 +219,13 @@ function PostWrite({ img, content, planId, hide, id }: ModalProps) {
   const contents = useInput(content, "게시물 내용을 입력해주세요");
   const edit = () => {
     authRequest.put("/community", {
-        img:"123",
+        img:imgSrc,
         content: contents.value,
         id,
         planId:planIdNum,
        
     });
+
     alert("커뮤니티 글수정이 완료되었습니다.");
 };
 
@@ -238,12 +239,14 @@ function PostWrite({ img, content, planId, hide, id }: ModalProps) {
               setPlanData(res.data.plans);
           })
           .catch((err) => {
-              console.log(err);
+             
           });
   }, []);
+  console.log(planData)
 
   // 커뮤니티 글작성; 모달창 내 이미지 버튼 클릭 시 내용 보이기 / 지우기
   var write_plan: number = 0;
+  
 
   const classnameAdd = () => {
       // 플렌 데이터 불러오기
@@ -254,6 +257,10 @@ function PostWrite({ img, content, planId, hide, id }: ModalProps) {
   const [planIdNum,setPlanIdNum]=useState(0)
   const getPlanIdNum= (x)=>{
       setPlanIdNum(x)
+  } 
+  const [imgSrc,setImgsrc]=useState("")
+  const getimgSrc= (x)=>{
+      setImgsrc(x)
   } 
   
 
@@ -288,6 +295,7 @@ function PostWrite({ img, content, planId, hide, id }: ModalProps) {
                                       }}
                                   >
                                       nickname
+                                      
                                   </span>
                               </div>
                           </div>
@@ -311,7 +319,7 @@ function PostWrite({ img, content, planId, hide, id }: ModalProps) {
                               />
                           </div>
                           <div className="test flex hidden items-center">
-                              <MyPlan data={planData} getPlanIdNum={getPlanIdNum} />
+                              <MyPlan data={planData} getPlanIdNum={getPlanIdNum} getimgSrc={getimgSrc} />
                           </div>
                       </div>
                   </div>

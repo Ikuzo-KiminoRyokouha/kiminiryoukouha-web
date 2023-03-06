@@ -14,6 +14,7 @@ import { Modal, Portal } from "../../components/common/modal";
 import authRequest from "@/utils/request/authRequest";
 import MyPlan from "../../components/Myplan";
 import { redirect } from "next/dist/server/api-utils";
+import mainRequest from "@/utils/request/mainRequest";
 
 export default function Thread() {
     const bottom = useRef(null);
@@ -122,7 +123,7 @@ function PostWrite({ img, content, planId, hide }: ModalProps) {
     const submit = () => {
         if (contents.value) {
             authRequest.post("/community", {
-                img: "1",
+                img: imgSrc,
                 content: contents.value,
                 planId: planIdNum,
             });
@@ -135,25 +136,25 @@ function PostWrite({ img, content, planId, hide }: ModalProps) {
     
 
 
-
     const [planData, setPlanData] = useState<Array<any> | undefined>(); // 데이터 저장 임의
     useEffect(() => {
         authRequest
-            .get(`/plan/all/${write_plan}`)
+            .get(`/plan/all/1`)
             .then((res) => {
                 setPlanData(res.data.plans);
             })
             .catch((err) => {
-                console.log(err);
+               
             });
     }, []);
-
+    
+  
     // 커뮤니티 글작성; 모달창 내 이미지 버튼 클릭 시 내용 보이기 / 지우기
     var write_plan: number = 0;
 
     const classnameAdd = () => {
         // 플렌 데이터 불러오기
-        console.log(planData);
+        
         document.getElementsByClassName("test")[0].classList.toggle("hidden");
         document.getElementsByClassName("test")[0].classList.add("block");
     };
@@ -162,7 +163,13 @@ function PostWrite({ img, content, planId, hide }: ModalProps) {
     const getPlanIdNum= (x)=>{
         setPlanIdNum(x)
     } 
+
+    const [imgSrc,setImgsrc]=useState("")
+    const getimgSrc= (x)=>{
+        setImgsrc(x)
+    } 
     
+  
 
     
     return (
@@ -218,7 +225,7 @@ function PostWrite({ img, content, planId, hide }: ModalProps) {
                                 />
                             </div>
                             <div className="test flex hidden items-center">
-                                <MyPlan data={planData} getPlanIdNum={getPlanIdNum} />
+                                <MyPlan data={planData} getPlanIdNum={getPlanIdNum}  getimgSrc={getimgSrc} />
                             </div>
                         </div>
                     </div>

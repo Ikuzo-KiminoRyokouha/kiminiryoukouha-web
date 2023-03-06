@@ -10,7 +10,7 @@ export default function ThreadSummary({plan}) {
 const router=useRouter()
 const a = (plan.plan?.id) as number
 
-const Thema =Object.values(plan?.plan?.tag).map((el)  =>{return el})
+const Thema = Object.values(plan?.plan?.tag).map((el)  =>{return el})
 
 
 // const qwerasdf =  async() =>{

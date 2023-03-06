@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { useInput, useTMap } from "../../hooks"
-import { Info } from "../../types/plan.interface";
 import axios from "axios";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
@@ -13,30 +12,20 @@ import authRequest from "@/utils/request/authRequest";
 
 
 
-export default function QWER({ travels, plan } ) {
+export default function Share({ travels, plan } ) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
 
   const router = useRouter();
   const isSave = useRef(false);
   const startDay = useInput("", "시작날짜ex) 2023/02/27");
+  
  
 
   const [selectedDate, setSelectedDate] = useState(dayjs(plan.start));
-  //선택된 날짜를 시작값으로 함
+
 
   const [dayPlan, setDayPlan] = useState(1);
 
-  // const onSubmit = async ()=>{
-  //   authRequest.post('/plan/copy',{
-  //     planId:plan.id
-  //     start:startDay.value
-  //   })
-  // }
-
-
- 
-                                 //여기에 날짜누르고 값넣으면 내 계획으로 post요청 되게끔 만들기 
- 
 
   /** 계획에 따라 지도에 장소를 띄워 주는 로직 */
   useEffect(() => {

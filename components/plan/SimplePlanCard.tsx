@@ -29,7 +29,7 @@ export default function SimplePlanCard({ plan }: Props) {
         <p className="text-lg">{plan.title.split(" ")[0]}</p>
         <Image
           className="rounded-full"
-          src={src}
+          src={src }
           width={1}
           height={1}
           layout="responsive"

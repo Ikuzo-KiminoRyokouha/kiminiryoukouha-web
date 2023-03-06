@@ -6,7 +6,8 @@ import { trace } from "console";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PlanDetail from "../plan/new/planDetail"
-import QWER from "./share";
+import Share from "./share";
+
 
 
 export default function q ({communityplans,totalplan ,test}){
@@ -32,7 +33,7 @@ totalplan.plans.map((el,i)=>{
 
 {
 totalplan.map((el,i)=>{
-  return totalplan[i]?.id==query.id ? <QWER travels={totalplan[i]?.travels} plan={test}/>:null
+  return totalplan[i]?.id==query.id ? <Share travels={totalplan[i]?.travels} plan={test}/>:null
   
 })
 

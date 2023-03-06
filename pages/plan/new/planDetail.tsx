@@ -13,6 +13,7 @@ import authRequest from "../../../utils/request/authRequest";
 
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
+  console.log('travels',travels)
 
   const router = useRouter();
   const isSave = useRef(false);
