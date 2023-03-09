@@ -26,7 +26,22 @@ export default function SimplePlanCard({ plan }: Props) {
   return (
     <div className="flex w-full space-x-4 border p-2 shadow-md drop-shadow-sm">
       <div className="basis-1/12 text-center">
-        <p className="text-lg">{plan.title.split(" ")[0]}</p>
+        <p
+          className="cursor-pointer text-lg"
+          onClick={() =>
+            router.push(
+              {
+                pathname: "/plan/detail",
+                query: {
+                  planId: plan.id,
+                },
+              },
+              "/plan/detail"
+            )
+          }
+        >
+          {plan.title.split(" ")[0]}
+        </p>
         <Image
           className="rounded-full"
           src={src}
