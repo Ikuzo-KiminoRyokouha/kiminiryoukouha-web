@@ -100,15 +100,15 @@ export default function Home() {
             />
           </div>
           <div className="h-5 w-full lg:h-full lg:w-5"></div>
-          <div className="flex h-96 w-full flex-row lg:w-1/3 lg:flex-col">
-            <div className="h-72 w-1/2 lg:h-1/2 lg:w-full">
+          <div className="flex h-96 w-full flex-col lg:w-1/3">
+            <div className="h-1/2 w-full">
               <ImageCard
                 src={"/assets/main-img.png"}
                 description={"東京/なごや"}
               />
             </div>
-            <div className="h-full w-5 lg:h-5 lg:w-full"></div>
-            <div className="h-72 w-1/2 lg:h-1/2 lg:w-full">
+            <div className="h-5 w-full"></div>
+            <div className="h-1/2 w-full">
               <ImageCard
                 src={"/assets/main-img.png"}
                 description={"東京/なごや"}
