@@ -229,20 +229,20 @@ function PostWrite({ img, content, planId, hide, id }: ModalProps) {
     alert("커뮤니티 글수정이 완료되었습니다.");
 };
 
+const [planData, setPlanData] = useState<Array<any> | undefined>(); // 데이터 저장 임의
 
+useEffect(() => {
+        authRequest
+            .get(`/plan/all/1`)
+            .then((res) => {
+                setPlanData(res.data.plans);
+              
+            })
+            .catch((err) => {
+               
+            });
+    }, []);
 
-  const [planData, setPlanData] = useState<Array<any> | undefined>(); // 데이터 저장 임의
-  useEffect(() => {
-      authRequest
-          .get(`/plan/all/1`)
-          .then((res) => {
-              setPlanData(res.data.plans);
-          })
-          .catch((err) => {
-             
-          });
-  }, []);
-  console.log(planData)
 
   // 커뮤니티 글작성; 모달창 내 이미지 버튼 클릭 시 내용 보이기 / 지우기
   var write_plan: number = 0;

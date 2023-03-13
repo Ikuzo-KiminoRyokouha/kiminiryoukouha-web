@@ -1,22 +1,32 @@
 import Image from "next/image";
+
 import {
     MdOutlineArrowForwardIos,
     MdOutlineArrowBackIosNew,
 } from "react-icons/md";
 import authRequest from "@/utils/request/authRequest";
-import { useMemo, useState } from "react";
-export default function Myplan({data,getPlanIdNum , getimgSrc}) {
+import { useEffect, useMemo, useState } from "react";
+
+
+
+
+export default function Myplan({data  ,getPlanIdNum , getimgSrc ,} ) {
     let [writePlan, setWritePlan] = useState(0);
-  
     
     const [image,setImage] =useState("")
-    
+    console.log(data)
+   
     // const src = useMemo(() => {
-    //     console.log(data)
-    //     const arr = data.filter((el) => el.destination.firstimage != "");
-    //     if (arr.length === 0) return "/assets/main-img.png";
-    //     return arr[0].destination.firstimage;
-    //   }, [x`]);
+    //     const arr = data.map((el,i)=>{
+    //         console.log(el)
+    //         el.travels.filter((el) => el.destination.firstimage != "");
+    //         if (arr.length === 0) return "/assets/main-img.png";
+    //         return arr[0].destination.firstimage;
+
+    //     }) 
+    //   }, []);
+        
+       
 
 //   const src = useMemo(() => {
 //         console.log(data)
@@ -25,6 +35,8 @@ export default function Myplan({data,getPlanIdNum , getimgSrc}) {
 //         return arr[0].destination.firstimage;
 //       }, []);
 
+
+
  
     return (
         <>
@@ -32,13 +44,13 @@ export default function Myplan({data,getPlanIdNum , getimgSrc}) {
                 <div
                 className="cursor-pointer p-2"
                 onClick={() => {
-                    if (writePlan > 0) {
+                    if (writePlan > 0
+                        ) {
                         setWritePlan(writePlan - 1);
                         getPlanIdNum(data[writePlan]?.id)
                         setImage(data[writePlan].travels[0].destination.firstimage)
                         getimgSrc(image)
                     }
-                  
                 }}
             >
                 <MdOutlineArrowBackIosNew />

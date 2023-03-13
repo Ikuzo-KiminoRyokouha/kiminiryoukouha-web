@@ -15,6 +15,7 @@ interface Props {
 }
 
 export default function SimplePlanCard({ plan }: Props) {
+ 
   const router = useRouter();
   const deleting = useToggle(false);
   const src = useMemo(() => {

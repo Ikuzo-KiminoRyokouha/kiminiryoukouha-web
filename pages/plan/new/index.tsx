@@ -29,7 +29,7 @@ export default function New() {
     endDate: "",
     money: 0,
   });
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(1); //현재스탭에대한 값 
   const [canNext, setCanNext] = useState<boolean>(false);
 
   return (

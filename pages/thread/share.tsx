@@ -17,8 +17,9 @@ export default function Share({ travels, plan } ) {
 
   const router = useRouter();
   const isSave = useRef(false);
-  const startDay = useInput("", "시작날짜ex) 2023/02/27");
+  const startDay1 = useInput("", "시작날짜ex) 2023/02/27");
   
+  console.log(plan)
  
 
   const [selectedDate, setSelectedDate] = useState(dayjs(plan.start));
@@ -114,7 +115,7 @@ export default function Share({ travels, plan } ) {
               <div className="mt-10 flex w-full justify-center space-x-10 font-bold text-white ">
                 <div className="flex ">
                 
-              <input  className="text-black text-center h-16" {...startDay}  />
+              <input  className="text-black text-center h-16" {...startDay1}  />
               </div>
                 <button
                   onClick={() => {

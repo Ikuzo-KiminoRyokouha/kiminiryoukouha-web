@@ -18,6 +18,7 @@ import { AiOutlineWarning } from "react-icons/ai";
 import { useInput, useToggle } from "../../hooks";
 import "@/utils/extension/array.extension";
 import FireworkEffect from "components/Firework";
+import select from "./Select.json"
 
 interface StepProps {
   ctx: Context<{
@@ -28,6 +29,7 @@ interface StepProps {
 }
 
 export function StepOne({ ctx }: StepProps) {
+  
   const { info, setInfo, setCanNext } = useContext(ctx);
 
   const [startDate, setStartDate] = useState<dayjs.Dayjs>(
@@ -111,6 +113,9 @@ export function StepTwo({ ctx }: StepProps) {
       return newObj;
     });
   };
+  console.log('select',select)
+  const [areacode,setAreacode] =useState("") 
+  const [sigungu,setSigungu]=useState("")
 
   // 태그안에 포함되어 있는
   useEffect(() => {
@@ -142,12 +147,15 @@ export function StepTwo({ ctx }: StepProps) {
 
   useEffect(() => {
     setCanNext(false);
-    mainRequest.get("/destination/tag").then((res) => {
+    if(areacode&&sigungu){
+    mainRequest.get(`/destination/tag/${areacode}/${sigungu}`).then((res) => {
       if (res.data.ok) {
         setRevealTag(res.data.tags);
       }
-    });
-  }, []);
+    })};
+  }, [areacode,sigungu]);
+//  2개다있으면 받아오고 두개다없으면 스테이트를 초기화해버리고
+
 
   useEffect(() => {
     return () => {
@@ -166,18 +174,29 @@ export function StepTwo({ ctx }: StepProps) {
         >
           Region
         </label>
+        <div className="flex ">
         <select
           value={info.region}
           onChange={(e) =>
             e.target.value &&
-            setInfo((prev) => ({ ...prev, region: e.target.value }))
+            setAreacode(e.target.value)
           }
-          id="countries"
+          id="areacode"
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         >
-          <option value="Default">Choose a region</option>
-          <option value="GyeongJu">경주</option>
+          <option value="39">제주도</option>
         </select>
+        <select
+          onChange={(e) =>
+            e.target.value &&
+            setSigungu(e.target.value)}
+          id="sigungu"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+        >
+          <option value="">{""}</option>
+        </select>
+        </div>
+        
       </div>
       <div className="p-2 py-8">
         <div className="space-x-3">
