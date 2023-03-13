@@ -23,32 +23,37 @@ export default function SimplePlanCard({ plan }: Props) {
     return arr[0].destination.firstimage;
   }, []);
 
+  const onClick = {
+    goDetail: () => {
+      router.push(
+        {
+          pathname: "/plan/detail",
+          query: {
+            planId: plan.id,
+          },
+        },
+        "/plan/detail"
+      );
+    },
+  };
+
   return (
     <div className="flex w-full space-x-4 border p-2 shadow-md drop-shadow-sm">
-      <div className="basis-1/12 text-center">
-        <p
-          className="cursor-pointer text-lg"
-          onClick={() =>
-            router.push(
-              {
-                pathname: "/plan/detail",
-                query: {
-                  planId: plan.id,
-                },
-              },
-              "/plan/detail"
-            )
-          }
-        >
+      <div className="basis-1/6 pr-5 text-center">
+        <p className="cursor-pointer text-lg" onClick={onClick.goDetail}>
           {plan.title.split(" ")[0]}
         </p>
-        <Image
-          className="rounded-full"
-          src={src}
-          width={1}
-          height={1}
-          layout="responsive"
-        />
+        <div className="flex items-center justify-center py-3">
+          <div className="relative h-28 w-28">
+            <Image
+              className="rounded-full"
+              src={src}
+              width={1}
+              height={1}
+              layout="responsive"
+            />
+          </div>
+        </div>
       </div>
       <div className="flex flex-1 flex-col justify-around">
         <p className="hidden md:block">
@@ -88,20 +93,7 @@ export default function SimplePlanCard({ plan }: Props) {
             <AiOutlineDelete />
           </button>
         </div>
-        <button
-          onClick={() =>
-            router.push(
-              {
-                pathname: "/plan/detail",
-                query: {
-                  planId: plan.id,
-                },
-              },
-              "/plan/detail"
-            )
-          }
-          className=" px-2 py-1 text-gray-500"
-        >
+        <button onClick={onClick.goDetail} className=" px-2 py-1 text-gray-500">
           자세히 보기
         </button>
       </div>
