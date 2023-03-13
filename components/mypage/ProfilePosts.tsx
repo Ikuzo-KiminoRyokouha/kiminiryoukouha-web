@@ -6,8 +6,6 @@ interface ProfilePostsProps {
 }
 
 export default function ProfilePosts({ communityPosts }) {
-  // console.log("communityPosts", communityPosts);
-  // console.log("myCommunityPosts", myCommunityPosts);
   console.log("communityPosts123", communityPosts);
 
   return (
@@ -15,15 +13,15 @@ export default function ProfilePosts({ communityPosts }) {
       {/* <div className="flex w-full flex-col items-center justify-center">
         <div className="w-2/3 pt-10">{test()}</div>
       </div> */}
+      {!communityPosts?.data?.length && (
+        <div className="flex min-h-[8rem] items-center justify-center pt-16">
+          <span className="text-2xl font-semibold">
+            There isn't any Posts yet
+          </span>
+        </div>
+      )}
       <div className="flex w-full flex-col items-center justify-center">
         <div className="w-2/3 pt-10">
-          {!communityPosts?.data?.length && (
-            <div className="flex min-h-[8rem] items-center justify-center">
-              <span className="text-2xl font-semibold">
-                There isn't any Posts yet
-              </span>
-            </div>
-          )}
           {communityPosts ? (
             communityPosts?.data.map((el) => {
               console.log("el456", el);

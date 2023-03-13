@@ -86,7 +86,7 @@ export default function Header() {
               {!user && (
                 <button
                   onClick={() => router.push("/login")}
-                  className="rounded-lg bg-sky-600 p-2 px-4 shadow-lg"
+                  className="rounded-lg bg-sky-600 py-3 px-5 shadow-lg"
                 >
                   <span className="text-white">Login</span>
                 </button>
@@ -101,7 +101,7 @@ export default function Header() {
                     className="flex cursor-pointer items-center justify-center pl-5 lg:pl-0"
                     onClick={dropdown.onClick}
                   >
-                    <FaUserCircle size={20} />
+                    <FaUserCircle size={25} />
                     <RiArrowDropDownFill size={30} />
                   </div>
                   <DropDown visible={dropdown.value}>
@@ -117,6 +117,12 @@ export default function Header() {
                         text={"My Profile"}
                         onClick={() => {
                           router.push(`/profile/${getUser()?.sub}`);
+                        }}
+                      />
+                      <DropDown.Item
+                        text={"Wallet"}
+                        onClick={() => {
+                          router.push(`/wallet`);
                         }}
                       />
                       <DropDown.Item text={"Setting"} onClick={() => {}} />

@@ -27,17 +27,12 @@ export default function DetailCard({ planId, travel }: Props) {
   }, []);
 
   return (
-    
     <>
-   
-      <div className="w-1/2 p-4 lg:w-1/3">
-        <div
-          className="h-full overflow-hidden rounded-lg border-2
-                        border-gray-200 border-opacity-60"
-        >
+      <div className="w-1/2 p-4 duration-200 ease-in hover:pt-0 lg:w-1/3">
+        <div className="h-full overflow-hidden rounded-lg">
           <img
-            className="w-full object-cover object-center 
-                       md:h-48 lg:h-72"
+            className="w-full rounded-lg object-cover 
+                       object-center md:h-48 lg:h-72"
             src={
               travel.destination.firstimage ||
               "https://picsum.photos/id/188/720/400/"
@@ -45,8 +40,8 @@ export default function DetailCard({ planId, travel }: Props) {
             alt="card image"
           />
           <div
-            className="cursor-pointer p-6 transition
-                         duration-300 ease-in hover:bg-indigo-600 hover:text-white"
+            className="cursor-pointer py-6 
+                         "
           >
             <h2 className="mb-1 text-base  font-medium">
               {dayjs(travel.startDay).format("YYYY-MM-DD")}
@@ -97,9 +92,7 @@ export default function DetailCard({ planId, travel }: Props) {
           hide={show.setFalse}
         />
       )}
-        
     </>
-
   );
 }
 

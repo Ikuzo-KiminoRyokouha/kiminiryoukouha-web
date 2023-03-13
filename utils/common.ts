@@ -30,6 +30,65 @@ export const cookieStringToObject = (cookieString: string | string[]): any => {
 };
 
 /**
+ * @description 월(month)를 받아서 영어 month로 바꿉니다.
+ */
+export const convertDateToEng = (month: string) => {
+  const engMonth = [
+    "January",
+    "Febuary",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  for (let i = 0; i < engMonth.length; i++) {
+    if (month === "01") {
+      return engMonth[i];
+    }
+    if (month === "02") {
+      return engMonth[i];
+    }
+    if (month === "03") {
+      return engMonth[i];
+    }
+    if (month === "04") {
+      return engMonth[i];
+    }
+    if (month === "05") {
+      return engMonth[i];
+    }
+    if (month === "06") {
+      return engMonth[i];
+    }
+    if (month === "07") {
+      return engMonth[i];
+    }
+    if (month === "08") {
+      return engMonth[i];
+    }
+    if (month === "09") {
+      return engMonth[i];
+    }
+    if (month === "10") {
+      return engMonth[i];
+    }
+    if (month === "11") {
+      return engMonth[i];
+    }
+    if (month === "12") {
+      return engMonth[i];
+    }
+  }
+};
+
+/**
  * @description 디바이스의 방향정보를 받아오기 위한 이벤트 리스너 입니다.
  */
 function orientationHandler(
