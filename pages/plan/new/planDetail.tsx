@@ -254,20 +254,58 @@ function IntroduceCard({ travel }) {
 }
 
 export async function getServerSideProps({ query, req }) {
-  
+    //여기서 쿼리로 받음 
   const info: Info = JSON.parse(query.info);
+  console.log(query)
+  console.log(info)
+
 
   const res = await authRequest
+  .post(
+    `/plan/random`,
+    {
+      // destination: "경주",
+      // dayPerDes: 3,
+      //쿼리에있는 정보들을가지고 post의 바디안에넣어서보냄
+      start: info.startDate,
+      end: info.endDate,
+      city: info.region,
+      tag: info.tag,
+      totalCost: info.money,
+   
+
+    },
+    {
+      cookie: req.headers.cookie,
+    }
+  )
+  .then((res) => {
+    if (res.data.ok) return res.data.plan;
+    return [];
+  })
+  .catch((error: AxiosError) => {
+    
+  });
+
+
+
+
+  const res1 = await authRequest
     .post(
-      `/plan/random`,
+      `/plan/random/1`,
       {
         // destination: "경주",
         // dayPerDes: 3,
+        //쿼리에있는 정보들을가지고 post의 바디안에넣어서보냄
         start: info.startDate,
         end: info.endDate,
         city: info.region,
         tag: info.tag,
         totalCost: info.money,
+      //이거부터 차근차근 ㄱㄱ 여기안되면 다시지워야함
+         areacode:info.areacode,
+         sigungucode:info.sigungucode
+
       },
       {
         cookie: req.headers.cookie,
@@ -275,13 +313,15 @@ export async function getServerSideProps({ query, req }) {
     )
     .then((res) => {
       if (res.data.ok) return res.data.plan;
+      
       return [];
     })
     .catch((error: AxiosError) => {
       
     });
+    console.log(res1)
 
-  const { travels, ...plan } = res;
+  const { travels, ...plan } = res1;
 
   return {
     props: {

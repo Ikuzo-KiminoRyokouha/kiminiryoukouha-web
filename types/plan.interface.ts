@@ -4,6 +4,8 @@ export interface Info {
   startDate: string;
   endDate: string;
   money: number;
+  areacode:string,
+  sigungucode:string
 }
 
 export interface Plan {
