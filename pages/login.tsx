@@ -3,12 +3,10 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef } from "react";
-
-import MyInput from "../components/MyInput";
-import useInput from "../hooks/useInput";
 import { mLogin } from "../utils/fetchFn/mutation/user";
 import React from "react";
 import { setJWTToken } from "../utils/client";
+import useForm from "../hooks/useForm";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,14 +22,11 @@ export default function LoginPage() {
       console.log("error occured", error);
     },
   });
-  const id = useInput("", "id");
-  const pwd = useInput("", "password");
 
-  const onSubmit = () => {
-    mutate({
-      email: id.value,
-      password: pwd.value,
-    });
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = (body) => {
+    mutate(body);
   };
 
   return (
@@ -45,15 +40,15 @@ export default function LoginPage() {
           <h1 className="p-1 pb-5 text-4xl font-bold">Sign in</h1>
         </div>
         <div className="flex w-full flex-col p-4">
-          <MyInput {...id} type="email" />
-          <MyInput
-            {...pwd}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                submitButton.current?.click();
-              }
-            }}
-            type="password"
+          <input
+            {...register("email", "id")}
+            required
+            className="my-3 rounded border-2 border-solid p-2.5"
+          />
+          <input
+            {...register("password", "password")}
+            required
+            className="my-3 rounded border-2 border-solid p-2.5"
           />
           <div className="flex items-center ">
             <div>
@@ -67,7 +62,7 @@ export default function LoginPage() {
           </div>
           <button
             ref={submitButton}
-            onClick={onSubmit}
+            onClick={() => handleSubmit(onSubmit)}
             type="submit"
             className="my-3 rounded bg-sky-600 p-4  text-white"
           >
