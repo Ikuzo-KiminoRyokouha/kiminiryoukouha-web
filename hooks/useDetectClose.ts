@@ -10,6 +10,7 @@ export default function useDetectClose(init: boolean) {
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
+      // 드롭다운 이외 클릭시
       if (ref.current !== null && !ref.current.contains(e.target as Node)) {
         setIsOpen(!isOpen);
       }
