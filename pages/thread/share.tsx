@@ -17,15 +17,25 @@ export default function Share({ travels, plan } ) {
 
   const router = useRouter();
   const isSave = useRef(false);
-  const startDay1 = useInput("", "시작날짜ex) 2023/02/27");
+  const startDay1 = useInput("", "시작날짜ex) 2023-02-27");
   
-  console.log(plan)
- 
 
-  const [selectedDate, setSelectedDate] = useState(dayjs(plan.start));
+
+  const [selectedDate, setSelectedDate] = useState(dayjs(plan?.start));
 
 
   const [dayPlan, setDayPlan] = useState(1);
+
+
+  const funcopy=async ()=>{
+    await authRequest.post(`plan/copy`,{
+      planId:plan.id as number,
+      start:startDay1.value
+    }
+    )
+
+
+  }
 
 
   /** 계획에 따라 지도에 장소를 띄워 주는 로직 */
@@ -120,8 +130,10 @@ export default function Share({ travels, plan } ) {
                 <button
                   onClick={() => {
                     isSave.current = true;
+                    ()=>{
+                      funcopy()
+                    }
                     
-                    router.push("/plan");
                   }}
                   className="rounded-lg border-2 bg-sky-600 py-6 px-24 transition duration-150 ease-in hover:bg-sky-700"
                 >

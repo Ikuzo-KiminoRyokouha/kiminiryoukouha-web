@@ -10,9 +10,9 @@ import Share from "./share";
 
 
 
-export default function q ({communityplans,totalplan ,test}){
+export default function q ({totalplan ,test}){
   const { query } =useRouter();
-  console.log(test)
+ 
   
 
  
@@ -63,13 +63,8 @@ export async function getServerSideProps({query,req}) {
     return [];
   })
 
-  
-  
   const test =await mainRequest.get(`http://localhost:8000/plan/${query.id}`).then((res)=>{if(res.data.ok)return res.data.plan })
  
-  
-  
-
   return {
     props: {
       totalplan : totalplan || [],

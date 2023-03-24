@@ -11,6 +11,7 @@ export default function ChatBotButton() {
  drop-shadow-lg duration-300 hover:animate-bounce hover:bg-blue-700 hover:drop-shadow-2xl md:flex"
     >
       <Image src="/assets/customer-service.png" width={24} height={24}></Image>
+      
     </div>
   );
 }

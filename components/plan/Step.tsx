@@ -128,7 +128,11 @@ export function StepTwo({ ctx }: StepProps) {
 
   const [areacode,setAreacode] =useState("") 
   const [sigungucode,setSigungu]=useState("")
+  const[region,setRegion]=useState("")
 
+
+
+ 
 
 
   // 태그안에 포함되어 있는
@@ -161,9 +165,9 @@ export function StepTwo({ ctx }: StepProps) {
 
   useEffect(() => {
     setCanNext(false);
-    if(sigungucode=="default"){
+    if(areacode!="" &&sigungucode=="default"){
     setRevealTag([])
-    updateTag("")
+    setKey("1")
     
   }
     if(areacode&&sigungucode){
@@ -183,9 +187,10 @@ export function StepTwo({ ctx }: StepProps) {
 //얘는 지우지말자고일단 
 useEffect(() => {
   if(areacode &&sigungucode)
+ 
   return () => {
-console.log('areacode',areacode)
-console.log('sigungucode',sigungucode)
+    
+
 
     setInfo((prev) => {
       return { ...prev, areacode:areacode,sigungucode:sigungucode };
@@ -201,6 +206,11 @@ console.log('sigungucode',sigungucode)
       });
     };
   }, [tag]);
+  
+
+
+
+
 
   return (
     <>
@@ -217,6 +227,13 @@ console.log('sigungucode',sigungucode)
             e.target.value &&
             setAreacode(e.target.value)
             setSigungu("default")
+            
+            
+           
+          
+
+
+           
           }
           }
           id="areacode"
@@ -231,9 +248,15 @@ console.log('sigungucode',sigungucode)
         </select>
         
         <select
-          onChange={(e) =>
+          onChange={(e) =>{
             e.target.value &&
-            setSigungu(e.target.value)}
+            setSigungu(e.target.value)
+           
+            
+
+          
+          }
+          }
           id="sigungucode"
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         >

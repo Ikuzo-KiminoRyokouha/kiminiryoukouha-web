@@ -11,10 +11,12 @@ import { useEffect, useMemo, useState } from "react";
 
 
 export default function Myplan({data  ,getPlanIdNum , getimgSrc ,} ) {
-    let [writePlan, setWritePlan] = useState(0);
+    let [writeIndex, setWritePlan] = useState(0);
     
     const [image,setImage] =useState("")
+    // console.log(data[writeIndex])
     console.log(data)
+
    
     // const src = useMemo(() => {
     //     const arr = data.map((el,i)=>{
@@ -34,6 +36,10 @@ export default function Myplan({data  ,getPlanIdNum , getimgSrc ,} ) {
 //         if (arr.length === 0) return "/assets/main-img.png";
 //         return arr[0].destination.firstimage;
 //       }, []);
+// console.log(data[writeIndex])
+
+
+
 
 
 
@@ -42,20 +48,20 @@ export default function Myplan({data  ,getPlanIdNum , getimgSrc ,} ) {
         <>
         {data?<> 
                 <div
-                className="cursor-pointer p-2"
+                className="cursor-pointer p-2" 
                 onClick={() => {
-                    if (writePlan > 0
+                    if (writeIndex > 0
                         ) {
-                        setWritePlan(writePlan - 1);
-                        getPlanIdNum(data[writePlan]?.id)
-                        setImage(data[writePlan].travels[0].destination.firstimage)
+                        setWritePlan(writeIndex - 1);
+                        getPlanIdNum(data[writeIndex]?.id)
+                        setImage(data[writeIndex].travels[0].destination.firstimage)
                         getimgSrc(image)
                     }
                 }}
-            >
+                >
                 <MdOutlineArrowBackIosNew />
             </div>
-            <div className="m-4 flex items-center rounded-md border p-1 shadow-sm">
+            <div className="m-4 flex items-center rounded-md border p-1 shadow-sm w-full">
                 <div className="h-24 w-24">
                     <Image
                         src= { image ||"/assets/main-img.png"}
@@ -67,13 +73,13 @@ export default function Myplan({data  ,getPlanIdNum , getimgSrc ,} ) {
                 {data && (
                     <div className="mx-2 flex flex-1 flex-col justify-around overflow-hidden text-ellipsis">
                         <p className="p-1">
-                            장소 : {data[writePlan]?.city}
+                            장소 : {data[writeIndex]?.city}
                         </p>
                         <p className="line-clamp-2 leading-2 m-1 block">
-                            예산 : {data[writePlan].totalCost}
+                            예산 : {data[writeIndex].totalCost}
                         </p>
                         <p className="p-1">
-                            테마: {Object.values(data[writePlan].tag)}
+                            테마: {Object.values(data[writeIndex].tag)}
                         </p>
                     </div>
                 )}
@@ -81,10 +87,10 @@ export default function Myplan({data  ,getPlanIdNum , getimgSrc ,} ) {
             <div
                 className="cursor-pointer p-2"
                 onClick={() => {
-                    if (writePlan < data.length - 1) {
-                        setWritePlan(writePlan +1);
-                        getPlanIdNum(data[writePlan]?.id)
-                        setImage(data[writePlan].travels[0].destination.firstimage)
+                    if (writeIndex < data.length - 1) {
+                        setWritePlan(writeIndex +1);
+                        getPlanIdNum(data[writeIndex]?.id)
+                        setImage(data[writeIndex].travels[0].destination.firstimage)
                         getimgSrc(image)
                     }
                     

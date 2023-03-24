@@ -33,6 +33,7 @@ export default function Home() {
           君の旅行は | AR, AI 基盤の旅行オールインワンフラットフォム
         </title>
         <meta name="description" content="너의 여행은의 메인 페이지 입니다." />
+       
       </Head>
 
       <main id="block" className="opacity-0">

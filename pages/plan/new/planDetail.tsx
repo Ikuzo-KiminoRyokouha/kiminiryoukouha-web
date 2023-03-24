@@ -13,7 +13,7 @@ import authRequest from "../../../utils/request/authRequest";
 
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
-  console.log('travels',travels)
+
 
   const router = useRouter();
   const isSave = useRef(false);
@@ -256,8 +256,7 @@ function IntroduceCard({ travel }) {
 export async function getServerSideProps({ query, req }) {
     //여기서 쿼리로 받음 
   const info: Info = JSON.parse(query.info);
-  console.log(query)
-  console.log(info)
+
 
 
   const res = await authRequest
@@ -319,7 +318,7 @@ export async function getServerSideProps({ query, req }) {
     .catch((error: AxiosError) => {
       
     });
-    console.log(res1)
+    
 
   const { travels, ...plan } = res1;
 
