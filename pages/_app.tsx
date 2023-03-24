@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
             <BottomNavigation />
             <ReactQueryDevtools initialIsOpen={false} />
-            <ChatBotButton />
+            <ChatBotButton   />
           </div>
           <Footer />
         </AuthCheck>

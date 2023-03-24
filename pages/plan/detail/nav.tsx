@@ -1,5 +1,5 @@
 import { useLocation, useTMap } from "@/hooks";
-import { Destination, Plan } from "@/types/plan.interface";
+import { Destination, Plan, Travel } from "@/types/plan.interface";
 import fakeData from "@/utils/dataMap/fakeData.json";
 import transfortModeMap from "@/utils/dataMap/transfortModeMap.json";
 import { convertSecToTimeObj } from "@/utils/math";
@@ -17,6 +17,7 @@ interface Props {
     travelId: number;
   };
   plan: Plan;
+  
 }
 
 export default function PlanNavigation({ query, plan }: Props) {
@@ -31,6 +32,10 @@ export default function PlanNavigation({ query, plan }: Props) {
     getDirectionUseTransfort,
   } = useTMap("map", false);
 
+  
+
+
+  
   const { myLatLng } = useLocation();
 
   const [mode, setMode] = useState(0);
@@ -43,25 +48,7 @@ export default function PlanNavigation({ query, plan }: Props) {
       return el.id === Number(query.travelId);
     })[0].destination
   );
-
-  // const drawRoute = async () => {
-  //   const destLatLng = {
-  //     lat: Number(destination.mapy),
-  //     lng: Number(destination.mapx),
-  //   };
-
-  //   console.log(destLatLng, myLatLng);
-
-  //   const data = await getDirectionUseTransfort(myLatLng, destLatLng);
-  //   // console.log("data", data);
-  // };
-  // useEffect(() => {
-  //   const destLatLng = {
-  //     lat: Number(destination.mapy),
-  //     lng: Number(destination.mapx),
-  //   };
-  //   myLatLng && drawRoute();
-  // }, [myLatLng]);
+  
 
   useEffect(() => {
     if (mode) {
@@ -127,26 +114,45 @@ export default function PlanNavigation({ query, plan }: Props) {
           <button className=" ml-auto mb-auto rounded-2xl bg-slate-500 p-4  text-white">
             <IoIosAirplane></IoIosAirplane>
           </button>
+   
 
+       <div className="flex  w-full h-32  ">
+         
+        {//currentmode 는 배열에서 가져온 값 
+Array(dayjs(plan.end).diff(plan.start,"d")+1).fill(0).map((el,i)=>{
+  return (<> 
+  {i===currentmode?<> <Image
+            src={plan.travels[i*2]?.destination.firstimage ||
+              "https://picsum.photos/id/188/720/400/"}
+            layout={"intrinsic"}
+            width={200}
+            height={200}
+            alt="user profile picture"
+            />
+            <Image
+            src={plan.travels[i*2+1]?.destination.firstimage ||
+              "https://picsum.photos/id/188/720/400/"}
+            layout={"intrinsic"}
+            width={200}
+            height={200}
+            alt="user profile picture"
+            />
+            </> :null}
+  
+  
+  </>)
+})
+
+}
+
+       </div>
           <div className="flex space-x-2 bg-white p-1">
-            {Array(dayjs(plan.end).diff(plan.start, "d") + 1)
-              .fill(0)
-              .map((el, i) => {
-                return (
-                  <button
-                    className={`${
-                      currentmode === i
-                        ? "border-1 bg-green-200 p-4 font-bold "
-                        : "  bg-gray-200 p-4 font-bold"
-                    }`}
-                    onClick={() => {
-                      setCurrentmode(i);
-                    }}
-                  >
-                    {i + 1}일차
-                  </button>
-                );
-              })}
+           {
+            Array(dayjs(plan.end).diff(plan.start,"d")+1).fill(0).map((el,i)=>{
+              return <button className={`${currentmode === i ? "bg-green-200 border-1 p-4 font-bold " 
+              : "  font-bold bg-gray-200 p-4"}`} onClick={()=>{setCurrentmode(i)}}>{i+1}일차</button>
+            })
+            }
           </div>
         </div>
         <div id="map"></div>
