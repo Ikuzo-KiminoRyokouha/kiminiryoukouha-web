@@ -10,42 +10,56 @@ import { FcAddImage, FcRemoveImage } from "react-icons/fc";
 import { FaUserCircle } from "react-icons/fa";
 import MyPlan from "./MyPlan";
 
-interface ModalProps {
+interface PostWriteModalProps {
   img: string;
-  content: string;
-  planId: number;
+  planId?: number;
   hide: () => void;
+  nickname: string;
+  isFixed?: boolean; // 게시물 수정인지 여부
+  postId?: number;
 }
 
 export default function PostWriteModal({
   img,
-  content,
   planId,
   hide,
-}: ModalProps) {
+  nickname,
+  isFixed,
+  postId,
+}: PostWriteModalProps) {
   const contents = useInput("", "게시물 내용을 입력해주세요");
   const submit = () => {
+    if (isFixed) {
+      authRequest.put(`/community/`, {
+        id: postId, // 게시물 인덱스
+        img,
+        content: contents.value,
+        planId,
+      });
+      alert("글수정이 완료되었습니다.");
+      hide();
+    }
     authRequest.post("/community", {
-      img: planImg,
+      img,
       content: contents.value,
       planId,
     });
-    alert("커뮤니티 글작성이 완료되었습니다.");
-    location.reload();
+    alert("글작성이 완료되었습니다.");
+    hide();
   };
-  const check = () => {
-    let result = false;
-    if (!contents.value) {
-      alert("글을 작성해주세요.");
-      return result;
-    }
-    if (hasPlan.value) {
-      planId = planData[planIndex].id;
-    } else {
-      planId = null;
-    }
-    return !result;
-  };
+  // const check = () => {
+  //   let result = false;
+  //   if (!contents.value) {
+  //     alert("글을 작성해주세요.");
+  //     return result;
+  //   }
+  //   if (hasPlan.value) {
+  //     planId = null;
+  //   } else {
+  //     planId = null;
+  //   }
+  //   return !result;
+  // };
 
   const [planData, setPlanData] = useState<Array<any> | undefined>([]);
   const [planIndex, setPlanIndex] = useState<number>(0);
@@ -65,22 +79,22 @@ export default function PostWriteModal({
 
   // 태그 데이터 정렬 부분 " ,"
 
-  let planImg = "/assets/main-img.png";
-  let plan_travels = planData[planIndex]?.travels;
-  let travels_length = 0;
-  for (let key in plan_travels) {
-    if (plan_travels.hasOwnProperty(key)) {
-      travels_length++;
-    }
-  }
-  for (let i = 0; i <= travels_length; i++) {
-    if (plan_travels) {
-      if (plan_travels[i]?.destination.firstimage) {
-        planImg = plan_travels[i].destination.firstimage;
-        break;
-      }
-    }
-  }
+  // let planImg = "/assets/main-img.png";
+  // let plan_travels = planData[planIndex]?.travels;
+  // let travels_length = 0;
+  // for (let key in plan_travels) {
+  //   if (plan_travels.hasOwnProperty(key)) {
+  //     travels_length++;
+  //   }
+  // }
+  // for (let i = 0; i <= travels_length; i++) {
+  //   if (plan_travels) {
+  //     if (plan_travels[i]?.destination.firstimage) {
+  //       planImg = plan_travels[i].destination.firstimage;
+  //       break;
+  //     }
+  //   }
+  // }
   return (
     <>
       <Portal qs={"#__next"}>
@@ -104,14 +118,7 @@ export default function PostWriteModal({
                       console.log("프로필");
                     }}
                   />
-                  <span
-                    className="cursor-pointer"
-                    onClick={() => {
-                      console.log("nickname");
-                    }}
-                  >
-                    nickname
-                  </span>
+                  <span className="cursor-pointer">{nickname}</span>
                 </div>
               </div>
               {/* 게시물 내용 입력 */}
@@ -157,7 +164,7 @@ export default function PostWriteModal({
                   <MyPlan
                     planData={planData}
                     planIndex={planIndex}
-                    planImg={planImg}
+                    planImg={""}
                   />
                   <div
                     className="cursor-pointer p-2"
