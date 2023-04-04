@@ -1,5 +1,8 @@
+import { getUser } from "@/utils/client";
+import { mCreateComment } from "@/utils/fetchFn/mutation/community";
 import authRequest from "@/utils/request/authRequest";
 import { useMutation } from "@tanstack/react-query";
+import useInput from "hooks/useInput";
 import useToggle from "hooks/useToggle";
 import { useRouter } from "next/router";
 import { FaUserCircle } from "react-icons/fa";
@@ -8,6 +11,8 @@ export function CommentBox({ commentData, postId, refetchComment }) {
   console.log("commentData123", commentData);
   const router = useRouter();
   const isWriting = useToggle(false);
+  const addCommentInput = useInput("", "내용을 입력해주세요");
+  const user = getUser();
 
   const mDeleteComment = (id) => {
     return authRequest.delete(`/commComments/${id}`);
@@ -21,31 +26,38 @@ export function CommentBox({ commentData, postId, refetchComment }) {
     },
   });
 
+  const { mutate: addComment } = useMutation({
+    mutationKey: ["addComment"],
+    mutationFn: mCreateComment,
+    onSuccess: () => {
+      refetchComment();
+    },
+  });
+
   const onClick = {
-    goUserProfile: () => {},
-    // 댓글작성
-    writeComment: () => {
-      isWriting.onClick();
-      // console.log("commentData.id", commentData.id);
-      // authRequest.post(`/commComments`, {
-      //   postId,
-      //   depth: 0,
-      //   content: "asdf2",
-      //   order: 1,
-      // });
+    goUserProfile: () => {
+      router.push(`/profile/${commentData.user.id}`);
     },
     // 대댓글 작성
-    addComment: () => {
+    addComment: async () => {
       isWriting.onClick();
-      // authRequest.post(`/commComments`, {
-      //   postId,
-      //   depth: 1,
-      //   content: "asdf2",
-      //   order: 1,
-      // });
+      await addComment({
+        postId: postId,
+        depth: 1,
+        content: addCommentInput.value,
+        order: 1,
+      });
     },
     delComment: () => {
       deleteComment(commentData.id);
+    },
+    openCommentInput: () => {
+      if (!user) {
+        alert("로그인이 필요합니다.");
+        return;
+      } else {
+        isWriting.onClick();
+      }
     },
   };
   return (
@@ -73,16 +85,18 @@ export function CommentBox({ commentData, postId, refetchComment }) {
           <div className="flex w-full min-w-[130px] py-1">
             <p
               className="cursor-pointer pb-1 pr-3 hover:underline"
-              onClick={onClick.writeComment}
+              onClick={onClick.openCommentInput}
             >
               댓글달기
             </p>
-            <p
-              className="cursor-pointer hover:underline"
-              onClick={onClick.delComment}
-            >
-              삭제
-            </p>
+            {user && user.sub === commentData.user.id ? (
+              <p
+                className="cursor-pointer hover:underline"
+                onClick={onClick.delComment}
+              >
+                삭제
+              </p>
+            ) : null}
           </div>
         </div>
       </div>
@@ -94,6 +108,7 @@ export function CommentBox({ commentData, postId, refetchComment }) {
       >
         <textarea
           className="ontline-none w-full resize-none rounded border-2 p-2 text-lg"
+          {...addCommentInput}
           rows={2}
         />
         <button

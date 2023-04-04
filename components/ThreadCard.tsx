@@ -1,6 +1,5 @@
 import useToggle from "hooks/useToggle";
 import { FaRegThumbsUp, FaUserCircle } from "react-icons/fa";
-import { MdSaveAlt } from "react-icons/md";
 import ThreadSummary from "./ThreadSummary";
 import useInput from "hooks/useInput";
 import { CommentBox } from "./community/CommentBox";
@@ -8,18 +7,33 @@ import mainRequest from "@/utils/request/mainRequest";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import PostWriteModal from "./community/PostWriteModal";
 import { getUser } from "@/utils/client";
+import { mCreateComment } from "@/utils/fetchFn/mutation/community";
+import { useRouter } from "next/router";
 import authRequest from "@/utils/request/authRequest";
 
-export default function ThreadCard({ postData }) {
+export default function ThreadCard({ postData, refetchPostsData }) {
   console.log("postData123", postData);
   const user = getUser();
   const writeComment = useInput("", "내용을 입력해주세요");
   const modal = useToggle(false);
   const readmore = useToggle(false);
+  const router = useRouter();
 
   const getComments = ({ queryKey }) => {
     return mainRequest.get(`http://localhost:8000/commComments/${queryKey[1]}`);
   };
+
+  const mDeletePost = (id) => {
+    return authRequest.delete(`/community/${id}`);
+  };
+
+  const { mutate: deletePost } = useMutation({
+    mutationKey: ["deletePost"],
+    mutationFn: mDeletePost,
+    onSuccess: () => {
+      refetchPostsData();
+    },
+  });
 
   const {
     data: comments,
@@ -29,14 +43,15 @@ export default function ThreadCard({ postData }) {
   console.log("isRefetching", isRefetching);
 
   const submitComment = (e) => {
-    if (e.key == "Enter") {
-      // alert(`${writeComment.value} 입력완료`);
-      console.log("submitComment 실행");
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
+    } else {
+      if (e.key == "Enter") {
+        onClick.createComment();
+        writeComment.onChange("");
+      }
     }
-  };
-
-  const mCreateComment = (body) => {
-    return authRequest.post("/commComments", body);
   };
 
   const { mutate: createComment } = useMutation({
@@ -50,16 +65,36 @@ export default function ThreadCard({ postData }) {
 
   const onClick = {
     like: () => {},
-    download: () => {},
-    showUser: () => {},
-    deletePost: () => {},
-    createComment: async () => {
-      await createComment({
-        postId: postData.id,
-        depth: 0,
-        content: writeComment.value,
-        order: 1,
-      });
+    showUser: () => {
+      // 나중에 요청에 유저정보도 넘어오면 손볼 것!
+      // router.push(`/profile/${postData.id}`);
+    },
+    deletePost: () => {
+      if (confirm("정말 삭제하시겠습니까?") === true) {
+        deletePost(postData.id);
+      } else {
+        return;
+      }
+    },
+    createComment: () => {
+      if (!user) {
+        alert("로그인이 필요합니다.");
+        return;
+      } else {
+        writeComment.onChange("");
+        createComment({
+          postId: postData.id,
+          depth: 0,
+          content: writeComment.value,
+          order: 1,
+        });
+      }
+    },
+    clickInput: () => {
+      if (!user) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
     },
   };
 
@@ -71,7 +106,7 @@ export default function ThreadCard({ postData }) {
           <PostWriteModal
             img={""}
             planId={null}
-            hide={modal.setFalse}
+            hideModal={modal.setFalse}
             nickname={user.nickname}
             isFixed={true}
             postId={postData.id}
@@ -80,12 +115,17 @@ export default function ThreadCard({ postData }) {
 
         <div className="">
           <div className="m-2 min-h-[27rem] w-auto rounded-3xl border shadow-md ">
+            {/* 닉넴 */}
             <div className="flex h-auto w-full items-center space-x-3 p-4">
               <FaUserCircle size={40} onClick={onClick.showUser} />
-              <span className="" onClick={onClick.showUser}>
+              <span
+                className="cursor-pointer hover:underline"
+                onClick={onClick.showUser}
+              >
                 {postData?.id}
               </span>
             </div>
+            {/* content */}
             <div className="min-h-[13rem]">
               <div className="p-4">
                 <span
@@ -119,13 +159,8 @@ export default function ThreadCard({ postData }) {
                   onClick={onClick.like}
                 />
                 <span className="text-sm">101</span>
-                <MdSaveAlt
-                  className="mx-2"
-                  size={19}
-                  onClick={onClick.download}
-                />
-                <span className="text-sm">8</span>
               </div>
+              {/* 여기 나중에 포스트데이터에 유저정보 추가되면 조건부 해야함 */}
               <div className="pr-2">
                 <button className="pr-3" onClick={() => modal.setTrue()}>
                   수정
@@ -157,6 +192,7 @@ export default function ThreadCard({ postData }) {
                 rows={1}
                 className="w-full resize-none rounded bg-neutral-200 p-2 outline-none"
                 {...writeComment}
+                onClick={onClick.clickInput}
                 onKeyDown={(e) => {
                   submitComment(e);
                 }}
