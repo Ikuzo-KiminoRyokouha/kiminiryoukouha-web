@@ -5,10 +5,17 @@ import { useMutation } from "@tanstack/react-query";
 import useInput from "hooks/useInput";
 import useToggle from "hooks/useToggle";
 import { useRouter } from "next/router";
+import { BsArrowReturnRight } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
+import NestedCommentBox from "./NestedCommentBox";
 
-export function CommentBox({ commentData, postId, refetchComment }) {
-  console.log("commentData123", commentData);
+export function CommentBox({
+  commentData,
+  postId,
+  refetchComment,
+  allComments,
+}) {
+  // console.log("commentData123", commentData);
   const router = useRouter();
   const isWriting = useToggle(false);
   const addCommentInput = useInput("", "내용을 입력해주세요");
@@ -39,18 +46,21 @@ export function CommentBox({ commentData, postId, refetchComment }) {
       router.push(`/profile/${commentData.user.id}`);
     },
     // 대댓글 작성
-    addComment: async () => {
+    addComment: () => {
       isWriting.onClick();
-      await addComment({
+      addComment({
         postId: postId,
-        depth: 1,
+        depth: 1, // 대댓글은 1고정 (댓글은 0)
         content: addCommentInput.value,
         order: 1,
+        targetId: commentData.id,
       });
+      addCommentInput.onChange("");
     },
     delComment: () => {
       deleteComment(commentData.id);
     },
+    // 대댓글작성 Input창 띄워주는 함수
     openCommentInput: () => {
       if (!user) {
         alert("로그인이 필요합니다.");
@@ -62,10 +72,15 @@ export function CommentBox({ commentData, postId, refetchComment }) {
   };
   return (
     <>
-      <div className="flex p-2 py-3">
+      <div
+        className={`flex p-2 py-3 ${commentData?.depth === 1 ? "pl-12" : ""}`}
+      >
+        {commentData?.depth === 1 ? (
+          <BsArrowReturnRight className="mt-4 mr-1" size={15} />
+        ) : null}
         <FaUserCircle className="m-2" size={30} />
         <div>
-          <div className="min-w-[130px] resize-none rounded-xl bg-neutral-200 p-2 outline-none">
+          <div className="w-fit min-w-[130px] resize-none rounded-xl bg-neutral-200 p-2 outline-none">
             <div className="p-1">
               <div className="flex">
                 {/* 유저아이디 */}
@@ -83,12 +98,15 @@ export function CommentBox({ commentData, postId, refetchComment }) {
             </div>
           </div>
           <div className="flex w-full min-w-[130px] py-1">
-            <p
-              className="cursor-pointer pb-1 pr-3 hover:underline"
-              onClick={onClick.openCommentInput}
-            >
-              댓글달기
-            </p>
+            {/* 대댓글까지만 작성 허용 */}
+            {commentData.depth === 0 ? (
+              <p
+                className="cursor-pointer pb-1 pr-3 hover:underline"
+                onClick={onClick.openCommentInput}
+              >
+                댓글달기
+              </p>
+            ) : null}
             {user && user.sub === commentData.user.id ? (
               <p
                 className="cursor-pointer hover:underline"
@@ -98,8 +116,24 @@ export function CommentBox({ commentData, postId, refetchComment }) {
               </p>
             ) : null}
           </div>
+          <div>
+            {allComments?.map((comment, idx) => {
+              comment.targetId !== null && console.log("comment321", comment);
+              return (
+                comment.targetId !== null &&
+                comment.targetId == commentData.id && (
+                  <NestedCommentBox
+                    goUserProfile={onClick.goUserProfile}
+                    commentData={comment}
+                    delComment={deleteComment}
+                  />
+                )
+              );
+            })}
+          </div>
         </div>
       </div>
+      {/* 대댓글 입력창 */}
       <form
         className={`flex p-2 ${isWriting.value ? "block" : "hidden"}`}
         onSubmit={(e) => {
@@ -127,4 +161,5 @@ export function CommentBox({ commentData, postId, refetchComment }) {
  * depth - 0이면 그냥 댓글 1이면 대댓글
  * content
  * order - 댓글끼리 순서, 또는 대댓글끼리 순서
+ * targetId - 대댓글이면 댓글의 id, 댓글이면 null
  */
