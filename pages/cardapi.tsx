@@ -8,12 +8,10 @@ async function onClick() {
   }
 }
 
-function App() {
+export default function CardAPI() {
   return (
     <div className="App">
       <button onClick={onClick}>계좌연결</button>
     </div>
   );
 }
-
-export default App;

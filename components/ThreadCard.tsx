@@ -54,6 +54,8 @@ export default function ThreadCard({ postData, refetchPostsData }) {
     }
   };
 
+  console.log("comments123", comments);
+
   const { mutate: createComment } = useMutation({
     mutationKey: ["createComment"],
     mutationFn: mCreateComment,
@@ -76,6 +78,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
         return;
       }
     },
+    // 댓글작성
     createComment: () => {
       if (!user) {
         alert("로그인이 필요합니다.");
@@ -87,6 +90,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
           depth: 0,
           content: writeComment.value,
           order: 1,
+          targetId: null,
         });
       }
     },
@@ -178,11 +182,14 @@ export default function ThreadCard({ postData, refetchPostsData }) {
               comments?.data?.comments?.map((el, idx) => {
                 console.log("el1234", el);
                 return (
-                  <CommentBox
-                    commentData={el}
-                    postId={postData.id}
-                    refetchComment={commentsRefetch}
-                  />
+                  el.targetId === null && (
+                    <CommentBox
+                      commentData={el}
+                      postId={postData.id}
+                      refetchComment={commentsRefetch}
+                      allComments={comments?.data?.comments}
+                    />
+                  )
                 );
               })}
             {/* 댓글 작성란 */}
