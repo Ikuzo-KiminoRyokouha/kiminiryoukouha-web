@@ -163,7 +163,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
                 />
                 <span className="text-sm">101</span>
               </div>
-              {user.sub === postData.user.id ? (
+              {user?.sub === postData.user.id ? (
                 <div className="pr-2">
                   <button className="pr-3" onClick={() => modal.setTrue()}>
                     수정
