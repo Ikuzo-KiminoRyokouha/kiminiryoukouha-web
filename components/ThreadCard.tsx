@@ -68,8 +68,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
   const onClick = {
     like: () => {},
     showUser: () => {
-      // 나중에 요청에 유저정보도 넘어오면 손볼 것!
-      // router.push(`/profile/${postData.id}`);
+      router.push(`/profile/${postData?.user?.id}`);
     },
     deletePost: () => {
       if (confirm("정말 삭제하시겠습니까?") === true) {
@@ -126,7 +125,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
                 className="cursor-pointer hover:underline"
                 onClick={onClick.showUser}
               >
-                {postData?.id}
+                {postData?.user?.nickname}
               </span>
             </div>
             {/* content */}
@@ -164,15 +163,16 @@ export default function ThreadCard({ postData, refetchPostsData }) {
                 />
                 <span className="text-sm">101</span>
               </div>
-              {/* 여기 나중에 포스트데이터에 유저정보 추가되면 조건부 해야함 */}
-              <div className="pr-2">
-                <button className="pr-3" onClick={() => modal.setTrue()}>
-                  수정
-                </button>
-                <button className="" onClick={onClick.deletePost}>
-                  삭제
-                </button>
-              </div>
+              {user.sub === postData.user.id ? (
+                <div className="pr-2">
+                  <button className="pr-3" onClick={() => modal.setTrue()}>
+                    수정
+                  </button>
+                  <button className="" onClick={onClick.deletePost}>
+                    삭제
+                  </button>
+                </div>
+              ) : null}
             </div>
             <div>
               <p className="border border-solid border-neutral-200"></p>
