@@ -256,38 +256,7 @@ function IntroduceCard({ travel }) {
 export async function getServerSideProps({ query, req }) {
     //여기서 쿼리로 받음 
   const info: Info = JSON.parse(query.info);
-
-
-
-  const res = await authRequest
-  .post(
-    `/plan/random`,
-    {
-      // destination: "경주",
-      // dayPerDes: 3,
-      //쿼리에있는 정보들을가지고 post의 바디안에넣어서보냄
-      start: info.startDate,
-      end: info.endDate,
-      city: info.region,
-      tag: info.tag,
-      totalCost: info.money,
-   
-
-    },
-    {
-      cookie: req.headers.cookie,
-    }
-  )
-  .then((res) => {
-    if (res.data.ok) return res.data.plan;
-    return [];
-  })
-  .catch((error: AxiosError) => {
-    
-  });
-
-
-
+console.log(info)
 
   const res1 = await authRequest
     .post(
@@ -311,11 +280,14 @@ export async function getServerSideProps({ query, req }) {
       }
     )
     .then((res) => {
-      if (res.data.ok) return res.data.plan;
+      if (res.data.ok)
+       {  console.log(res.data.plan)
+        return  res.data.plan;}
       
       return [];
     })
     .catch((error: AxiosError) => {
+      console.log("아예 서버도 못감 ")
       
     });
     

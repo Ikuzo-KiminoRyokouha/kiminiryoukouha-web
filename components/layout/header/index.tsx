@@ -104,8 +104,9 @@ export default function Header() {
                     <FaUserCircle size={25} />
                     <RiArrowDropDownFill size={30} />
                   </div>
+                  
                   <DropDown visible={dropdown.value}>
-                    <DropDown.Header>
+                    <DropDown.Header> 
                       <div>Sign Up as</div>
                       <div className="truncate font-medium">
                         {user.nickname}

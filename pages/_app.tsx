@@ -36,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <AuthCheck needAuth={needAuth}>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <Component {...pageProps} />
+            <Component {...pageProps}  />
             <BottomNavigation />
             <ReactQueryDevtools initialIsOpen={false} />
             <ChatBotButton   />

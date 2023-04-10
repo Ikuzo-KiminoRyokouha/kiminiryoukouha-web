@@ -44,6 +44,8 @@ export default function Thread() {
             return Number(new URL(next).searchParams.get("offset"));
         },
     });
+
+    
     const onClick = {
         showUser: () => {},
     };
