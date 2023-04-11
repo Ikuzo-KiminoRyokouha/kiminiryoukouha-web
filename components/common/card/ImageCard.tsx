@@ -11,7 +11,7 @@ interface Props {
  */
 export default function ImageCard({ src, description }: Props) {
   return (
-    <div className="relative m-1 h-full w-full">
+    <div className="relative h-full w-full">
       <Image src={src} layout="fill"></Image>
       <div className="absolute bottom-4 flex w-full justify-center">
         <span className="text-xl font-bold text-white">{description}</span>

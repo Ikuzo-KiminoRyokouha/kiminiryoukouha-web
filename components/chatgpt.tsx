@@ -7,7 +7,6 @@ import { Head } from "next/document";
 
 export default function Chatgpt(){
     
-    const REST_API_KEY="4c037f853d908e8478a94625d39e42d3"
     
     
 
@@ -16,7 +15,6 @@ export default function Chatgpt(){
     const [x,setX]=useState(0)
     const [y,setY]=useState(0)
     const [reply,setReply]=useState("")
-    const [loadding,setLoadding]=useState(false)
     useEffect(() => {
       const { geolocation } = navigator;
       geolocation.getCurrentPosition(
@@ -42,7 +40,7 @@ export default function Chatgpt(){
       axios
         .get(
           `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${y}&y=${x}`,
-          { headers: { Authorization: `KakaoAK ${REST_API_KEY}` } }
+          { headers: { Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_API_KEY}` } }
         )
         .then((res) => {
           console.log(res.data.documents[1].address_name);
@@ -54,59 +52,52 @@ export default function Chatgpt(){
     useEffect(() => {
       if (x && y) {
         abc(x, y);
-       
       }
-      
     }, [x, y]);
 
-    useEffect( ()=>{
-      if(myplace!="")
-       getCompletionFromOpenAI()
-    },[])
            
          
 
    
 
     const configuration = new Configuration({
-      apiKey: "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" 
+      apiKey: process.env.NEXT_PUBLIC_ChatGpt_API_KEY
     });
     const openai = new OpenAIApi(configuration);
 
     async function getCompletionFromOpenAI() {
       console.log("맛집추천 대기중")
-      setLoadding(true)
       const completion = await openai.createChatCompletion({
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'user', content: `${myplace}+맛집 5개만 추천해줘 가게이름, 전화번호,위치만 나타내서` }
+          { role: 'user', content: `${myplace}+의맛집 추천해줘` }
         ],
         temperature: 0,
       });
     
       console.log(completion.data.choices[0].message.content);
       setReply(completion.data.choices[0].message.content)
-      setLoadding(false)
-     
 
     }
     
-    useEffect(() => {
-      if (myplace !== "") getCompletionFromOpenAI();
-    }, [myplace]);
+   
 
    
 
     
 return(<>
-<div className="mx-auto  w-full max-w-2xl flex-1 border lg:mb-0 ">
-{/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded-full" onClick={getCompletionFromOpenAI } >
+<div className="mx-auto  mb-[53px] max-h-full w-full max-w-2xl flex-1 border lg:mb-0">
+  <input className="border-black" />
+
+<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={getCompletionFromOpenAI } >
   맛집추천버튼
-</button> */}
-<div className="bg-gray-500">
-<div className="border-black text-lg overflow-auto  ">{reply}</div>
-<div className="animate-bounce bg-#848484"> {loadding?"...loadding":null}</div>
-</div>
+</button>
+<div>{x}</div>
+<div>{y}</div>
+<div>{myplace?myplace:1}</div>
+<div className="border-black">{reply}</div>
+
+
 </div>
 
 

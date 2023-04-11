@@ -40,35 +40,40 @@ export default function LoginPage() {
           <h1 className="p-1 pb-5 text-4xl font-bold">Sign in</h1>
         </div>
         <div className="flex w-full flex-col p-4">
-          <input
-            {...register("email", "id")}
-            required
-            className="my-3 rounded border-2 border-solid p-2.5"
-          />
-          <input
-            {...register("password", "password")}
-            required
-            className="my-3 rounded border-2 border-solid p-2.5"
-          />
-          <div className="flex items-center ">
-            <div>
-              <input type="checkbox" id="remember" className="h-4 w-4" />
-            </div>
-            <div className="pb-1">
-              <label htmlFor="remember" className=" pl-2 text-lg">
-                remember me
-              </label>
-            </div>
-          </div>
-          <button
-            ref={submitButton}
-            onClick={() => handleSubmit(onSubmit)}
-            type="submit"
-            className="my-3 rounded bg-sky-600 p-4  text-white"
+          <form
+            className="flex w-full flex-col p-4"
+            onSubmit={(e) => e.preventDefault()}
           >
-            Sign In
-          </button>
-
+            <input
+              {...register("email", "id")}
+              required
+              className="my-3 rounded border-2 border-solid p-2.5"
+            />
+            <input
+              {...register("password", "password")}
+              required
+              className="my-3 rounded border-2 border-solid p-2.5"
+              type="password"
+            />
+            <div className="flex items-center ">
+              <div>
+                <input type="checkbox" id="remember" className="h-4 w-4" />
+              </div>
+              <div className="pb-1">
+                <label htmlFor="remember" className=" pl-2 text-lg">
+                  remember me
+                </label>
+              </div>
+            </div>
+            <button
+              ref={submitButton}
+              onClick={() => handleSubmit(onSubmit)}
+              type="submit"
+              className="my-3 rounded bg-sky-600 p-4  text-white"
+            >
+              Sign In
+            </button>
+          </form>
           <div className="flex justify-between">
             <Link href="signUp" legacyBehavior>
               <a className="text-xs text-sky-600 md:text-sm xl:text-base">

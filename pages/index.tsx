@@ -4,8 +4,6 @@ import PlanCarousel from "../components/PlanCarousel";
 import ImageCard from "../components/common/card/ImageCard";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import authRequest from "../utils/request/authRequest";
-import { cookieStringToObject } from "../utils/common";
 
 export default function Home() {
   const router = useRouter();
@@ -72,8 +70,8 @@ export default function Home() {
       </main>
       {/* 나의 여행 키워드 */}
       <div id="block" className="mx-auto mt-6 max-w-7xl space-y-6">
-        <div className="flex lg:pl-0">
-          <p className="mr-6 px-4 text-xl font-bold lg:px-0 lg:text-2xl">
+        <div className="flex w-full justify-between px-5 lg:justify-start lg:pl-0">
+          <p className="mr-6 pr-4 text-xl font-bold lg:px-0 lg:text-2xl">
             私の旅行キーワードは？
           </p>
           <div className="flex items-center justify-center rounded bg-sky-500 py-1 px-4">
@@ -109,7 +107,7 @@ export default function Home() {
               />
             </div>
             <div className="h-5 w-full"></div>
-            <div className="h-1/2 w-full">
+            <div className="mb-10 h-1/2 w-full lg:mb-0">
               <ImageCard
                 src={"/assets/main-img.png"}
                 description={"東京/なごや"}
