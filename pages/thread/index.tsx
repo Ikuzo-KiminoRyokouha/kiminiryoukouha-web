@@ -90,7 +90,12 @@ export default function Thread() {
             </div>
           </div>
         </div>
-        {data?.pages[0] &&
+        {data?.pages[0].length === 0 && (
+          <div className="flex h-40 items-center justify-center">
+            <p className="text-xl font-semibold">There isn't any posts yet.</p>
+          </div>
+        )}
+        {data?.pages[0].length > 0 &&
           data?.pages.map((group, idx) => {
             return group.map((el, index) => {
               console.log("el1234", el);

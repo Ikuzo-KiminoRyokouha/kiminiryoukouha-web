@@ -20,7 +20,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
   const router = useRouter();
 
   const getComments = ({ queryKey }) => {
-    return mainRequest.get(`http://localhost:8000/commComments/${queryKey[1]}`);
+    return mainRequest.get(`/commComments/${queryKey[1]}`);
   };
 
   const mDeletePost = (id) => {
@@ -163,7 +163,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
                 />
                 <span className="text-sm">101</span>
               </div>
-              {user.sub === postData.user.id ? (
+              {user?.sub === postData.user.id ? (
                 <div className="pr-2">
                   <button className="pr-3" onClick={() => modal.setTrue()}>
                     수정

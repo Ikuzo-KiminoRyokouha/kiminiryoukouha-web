@@ -1,10 +1,12 @@
+import authRequest from "@/utils/request/authRequest";
+import { useQuery } from "@tanstack/react-query";
 import PurchaseHistory from "components/PurchaseHistory";
 import useDetectClose from "hooks/useDetectClose";
 import useInput from "hooks/useInput";
 import { useState } from "react";
 
-export default function Wallet() {
-  const search = useInput("", "Search");
+export default function Receipt({ planId }) {
+  const search = useInput("", "Insert");
   const {
     isOpen: isRecent,
     ref: recentRef,
@@ -17,21 +19,33 @@ export default function Wallet() {
     removeHandler: sortHandler,
   } = useDetectClose(false);
 
+  const getTransactionData = ({ queryKey }) => {
+    return authRequest.get(`/banking/transaction/list/${queryKey[1]}`);
+  };
+
+  const { data: transactionData } = useQuery(
+    ["getTransactionData", planId],
+    getTransactionData
+  );
+  console.log("transactionData1", transactionData?.data?.transaction);
+
   const [recentValue, setRecentValue] = useState<string>("10");
   const [sortValue, setSortValue] = useState<string>("최신순");
   const recentList = ["10", "20", "30"];
   const sortList = ["최신순", "가격순"];
+  let totalAmount = 0;
+
+  for (let i = 0; i < transactionData?.data?.transaction.length; i++) {
+    totalAmount += Number(transactionData?.data?.transaction[i].amount);
+  }
 
   return (
     <>
       <div className="flex w-full flex-1">
         <div className="mx-auto flex max-w-7xl flex-1 flex-col items-center">
-          <div className="flex h-40 w-full items-center justify-center">
-            <h1 className="text-5xl font-semibold">가계부</h1>
-          </div>
           <div className="flex h-16 w-full justify-start lg:w-2/3">
             <h1 className="mx-5 text-3xl font-semibold lg:mx-0">
-              지출금액 : 243,000 원
+              {`지출금액 : ${totalAmount} 원`}
             </h1>
           </div>
           <div className="h-fit w-full">
@@ -39,13 +53,13 @@ export default function Wallet() {
               <input
                 type="text"
                 {...search}
-                className="mx-5 h-20 w-full rounded-xl border-2 border-sky-500 p-5 text-2xl lg:mx-0 lg:w-2/3"
+                className="mx-5 h-16 w-full rounded-xl border-2 border-sky-500 p-5 text-2xl lg:mx-0 lg:w-2/3"
               />
             </form>
           </div>
           <div className="h-4 w-full"></div>
           <div className="flex w-full flex-1 justify-center bg-white">
-            <div className="mb-14 min-h-full w-full rounded-t-3xl border-t-2 border-sky-500 pb-4 lg:mb-0 lg:w-2/3 lg:border-r-2 lg:border-l-2">
+            <div className="mb-14 min-h-full w-full rounded-3xl border-2 border-sky-500 pb-4 lg:mb-0 lg:w-2/3 ">
               <div className="mx-auto flex h-full w-[90%] flex-col items-center">
                 <div className="mt-6 flex h-12 w-full justify-between border-b-2">
                   {/* 최근 몇개 */}
@@ -105,7 +119,17 @@ export default function Wallet() {
                     </ul>
                   </div>
                 </div>
-                <PurchaseHistory />
+                {transactionData &&
+                  transactionData?.data?.transaction.map((data) => {
+                    if (data.visible === true)
+                      return <PurchaseHistory data={data} />;
+                  })}
+                {/* 데이터 없을시 */}
+                {transactionData?.data?.transaction.length === 0 && (
+                  <div className="flex items-center justify-center">
+                    <p className="py-5 text-2xl">There isn't any data yet</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
