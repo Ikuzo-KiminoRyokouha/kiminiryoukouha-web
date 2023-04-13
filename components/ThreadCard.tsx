@@ -20,7 +20,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
   const router = useRouter();
 
   const getComments = ({ queryKey }) => {
-    return mainRequest.get(`http://localhost:8000/commComments/${queryKey[1]}`);
+    return mainRequest.get(`/commComments/${queryKey[1]}`);
   };
 
   const mDeletePost = (id) => {

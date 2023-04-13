@@ -1,8 +1,9 @@
 import authRequest from "@/utils/request/authRequest";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 
+// 계좌등록 끝내면 오픈뱅킹에서 test/authCode로 리다이렉트 시킴
 export default function AuthCode() {
   const router = useRouter();
   let myCode = "";
@@ -13,19 +14,27 @@ export default function AuthCode() {
 
   const { mutate } = useMutation(["mSendApi"], mSendApi);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     myCode = router.asPath.split("?")[1].split("&")[0].split("=")[1];
-    console.log("router layoutEffect", myCode);
+    console.log("router layoutEffect", router.asPath);
     mutate({
       authCode: String(myCode),
     });
-    router.push("/cardapi");
+    // router.push("/wallet");
   }, []);
 
   return (
     <>
       <div className="flex flex-1 items-center justify-center">
         <p className="text-2xl">Your account has been registered.</p>
+        <button
+          className="bg-sky-600 p-5 text-white"
+          onClick={() => {
+            router.push("/wallet");
+          }}
+        >
+          Confirm
+        </button>
       </div>
     </>
   );

@@ -1,9 +1,8 @@
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { TbFileDescription, TbMap } from "react-icons/tb";
-
 import { useToggle } from "../../hooks";
 import { Travel } from "../../types/plan.interface";
 import { getDescriptionFromAPI } from "../../utils/apiQuery";
@@ -28,21 +27,17 @@ export default function DetailCard({ planId, travel }: Props) {
 
   return (
     <>
-      <div className="w-1/2 p-4 duration-200 ease-in hover:pt-0 lg:w-1/3">
+      <div className="w-1/2 p-4 shadow-lg duration-200 ease-in hover:pt-0">
         <div className="h-full overflow-hidden rounded-lg">
           <img
-            className="w-full rounded-lg object-cover 
-                       object-center md:h-48 lg:h-72"
+            className="w-full rounded-lg object-cover object-center md:h-48 lg:h-72"
             src={
               travel.destination.firstimage ||
               "https://picsum.photos/id/188/720/400/"
             }
             alt="card image"
           />
-          <div
-            className="cursor-pointer py-6 
-                         "
-          >
+          <div className="cursor-pointer py-6">
             <h2 className="mb-1 text-base  font-medium">
               {dayjs(travel.startDay).format("YYYY-MM-DD")}
             </h2>

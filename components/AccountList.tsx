@@ -13,7 +13,8 @@ export default function AccountList({ accountData }) {
     mutationKey: ["mRegisterAccount"],
     mutationFn: mRegisterAccount,
     onSuccess: () => {
-      router.push("/wallet");
+      // 리다이렉트 설정해줘야함
+      router.push("/plan");
     },
   });
 
