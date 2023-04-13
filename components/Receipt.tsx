@@ -27,7 +27,7 @@ export default function Receipt({ planId }) {
     ["getTransactionData", planId],
     getTransactionData
   );
-  console.log("transactionData", transactionData?.data?.transaction);
+  console.log("transactionData1", transactionData?.data?.transaction);
 
   const [recentValue, setRecentValue] = useState<string>("10");
   const [sortValue, setSortValue] = useState<string>("최신순");
