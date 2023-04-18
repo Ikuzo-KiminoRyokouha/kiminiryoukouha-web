@@ -8,11 +8,8 @@ export default function NestedCommentBox({
   delComment,
 }) {
   const user = getUser();
-  const onClick = {
-    delNestedComment: () => {
-      delComment(commentData.id);
-    },
-  };
+
+  // console.log("commentData", commentData);
   return (
     <>
       <div className={`flex p-2 py-3 pl-2`}>
@@ -25,7 +22,9 @@ export default function NestedCommentBox({
                 {/* 유저아이디 */}
                 <button
                   className="font-bold hover:underline"
-                  onClick={goUserProfile}
+                  onClick={() => {
+                    goUserProfile(commentData?.user?.id);
+                  }}
                 >
                   <p className="">{commentData.user.nickname}</p>
                 </button>
@@ -40,7 +39,9 @@ export default function NestedCommentBox({
             {user && user.sub === commentData.user.id ? (
               <p
                 className="cursor-pointer hover:underline"
-                onClick={onClick.delNestedComment}
+                onClick={() => {
+                  delComment(commentData.id);
+                }}
               >
                 삭제
               </p>

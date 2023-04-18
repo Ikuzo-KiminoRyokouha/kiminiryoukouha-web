@@ -6,14 +6,13 @@ import { CommentBox } from "./community/CommentBox";
 import mainRequest from "@/utils/request/mainRequest";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import PostWriteModal from "./community/PostWriteModal";
-import { getUser } from "@/utils/client";
-import { mCreateComment } from "@/utils/fetchFn/mutation/community";
+import {
+  mCreateComment,
+  mDeleteComment,
+} from "@/utils/fetchFn/mutation/community";
 import { useRouter } from "next/router";
-import authRequest from "@/utils/request/authRequest";
 
-export default function ThreadCard({ postData, refetchPostsData }) {
-  console.log("postData123", postData);
-  const user = getUser();
+export default function ThreadCard({ postData, deletePost, loginUser }) {
   const writeComment = useInput("", "내용을 입력해주세요");
   const modal = useToggle(false);
   const readmore = useToggle(false);
@@ -23,27 +22,13 @@ export default function ThreadCard({ postData, refetchPostsData }) {
     return mainRequest.get(`/commComments/${queryKey[1]}`);
   };
 
-  const mDeletePost = (id) => {
-    return authRequest.delete(`/community/${id}`);
-  };
-
-  const { mutate: deletePost } = useMutation({
-    mutationKey: ["deletePost"],
-    mutationFn: mDeletePost,
-    onSuccess: () => {
-      refetchPostsData();
-    },
-  });
-
-  const {
-    data: comments,
-    refetch: commentsRefetch,
-    isRefetching,
-  } = useQuery(["getComments", postData.id], getComments);
-  console.log("isRefetching", isRefetching);
+  const { data: comments, refetch: commentsRefetch } = useQuery(
+    ["getComments", postData.id],
+    getComments
+  );
 
   const submitComment = (e) => {
-    if (!user) {
+    if (!loginUser) {
       alert("로그인이 필요합니다.");
       return;
     } else {
@@ -54,13 +39,27 @@ export default function ThreadCard({ postData, refetchPostsData }) {
     }
   };
 
-  console.log("comments123", comments);
-
   const { mutate: createComment } = useMutation({
     mutationKey: ["createComment"],
     mutationFn: mCreateComment,
     onSuccess: () => {
       // 댓글쓰면 댓글가져오는 useQuery 강제 refetch
+      commentsRefetch();
+    },
+  });
+
+  const { mutate: deleteComment } = useMutation({
+    mutationKey: ["deleteComment"],
+    mutationFn: mDeleteComment,
+    onSuccess: () => {
+      commentsRefetch();
+    },
+  });
+
+  const { mutate: addComment } = useMutation({
+    mutationKey: ["addComment"],
+    mutationFn: mCreateComment,
+    onSuccess: () => {
       commentsRefetch();
     },
   });
@@ -79,7 +78,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
     },
     // 댓글작성
     createComment: () => {
-      if (!user) {
+      if (!loginUser) {
         alert("로그인이 필요합니다.");
         return;
       } else {
@@ -94,12 +93,19 @@ export default function ThreadCard({ postData, refetchPostsData }) {
       }
     },
     clickInput: () => {
-      if (!user) {
+      if (!loginUser) {
         alert("로그인이 필요합니다.");
         return;
       }
     },
+    goUserProfile: (userId) => {
+      router.push(`/profile/${userId}`);
+    },
   };
+
+  // console.log("postData123", postData);
+  // console.log("isRefetching", isRefetching);
+  // console.log("comments123", comments);
 
   return (
     <>
@@ -110,7 +116,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
             img={""}
             planId={null}
             hideModal={modal.setFalse}
-            nickname={user.nickname}
+            nickname={loginUser.nickname}
             isFixed={true}
             postId={postData.id}
           />
@@ -163,7 +169,7 @@ export default function ThreadCard({ postData, refetchPostsData }) {
                 />
                 <span className="text-sm">101</span>
               </div>
-              {user?.sub === postData.user.id ? (
+              {loginUser?.sub === postData.user.id ? (
                 <div className="pr-2">
                   <button className="pr-3" onClick={() => modal.setTrue()}>
                     수정
@@ -179,15 +185,17 @@ export default function ThreadCard({ postData, refetchPostsData }) {
             </div>
             {/* 댓글 불러오기 */}
             {comments?.data?.ok &&
-              comments?.data?.comments?.map((el, idx) => {
-                console.log("el1234", el);
+              comments?.data?.comments?.map((el) => {
                 return (
                   el.targetId === null && (
                     <CommentBox
+                      goUserProfile={onClick.goUserProfile}
+                      key={el.id}
                       commentData={el}
                       postId={postData.id}
-                      refetchComment={commentsRefetch}
                       allComments={comments?.data?.comments}
+                      addComment={addComment}
+                      deleteComment={deleteComment}
                     />
                   )
                 );

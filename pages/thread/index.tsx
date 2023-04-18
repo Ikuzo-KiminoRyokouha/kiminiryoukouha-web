@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import ThreadCard from "components/ThreadCard";
 import useObserver from "hooks/useObserver";
@@ -8,14 +8,13 @@ import { useToggle } from "../../hooks";
 import { FaUserCircle } from "react-icons/fa";
 import { getUser } from "@/utils/client";
 import PostWriteModalProps from "../../components/community/PostWriteModal";
+import authRequest from "@/utils/request/authRequest";
 
 export default function Thread() {
   const bottom = useRef(null);
   const onPostWrite = useToggle(false); // 게시물 작성 모달 on, off 스위치
   const user = getUser();
   const [totalPostsNum, setTotalPostsNum] = useState(0);
-
-  console.log("user1234", user?.nickname);
 
   const getPostsData = ({ pageParam = 0 }) => {
     return axios
@@ -26,11 +25,12 @@ export default function Thread() {
       });
   };
 
+  // 페이지 접속시 3개 이상은 잘 안보임 -> 처음 요청은 3개 그런다음 + 6~7개씩 요청하면 초반 성능향상 가능할듯?
+
   const {
     data,
     fetchNextPage,
     isFetchingNextPage,
-    status,
     refetch: refetchPostsData,
   } = useInfiniteQuery(["getPostsData"], getPostsData, {
     getNextPageParam: (lastPage) => {
@@ -45,7 +45,17 @@ export default function Thread() {
     },
   });
 
-  console.log("data?.pages", data?.pages);
+  const mDeletePost = (id) => {
+    return authRequest.delete(`/community/${id}`);
+  };
+
+  const { mutate: deletePost } = useMutation({
+    mutationKey: ["deletePost"],
+    mutationFn: mDeletePost,
+    onSuccess: () => {
+      refetchPostsData();
+    },
+  });
 
   // useObserver로 넘겨줄 callback, entry로 넘어오는 HTMLElement가
   // isIntersecting이라면 무한 스크롤을 위한 fetchNextPage가 실행될 것이다.
@@ -67,6 +77,9 @@ export default function Thread() {
       }
     },
   };
+
+  // console.log("user1234", user?.nickname);
+  // console.log("data?.pages", data?.pages);
 
   return (
     <>
@@ -96,11 +109,15 @@ export default function Thread() {
           </div>
         )}
         {data?.pages[0].length > 0 &&
-          data?.pages.map((group, idx) => {
-            return group.map((el, index) => {
-              console.log("el1234", el);
+          data?.pages.map((group) => {
+            return group.map((el) => {
               return (
-                <ThreadCard postData={el} refetchPostsData={refetchPostsData} />
+                <ThreadCard
+                  loginUser={user}
+                  deletePost={deletePost}
+                  postData={el}
+                  key={el.id}
+                />
               );
             });
           })}

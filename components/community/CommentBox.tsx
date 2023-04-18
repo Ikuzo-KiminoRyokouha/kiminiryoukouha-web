@@ -1,7 +1,4 @@
 import { getUser } from "@/utils/client";
-import { mCreateComment } from "@/utils/fetchFn/mutation/community";
-import authRequest from "@/utils/request/authRequest";
-import { useMutation } from "@tanstack/react-query";
 import useInput from "hooks/useInput";
 import useToggle from "hooks/useToggle";
 import { useRouter } from "next/router";
@@ -12,8 +9,10 @@ import NestedCommentBox from "./NestedCommentBox";
 export function CommentBox({
   commentData,
   postId,
-  refetchComment,
   allComments,
+  addComment,
+  deleteComment,
+  goUserProfile,
 }) {
   // console.log("commentData123", commentData);
   const router = useRouter();
@@ -21,30 +20,7 @@ export function CommentBox({
   const addCommentInput = useInput("", "내용을 입력해주세요");
   const user = getUser();
 
-  const mDeleteComment = (id) => {
-    return authRequest.delete(`/commComments/${id}`);
-  };
-
-  const { mutate: deleteComment } = useMutation({
-    mutationKey: ["deleteComment"],
-    mutationFn: mDeleteComment,
-    onSuccess: () => {
-      refetchComment();
-    },
-  });
-
-  const { mutate: addComment } = useMutation({
-    mutationKey: ["addComment"],
-    mutationFn: mCreateComment,
-    onSuccess: () => {
-      refetchComment();
-    },
-  });
-
   const onClick = {
-    goUserProfile: () => {
-      router.push(`/profile/${commentData.user.id}`);
-    },
     // 대댓글 작성
     addComment: () => {
       isWriting.onClick();
@@ -56,9 +32,6 @@ export function CommentBox({
         targetId: commentData.id,
       });
       addCommentInput.onChange("");
-    },
-    delComment: () => {
-      deleteComment(commentData.id);
     },
     // 대댓글작성 Input창 띄워주는 함수
     openCommentInput: () => {
@@ -86,7 +59,9 @@ export function CommentBox({
                 {/* 유저아이디 */}
                 <button
                   className="font-bold hover:underline"
-                  onClick={onClick.goUserProfile}
+                  onClick={() => {
+                    goUserProfile(commentData?.user?.id);
+                  }}
                 >
                   <p className="">{commentData.user.nickname}</p>
                 </button>
@@ -110,20 +85,22 @@ export function CommentBox({
             {user && user.sub === commentData.user.id ? (
               <p
                 className="cursor-pointer hover:underline"
-                onClick={onClick.delComment}
+                onClick={() => {
+                  deleteComment(commentData.id);
+                }}
               >
                 삭제
               </p>
             ) : null}
           </div>
           <div>
-            {allComments?.map((comment, idx) => {
-              comment.targetId !== null && console.log("comment321", comment);
+            {allComments?.map((comment) => {
               return (
                 comment.targetId !== null &&
                 comment.targetId == commentData.id && (
                   <NestedCommentBox
-                    goUserProfile={onClick.goUserProfile}
+                    key={comment.id}
+                    goUserProfile={goUserProfile}
                     commentData={comment}
                     delComment={deleteComment}
                   />

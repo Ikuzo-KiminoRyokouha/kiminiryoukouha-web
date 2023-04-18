@@ -13,3 +13,7 @@ export const mCreatePost = (body) => {
 export const mUpdatePost = (body) => {
   return authRequest.put("/community/", body);
 };
+
+export const mDeleteComment = (id) => {
+  return authRequest.delete(`/commComments/${id}`);
+};
