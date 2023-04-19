@@ -9,6 +9,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { getUser } from "@/utils/client";
 import PostWriteModalProps from "../../components/community/PostWriteModal";
 import authRequest from "@/utils/request/authRequest";
+import { mDeletePost } from "@/utils/fetchFn/mutation/community";
 
 export default function Thread() {
   const bottom = useRef(null);
@@ -44,10 +45,6 @@ export default function Thread() {
         : undefined;
     },
   });
-
-  const mDeletePost = (id) => {
-    return authRequest.delete(`/community/${id}`);
-  };
 
   const { mutate: deletePost } = useMutation({
     mutationKey: ["deletePost"],

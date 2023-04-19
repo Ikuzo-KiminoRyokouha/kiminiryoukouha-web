@@ -32,9 +32,9 @@ export default function PostWriteModal({
   refetchData,
 }: PostWriteModalProps) {
   const contentsInput = useInput("", "게시물 내용을 입력해주세요");
-  const [planData, setPlanData] = useState<Array<any> | undefined>([]);
-  const [planIndex, setPlanIndex] = useState<number>(0);
-  const hasPlan = useToggle(false);
+  // const [planData, setPlanData] = useState<Array<any> | undefined>([]);
+  // const [planIndex, setPlanIndex] = useState<number>(0);
+  // const hasPlan = useToggle(false);
 
   const { mutate: createPost } = useMutation({
     mutationKey: ["createPost"],
@@ -88,17 +88,17 @@ export default function PostWriteModal({
   //   return !result;
   // };
 
-  useEffect(() => {
-    authRequest
-      .get(`/plan/all/${planIndex}`)
-      .then((res) => {
-        setPlanData(res.data.plans);
-        setPlanIndex(res.data.plans.length - 1);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   authRequest
+  //     .get(`/plan/all/${planIndex}`)
+  //     .then((res) => {
+  //       setPlanData(res.data.plans);
+  //       setPlanIndex(res.data.plans.length - 1);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   // 태그 데이터 정렬 부분 " ,"
 
@@ -154,7 +154,7 @@ export default function PostWriteModal({
                   />
                 </div>
                 {/* plan 선택 */}
-                <div className="flex w-full justify-end">
+                {/* <div className="flex w-full justify-end">
                   {hasPlan.value ? (
                     <FcRemoveImage
                       size={40}
@@ -172,8 +172,8 @@ export default function PostWriteModal({
                       className="cursor-pointer"
                     />
                   )}
-                </div>
-                {hasPlan.value && (
+                </div> */}
+                {/* {hasPlan.value && (
                   <div className="flex items-center">
                     <div
                       className="cursor-pointer p-2"
@@ -201,7 +201,7 @@ export default function PostWriteModal({
                       <MdOutlineArrowForwardIos />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
             <Modal.Footer>

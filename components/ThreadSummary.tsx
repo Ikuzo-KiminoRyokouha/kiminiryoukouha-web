@@ -1,10 +1,9 @@
 import { getPlan } from "@/utils/fetchFn/query/community";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function ThreadSummary({ plan }) {
-  const router = useRouter();
   const planId = plan?.plan?.id as number;
 
   const { data: planData } = useQuery(["getPlan", planId], getPlan);
@@ -35,14 +34,19 @@ export default function ThreadSummary({ plan }) {
           {/* <p className="p-1">{"테마 :" + Thema}</p> */}
           <p className="p-1">{"테마 :"}</p>
         </div>
-        <div
+        {/* <div
           className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white"
           onClick={() => {
             router.push(`/thread/${planId}`);
           }}
         >
           <span>계획보기</span>
-        </div>
+        </div> */}
+        <Link href={`/thread/${planId}`} passHref>
+          <a className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white">
+            계획보기
+          </a>
+        </Link>
       </div>
     </>
   );

@@ -17,3 +17,7 @@ export const mUpdatePost = (body) => {
 export const mDeleteComment = (id) => {
   return authRequest.delete(`/commComments/${id}`);
 };
+
+export const mDeletePost = (id) => {
+  return authRequest.delete(`/community/${id}`);
+};

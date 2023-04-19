@@ -1,12 +1,9 @@
 import { getUser } from "@/utils/client";
+import Link from "next/link";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 
-export default function NestedCommentBox({
-  goUserProfile,
-  commentData,
-  delComment,
-}) {
+export default function NestedCommentBox({ commentData, delComment }) {
   const user = getUser();
 
   // console.log("commentData", commentData);
@@ -20,14 +17,11 @@ export default function NestedCommentBox({
             <div className="p-1">
               <div className="flex">
                 {/* 유저아이디 */}
-                <button
-                  className="font-bold hover:underline"
-                  onClick={() => {
-                    goUserProfile(commentData?.user?.id);
-                  }}
-                >
-                  <p className="">{commentData.user.nickname}</p>
-                </button>
+                <Link href={`/profile/${commentData?.user?.id}`} passHref>
+                  <a className="font-bold hover:underline">
+                    {commentData.user.nickname}
+                  </a>
+                </Link>
               </div>
               {/* 댓글내용 */}
               <div className="flex pt-2">

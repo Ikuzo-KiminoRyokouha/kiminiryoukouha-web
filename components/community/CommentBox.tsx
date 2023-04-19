@@ -1,10 +1,10 @@
 import { getUser } from "@/utils/client";
 import useInput from "hooks/useInput";
 import useToggle from "hooks/useToggle";
-import { useRouter } from "next/router";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 import NestedCommentBox from "./NestedCommentBox";
+import Link from "next/link";
 
 export function CommentBox({
   commentData,
@@ -12,10 +12,8 @@ export function CommentBox({
   allComments,
   addComment,
   deleteComment,
-  goUserProfile,
 }) {
   // console.log("commentData123", commentData);
-  const router = useRouter();
   const isWriting = useToggle(false);
   const addCommentInput = useInput("", "내용을 입력해주세요");
   const user = getUser();
@@ -57,14 +55,11 @@ export function CommentBox({
             <div className="p-1">
               <div className="flex">
                 {/* 유저아이디 */}
-                <button
-                  className="font-bold hover:underline"
-                  onClick={() => {
-                    goUserProfile(commentData?.user?.id);
-                  }}
-                >
-                  <p className="">{commentData.user.nickname}</p>
-                </button>
+                <Link href={`/profile/${commentData?.user?.id}`} passHref>
+                  <a className="font-bold hover:underline">
+                    {commentData.user.nickname}
+                  </a>
+                </Link>
               </div>
               {/* 댓글내용 */}
               <div className="flex pt-2">
@@ -100,7 +95,6 @@ export function CommentBox({
                 comment.targetId == commentData.id && (
                   <NestedCommentBox
                     key={comment.id}
-                    goUserProfile={goUserProfile}
                     commentData={comment}
                     delComment={deleteComment}
                   />

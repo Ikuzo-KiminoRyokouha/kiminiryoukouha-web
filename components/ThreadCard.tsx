@@ -3,7 +3,6 @@ import { FaRegThumbsUp, FaUserCircle } from "react-icons/fa";
 import ThreadSummary from "./ThreadSummary";
 import useInput from "hooks/useInput";
 import { CommentBox } from "./community/CommentBox";
-import mainRequest from "@/utils/request/mainRequest";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import PostWriteModal from "./community/PostWriteModal";
 import {
@@ -11,16 +10,13 @@ import {
   mDeleteComment,
 } from "@/utils/fetchFn/mutation/community";
 import { useRouter } from "next/router";
+import { getComments } from "@/utils/fetchFn/query/community";
+import Link from "next/link";
 
 export default function ThreadCard({ postData, deletePost, loginUser }) {
   const writeComment = useInput("", "내용을 입력해주세요");
   const modal = useToggle(false);
   const readmore = useToggle(false);
-  const router = useRouter();
-
-  const getComments = ({ queryKey }) => {
-    return mainRequest.get(`/commComments/${queryKey[1]}`);
-  };
 
   const { data: comments, refetch: commentsRefetch } = useQuery(
     ["getComments", postData.id],
@@ -66,9 +62,6 @@ export default function ThreadCard({ postData, deletePost, loginUser }) {
 
   const onClick = {
     like: () => {},
-    showUser: () => {
-      router.push(`/profile/${postData?.user?.id}`);
-    },
     deletePost: () => {
       if (confirm("정말 삭제하시겠습니까?") === true) {
         deletePost(postData.id);
@@ -98,9 +91,6 @@ export default function ThreadCard({ postData, deletePost, loginUser }) {
         return;
       }
     },
-    goUserProfile: (userId) => {
-      router.push(`/profile/${userId}`);
-    },
   };
 
   // console.log("postData123", postData);
@@ -126,13 +116,12 @@ export default function ThreadCard({ postData, deletePost, loginUser }) {
           <div className="m-2 min-h-[27rem] w-auto rounded-3xl border shadow-md ">
             {/* 닉넴 */}
             <div className="flex h-auto w-full items-center space-x-3 p-4">
-              <FaUserCircle size={40} onClick={onClick.showUser} />
-              <span
-                className="cursor-pointer hover:underline"
-                onClick={onClick.showUser}
-              >
-                {postData?.user?.nickname}
-              </span>
+              <FaUserCircle size={40} />
+              <Link href={`/profile/${postData?.user?.id}`} passHref>
+                <a className="cursor-pointer hover:underline">
+                  {postData?.user?.nickname}
+                </a>
+              </Link>
             </div>
             {/* content */}
             <div className="min-h-[13rem]">
@@ -189,7 +178,6 @@ export default function ThreadCard({ postData, deletePost, loginUser }) {
                 return (
                   el.targetId === null && (
                     <CommentBox
-                      goUserProfile={onClick.goUserProfile}
                       key={el.id}
                       commentData={el}
                       postId={postData.id}
