@@ -16,10 +16,13 @@ export default function Thread() {
   const onPostWrite = useToggle(false); // 게시물 작성 모달 on, off 스위치
   const user = getUser();
   const [totalPostsNum, setTotalPostsNum] = useState(0);
+  let LIMIT = 5;
 
   const getPostsData = ({ pageParam = 0 }) => {
     return axios
-      .get(`http://localhost:8000/community/?limit=10&offset=${pageParam}`)
+      .get(
+        `http://localhost:8000/community/?limit=${LIMIT}&offset=${pageParam}`
+      )
       .then((res) => {
         setTotalPostsNum(res.data[1]);
         return res?.data[0];
@@ -40,6 +43,11 @@ export default function Thread() {
       // 위의 fetch callback의 인자로 자동으로 pageParam을 전달.
       // lastPage: 호출된 가장 마지막에 있는 페이지 데이터
       // getNextPageParam의 return값은 위의 콜백의 pageParam으로 전달됨
+
+      if (LIMIT < 10) {
+        LIMIT += 5;
+      }
+
       return totalPostsNum > lastPage[0]?.id + 10
         ? lastPage[0]?.id + 9
         : undefined;
@@ -60,7 +68,7 @@ export default function Thread() {
 
   // useObserver로 bottom ref와 onIntersect를 넘겨 주자.
   useObserver({
-    target: bottom,
+    target: bottom, // ref
     onIntersect,
   });
 
