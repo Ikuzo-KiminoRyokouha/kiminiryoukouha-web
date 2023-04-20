@@ -10,7 +10,8 @@ export default function ThreadSummary({ plan }) {
 
   // console.log("plan123", plan);
   // console.log("planId", planId);
-  // console.log("planData", planData);
+  // console.log("planData321", planData?.data?.plan?.tag[1]);
+
   return (
     <>
       <div className="m-4 flex border p-1 shadow-sm">
@@ -31,17 +32,16 @@ export default function ThreadSummary({ plan }) {
           <p className="line-clamp-2 leading-2 m-1 block">
             예산 : {plan?.plan?.totalCost}
           </p>
-          {/* <p className="p-1">{"테마 :" + Thema}</p> */}
-          <p className="p-1">{"테마 :"}</p>
+          <p className="p-1">
+            테마 :
+            {planData?.data?.plan?.tag &&
+              Object.keys(planData?.data?.plan?.tag).map((key) => {
+                return planData?.data?.plan?.tag[key].map((tag) => {
+                  return " " + String(tag) + "  ";
+                });
+              })}
+          </p>
         </div>
-        {/* <div
-          className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white"
-          onClick={() => {
-            router.push(`/thread/${planId}`);
-          }}
-        >
-          <span>계획보기</span>
-        </div> */}
         <Link href={`/thread/${planId}`} passHref>
           <a className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white">
             계획보기

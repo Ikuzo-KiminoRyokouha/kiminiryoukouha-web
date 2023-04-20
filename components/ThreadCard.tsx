@@ -14,7 +14,12 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import useObserver from "hooks/useObserver";
 
-export default function ThreadCard({ postData, deletePost, loginUser }) {
+export default function ThreadCard({
+  postData,
+  deletePost,
+  loginUser,
+  refetchData,
+}) {
   const writeComment = useInput("", "내용을 입력해주세요");
   const modal = useToggle(false);
   const readmore = useToggle(false);
@@ -161,7 +166,9 @@ export default function ThreadCard({ postData, deletePost, loginUser }) {
                     color="blue"
                     onClick={onClick.like}
                   />
-                  <span className="text-sm">101</span>
+                  <span className="text-sm">
+                    {Math.floor(Math.random() * 110)}
+                  </span>
                 </div>
                 {loginUser?.sub === postData.user.id ? (
                   <div className="pr-2">
@@ -219,11 +226,12 @@ export default function ThreadCard({ postData, deletePost, loginUser }) {
         {modal.value && (
           <PostWriteModal
             img={""}
-            planId={null}
+            planId={postData?.plan?.id}
             hideModal={modal.setFalse}
             nickname={loginUser.nickname}
             isFixed={true}
             postId={postData.id}
+            refetchData={refetchData}
           />
         )}
       </div>

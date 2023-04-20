@@ -8,7 +8,6 @@ import { useToggle } from "../../hooks";
 import { FaUserCircle } from "react-icons/fa";
 import { getUser } from "@/utils/client";
 import PostWriteModalProps from "../../components/community/PostWriteModal";
-import authRequest from "@/utils/request/authRequest";
 import { mDeletePost } from "@/utils/fetchFn/mutation/community";
 
 export default function Thread() {
@@ -122,6 +121,7 @@ export default function Thread() {
                   deletePost={deletePost}
                   postData={el}
                   key={el.id}
+                  refetchData={refetchPostsData}
                 />
               );
             });
@@ -131,7 +131,7 @@ export default function Thread() {
           {isFetchingNextPage && <p>데이터 불러오는중</p>}
         </div>
       </div>
-      {/* 모달창 */}
+      {/* 게시물 작성 모달 */}
       {onPostWrite.value && (
         <PostWriteModalProps
           img={""}
@@ -139,6 +139,7 @@ export default function Thread() {
           hideModal={onPostWrite.setFalse}
           nickname={user ? user.nickname : "..."}
           refetchData={refetchPostsData}
+          isFixed={false}
         />
       )}
     </>
