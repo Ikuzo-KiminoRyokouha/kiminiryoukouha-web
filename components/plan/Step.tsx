@@ -37,6 +37,11 @@ interface StepProps {
 }
 
 export function StepOne({ ctx }: StepProps) {
+
+
+
+
+  
   
   const { info, setInfo, setCanNext } = useContext(ctx);
   //구조분해할당 ctx.info를 그냥 info로 
@@ -130,6 +135,7 @@ export function StepTwo({ ctx }: StepProps) {
   const [sigungucode,setSigungu]=useState("")
   const[region,setRegion]=useState("")
 
+  
 
 
  
@@ -189,11 +195,11 @@ useEffect(() => {
   if(areacode &&sigungucode)
  
   return () => {
-    
+   //여기를 봐꿔야할듯
 
 
     setInfo((prev) => {
-      return { ...prev, areacode:areacode,sigungucode:sigungucode };
+      return { ...prev, areacode:areacode,sigungucode:sigungucode,region:"제발좀" };
     });
   };
 }, [areacode,sigungucode]);

@@ -14,7 +14,7 @@ module.exports = async (phase) => {
     images: {
       domains: ["tong.visitkorea.or.kr", "picsum.photos"],
     },
-    reactStrictMode: true,
+    reactStrictMode: false  , //이거 스트릭트모드 온 오프 
     swcMinify: true,
     webpack5: true,
     compiler: {

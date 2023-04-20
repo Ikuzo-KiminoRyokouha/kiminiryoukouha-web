@@ -67,30 +67,9 @@ function Modal({closeModal}) {
     <div >
       <div onClick={(e)=>{e.stopPropagation()}}>
         <div className="z-100 fixed bottom-16 right-0  h-auto w-auto bg-blue-300 rounded-lg ">
-          {/* <div className="flex justify-between bg-red-500">
-            <div className="ml-2 my-2  text-black text-2xl items-center font-bold">Chatbot</div>
-            <button onClick={handleCloseModal} className=" mr-2 text-2xl my-2 ">X</button>
-          </div> */}
-          
+      
           <Chatbot ></Chatbot>
-          {/* <div className="bg-amber-700 w-10/12 h-20">
-            <span className="bg-slate-400 "> B</span>
-          </div>
-          <div className="bg-amber-700 w-10/12 h-20 ml-auto mt-3">
-            <div className="bg-slate-400 "> asdasdassdadkas;dasldkas;dkasdkaskdaskdlsakda;d;askdaskd;alskdaskd;aldkd</div>
         
-          <
-          </div>
-           */}
-         
-
-          
-          
-          {/* <button className="w-full hover:bg-blue-400 p-4  text-black border-2 rounded-2xl">맛집추천</button>
-          <button className="w-full hover:bg-blue-400   border-2  p-4 text-black rounded-2xl" >플랜수정</button>
-          <button className="w-full  hover:bg-blue-400 border-2  p-4 text-black rounded-2xl">가계부</button>
-          <button className="w-full  hover:bg-blue-400 border-2 p-4 text-black rounded-2xl">기타</button> */}
-          
           
         </div>
       

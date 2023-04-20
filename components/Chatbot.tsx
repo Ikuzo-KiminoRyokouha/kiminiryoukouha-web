@@ -1,8 +1,14 @@
 import ChatBot from 'react-simple-chatbot';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import Chatgpt from './chatgpt';
+import QWER from 'pages/planput';
+import ABC from 'pages/weather';
 
 
+const CustomComponent = styled.div`
+  background-color: #848484;
+  color: #fff;
+`;
 
 
 export default function Chatbot(){
@@ -24,7 +30,7 @@ export default function Chatbot(){
             {
               value: 'delivery',
               label: '오늘의날씨 ',
-              trigger: 'delivery',
+              trigger: 'weather',
             },
             {
               value: 'return',
@@ -35,19 +41,41 @@ export default function Chatbot(){
         },
         {
           id: 'order',
-          component: <Chatgpt/>,
+          component: <CustomComponent><Chatgpt/></CustomComponent>,
           end:true,
         },
         {
-          id: 'delivery',
-          message: '오늘의 날씨 입니다.',
+          id: 'weather',
+          component: <CustomComponent><ABC/></CustomComponent>,
           end:true ,
         },
         {
           id: 'return',
-          message: '계획 수정하기 관련 문의입니다 .',
-          end: true,
+          options: [
+            {
+              value: 'activatedPlans',
+              label: '진행중인계획수정',
+              trigger: 'activatedPlansCom',
+            },
+            {
+              value: 'waitingPlans',
+              label: '다가오는계획수정 ',
+              trigger: 'waitingPlans',
+            },
+           
+          ],
+          
         },
+        {
+          id:"activatedPlansCom",
+          component: <CustomComponent><QWER/></CustomComponent>,
+
+        },
+        {
+          id:"waitingPlans",
+          component: <CustomComponent><QWER/></CustomComponent>,
+        }
+                  
       ];
 
 
@@ -62,18 +90,18 @@ export default function Chatbot(){
         botFontColor: '#fff',
         userBubbleColor: '#fff',
         userFontColor: '#4a4a4a',
+        customComponentBgColor: '#1000f4',
       };
+      
 
 
 
     return(<>
 
     
-  
 <ThemeProvider theme={theme}>
-            <ChatBot steps={steps} />
-    </ThemeProvider>
-  
+  <ChatBot steps={steps} />
+</ThemeProvider>
  
     
  

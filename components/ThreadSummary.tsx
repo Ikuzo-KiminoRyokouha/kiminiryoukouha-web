@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default function ThreadSummary({ plan }) {
-  console.log("plan123", plan);
+  
   const router = useRouter();
   const planId = plan?.id as number;
 

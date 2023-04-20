@@ -148,6 +148,7 @@ const ModeChangeButton = styled.button<ButtonProps>`
 `;
 
 export async function getServerSideProps({ query, req }) {
+
   try {
     const res = await authRequest.get(`/plan/all/1`, {
       cookie: req.headers.cookie,
