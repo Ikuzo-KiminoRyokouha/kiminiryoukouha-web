@@ -1,18 +1,12 @@
 import { getUser } from "@/utils/client";
+import Link from "next/link";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 
-export default function NestedCommentBox({
-  goUserProfile,
-  commentData,
-  delComment,
-}) {
+export default function NestedCommentBox({ commentData, delComment }) {
   const user = getUser();
-  const onClick = {
-    delNestedComment: () => {
-      delComment(commentData.id);
-    },
-  };
+
+  // console.log("commentData", commentData);
   return (
     <>
       <div className={`flex p-2 py-3 pl-2`}>
@@ -23,12 +17,11 @@ export default function NestedCommentBox({
             <div className="p-1">
               <div className="flex">
                 {/* 유저아이디 */}
-                <button
-                  className="font-bold hover:underline"
-                  onClick={goUserProfile}
-                >
-                  <p className="">{commentData.user.nickname}</p>
-                </button>
+                <Link href={`/profile/${commentData?.user?.id}`} passHref>
+                  <a className="font-bold hover:underline">
+                    {commentData.user.nickname}
+                  </a>
+                </Link>
               </div>
               {/* 댓글내용 */}
               <div className="flex pt-2">
@@ -40,7 +33,9 @@ export default function NestedCommentBox({
             {user && user.sub === commentData.user.id ? (
               <p
                 className="cursor-pointer hover:underline"
-                onClick={onClick.delNestedComment}
+                onClick={() => {
+                  delComment(commentData.id);
+                }}
               >
                 삭제
               </p>

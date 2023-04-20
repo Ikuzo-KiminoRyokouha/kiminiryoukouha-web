@@ -63,7 +63,10 @@ export default function DesktopBoard({
             />
             <button
               className="rounded border-2 border-solid border-sky-600 bg-sky-600 p-3 text-white"
-              onClick={onClick.searchBtn}
+              onClick={(e) => {
+                onClick.searchBtn();
+                e.preventDefault();
+              }}
             >
               검색
             </button>

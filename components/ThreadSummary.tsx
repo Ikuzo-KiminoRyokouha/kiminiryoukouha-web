@@ -1,17 +1,16 @@
-import mainRequest from "@/utils/request/mainRequest";
+import { getPlan } from "@/utils/fetchFn/query/community";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function ThreadSummary({ plan }) {
-  console.log("plan123", plan);
-  const router = useRouter();
-  const planId = plan?.id as number;
+  const planId = plan?.plan?.id as number;
 
-  const getPlan = ({ queryKey }) => {
-    return mainRequest.get(`/plan/${planId}`);
-  };
-  const { data: planData } = useQuery(["getPlan"], getPlan);
+  const { data: planData } = useQuery(["getPlan", planId], getPlan);
+
+  // console.log("plan123", plan);
+  // console.log("planId", planId);
+  // console.log("planData321", planData?.data?.plan?.tag[1]);
 
   return (
     <>
@@ -25,6 +24,7 @@ export default function ThreadSummary({ plan }) {
             width={1}
             height={1}
             layout="responsive"
+            loading="lazy"
           />
         </div>
         <div className="mx-2 flex flex-1 flex-col justify-around overflow-hidden text-ellipsis">
@@ -32,18 +32,21 @@ export default function ThreadSummary({ plan }) {
           <p className="line-clamp-2 leading-2 m-1 block">
             예산 : {plan?.plan?.totalCost}
           </p>
-          {/* <p className="p-1">{"테마 :" + Thema}</p> */}
-          <p className="p-1">{"테마 :"}</p>
+          <p className="p-1">
+            테마 :
+            {planData?.data?.plan?.tag &&
+              Object.keys(planData?.data?.plan?.tag).map((key) => {
+                return planData?.data?.plan?.tag[key].map((tag) => {
+                  return " " + String(tag) + "  ";
+                });
+              })}
+          </p>
         </div>
-        <div
-          className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white"
-          onClick={() => {
-            console.log("계획보기 clicked");
-            router.push(`/thread/${planId}`);
-          }}
-        >
-          <span>계획보기</span>
-        </div>
+        <Link href={`/thread/${planId}`} passHref>
+          <a className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white">
+            계획보기
+          </a>
+        </Link>
       </div>
     </>
   );
