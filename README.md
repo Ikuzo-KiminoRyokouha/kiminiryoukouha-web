@@ -1,5 +1,6 @@
 # Team Project 君の旅行は? - 3 組 イクゾ
 
+<br>
 <center>
   <img alt="君の旅行はlogo" src="public/assets/readmelogo.JPG">
 </center>
