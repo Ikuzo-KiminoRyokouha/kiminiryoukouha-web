@@ -8,7 +8,7 @@ import ChatBotButton from "../components/layout/ChatBotButton";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/header";
 import BottomNavigation from "../components/layout/BottomNavigation";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { queryClient } from "../utils/request/reloadQuery";
 import { ThemeProvider } from "styled-components";
 
@@ -21,7 +21,9 @@ const theme = {};
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-
+  useEffect(() => {
+    queryClient.invalidateQueries(["getUser"]);
+  }, [router.pathname]);
   /**
    * @description router에 pathname 에 대해서 인증처리가 필요한 URL 인지 판단해주는 변수
    */
@@ -39,7 +41,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
             <BottomNavigation />
             <ReactQueryDevtools initialIsOpen={false} />
-            <ChatBotButton   />
+            <ChatBotButton />
           </div>
           <Footer />
         </AuthCheck>
