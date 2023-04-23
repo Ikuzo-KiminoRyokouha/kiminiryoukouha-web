@@ -1,7 +1,6 @@
 import useToggle from "hooks/useToggle";
 import { FaRegThumbsUp, FaUserCircle } from "react-icons/fa";
 import ThreadSummary from "./ThreadSummary";
-import useInput from "hooks/useInput";
 import { CommentBox } from "./community/CommentBox";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import PostWriteModal from "./community/PostWriteModal";
@@ -20,11 +19,12 @@ export default function ThreadCard({
   loginUser,
   refetchData,
 }) {
-  const writeComment = useInput("", "내용을 입력해주세요");
   const modal = useToggle(false);
   const readmore = useToggle(false);
   const target = useRef(null);
   const [visible, setVisible] = useState(false); // DOM에 렌더링 여부
+  const likes = useRef(Math.floor(Math.random() * 110));
+  const inputRef = useRef(null);
 
   const onIntersect = ([entry]) =>
     entry.isIntersecting ? setVisible(true) : setVisible(false);
@@ -39,18 +39,6 @@ export default function ThreadCard({
     ["getComments", postData.id],
     getComments
   );
-
-  const submitComment = (e) => {
-    if (!loginUser) {
-      alert("로그인이 필요합니다.");
-      return;
-    } else {
-      if (e.key == "Enter") {
-        onClick.createComment();
-        writeComment.onChange("");
-      }
-    }
-  };
 
   const { mutate: createComment } = useMutation({
     mutationKey: ["createComment"],
@@ -92,22 +80,28 @@ export default function ThreadCard({
         alert("로그인이 필요합니다.");
         return;
       } else {
-        writeComment.onChange("");
         createComment({
           postId: postData.id,
           depth: 0,
-          content: writeComment.value,
+          content: inputRef.current.value,
           order: 1,
           targetId: null,
         });
+        inputRef.current.value = "";
       }
     },
-    clickInput: () => {
-      if (!loginUser) {
-        alert("로그인이 필요합니다.");
-        return;
+  };
+
+  const submitComment = (e) => {
+    if (!loginUser) {
+      alert("로그인이 필요합니다.");
+      return;
+    } else {
+      if (e.key == "Enter") {
+        onClick.createComment();
+        inputRef.current.value = "";
       }
-    },
+    }
   };
 
   // console.log("postData123", postData);
@@ -166,9 +160,7 @@ export default function ThreadCard({
                     color="blue"
                     onClick={onClick.like}
                   />
-                  <span className="text-sm">
-                    {Math.floor(Math.random() * 110)}
-                  </span>
+                  <span className="text-sm">{likes.current}</span>
                 </div>
                 {loginUser?.sub === postData.user.id ? (
                   <div className="pr-2">
@@ -201,24 +193,30 @@ export default function ThreadCard({
                   );
                 })}
               {/* 댓글 작성란 */}
-              <div className="flex w-full items-center justify-start p-2">
+              <form
+                className="flex w-full items-center justify-start p-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                }}
+              >
                 <FaUserCircle className="m-2" size={30} />
                 <textarea
+                  ref={inputRef}
                   rows={1}
                   className="w-full resize-none rounded bg-neutral-200 p-2 outline-none"
-                  {...writeComment}
-                  onClick={onClick.clickInput}
+                  placeholder="내용을 입력해주세요"
                   onKeyDown={(e) => {
                     submitComment(e);
                   }}
                 />
                 <button
                   className="w-20 rounded bg-sky-600 py-2 text-white"
+                  type="submit"
                   onClick={onClick.createComment}
                 >
                   등록
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         )}
