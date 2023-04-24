@@ -1,13 +1,12 @@
 import { useQueries } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import BoardNav from "../../../components/board/BoardNav";
 import Comment from "../../../components/Comment";
 import { useInput, useBoard } from "../../../hooks";
 import { getUser } from "../../../utils/client";
 import { getComment } from "../../../utils/fetchFn/query/board";
-import BoardImage from "../../../components/board/BoardImage";
 import axios from "axios";
+import Image from "next/image";
 
 //얘가 밑에 댓글 맵으로 뿌려주는거
 export default function Detail({ boardData }) {
@@ -62,9 +61,19 @@ export default function Detail({ boardData }) {
       <div>
         <div className="mx-auto max-w-7xl">
           {/* 배경사진 */}
-          <BoardImage />
+          <div className="relative hidden h-72 w-full md:block">
+            <Image src={"/assets/QnA-bg.png"} layout={"fill"} loading="lazy" />
+          </div>
           <div className="flex h-full w-full flex-col lg:flex-row">
-            <BoardNav />
+            <nav className=" w-full md:flex md:w-1/4">
+              <div className="flex w-full flex-row md:flex-col">
+                <div className="h-9 w-full bg-sky-600 md:mt-9 md:w-2/3 md:flex-none">
+                  <h2 className="pl-2 pt-1 text-lg text-white md:pl-1">
+                    질의응답
+                  </h2>
+                </div>
+              </div>
+            </nav>
             {/** 게시판 제목 */}
             <div className="mx-auto w-4/5 max-w-6xl px-2">
               <div className="mx-auto mt-0 hidden h-px w-full  max-w-6xl bg-black md:mt-9 md:block"></div>
