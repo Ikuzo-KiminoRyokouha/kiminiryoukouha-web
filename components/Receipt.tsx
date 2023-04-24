@@ -48,7 +48,7 @@ export default function Receipt({ planId }) {
               {`지출금액 : ${totalAmount} 원`}
             </h1>
           </div>
-          <div className="h-fit w-full">
+          {/* <div className="h-fit w-full">
             <form action="" className="flex w-full justify-center">
               <input
                 type="text"
@@ -56,7 +56,7 @@ export default function Receipt({ planId }) {
                 className="mx-5 h-16 w-full rounded-xl border-2 border-sky-500 p-5 text-2xl lg:mx-0 lg:w-2/3"
               />
             </form>
-          </div>
+          </div> */}
           <div className="h-4 w-full"></div>
           <div className="flex w-full flex-1 justify-center bg-white">
             <div className="mb-14 min-h-full w-full rounded-3xl border-2 border-sky-500 pb-4 lg:mb-0 lg:w-2/3 ">

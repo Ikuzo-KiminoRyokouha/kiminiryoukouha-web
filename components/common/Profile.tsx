@@ -122,9 +122,9 @@ Profile.Info = ({ isMyProfile }) => {
             </div>
             <div className="flex pt-2">
               {/* 팔로우 팔로워 */}
-              {["following", "follower"].map((el) => {
+              {["following", "follower"].map((el, idx) => {
                 return (
-                  <div className="flex">
+                  <div className="flex" key={idx}>
                     <span
                       className="text-md cursor-pointer pr-1 font-semibold leading-8"
                       onClick={

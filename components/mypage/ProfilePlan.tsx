@@ -1,7 +1,7 @@
 import DecidedPlanCard from "components/plan/DecidedPlanCard";
 
 export default function ProfilePlan({ planInfo }) {
-  console.log("planInfo123", planInfo);
+  // console.log("planInfo123", planInfo);
 
   return (
     <>
@@ -19,9 +19,11 @@ export default function ProfilePlan({ planInfo }) {
       <div className="grid  grid-cols-1 gap-y-10 pt-10 pl-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {planInfo ? (
           planInfo?.data?.plans?.map((el) => {
-            // console.log("el123", el);
+            console.log("el321", el);
             return (
               <DecidedPlanCard
+                planId={el.id}
+                key={el.id}
                 img={
                   el?.travels[0]?.destination?.firstimage ||
                   "/assets/error_img.png"
