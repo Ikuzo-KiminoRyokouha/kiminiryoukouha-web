@@ -4,7 +4,7 @@ import mainRequest from "../../request/mainRequest";
  * @description /board/all/페이지
  * @param {Array} queryKey
  */
-export const getBoardPosts = (context) => {
+export const getBoardPosts = (context ) => {
   return mainRequest.get(`/board/all/${context.queryKey[1]}`);
 };
 

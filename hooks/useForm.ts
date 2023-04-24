@@ -5,6 +5,7 @@ interface UseFormRef {
 }
 
 export default function useForm() {
+  
   const inputRefs = useRef<UseFormRef>({});
 
   const register = (key: string, placeholder: string) => {
