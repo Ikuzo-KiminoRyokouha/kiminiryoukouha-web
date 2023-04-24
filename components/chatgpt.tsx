@@ -86,19 +86,16 @@ export default function Chatgpt(){
 
     
 return(<>
-<div className="mx-auto  mb-[53px] max-h-full w-full max-w-2xl flex-1 border lg:mb-0">
-  <input className="border-black" />
 
-<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={getCompletionFromOpenAI } >
-  맛집추천버튼
-</button>
+
+<div  className="text-lg  w-72">
+
 <div>{x}</div>
 <div>{y}</div>
 <div>{myplace?myplace:1}</div>
 <div className="border-black">{reply}</div>
-
-
 </div>
+
 
 
 

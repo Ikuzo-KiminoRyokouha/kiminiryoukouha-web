@@ -6,6 +6,10 @@ import { MdArrowRight, MdArrowDropDown } from "react-icons/md";
 import DetailCard from "../../../components/plan/DetailCard";
 import { Plan } from "../../../types/plan.interface";
 import mainRequest from "../../../utils/request/mainRequest";
+import Receipt from "components/Receipt";
+import authRequest from "@/utils/request/authRequest";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 
 interface PlanProps {
   plan: Plan;
@@ -13,14 +17,22 @@ interface PlanProps {
 
 export default function PlanDetail({ plan }: PlanProps) {
   const [period, setPeriod] = useState<number>(0);
-  console.log("plan123 : ", plan);
+  console.log("plan123 : ", plan.id);
+  const router = useRouter();
+
+  // 등록된 계좌 있는지
+  const getMyAccount = ({ queryKey }) => {
+    return authRequest.get(`/banking/my/account/info`);
+  };
+  const { data: bankingInfo } = useQuery(["getMyAccount"], getMyAccount);
+  console.log("bankingInfo", bankingInfo?.data?.ok);
 
   useLayoutEffect(() => {
     setPeriod(dayjs(plan.end).diff(dayjs(plan.start), "d") + 1);
   }, []);
 
   return (
-    <div className="mx-auto flex max-h-full w-full max-w-7xl flex-1 pb-28 lg:mb-0 ">
+    <div className="mx-auto flex h-fit w-full max-w-7xl flex-1 pb-28 lg:mb-0 ">
       <div className="w-full">
         {/* main image */}
         <div className="relative h-52 w-full bg-slate-200">
@@ -49,28 +61,53 @@ export default function PlanDetail({ plan }: PlanProps) {
             )}`}
           </p>
         </div>
-        {Array.from(Array(period)).map((_, idx) => {
-          return <DayPlanList plan={plan} idx={idx} />;
-        })}
+        <div className="flex h-fit">
+          <div className="w-[60%]  flex-col">
+            {Array.from(Array(period)).map((_, idx) => {
+              return <DayPlanList plan={plan} idx={idx} />;
+            })}
+          </div>
+          {/* 가계부 */}
+          <div className="w-[40%]">
+            <div className="flex justify-center">
+              <p className="pb-16 text-3xl font-semibold">가계부</p>
+            </div>
+            {bankingInfo?.data?.ok && bankingInfo?.data?.ok === true ? (
+              <Receipt planId={plan?.id} />
+            ) : (
+              <div className="flex justify-center">
+                <button
+                  className="rounded bg-sky-600 p-2 text-xl text-white"
+                  onClick={() => {
+                    router.push(`/wallet`);
+                  }}
+                >
+                  계좌등록하기
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 const DayPlanList = ({ plan, idx }) => {
-  const [test, setTest] = useState(true);
+  const [showPlan, setShowPlan] = useState(true);
 
   return (
     <>
+      {/* 몇번째 날인지 */}
       <div className="flex items-center p-2">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           <span className="text-xl font-bold">Day{idx + 1}</span>
         </div>
         <div>
-          {test === true ? (
+          {showPlan === true ? (
             <MdArrowRight
               onClick={() => {
-                setTest(!test);
+                setShowPlan(!showPlan);
               }}
               size={35}
               className="cursor-pointer pt-1"
@@ -78,7 +115,7 @@ const DayPlanList = ({ plan, idx }) => {
           ) : (
             <MdArrowDropDown
               onClick={() => {
-                setTest(!test);
+                setShowPlan(!showPlan);
               }}
               size={35}
               className="cursor-pointer pt-1"
@@ -87,7 +124,7 @@ const DayPlanList = ({ plan, idx }) => {
         </div>
       </div>
       {/* 게시물 post */}
-      <div className={`flex flex-wrap py-10 ${test ? "block" : "hidden"}`}>
+      <div className={`flex  py-10 ${showPlan ? "block" : "hidden"}`}>
         {plan.travels.map((travel) => {
           if (
             dayjs(travel.startDay).format("YYYY-MM-DD") ===

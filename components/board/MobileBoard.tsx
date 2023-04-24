@@ -3,7 +3,6 @@ import usePagination from "../../hooks/usePagination";
 import useInput from "../../hooks/useInput";
 import { useRouter } from "next/router";
 import { FiSearch } from "react-icons/fi";
-import { BiLockAlt } from "react-icons/bi";
 import MobileBoardPosts from "./MobileBoardPosts";
 import { getUser } from "../../utils/client";
 import SearchNotFound from "./SearchNotFound";
@@ -38,7 +37,7 @@ export default function MobileBoard({ posts, maxPage, pathname, searchData }) {
   };
 
   return (
-    <div className="absolute mt-9 flex h-full w-full flex-col md:hidden">
+    <div className="flex h-full w-full flex-col md:hidden">
       <form
         className="relative flex border-b-2 border-solid border-gray-300 focus:outline-none"
         onSubmit={(e) => {
@@ -67,7 +66,7 @@ export default function MobileBoard({ posts, maxPage, pathname, searchData }) {
         </div>
       )}
       {/* 페이지네이션 & 글쓰기버튼 */}
-      <div className="mb-9 flex w-full justify-between p-2">
+      <div className=" flex w-full justify-between p-2">
         <div className="pl-2">
           {router.pathname === "/QnA/search" ? (
             <Pagination

@@ -22,15 +22,12 @@ export default function ProfilePosts({ communityPosts }) {
       )}
       <div className="flex w-full flex-col items-center justify-center">
         <div className="w-2/3 pt-10">
-          {communityPosts ? (
+          {/* {communityPosts ? (
             communityPosts?.data.map((el) => {
               console.log("el456", el);
               return (
                 <div className="py-5">
                   <ThreadCard
-                    pokemon={undefined}
-                    onClick={() => {}}
-                    content={el.content}
                     createdAt={el.createdAt}
                     id={el.id}
                     img={el.img}
@@ -41,7 +38,7 @@ export default function ProfilePosts({ communityPosts }) {
             })
           ) : (
             <div>Loading...</div>
-          )}
+          )} */}
         </div>
       </div>
     </>

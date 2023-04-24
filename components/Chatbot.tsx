@@ -46,8 +46,8 @@ export default function Chatbot(){
         },
         {
           id: 'weather',
-          component: <CustomComponent><ABC/></CustomComponent>,
-          end:true ,
+          component: <ABC/>,
+          trigger:"qq" ,
         },
         {
           id: 'return',
@@ -57,11 +57,7 @@ export default function Chatbot(){
               label: '진행중인계획수정',
               trigger: 'activatedPlansCom',
             },
-            {
-              value: 'waitingPlans',
-              label: '다가오는계획수정 ',
-              trigger: 'waitingPlans',
-            },
+         
            
           ],
           
@@ -75,7 +71,11 @@ export default function Chatbot(){
           id:"waitingPlans",
           component: <CustomComponent><QWER/></CustomComponent>,
         }
-                  
+        ,{
+          id:"qq",
+          message:"어쩌구저쩌구",
+          end:true
+        }          
       ];
 
 

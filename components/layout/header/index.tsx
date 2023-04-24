@@ -32,7 +32,6 @@ export default function Header() {
     function handleOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         dropdown.setFalse();
-        console.log("작동됨");
       }
     }
     document.addEventListener("mousedown", handleOutside);
@@ -64,6 +63,7 @@ export default function Header() {
                       width={"24px"}
                       height={"24px"}
                       layout="responsive"
+                      loading="lazy"
                     />
                   </div>
                   <span className="whitespace-nowrap text-xl font-semibold text-sky-600">
@@ -118,12 +118,6 @@ export default function Header() {
                         text={"My Profile"}
                         onClick={() => {
                           router.push(`/profile/${getUser()?.sub}`);
-                        }}
-                      />
-                      <DropDown.Item
-                        text={"Wallet"}
-                        onClick={() => {
-                          router.push(`/wallet`);
                         }}
                       />
                       <DropDown.Item text={"Setting"} onClick={() => {}} />

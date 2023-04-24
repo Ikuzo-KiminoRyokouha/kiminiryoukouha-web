@@ -19,22 +19,15 @@ export default function QWER(){
 useEffect(()=>{
    async function Plancome(){
     try {
-    const plan=  await authRequest.get(`/plan/all/1`)
-   
-    
-    setActivatedPlans(() => {
-        return plan.data.plans?.filter(
-          (plan) =>
-            dayjs(plan.start).isBefore(dayjs()) &&
-            dayjs(plan.end).isAfter(dayjs())
-        );
-      });
-    
-      setWaitingPlans(() => {
-        return plan.data.plans?.filter((plan) => dayjs(plan.start).isAfter(dayjs()));
-      });  
+    const abc=  await authRequest.get("plan/today")
+ 
 
+    const qwe= await authRequest.get(`travel/${abc.data.plan.id}`)
+      console.log(qwe.data)
+  
    
+
+     
 
         
     } catch (error) {
@@ -71,8 +64,8 @@ useEffect(()=>{
         {el.travels.map((el, i) => {
           return (
             <tr key={i}>
-              <td className="border border-slate-300 px-2 py-2">{el.destination.title}</td>
-              <td className="border border-slate-300 px-2 py-2 text-right">
+              <td className="border border-slate-300 w-5/6 ">{el.destination.title}</td>
+              <td className="border border-slate-300 w-1/6 px-1 py-1 text-center">
                 <button
                   className=""
                   onClick={() => {

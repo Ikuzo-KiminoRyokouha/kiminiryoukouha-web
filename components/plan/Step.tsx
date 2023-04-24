@@ -135,6 +135,8 @@ export function StepTwo({ ctx }: StepProps) {
   const [sigungucode,setSigungu]=useState("")
   const[region,setRegion]=useState("")
 
+ 
+
   
 
 
@@ -199,7 +201,7 @@ useEffect(() => {
 
 
     setInfo((prev) => {
-      return { ...prev, areacode:areacode,sigungucode:sigungucode,region:"제발좀" };
+      return { ...prev, areacode:areacode,sigungucode:sigungucode,region };
     });
   };
 }, [areacode,sigungucode]);
@@ -233,7 +235,11 @@ useEffect(() => {
             e.target.value &&
             setAreacode(e.target.value)
             setSigungu("default")
-            
+
+            const name = e.target.options[e.target.selectedIndex].text;
+            console.log(name)
+            setRegion("")
+           setRegion((prev)=>prev+name)
             
            
           
@@ -257,7 +263,12 @@ useEffect(() => {
           onChange={(e) =>{
             e.target.value &&
             setSigungu(e.target.value)
-           
+            const name = e.target.options[e.target.selectedIndex].text;
+            console.log(name)
+
+        
+
+            setRegion((prev)=>prev+ name)
             
 
           

@@ -89,9 +89,7 @@ return(<>
 
 
 <div  className="text-lg  w-72">
-<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full" onClick={getCompletionFromOpenAI } >
-  맛집추천버튼
-</button>
+
 <div>{x}</div>
 <div>{y}</div>
 <div>{myplace?myplace:1}</div>
