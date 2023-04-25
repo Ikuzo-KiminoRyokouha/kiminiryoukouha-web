@@ -91,11 +91,17 @@ export default function Index({ plans }) {
         </div>
         <div className="mx-2 w-full space-y-2">
           {mode === 0 &&
-            activatedPlans?.map((plan) => <SimplePlanCard plan={plan} />)}
+            activatedPlans?.map((plan) => (
+              <SimplePlanCard plan={plan} key={plan.id} />
+            ))}
           {mode === 1 &&
-            waitingPlans?.map((plan) => <SimplePlanCard plan={plan} />)}
+            waitingPlans?.map((plan) => (
+              <SimplePlanCard plan={plan} key={plan.id} />
+            ))}
           {mode === 2 &&
-            endPlans?.map((plan) => <SimplePlanCard plan={plan} />)}
+            endPlans?.map((plan) => (
+              <SimplePlanCard plan={plan} key={plan.id} />
+            ))}
 
           <div
             onClick={(e) => router.push("/plan/new")}

@@ -9,13 +9,13 @@ import dayjs from "dayjs";
 import { useToggle } from "../../hooks";
 import { Modal, Portal } from "../common/modal";
 import mainRequest from "../../utils/request/mainRequest";
+import Link from "next/link";
 
 interface Props {
   plan: Plan;
 }
 
 export default function SimplePlanCard({ plan }: Props) {
- 
   const router = useRouter();
   const deleting = useToggle(false);
   const src = useMemo(() => {
@@ -94,9 +94,17 @@ export default function SimplePlanCard({ plan }: Props) {
             <AiOutlineDelete />
           </button>
         </div>
-        <button onClick={onClick.goDetail} className=" px-2 py-1 text-gray-500">
-          자세히 보기
-        </button>
+        <div className="flex flex-col items-end">
+          <Link href={`/plan/album${plan.id}`} passHref>
+            <a className=" px-2 py-1 text-gray-500">앨범 보기</a>
+          </Link>
+          <button
+            onClick={onClick.goDetail}
+            className=" px-2 py-1 text-gray-500"
+          >
+            자세히 보기
+          </button>
+        </div>
       </div>
       {deleting.value && (
         <DeletingModal
