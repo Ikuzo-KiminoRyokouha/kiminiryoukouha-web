@@ -1,4 +1,4 @@
-import { convertDateToEng } from "@/utils/common";
+import { convertMonthToEnglish } from "@/utils/common";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { useLayoutEffect, useState } from "react";
@@ -51,14 +51,11 @@ export default function PlanDetail({ plan }: PlanProps) {
         {/* plan date */}
         <div className="mb-5 flex h-16 w-full items-center rounded-lg bg-gray-200 px-2">
           <p className="text-3xl font-semibold">
-            📅 Travel Date :
-            {`${convertDateToEng(plan.start.slice(5, 7))} ${plan.start.slice(
-              8,
-              10
-            )} ~ ${convertDateToEng(plan.end.slice(5, 7))} ${plan.end.slice(
-              8,
-              10
-            )}`}
+            {`📅 Travel Date : ${convertMonthToEnglish(
+              plan.start.slice(5, 7)
+            )} ${plan.start.slice(8, 10)} ~ ${convertMonthToEnglish(
+              plan.end.slice(5, 7)
+            )} ${plan.end.slice(8, 10)}`}
           </p>
         </div>
         <div className="flex h-fit">

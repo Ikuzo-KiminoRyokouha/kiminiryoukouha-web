@@ -4,15 +4,13 @@ import styled from "styled-components";
 import { Plan } from "../../types/plan.interface";
 import dayjs from "dayjs";
 import SimplePlanCard from "../../components/plan/SimplePlanCard";
-import { useRouter } from "next/router";
 import "@/utils/extension/array.extension";
 import authRequest from "../../utils/request/authRequest";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Index({ plans }) {
   let [mode, setMode] = useState(0);
-
-  const router = useRouter();
 
   const [activatedPlans, setActivatedPlans] = useState<Array<Plan>>();
   const [waitingPlans, setWaitingPlans] = useState<Array<Plan>>();
@@ -103,17 +101,16 @@ export default function Index({ plans }) {
               <SimplePlanCard plan={plan} key={plan.id} />
             ))}
 
-          <div
-            onClick={(e) => router.push("/plan/new")}
-            className="flex w-full  cursor-pointer border  shadow-lg duration-500 hover:border-sky-600 hover:text-sky-600"
-          >
-            <div className="flex items-center justify-center p-6">
-              <AiOutlinePlusCircle size={24} />
-            </div>
-            <div className="flex items-center justify-center p-6">
-              <span>새로운 계획 세우기</span>
-            </div>
-          </div>
+          <Link href={`/plan/new`} passHref>
+            <a className="flex w-full  cursor-pointer border  shadow-lg duration-500 hover:border-sky-600 hover:text-sky-600">
+              <div className="flex items-center justify-center p-6">
+                <AiOutlinePlusCircle size={24} />
+              </div>
+              <div className="flex items-center justify-center p-6">
+                <span>새로운 계획 세우기</span>
+              </div>
+            </a>
+          </Link>
         </div>
       </div>
     </>
