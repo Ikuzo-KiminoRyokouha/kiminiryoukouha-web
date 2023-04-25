@@ -26,13 +26,24 @@ export default function ThreadCard({
   const likes = useRef(Math.floor(Math.random() * 110));
   const inputRef = useRef(null);
 
-  const onIntersect = ([entry]) =>
+  const debounce = (callback, limit = 100) => {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        callback.apply(this, args);
+      }, limit);
+    };
+  };
+
+  const onIntersect = debounce(([entry]) => {
     entry.isIntersecting ? setVisible(true) : setVisible(false);
+  }, 100);
 
   useObserver({
     target,
     onIntersect,
-    threshold: 0.1, // 화면 양끝에서 10%만 보여져도 onIntersect를 실행한다.
+    threshold: 0.02, // 화면 양끝에서 10%만 보여져도 onIntersect를 실행한다.
   });
 
   const { data: comments, refetch: commentsRefetch } = useQuery(
