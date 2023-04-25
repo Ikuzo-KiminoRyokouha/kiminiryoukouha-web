@@ -3,7 +3,7 @@ interface PurchaseHistoryProps {
 }
 
 export default function PurchaseHistory({ data }: PurchaseHistoryProps) {
-  console.log("data4321", data);
+  // console.log("data4321", data);
   const date = data.date.replace(/(\d{4})(\d{2})(\d{2})/, "$1.$2.$3");
   const status = data.inOrOut;
   const description = data.name;

@@ -39,11 +39,13 @@ export default function PlanDetail({ travels, plan, info }) {
 
   const handleRouteChange = async () => {
     !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
+    !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
     return;
   };
 
   useEffect(() => {
     const handleWindowClose = async (e: BeforeUnloadEvent) => {
+      !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
       !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
       return;
     };
@@ -276,16 +278,11 @@ export async function getServerSideProps({ query, req }) {
       }
     )
     .then((res) => {
-      if (res.data.ok) {
-        console.log(res.data.plan);
-        return res.data.plan;
-      }
+      if (res.data.ok) return res.data.plan;
 
       return [];
     })
-    .catch((error: AxiosError) => {
-      console.log("아예 서버도 못감 ");
-    });
+    .catch((error: AxiosError) => {});
 
   const { travels, ...plan } = res1;
 

@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
 import { useLayoutEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { TbFileDescription, TbMap } from "react-icons/tb";
@@ -7,6 +6,7 @@ import { useToggle } from "../../hooks";
 import { Travel } from "../../types/plan.interface";
 import { getDescriptionFromAPI } from "../../utils/apiQuery";
 import { Modal, Portal } from "../common/modal";
+import Link from "next/link";
 
 interface Props {
   travel: Travel;
@@ -16,7 +16,6 @@ interface Props {
 export default function DetailCard({ planId, travel }: Props) {
   const [description, setDescription] = useState<string>("");
   const show = useToggle(false);
-  const router = useRouter();
 
   useLayoutEffect(() => {
     getDescriptionFromAPI(
@@ -27,7 +26,7 @@ export default function DetailCard({ planId, travel }: Props) {
 
   return (
     <>
-      <div className="w-1/2 p-4 shadow-lg duration-200 ease-in hover:pt-0">
+      <div className="w-1/2 p-4 shadow-lg duration-200 ease-in hover:shadow-2xl">
         <div className="h-full overflow-hidden rounded-lg">
           <img
             className="w-full rounded-lg object-cover object-center md:h-48 lg:h-72"
@@ -48,31 +47,21 @@ export default function DetailCard({ planId, travel }: Props) {
               {description}
             </p>
           </div>
-          <div className="flex">
-            <div className="ml-auto">
-              <button>
+          <div className="flex justify-end">
+            {/* <button>
                 <AiOutlineCheckCircle size={30} color={"blue"} />
-              </button>
-              <button
-                onClick={() =>
-                  router.push(
-                    {
-                      pathname: "/plan/detail/nav",
-                      query: {
-                        planId,
-                        travelId: travel.id,
-                      },
-                    },
-                    "/plan/detail/nav"
-                  )
-                }
-              >
+              </button> */}
+            <Link
+              href={`/plan/detail/nav?planId=${planId}&travelId=${travel.id}`}
+              passHref
+            >
+              <a>
                 <TbMap size={30} color={"green"} />
-              </button>
-              <button onClick={show.setTrue}>
-                <TbFileDescription size={30} />
-              </button>
-            </div>
+              </a>
+            </Link>
+            <button onClick={show.setTrue}>
+              <TbFileDescription size={30} color="blue" />
+            </button>
           </div>
         </div>
       </div>
