@@ -27,6 +27,7 @@ export default function Share({ travels, plan }) {
       start: startDay1.value,
     });
   };
+  console.log(plan.id)
 
   /** 계획에 따라 지도에 장소를 띄워 주는 로직 */
   useEffect(() => {

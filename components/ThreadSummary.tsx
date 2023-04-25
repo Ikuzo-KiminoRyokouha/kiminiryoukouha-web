@@ -2,9 +2,12 @@ import { getPlan } from "@/utils/fetchFn/query/community";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function ThreadSummary({ plan }) {
-  const planId = plan?.plan?.id as number;
+  
+  const router = useRouter();
+  const planId = plan?.id as number;
 
   const { data: planData } = useQuery(["getPlan", planId], getPlan);
 

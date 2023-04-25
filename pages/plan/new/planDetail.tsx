@@ -39,11 +39,13 @@ export default function PlanDetail({ travels, plan, info }) {
 
   const handleRouteChange = async () => {
     !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
+    !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
     return;
   };
 
   useEffect(() => {
     const handleWindowClose = async (e: BeforeUnloadEvent) => {
+      !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
       !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
       return;
     };
@@ -253,29 +255,7 @@ function IntroduceCard({ travel }) {
 export async function getServerSideProps({ query, req }) {
   //여기서 쿼리로 받음
   const info: Info = JSON.parse(query.info);
-
-  const res = await authRequest
-    .post(
-      `/plan/random`,
-      {
-        // destination: "경주",
-        // dayPerDes: 3,
-        //쿼리에있는 정보들을가지고 post의 바디안에넣어서보냄
-        start: info.startDate,
-        end: info.endDate,
-        city: info.region,
-        tag: info.tag,
-        totalCost: info.money,
-      },
-      {
-        cookie: req.headers.cookie,
-      }
-    )
-    .then((res) => {
-      if (res.data.ok) return res.data.plan;
-      return [];
-    })
-    .catch((error: AxiosError) => {});
+  console.log(info);
 
   const res1 = await authRequest
     .post(
@@ -290,8 +270,8 @@ export async function getServerSideProps({ query, req }) {
         tag: info.tag,
         totalCost: info.money,
         //이거부터 차근차근 ㄱㄱ 여기안되면 다시지워야함
-        // areacode: info.areacode,
-        // sigungucode: info.sigungucode,
+        areacode: info.areacode,
+        sigungucode: info.sigungucode,
       },
       {
         cookie: req.headers.cookie,

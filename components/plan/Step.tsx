@@ -180,8 +180,15 @@ export function StepTwo({ ctx }: StepProps) {
   useEffect(() => {
     if (areacode && sigungucode)
       return () => {
+        //여기를 봐꿔야할듯
+
         setInfo((prev) => {
-          return { ...prev, areacode: areacode, sigungucode: sigungucode };
+          return {
+            ...prev,
+            areacode: areacode,
+            sigungucode: sigungucode,
+            region,
+          };
         });
       };
   }, [areacode, sigungucode]);
@@ -208,13 +215,17 @@ export function StepTwo({ ctx }: StepProps) {
             onChange={(e) => {
               e.target.value && setAreacode(e.target.value);
               setSigungu("default");
+
+              const name = e.target.options[e.target.selectedIndex].text;
+              console.log(name);
+              setRegion("");
+              setRegion((prev) => prev + name);
             }}
             id="areacode"
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           >
             <option value={"default"}> 지역선택</option>
             {select.map((el) => {
-              console.log("el321", el);
               return (
                 <>
                   <option value={el.code}>{el.name}</option>
@@ -226,6 +237,10 @@ export function StepTwo({ ctx }: StepProps) {
           <select
             onChange={(e) => {
               e.target.value && setSigungu(e.target.value);
+              const name = e.target.options[e.target.selectedIndex].text;
+              console.log(name);
+
+              setRegion((prev) => prev + name);
             }}
             id="sigungucode"
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
