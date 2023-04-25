@@ -14,7 +14,6 @@ import authRequest from "../../../utils/request/authRequest";
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
 
-
   const router = useRouter();
   const isSave = useRef(false);
 
@@ -39,15 +38,13 @@ export default function PlanDetail({ travels, plan, info }) {
   };
 
   const handleRouteChange = async () => {
-    !isSave.current &&
-      (await authRequest.delete(`/plan/${plan.id}`));
+    !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
     return;
   };
 
   useEffect(() => {
     const handleWindowClose = async (e: BeforeUnloadEvent) => {
-      !isSave.current &&
-        (await authRequest.delete(`/plan/${plan.id}`));
+      !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
       return;
     };
     /* 이벤트리스너 등록 */
@@ -254,44 +251,12 @@ function IntroduceCard({ travel }) {
 }
 
 export async function getServerSideProps({ query, req }) {
-    //여기서 쿼리로 받음 
+  //여기서 쿼리로 받음
   const info: Info = JSON.parse(query.info);
 
-
-
   const res = await authRequest
-  .post(
-    `/plan/random`,
-    {
-      // destination: "경주",
-      // dayPerDes: 3,
-      //쿼리에있는 정보들을가지고 post의 바디안에넣어서보냄
-      start: info.startDate,
-      end: info.endDate,
-      city: info.region,
-      tag: info.tag,
-      totalCost: info.money,
-   
-
-    },
-    {
-      cookie: req.headers.cookie,
-    }
-  )
-  .then((res) => {
-    if (res.data.ok) return res.data.plan;
-    return [];
-  })
-  .catch((error: AxiosError) => {
-    
-  });
-
-
-
-
-  const res1 = await authRequest
     .post(
-      `/plan/random/1`,
+      `/plan/random`,
       {
         // destination: "경주",
         // dayPerDes: 3,
@@ -301,10 +266,6 @@ export async function getServerSideProps({ query, req }) {
         city: info.region,
         tag: info.tag,
         totalCost: info.money,
-      //이거부터 차근차근 ㄱㄱ 여기안되면 다시지워야함
-         areacode:info.areacode,
-         sigungucode:info.sigungucode
-
       },
       {
         cookie: req.headers.cookie,
@@ -312,13 +273,36 @@ export async function getServerSideProps({ query, req }) {
     )
     .then((res) => {
       if (res.data.ok) return res.data.plan;
-      
       return [];
     })
-    .catch((error: AxiosError) => {
-      
-    });
-    
+    .catch((error: AxiosError) => {});
+
+  const res1 = await authRequest
+    .post(
+      `/plan/personality`,
+      {
+        // destination: "경주",
+        // dayPerDes: 3,
+        //쿼리에있는 정보들을가지고 post의 바디안에넣어서보냄
+        start: info.startDate,
+        end: info.endDate,
+        city: info.region,
+        tag: info.tag,
+        totalCost: info.money,
+        //이거부터 차근차근 ㄱㄱ 여기안되면 다시지워야함
+        // areacode: info.areacode,
+        // sigungucode: info.sigungucode,
+      },
+      {
+        cookie: req.headers.cookie,
+      }
+    )
+    .then((res) => {
+      if (res.data.ok) return res.data.plan;
+
+      return [];
+    })
+    .catch((error: AxiosError) => {});
 
   const { travels, ...plan } = res1;
 
