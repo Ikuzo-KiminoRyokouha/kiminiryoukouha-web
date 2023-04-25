@@ -144,8 +144,8 @@ export default function Camera({ travelsData, todayPlanId }) {
     const file = new File([u8arr], `${todayPlanId}.jpeg`, { type: mime });
     formData.append("file", file);
     formData.append("planId", todayPlanId);
-    formData.append("mapx", photoMetadata.latitude + "");
-    formData.append("mapy", photoMetadata.longitude + "");
+    formData.append("mapx", photoMetadata?.latitude + "");
+    formData.append("mapy", photoMetadata?.longitude + "");
     formData.append("destinationId", destinationId);
     createAlbumImage(formData);
   };
