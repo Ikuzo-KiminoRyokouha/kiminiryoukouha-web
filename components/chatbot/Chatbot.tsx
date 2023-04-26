@@ -90,6 +90,8 @@ export default function Chatbot() {
       options: [
         { value: "travel", label: "오늘 여행 일정 보여줘", trigger: "travel1" },
         { value: "camera", label: "사진 찍을게요", trigger: "camera1" },
+        { value: "budget", label: "예산 관리", trigger: "budget1" },
+        { value: "food", label: "맛집 추천", trigger: "food1" },
       ],
     },
 
@@ -207,6 +209,15 @@ export default function Chatbot() {
       component: (
         <RefreshButton onClick={handleRefresh}>새로고침</RefreshButton>
       ),
+    },
+
+    {
+      id: "food1",
+      message: "아직 준비중...",
+    },
+    {
+      id: "budget1",
+      message: "예산 괸리.. 아직 준비중...",
     },
   ];
 

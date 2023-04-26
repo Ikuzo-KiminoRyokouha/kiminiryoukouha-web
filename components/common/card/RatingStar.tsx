@@ -30,7 +30,7 @@ interface Props {
 
 export default function RatingStar({ rating }: Props) {
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-2xl pb-2">
       <div className="flex items-center space-x-2">
         <div className="flex rounded-lg border">
           {Array.from({ length: 5 }).map((_, idx) => {
