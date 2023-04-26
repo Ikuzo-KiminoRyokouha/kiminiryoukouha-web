@@ -28,8 +28,10 @@ export default function New() {
     startDate: "",
     endDate: "",
     money: 0,
+    areacode: "",
+    sigungucode: "",
   });
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(1); //현재스탭에대한 값
   const [canNext, setCanNext] = useState<boolean>(false);
 
   return (
@@ -44,7 +46,7 @@ export default function New() {
         <Stepper.Header>
           {stepMap.map((step, idx) => {
             return (
-              <React.Fragment key={idx}>
+              <React.Fragment key={idx + 10}>
                 <Stepper.Circle {...step} />
                 {idx + 1 < stepMap.length && <Stepper.Line step={step.step} />}
               </React.Fragment>

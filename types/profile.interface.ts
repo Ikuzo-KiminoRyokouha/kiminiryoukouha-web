@@ -74,9 +74,8 @@ export interface NavProps extends IProps {
 
 export interface ContentsProps {
   navPage: string;
-  planInfo: any;
-  communityPosts?: [CommunityPostsProps];
-  myCommunityPosts?: [MyCommunityPostsProps];
+  // planInfo: any;
+  // communityPosts?: [CommunityPostsProps];
 }
 
 export interface NavButtonProps {
@@ -92,8 +91,15 @@ export interface NavButtonProps {
 export interface FixProfileProps {
   hide: () => void;
   description: string;
-  writeDescription;
-  userInfoRefetch;
+  writeDescription: UseMutateFunction<
+    AxiosResponse<any, any>,
+    unknown,
+    any,
+    unknown
+  >;
+  userInfoRefetch: <TPageData>(
+    options?: RefetchOptions & RefetchQueryFilters<TPageData>
+  ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;
 }
 
 export interface ShowFollowingProps {
@@ -109,4 +115,46 @@ export interface ShowFollowerProps {
 export interface FollwerFollweeInfoProps {
   info: [FollowingFollowerInfo];
   hide: () => void;
+}
+
+export interface UseProfileProps {
+  writeDescription: UseMutateFunction<
+    AxiosResponse<any, any>,
+    unknown,
+    string,
+    unknown
+  >;
+  userFollow: UseMutateFunction<AxiosResponse<any, any>, unknown, any, unknown>;
+  userUnfollow: UseMutateFunction<
+    AxiosResponse<any, any>,
+    unknown,
+    any,
+    unknown
+  >;
+  userInfo: AxiosResponse<any, any>;
+  userFollower: AxiosResponse<any, any>;
+  userFollowee: AxiosResponse<any, any>;
+  getUserFolloweeRefetch: <TPageData>(
+    options?: RefetchOptions & RefetchQueryFilters<TPageData>
+  ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;
+  getUserFollowerRefetch: <TPageData>(
+    options?: RefetchOptions & RefetchQueryFilters<TPageData>
+  ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;
+  userInfoRefetch: <TPageData>(
+    options?: RefetchOptions & RefetchQueryFilters<TPageData>
+  ) => Promise<QueryObserverResult<AxiosResponse<any, any>, unknown>>;
+  nickname: string;
+  planInfo: AxiosResponse<any, any>;
+  communityPosts: AxiosResponse<any, any>;
+  myName;
+  isFollow;
+  onClick;
+  isFixing;
+  isShowFollower;
+  isShowFollowing;
+  followerInfo;
+  followerNum;
+  followingNum;
+  description;
+  followingInfo;
 }

@@ -2,7 +2,7 @@ interface Props {
   onWrite: () => void;
 }
 
-export default function SearchNotFound({ onWrite }) {
+export default function SearchNotFound({ onWrite }: Props) {
   return (
     <>
       {/* 검색된 게시물 없을시 페이지 */}

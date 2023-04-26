@@ -11,6 +11,7 @@ interface Props {
   title: string;
   days: string;
   description: string;
+  planId: number;
 }
 
 export default function DecidedPlanCard({
@@ -18,50 +19,53 @@ export default function DecidedPlanCard({
   title,
   days,
   description,
+  planId,
 }: Props) {
   const [plan, setPlan] = useState<any>();
 
   const router = useRouter();
 
-  useEffect(() => {
-    axios
-      .post(`http://localhost:8000/plan/random`, {
-        // destination: "경주",
-        dayPerDes: 3,
-        start: new Date(),
-        end: dayjs().add(2, "day").toISOString(),
-        city: "경주",
-      })
-      .then((res) => {
-        axios
-          .get(`http://localhost:8000/plan/${res.data.id}`)
-          .then((res) => {
-            if (res.data.ok) setPlan(res.data.plan);
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .post(`http://localhost:8000/plan/random`, {
+  //       // destination: "경주",
+  //       dayPerDes: 3,
+  //       start: new Date(),
+  //       end: dayjs().add(2, "day").toISOString(),
+  //       city: "경주",
+  //     })
+  //     .then((res) => {
+  //       axios
+  //         .get(`http://localhost:8000/plan/${res.data.id}`)
+  //         .then((res) => {
+  //           if (res.data.ok) setPlan(res.data.plan);
+  //         })
+  //         .catch((err) => console.log(err));
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   return (
     <>
       {/* 카드 */}
       <div
-        className="h-96 w-60 cursor-pointer rounded-lg border border-black"
+        className="h-96 w-60 cursor-pointer rounded-lg  shadow-lg"
         onClick={() =>
           router.push(
             {
-              pathname: "/plan/new/planDetail",
-              query: { plan: JSON.stringify(plan) },
+              pathname: "/plan/detail",
+              query: {
+                planId: planId,
+              },
             },
-            "/plan/new/planDetail"
+            "/plan/detail"
           )
         }
       >
         {/* 미리보기 이미지 */}
-        <div className="relative h-[45%]">
+        <div className="relative h-[45%] rounded-t">
           {/* <Image
             src={`${
               plan?.travels[0].destination.firstimg
@@ -70,7 +74,7 @@ export default function DecidedPlanCard({
             }`}
             layout={"fill"}
           /> */}
-          <Image src={img} layout={"fill"} />
+          <Image className="rounded-t" src={img} layout={"fill"} />
         </div>
         {/* 텍스트부분 */}
         <div className="flex h-[55%] flex-col items-center">

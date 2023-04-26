@@ -9,13 +9,13 @@ import dayjs from "dayjs";
 import { useToggle } from "../../hooks";
 import { Modal, Portal } from "../common/modal";
 import mainRequest from "../../utils/request/mainRequest";
+import Link from "next/link";
 
 interface Props {
   plan: Plan;
 }
 
 export default function SimplePlanCard({ plan }: Props) {
-  const router = useRouter();
   const deleting = useToggle(false);
   const src = useMemo(() => {
     const arr = plan.travels.filter((el) => el.destination.firstimage != "");
@@ -25,15 +25,21 @@ export default function SimplePlanCard({ plan }: Props) {
 
   return (
     <div className="flex w-full space-x-4 border p-2 shadow-md drop-shadow-sm">
-      <div className="basis-1/12 text-center">
-        <p className="text-lg">{plan.title.split(" ")[0]}</p>
-        <Image
-          className="rounded-full"
-          src={src}
-          width={1}
-          height={1}
-          layout="responsive"
-        />
+      <div className="basis-1/6 pr-5 text-center">
+        <Link href={`/plan/detail?planId=${plan.id}`} passHref>
+          <a className="cursor-pointer text-lg">{plan.title.split(" ")[0]}</a>
+        </Link>
+        <div className="flex items-center justify-center py-3">
+          <div className="relative h-28 w-28">
+            <Image
+              className="rounded-full"
+              src={src}
+              width={1}
+              height={1}
+              layout="responsive"
+            />
+          </div>
+        </div>
       </div>
       <div className="flex flex-1 flex-col justify-around">
         <p className="hidden md:block">
@@ -59,13 +65,14 @@ export default function SimplePlanCard({ plan }: Props) {
       </div>
       {/* <div className="relative flex flex-1 flex-col"></div> */}
       <div className="flex flex-col justify-between space-y-2">
-        <div className="space-x-3">
-          <button className="p-1 text-sky-600">
+        <div className="flex justify-end">
+          {/* <div className="space-x-3"> */}
+          {/* <button className="p-1 text-sky-600">
             <BsShare />
           </button>
           <button className="p-1 text-teal-600">
             <FiEdit />
-          </button>
+          </button> */}
           <button
             onClick={() => deleting.setTrue()}
             className=" p-1 text-red-400"
@@ -73,22 +80,14 @@ export default function SimplePlanCard({ plan }: Props) {
             <AiOutlineDelete />
           </button>
         </div>
-        <button
-          onClick={() =>
-            router.push(
-              {
-                pathname: "/plan/detail",
-                query: {
-                  planId: plan.id,
-                },
-              },
-              "/plan/detail"
-            )
-          }
-          className=" px-2 py-1 text-gray-500"
-        >
-          자세히 보기
-        </button>
+        <div className="flex flex-col items-end">
+          <Link href={`/album/${plan.id}`} passHref>
+            <a className=" px-2 py-1 text-gray-500">앨범 보기</a>
+          </Link>
+          <Link href={`/plan/detail?planId=${plan.id}`} passHref>
+            <a className=" px-2 py-1 text-gray-500">자세히 보기</a>
+          </Link>
+        </div>
       </div>
       {deleting.value && (
         <DeletingModal

@@ -1,13 +1,13 @@
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { TbFileDescription, TbMap } from "react-icons/tb";
-
 import { useToggle } from "../../hooks";
 import { Travel } from "../../types/plan.interface";
 import { getDescriptionFromAPI } from "../../utils/apiQuery";
 import { Modal, Portal } from "../common/modal";
+import Link from "next/link";
+import RatingStar from "@/common/card/RatingStar";
 
 interface Props {
   travel: Travel;
@@ -15,9 +15,9 @@ interface Props {
 }
 
 export default function DetailCard({ planId, travel }: Props) {
+  console.log(travel);
   const [description, setDescription] = useState<string>("");
   const show = useToggle(false);
-  const router = useRouter();
 
   useLayoutEffect(() => {
     getDescriptionFromAPI(
@@ -27,62 +27,44 @@ export default function DetailCard({ planId, travel }: Props) {
   }, []);
 
   return (
-    
     <>
-   
-      <div className="w-1/2 p-4 lg:w-1/3">
-        <div
-          className="h-full overflow-hidden rounded-lg border-2
-                        border-gray-200 border-opacity-60"
-        >
+      <div className="w-1/2 p-4 shadow-lg duration-200 ease-in hover:shadow-2xl">
+        <div className="h-full overflow-hidden rounded-lg">
           <img
-            className="w-full object-cover object-center 
-                       md:h-48 lg:h-72"
+            className="w-full rounded-lg object-cover object-center md:h-48 lg:h-72"
             src={
               travel.destination.firstimage ||
               "https://picsum.photos/id/188/720/400/"
             }
             alt="card image"
           />
-          <div
-            className="cursor-pointer p-6 transition
-                         duration-300 ease-in hover:bg-indigo-600 hover:text-white"
-          >
+          <div className="cursor-pointer py-6">
             <h2 className="mb-1 text-base  font-medium">
               {dayjs(travel.startDay).format("YYYY-MM-DD")}
             </h2>
             <h1 className="mb-3 text-lg font-semibold">
               {travel.destination.title}
             </h1>
+            <RatingStar rating={travel.exrating}></RatingStar>
             <p className="mb-3 truncate text-xs leading-relaxed">
               {description}
             </p>
           </div>
-          <div className="flex">
-            <div className="ml-auto">
-              <button>
+          <div className="flex justify-end">
+            {/* <button>
                 <AiOutlineCheckCircle size={30} color={"blue"} />
-              </button>
-              <button
-                onClick={() =>
-                  router.push(
-                    {
-                      pathname: "/plan/detail/nav",
-                      query: {
-                        planId,
-                        travelId: travel.id,
-                      },
-                    },
-                    "/plan/detail/nav"
-                  )
-                }
-              >
+              </button> */}
+            <Link
+              href={`/plan/detail/nav?planId=${planId}&travelId=${travel.id}`}
+              passHref
+            >
+              <a>
                 <TbMap size={30} color={"green"} />
-              </button>
-              <button onClick={show.setTrue}>
-                <TbFileDescription size={30} />
-              </button>
-            </div>
+              </a>
+            </Link>
+            <button onClick={show.setTrue}>
+              <TbFileDescription size={30} color="blue" />
+            </button>
           </div>
         </div>
       </div>
@@ -97,9 +79,7 @@ export default function DetailCard({ planId, travel }: Props) {
           hide={show.setFalse}
         />
       )}
-        
     </>
-
   );
 }
 

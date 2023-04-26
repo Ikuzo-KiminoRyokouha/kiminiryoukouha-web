@@ -44,12 +44,12 @@ export default function PlanCarousel() {
         itemClass="carousel-item-padding-40-px"
       >
         {[0, 1, 2, 3, 4, 5, 6].map(() => (
-          <div key="el" className="flex h-96 flex-col space-y-2 p-5">
+          <div key="el" className="flex h-[28rem] flex-col space-y-2 p-5">
             <div className="relative flex-1">
               <Image src={"/assets/main-img.png"} layout={"fill"} />
             </div>
-            <div className="mx-4 shrink space-y-2">
-              <div className="mx-4 flex justify-between">
+            <div className="shrink space-y-2">
+              <div className="flex justify-between">
                 <span>タイトル</span>
                 <span>場所</span>
               </div>
@@ -61,6 +61,7 @@ export default function PlanCarousel() {
                 読み込み
               </button>
             </div>
+            <div className="h-9 w-full"></div>
           </div>
         ))}
       </Carousel>

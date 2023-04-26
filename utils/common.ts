@@ -30,6 +30,32 @@ export const cookieStringToObject = (cookieString: string | string[]): any => {
 };
 
 /**
+ * @description 월(month)를 받아서 영어 month로 바꿉니다.
+ */
+export function convertMonthToEnglish(month) {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  if (month >= 1 && month <= 12) {
+    return monthNames[month - 1];
+  } else {
+    return "Invalid month";
+  }
+}
+
+/**
  * @description 디바이스의 방향정보를 받아오기 위한 이벤트 리스너 입니다.
  */
 function orientationHandler(

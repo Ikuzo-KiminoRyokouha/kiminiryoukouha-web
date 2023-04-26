@@ -13,6 +13,7 @@ import headerNavMap from "../../../utils/dataMap/headerNavMap.json";
 import DropDown from "../../common/DropDown";
 import { useMutation } from "@tanstack/react-query";
 import { mLogout } from "../../../utils/fetchFn/mutation/user";
+import { useEffect, useRef } from "react";
 
 /**
  * @description 모든 화면에 공통적으로 적용 되는 Header 컴포넌트 입니다.
@@ -26,10 +27,22 @@ export default function Header() {
     onSuccess: () => router.reload(),
     onError: () => alert("요청 실패"),
   });
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    function handleOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        dropdown.setFalse();
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <div
-      className={`sticky top-0 z-40 h-[64px] w-full flex-none bg-white bg-opacity-100 lg:border-b lg:border-slate-900/10 ${
+      className={`sticky top-0 z-40 h-[72px] w-full flex-none bg-white bg-opacity-100 lg:border-b lg:border-slate-900/10 ${
         router.pathname === "/" ? "lg:bg-opacity-10" : "lg:bg-opacity-100"
       } `}
     >
@@ -37,25 +50,28 @@ export default function Header() {
         <div className="max-w-8xl mx-auto">
           <div className="relative flex items-center justify-between px-4 lg:justify-start lg:px-0">
             {/* 모바일 햄버거 */}
-            <div className="flex lg:hidden">
-              <AiOutlineMenu size={25} />
-            </div>
-            {/* 앱 타이틀 */}
-            <Link href={"/"}>
-              <div className="flex cursor-pointer items-center space-x-2">
-                <div className="h-8 w-8">
-                  <Image
-                    src="/assets/logo.png"
-                    width={"24px"}
-                    height={"24px"}
-                    layout="responsive"
-                  />
-                </div>
-                <span className="whitespace-nowrap text-xl font-semibold text-sky-600">
-                  君の旅行は
-                </span>
+            <div className="flex items-center">
+              <div className="flex lg:hidden">
+                <AiOutlineMenu size={25} />
               </div>
-            </Link>
+              {/* 앱 타이틀 */}
+              <Link href={"/"}>
+                <div className="flex cursor-pointer items-center space-x-2 pl-5 lg:pl-0">
+                  <div className="h-8 w-8">
+                    <Image
+                      src="/assets/logo.png"
+                      width={"24px"}
+                      height={"24px"}
+                      layout="responsive"
+                      loading="lazy"
+                    />
+                  </div>
+                  <span className="whitespace-nowrap text-xl font-semibold text-sky-600">
+                    君の旅行は
+                  </span>
+                </div>
+              </Link>
+            </div>
 
             {/* 메뉴 */}
             <div className="relative flex items-center lg:ml-auto">
@@ -63,30 +79,34 @@ export default function Header() {
               <HeaderNav items={headerNavMap} />
               {/* 검색 */}
               <input
-                className="mx-4 hidden rounded-lg border border-black py-2 px-4 focus:outline-0 focus:ring-0 lg:block "
+                className="mx-4 hidden rounded-lg border border-black py-2 px-4 font-semibold focus:outline-0 focus:ring-0 lg:block"
                 {...keyword}
               />
               {/* 로그인 버튼 */}
               {!user && (
                 <button
                   onClick={() => router.push("/login")}
-                  className="rounded-lg bg-sky-600 p-2 px-4 shadow-lg"
+                  className="rounded-lg bg-sky-600 py-3 px-5 shadow-lg"
                 >
                   <span className="text-white">Login</span>
                 </button>
               )}
               {user && (
-                <div className="relative flex items-center justify-end space-x-1">
+                <div
+                  className="relative flex items-center justify-end space-x-1"
+                  ref={dropdownRef}
+                >
                   <div
                     onMouseDown={(e) => e.preventDefault()}
-                    className="flex cursor-pointer items-center justify-center"
+                    className="flex cursor-pointer items-center justify-center pl-5 lg:pl-0"
                     onClick={dropdown.onClick}
                   >
-                    <FaUserCircle size={20} />
+                    <FaUserCircle size={25} />
                     <RiArrowDropDownFill size={30} />
                   </div>
+                  
                   <DropDown visible={dropdown.value}>
-                    <DropDown.Header>
+                    <DropDown.Header> 
                       <div>Sign Up as</div>
                       <div className="truncate font-medium">
                         {user.nickname}

@@ -14,13 +14,12 @@ export default function Modal({
     /* background blur window */
     <div
       onClick={hide}
-      className="fixed inset-0
-    z-50 flex items-center justify-center backdrop-blur-sm transition-all"
+      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm transition-all"
     >
       {/* main modal window */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="scrollbar-none flex max-h-[32.5rem] min-h-fit w-full flex-col space-y-4 overflow-auto  border bg-white p-6 lg:max-w-md"
+        className="scrollbar-none flex max-h-[36rem] min-h-fit w-full flex-col space-y-4 overflow-auto  border bg-white p-6 lg:max-w-md"
       >
         {children}
       </div>
