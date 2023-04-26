@@ -10,6 +10,8 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import { LatLng } from "../../../types/tmap.type";
 import authRequest from "../../../utils/request/authRequest";
+import RatingInput from "components/input/RatingInput";
+import RatingStar from "@/common/card/RatingStar";
 
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
@@ -234,6 +236,7 @@ function IntroduceCard({ travel }) {
     // 사진박스
     <div className="mt-10 flex flex-col items-center justify-center">
       <h1 className="py-5 text-2xl font-bold">{travel.destination.title}</h1>
+      <RatingStar rating={travel.exrating}></RatingStar>
       <div className="w-4/5 md:w-1/2">
         <Image
           src={

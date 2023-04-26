@@ -1,3 +1,4 @@
+import RatingStar from "@/common/card/RatingStar";
 import { AnimatePresence, motion } from "framer-motion";
 import useChatBot from "hooks/useChatBot";
 import { useEffect, useState } from "react";
@@ -52,7 +53,7 @@ const box = {
 
 export const ShowNewTravels = ({ ...props }) => {
   const [destinations, setDestinations] = useState([]);
-
+  console.log(destinations);
   useEffect(() => {
     if (props?.destinations) {
       setDestinations([...props?.destinations]);
@@ -78,33 +79,42 @@ export const ShowNewTravels = ({ ...props }) => {
   return (
     <>
       {destinations && destinations.length > 0 && (
-        <Wrapper>
-          <AnimatePresence custom={back}>
-            <Box
-              custom={back}
-              variants={box}
-              initial="entry"
-              animate="center"
-              exit="exit"
-              key={visible}
-              bgPhoto={destinations[visible][0].firstimage}
-            >
-              {destinations[visible][0].title}
-              <br />
-            </Box>
-          </AnimatePresence>
-          <Button onClick={nextPlease}>next</Button>
-          <Button onClick={prevPlease}>prev</Button>
-        </Wrapper>
+        <>
+          <Wrapper>
+            <AnimatePresence custom={back}>
+              <Box
+                custom={back}
+                variants={box}
+                initial="entry"
+                animate="center"
+                exit="exit"
+                key={visible}
+                bgPhoto={destinations[visible][0].firstimage}
+              >
+                {destinations[visible][0].title}
+                <br />
+              </Box>
+            </AnimatePresence>
+            <div className="mt-5">
+              <RatingStar rating={destinations[visible][1]}></RatingStar>
+            </div>
+
+            <div>
+              <Button onClick={prevPlease}>prev</Button>
+
+              <Button onClick={nextPlease}>next</Button>
+            </div>
+          </Wrapper>
+        </>
       )}
     </>
   );
 };
 
 const Button = styled.button`
-  background-color: #0284c7;
+  background-color: #848484;
   color: white;
-  padding: 2px;
+  padding: 5px;
   border-radius: 5px;
-  margin-top: 5px;
+  margin: 10px 5px 5px 5px;
 `;
