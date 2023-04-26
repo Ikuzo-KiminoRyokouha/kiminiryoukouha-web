@@ -6,23 +6,23 @@ import { useEffect } from "react";
 import Link from "next/link";
 
 export default function Home() {
-  useEffect(() => {
-    const observer = new IntersectionObserver((e) => {
-      e.forEach((el) => {
-        if (el.isIntersecting) {
-          (el.target as any).style.opacity = 1;
-        } else {
-          (el.target as any).style.opacity = 0;
-        }
-      });
-    });
-    const block = document.querySelectorAll("#block");
-    block.forEach((el) => {
-      el.classList.add("opacity-0");
-      (el as any).style.transition = "3s";
-      observer.observe(el);
-    });
-  }, []);
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver((e) => {
+  //     e.forEach((el) => {
+  //       if (el.isIntersecting) {
+  //         (el.target as any).style.opacity = 1;
+  //       } else {
+  //         (el.target as any).style.opacity = 0;
+  //       }
+  //     });
+  //   });
+  //   const block = document.querySelectorAll("#block");
+  //   block.forEach((el) => {
+  //     el.classList.add("opacity-0");
+  //     (el as any).style.transition = "3s";
+  //     observer.observe(el);
+  //   });
+  // }, []);
   return (
     <div>
       <Head>
@@ -32,8 +32,8 @@ export default function Home() {
         <meta name="description" content="너의 여행은의 메인 페이지 입니다." />
       </Head>
 
-      <main id="block" className="opacity-0">
-        <div className="hidden min-h-screen lg:block">
+      <main id="block" className="min-h-fit">
+        <div className="lg:block">
           {/* 이미지 absoulte */}
           <Image src={"/assets/main-img.png"} layout={"fill"} />
           {/* 메인 문구 */}
@@ -44,7 +44,7 @@ export default function Home() {
               </p>
               <div className="flex">
                 <Link href={"/plan/new"} passHref>
-                  <a className="rounded-lg bg-gray-300 bg-opacity-30 py-3 px-10 duration-300 ease-in hover:bg-sky-600">
+                  <a className="rounded-lg bg-gray-300 bg-opacity-30 px-10 py-3 duration-300 ease-in hover:bg-sky-600">
                     <span className="bg-opacity-100 text-2xl text-white">
                       Start Your Journey &#10132;
                     </span>

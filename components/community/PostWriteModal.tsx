@@ -106,17 +106,16 @@ export default function PostWriteModal({
                     {/* 마이플랜 가져와서 보여주기 */}
                     <ul>
                       {myPlanData &&
-                        myPlanData?.data?.plans.map((plan, idx) => {
+                        myPlanData?.data?.plans?.map((plan, idx) => {
                           return (
-                            <li
-                              className="cursor-pointer py-1 text-lg"
-                              onClick={() => {
-                                setSelectedPlan(plan.id);
-                              }}
-                            >
-                              {String(idx + 1) + ". "}
-                              {plan.title}
-                            </li>
+                            <>
+                              <PlanList
+                                idx={idx}
+                                plan={plan}
+                                setSelectedPlan={setSelectedPlan}
+                                key={plan.id}
+                              />
+                            </>
                           );
                         })}
                     </ul>
@@ -146,5 +145,23 @@ export default function PostWriteModal({
         </Modal>
       </Portal>
     </>
+  );
+}
+
+function PlanList({ setSelectedPlan, plan, idx }) {
+  const clicked = useToggle(false);
+  return (
+    <li
+      className={`cursor-pointer py-1 text-lg ${
+        clicked.value ? "text-sky-600" : ""
+      }`}
+      onClick={() => {
+        clicked.onClick();
+        setSelectedPlan(plan.id);
+      }}
+    >
+      {String(idx + 1) + ". "}
+      {plan.title}
+    </li>
   );
 }
