@@ -7,6 +7,7 @@ import { Travel } from "../../types/plan.interface";
 import { getDescriptionFromAPI } from "../../utils/apiQuery";
 import { Modal, Portal } from "../common/modal";
 import Link from "next/link";
+import RatingStar from "@/common/card/RatingStar";
 
 interface Props {
   travel: Travel;
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export default function DetailCard({ planId, travel }: Props) {
+  console.log(travel);
   const [description, setDescription] = useState<string>("");
   const show = useToggle(false);
 
@@ -43,6 +45,7 @@ export default function DetailCard({ planId, travel }: Props) {
             <h1 className="mb-3 text-lg font-semibold">
               {travel.destination.title}
             </h1>
+            <RatingStar rating={travel.exrating}></RatingStar>
             <p className="mb-3 truncate text-xs leading-relaxed">
               {description}
             </p>
