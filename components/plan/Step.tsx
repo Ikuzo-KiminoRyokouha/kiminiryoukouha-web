@@ -82,9 +82,12 @@ export function StepOne({ ctx }: StepProps) {
       />
       <div className="flex w-full md:w-auto md:pl-10">
         <div className="flex w-full justify-around">
-          {["시작", "종료"].map((el) => {
+          {["시작", "종료"].map((el, idx) => {
             return (
-              <div className="flex flex-col items-center pr-3">
+              <div
+                className="flex flex-col items-center pr-3"
+                key={idx + 10000}
+              >
                 <label className="my-2 block font-medium text-gray-900">
                   {el}날짜
                 </label>
@@ -127,7 +130,7 @@ export function StepTwo({ ctx }: StepProps) {
   const [sigungucode, setSigungu] = useState("");
   const [region, setRegion] = useState("");
 
-  // 태그안에 포함되어 있는
+  // 카테고리안에 포함되어 있는
   useEffect(() => {
     const obj = {};
     Array.from(Object.keys(tag)).map((key) => {
@@ -217,7 +220,7 @@ export function StepTwo({ ctx }: StepProps) {
               setSigungu("default");
 
               const name = e.target.options[e.target.selectedIndex].text;
-              console.log(name);
+              // console.log(name);
               setRegion("");
               setRegion((prev) => prev + name);
             }}
@@ -228,7 +231,9 @@ export function StepTwo({ ctx }: StepProps) {
             {select.map((el) => {
               return (
                 <>
-                  <option value={el.code}>{el.name}</option>
+                  <option value={el.code} key={el.code}>
+                    {el.name}
+                  </option>
                 </>
               );
             })}
@@ -238,7 +243,7 @@ export function StepTwo({ ctx }: StepProps) {
             onChange={(e) => {
               e.target.value && setSigungu(e.target.value);
               const name = e.target.options[e.target.selectedIndex].text;
-              console.log(name);
+              // console.log(name);
 
               setRegion((prev) => prev + name);
             }}
@@ -279,18 +284,25 @@ export function StepTwo({ ctx }: StepProps) {
             );
           })}
         </div>
-        <div className="py-3">tag</div>
-        {revealTag?.map((el, idx) => (
-          <button
-            onClick={() => updateTag(el.tag)}
-            key={el.tag + idx}
-            className={`m-2 rounded bg-gray-400 ${
-              tag[key].includes(el.tag) ? "bg-emerald-500" : "bg-gray-400"
-            } px-2 py-2 text-sm font-medium text-white`}
-          >
-            {el.tag + " " + el.tagCount}
-          </button>
-        ))}
+        <div className="py-3">Category</div>
+        {revealTag?.map((el, idx) => {
+          // console.log("el.tag321", el);
+          return (
+            <button
+              onClick={() => {
+                console.log("tag321", tag, el.tag);
+
+                updateTag(el.tag);
+              }}
+              key={el.tag + idx}
+              className={`m-2 rounded bg-gray-400 ${
+                tag[key].includes(el.tag) ? "bg-emerald-500" : "bg-gray-400"
+              } px-2 py-2 text-sm font-medium text-white`}
+            >
+              {el.tag + " " + el.tagCount}
+            </button>
+          );
+        })}
         <div className="flex items-start space-x-3">
           {hintMessage.length != 0 && (
             <>
@@ -302,7 +314,7 @@ export function StepTwo({ ctx }: StepProps) {
                   hintMessage.map((el) => {
                     return (
                       <p key={`${el}`}>
-                        {el}차 일정갯수가 1개 이하입니다. 다른 태그도
+                        {el}차 일정갯수가 1개 이하입니다. 다른 카테고리도
                         골라보세요!
                       </p>
                     );

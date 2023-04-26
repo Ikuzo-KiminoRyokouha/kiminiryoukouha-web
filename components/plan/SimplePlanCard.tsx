@@ -81,7 +81,7 @@ export default function SimplePlanCard({ plan }: Props) {
           </button>
         </div>
         <div className="flex flex-col items-end">
-          <Link href={`/plan/album${plan.id}`} passHref>
+          <Link href={`/album/${plan.id}`} passHref>
             <a className=" px-2 py-1 text-gray-500">앨범 보기</a>
           </Link>
           <Link href={`/plan/detail?planId=${plan.id}`} passHref>
