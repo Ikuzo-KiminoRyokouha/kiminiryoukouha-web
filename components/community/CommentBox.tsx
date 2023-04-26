@@ -18,6 +18,8 @@ export function CommentBox({
   const addCommentInput = useInput("", "내용을 입력해주세요");
   const user = getUser();
 
+  console.log("commentData321", commentData);
+
   const onClick = {
     // 대댓글 작성
     addComment: () => {
@@ -47,7 +49,7 @@ export function CommentBox({
         className={`flex p-2 py-3 ${commentData?.depth === 1 ? "pl-12" : ""}`}
       >
         {commentData?.depth === 1 ? (
-          <BsArrowReturnRight className="mt-4 mr-1" size={15} />
+          <BsArrowReturnRight className="mr-1 mt-4" size={15} />
         ) : null}
         <FaUserCircle className="m-2" size={30} />
         <div>
