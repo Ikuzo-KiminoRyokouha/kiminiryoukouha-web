@@ -4,8 +4,8 @@ export interface Info {
   startDate: string;
   endDate: string;
   money: number;
-  areacode:string,
-  sigungucode:string
+  areacode: string;
+  sigungucode: string;
 }
 
 export interface Plan {
@@ -28,6 +28,7 @@ export interface Travel {
   destination: Destination;
   id: number;
   startDay: string;
+  exrating?: number;
 }
 
 export interface Destination {

@@ -3,27 +3,26 @@ import Image from "next/image";
 import PlanCarousel from "../components/PlanCarousel";
 import ImageCard from "../components/common/card/ImageCard";
 import { useEffect } from "react";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Home() {
-  const router = useRouter();
-  useEffect(() => {
-    const observer = new IntersectionObserver((e) => {
-      e.forEach((el) => {
-        if (el.isIntersecting) {
-          (el.target as any).style.opacity = 1;
-        } else {
-          (el.target as any).style.opacity = 0;
-        }
-      });
-    });
-    const block = document.querySelectorAll("#block");
-    block.forEach((el) => {
-      el.classList.add("opacity-0");
-      (el as any).style.transition = "3s";
-      observer.observe(el);
-    });
-  }, []);
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver((e) => {
+  //     e.forEach((el) => {
+  //       if (el.isIntersecting) {
+  //         (el.target as any).style.opacity = 1;
+  //       } else {
+  //         (el.target as any).style.opacity = 0;
+  //       }
+  //     });
+  //   });
+  //   const block = document.querySelectorAll("#block");
+  //   block.forEach((el) => {
+  //     el.classList.add("opacity-0");
+  //     (el as any).style.transition = "3s";
+  //     observer.observe(el);
+  //   });
+  // }, []);
   return (
     <div>
       <Head>
@@ -31,11 +30,10 @@ export default function Home() {
           君の旅行は | AR, AI 基盤の旅行オールインワンフラットフォム
         </title>
         <meta name="description" content="너의 여행은의 메인 페이지 입니다." />
-       
       </Head>
 
-      <main id="block" className="opacity-0">
-        <div className="hidden min-h-screen lg:block">
+      <main id="block" className="min-h-fit">
+        <div className="lg:block">
           {/* 이미지 absoulte */}
           <Image src={"/assets/main-img.png"} layout={"fill"} />
           {/* 메인 문구 */}
@@ -45,14 +43,13 @@ export default function Home() {
                 Do You Wanna Go To Travel?
               </p>
               <div className="flex">
-                <button
-                  onClick={() => router.push("/plan/new")}
-                  className="rounded-lg bg-gray-300 bg-opacity-30 py-3 px-10 duration-300 ease-in hover:bg-sky-600"
-                >
-                  <span className="bg-opacity-100 text-2xl text-white">
-                    Start Your Journey &#10132;
-                  </span>
-                </button>
+                <Link href={"/plan/new"} passHref>
+                  <a className="rounded-lg bg-gray-300 bg-opacity-30 px-10 py-3 duration-300 ease-in hover:bg-sky-600">
+                    <span className="bg-opacity-100 text-2xl text-white">
+                      Start Your Journey &#10132;
+                    </span>
+                  </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -69,7 +66,7 @@ export default function Home() {
         </div>
       </main>
       {/* 나의 여행 키워드 */}
-      <div id="block" className="mx-auto mt-6 max-w-7xl space-y-6">
+      {/* <div id="block" className="mx-auto mt-6 max-w-7xl space-y-6">
         <div className="flex w-full justify-between px-5 lg:justify-start lg:pl-0">
           <p className="mr-6 pr-4 text-xl font-bold lg:px-0 lg:text-2xl">
             私の旅行キーワードは？
@@ -81,9 +78,9 @@ export default function Home() {
         <div className="hidden py-3 lg:block">
           <p className="font-semibold">おすすめプラン</p>
         </div>
-      </div>
-      <PlanCarousel />
+      </div> */}
       {/* 어디로 가고싶은지 */}
+      {/* <PlanCarousel />
       <div
         id="block"
         className="mx-auto mt-5 mb-16 max-w-7xl space-y-6 px-4 lg:mb-0 lg:px-0"
@@ -115,9 +112,9 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* AR로 보는세계 */}
-      <div
+      {/* <div
         id="block"
         className="mx-auto my-5 hidden max-w-7xl  space-y-6 py-4 pb-10 lg:block"
       >
@@ -135,7 +132,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

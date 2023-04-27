@@ -18,8 +18,8 @@ import { AiOutlineWarning } from "react-icons/ai";
 import { useInput, useToggle } from "../../hooks";
 import "@/utils/extension/array.extension";
 import FireworkEffect from "components/Firework";
-import select from "./Select.json"
-//Step에서는 info는  밑에 규칙을 따라야해 stepProps에서 정의해줬으니까 
+import select from "./Select.json";
+//Step에서는 info는  밑에 규칙을 따라야해 stepProps에서 정의해줬으니까
 // export interface Info {
 //   tag: { [key: string]: Array<string> };
 //   region: string;
@@ -37,17 +37,10 @@ interface StepProps {
 }
 
 export function StepOne({ ctx }: StepProps) {
-
-
-
-
-  
-  
   const { info, setInfo, setCanNext } = useContext(ctx);
-  //구조분해할당 ctx.info를 그냥 info로 
+  //구조분해할당 ctx.info를 그냥 info로
 
-
-  const [startDate, setStartDate] = useState<dayjs.Dayjs>(  //
+  const [startDate, setStartDate] = useState<dayjs.Dayjs>( //
     info.startDate ? dayjs(info.startDate) : undefined
   );
   const [endDate, setEndDate] = useState<dayjs.Dayjs>(
@@ -62,12 +55,12 @@ export function StepOne({ ctx }: StepProps) {
         tagObj[i] = [];
       }
 
-      setInfo((prev) => ({ //이전값이있으면 
+      setInfo((prev) => ({
+        //이전값이있으면
         ...prev,
         startDate: startDate?.format("YYYY-MM-DD"),
         endDate: endDate?.format("YYYY-MM-DD"),
         tag: { ...tagObj },
-        
       }));
       setCanNext(true);
     } else {
@@ -89,9 +82,12 @@ export function StepOne({ ctx }: StepProps) {
       />
       <div className="flex w-full md:w-auto md:pl-10">
         <div className="flex w-full justify-around">
-          {["시작", "종료"].map((el) => {
+          {["시작", "종료"].map((el, idx) => {
             return (
-              <div className="flex flex-col items-center pr-3">
+              <div
+                className="flex flex-col items-center pr-3"
+                key={idx + 10000}
+              >
                 <label className="my-2 block font-medium text-gray-900">
                   {el}날짜
                 </label>
@@ -130,20 +126,11 @@ export function StepTwo({ ctx }: StepProps) {
     });
   };
 
+  const [areacode, setAreacode] = useState("");
+  const [sigungucode, setSigungu] = useState("");
+  const [region, setRegion] = useState("");
 
-  const [areacode,setAreacode] =useState("") 
-  const [sigungucode,setSigungu]=useState("")
-  const[region,setRegion]=useState("")
-
- 
-
-  
-
-
- 
-
-
-  // 태그안에 포함되어 있는
+  // 카테고리안에 포함되어 있는
   useEffect(() => {
     const obj = {};
     Array.from(Object.keys(tag)).map((key) => {
@@ -173,39 +160,41 @@ export function StepTwo({ ctx }: StepProps) {
 
   useEffect(() => {
     setCanNext(false);
-    if(areacode!="" &&sigungucode=="default"){
-    setRevealTag([])
-    setKey("1")
-    
-  }
-    if(areacode&&sigungucode){
-    mainRequest.get(`/destination/tag/${areacode}/${sigungucode}`).then((res) => {
-      if (res.data.ok) {
-        setRevealTag(res.data.tags);
-      }
-    })}
-    
-    ;
+    if (areacode != "" && sigungucode == "default") {
+      setRevealTag([]);
+      setKey("1");
+    }
+    if (areacode && sigungucode) {
+      mainRequest
+        .get(`/destination/tag/${areacode}/${sigungucode}`)
+        .then((res) => {
+          if (res.data.ok) {
+            setRevealTag(res.data.tags);
+          }
+        });
+    }
   }, [sigungucode]);
-//  2개다있으면 받아오고 두개다없으면 스테이트를 초기화해버리고
+  //  2개다있으면 받아오고 두개다없으면 스테이트를 초기화해버리고
 
-//Info에 areacode랑 sigungucode를 다 넣어서보내고싶음 
-//그러면 planDetail의 쿼리스트링에는 다 들어가야하는데 
-//왜 2개가 빠져있을까 
-//얘는 지우지말자고일단 
-useEffect(() => {
-  if(areacode &&sigungucode)
- 
-  return () => {
-   //여기를 봐꿔야할듯
+  //Info에 areacode랑 sigungucode를 다 넣어서보내고싶음
+  //그러면 planDetail의 쿼리스트링에는 다 들어가야하는데
+  //왜 2개가 빠져있을까
+  //얘는 지우지말자고일단
+  useEffect(() => {
+    if (areacode && sigungucode)
+      return () => {
+        //여기를 봐꿔야할듯
 
-
-    setInfo((prev) => {
-      return { ...prev, areacode:areacode,sigungucode:sigungucode,region };
-    });
-  };
-}, [areacode,sigungucode]);
-
+        setInfo((prev) => {
+          return {
+            ...prev,
+            areacode: areacode,
+            sigungucode: sigungucode,
+            region,
+          };
+        });
+      };
+  }, [areacode, sigungucode]);
 
   useEffect(() => {
     return () => {
@@ -214,11 +203,6 @@ useEffect(() => {
       });
     };
   }, [tag]);
-  
-
-
-
-
 
   return (
     <>
@@ -230,73 +214,59 @@ useEffect(() => {
           Region
         </label>
         <div className="flex ">
-        <select
-          onChange={(e) =>{
-            e.target.value &&
-            setAreacode(e.target.value)
-            setSigungu("default")
+          <select
+            onChange={(e) => {
+              e.target.value && setAreacode(e.target.value);
+              setSigungu("default");
 
-            const name = e.target.options[e.target.selectedIndex].text;
-            console.log(name)
-            setRegion("")
-           setRegion((prev)=>prev+name)
-            
-           
-          
+              const name = e.target.options[e.target.selectedIndex].text;
+              // console.log(name);
+              setRegion("");
+              setRegion((prev) => prev + name);
+            }}
+            id="areacode"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          >
+            <option value={"default"}> 지역선택</option>
+            {select.map((el) => {
+              return (
+                <>
+                  <option value={el.code} key={el.code}>
+                    {el.name}
+                  </option>
+                </>
+              );
+            })}
+          </select>
 
+          <select
+            onChange={(e) => {
+              e.target.value && setSigungu(e.target.value);
+              const name = e.target.options[e.target.selectedIndex].text;
+              // console.log(name);
 
-           
-          }
-          }
-          id="areacode"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-        >
-          <option value={"default"}> 지역선택</option>
-          {select.map((el)=>{
-            return (<>
-            <option value={el.code}>{el.name}</option>
-            </>)
-          })}
-        </select>
-        
-        <select
-          onChange={(e) =>{
-            e.target.value &&
-            setSigungu(e.target.value)
-            const name = e.target.options[e.target.selectedIndex].text;
-            console.log(name)
-
-        
-
-            setRegion((prev)=>prev+ name)
-            
-
-          
-          }
-          }
-          id="sigungucode"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-        >
-          <option value={"default"}> 지역선택</option>
-          {select.map((el,i)=>{
-           if(areacode==el.code)
-            return (<>
-              {el.sigungu.map((el,i)=>{
-                return(<>
-                
-
-                <option value={el.code}> {el.name}</option>   
-
-                </>)
-              })}
-           
-
-            
-            </>)
-          })}
-        </select>
+              setRegion((prev) => prev + name);
+            }}
+            id="sigungucode"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          >
+            <option value={"default"}> 지역선택</option>
+            {select.map((el, i) => {
+              if (areacode == el.code)
+                return (
+                  <>
+                    {el.sigungu.map((el, i) => {
+                      return (
+                        <>
+                          <option value={el.code}> {el.name}</option>
+                        </>
+                      );
+                    })}
+                  </>
+                );
+            })}
+          </select>
         </div>
-        
       </div>
       <div className="p-2 py-8">
         <div className="space-x-3">
@@ -314,18 +284,25 @@ useEffect(() => {
             );
           })}
         </div>
-        <div className="py-3">tag</div>
-        {revealTag?.map((el, idx) => (
-          <button
-            onClick={() => updateTag(el.tag)}
-            key={el.tag + idx}
-            className={`m-2 rounded bg-gray-400 ${
-              tag[key].includes(el.tag) ? "bg-emerald-500" : "bg-gray-400"
-            } px-2 py-2 text-sm font-medium text-white`}
-          >
-            {el.tag + " " + el.tagCount}
-          </button>
-        ))}
+        <div className="py-3">Category</div>
+        {revealTag?.map((el, idx) => {
+          // console.log("el.tag321", el);
+          return (
+            <button
+              onClick={() => {
+                console.log("tag321", tag, el.tag);
+
+                updateTag(el.tag);
+              }}
+              key={el.tag + idx}
+              className={`m-2 rounded bg-gray-400 ${
+                tag[key].includes(el.tag) ? "bg-emerald-500" : "bg-gray-400"
+              } px-2 py-2 text-sm font-medium text-white`}
+            >
+              {el.tag + " " + el.tagCount}
+            </button>
+          );
+        })}
         <div className="flex items-start space-x-3">
           {hintMessage.length != 0 && (
             <>
@@ -337,7 +314,7 @@ useEffect(() => {
                   hintMessage.map((el) => {
                     return (
                       <p key={`${el}`}>
-                        {el}차 일정갯수가 1개 이하입니다. 다른 태그도
+                        {el}차 일정갯수가 1개 이하입니다. 다른 카테고리도
                         골라보세요!
                       </p>
                     );
@@ -384,7 +361,6 @@ export function StepThree({ ctx }: StepProps) {
       });
     };
   }, [money.value]);
-
 
   return (
     <div className="flex flex-1 flex-col">

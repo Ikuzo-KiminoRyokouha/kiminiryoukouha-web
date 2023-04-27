@@ -10,10 +10,11 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import { LatLng } from "../../../types/tmap.type";
 import authRequest from "../../../utils/request/authRequest";
+import RatingInput from "components/input/RatingInput";
+import RatingStar from "@/common/card/RatingStar";
 
 export default function PlanDetail({ travels, plan, info }) {
   const { makeLayerForPlan, additionalScriptLoaing } = useTMap("map");
-
 
   const router = useRouter();
   const isSave = useRef(false);
@@ -39,15 +40,15 @@ export default function PlanDetail({ travels, plan, info }) {
   };
 
   const handleRouteChange = async () => {
-    !isSave.current &&
-      (await authRequest.delete(`/plan/${plan.id}`));
+    !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
+    !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
     return;
   };
 
   useEffect(() => {
     const handleWindowClose = async (e: BeforeUnloadEvent) => {
-      !isSave.current &&
-        (await authRequest.delete(`/plan/${plan.id}`));
+      !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
+      !isSave.current && (await authRequest.delete(`/plan/${plan.id}`));
       return;
     };
     /* 이벤트리스너 등록 */
@@ -235,6 +236,7 @@ function IntroduceCard({ travel }) {
     // 사진박스
     <div className="mt-10 flex flex-col items-center justify-center">
       <h1 className="py-5 text-2xl font-bold">{travel.destination.title}</h1>
+      <RatingStar rating={travel.exrating}></RatingStar>
       <div className="w-4/5 md:w-1/2">
         <Image
           src={
@@ -254,13 +256,13 @@ function IntroduceCard({ travel }) {
 }
 
 export async function getServerSideProps({ query, req }) {
-    //여기서 쿼리로 받음 
+  //여기서 쿼리로 받음
   const info: Info = JSON.parse(query.info);
-console.log(info)
+  console.log(info);
 
   const res1 = await authRequest
     .post(
-      `/plan/random/1`,
+      `/plan/personality`,
       {
         // destination: "경주",
         // dayPerDes: 3,
@@ -270,27 +272,20 @@ console.log(info)
         city: info.region,
         tag: info.tag,
         totalCost: info.money,
-      //이거부터 차근차근 ㄱㄱ 여기안되면 다시지워야함
-         areacode:info.areacode,
-         sigungucode:info.sigungucode
-
+        //이거부터 차근차근 ㄱㄱ 여기안되면 다시지워야함
+        areacode: info.areacode,
+        sigungucode: info.sigungucode,
       },
       {
         cookie: req.headers.cookie,
       }
     )
     .then((res) => {
-      if (res.data.ok)
-       {  console.log(res.data.plan)
-        return  res.data.plan;}
-      
+      if (res.data.ok) return res.data.plan;
+
       return [];
     })
-    .catch((error: AxiosError) => {
-      console.log("아예 서버도 못감 ")
-      
-    });
-    
+    .catch((error: AxiosError) => {});
 
   const { travels, ...plan } = res1;
 
