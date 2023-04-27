@@ -45,6 +45,7 @@ export default function Chatgpt(){
         .then((res) => {
           console.log(res.data.documents[1].address_name);
           setMyplace(res.data.documents[1].address_name);
+          getCompletionFromOpenAI()
         })
         .catch((e) => console.log(e));
     };

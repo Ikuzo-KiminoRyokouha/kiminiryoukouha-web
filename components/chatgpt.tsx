@@ -11,7 +11,7 @@ export default function Chatgpt(){
     
 
 
-    const [myplace,setMyplace]=useState("")
+    const [myplace,setMyplace]=useState(null)
     const [x,setX]=useState(0)
     const [y,setY]=useState(0)
     const [reply,setReply]=useState("")
@@ -52,9 +52,16 @@ export default function Chatgpt(){
     useEffect(() => {
       if (x && y) {
         abc(x, y);
+       
       }
     }, [x, y]);
 
+    useEffect(()=>{
+      if(myplace)
+      getCompletionFromOpenAI()
+
+    },[myplace]
+    )
            
          
 
@@ -93,7 +100,8 @@ return(<>
 <div>{x}</div>
 <div>{y}</div>
 <div>{myplace?myplace:1}</div>
-<div className="border-black">{reply}</div>
+<div className="border-black">{reply?reply:123}</div>
+
 </div>
 
 
