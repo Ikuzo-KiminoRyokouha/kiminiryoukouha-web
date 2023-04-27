@@ -84,7 +84,7 @@ Stepper.Circle = ({
         className={`h-12 w-12 rounded-full border-2 ${
           step <= currentStep && "border-teal-600 bg-teal-600"
         } ${
-          step < currentStep && "border-gray-300 bg-white text-white"
+          step < currentStep && "border-teal-600 bg-teal-600 text-white"
         }  flex items-center justify-center py-3 transition duration-500 ease-in-out`}
       >
         <Icon />
@@ -145,12 +145,14 @@ Stepper.StepButton = ({ maxStep, canNext }: StepButtonProps) => {
   const { currentStep, setCurrentStep } = useContext(StepperContext);
 
   const goPrev = () => {
+    console.log("goPrevClicked");
     if (currentStep < maxStep && currentStep > 0) {
       setCurrentStep((prev) => prev - 1);
     }
   };
 
   const goNext = () => {
+    console.log("goNextclicked");
     canNext && setCurrentStep((prev) => prev + 1);
   };
 
