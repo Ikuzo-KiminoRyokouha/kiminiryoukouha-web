@@ -7,3 +7,7 @@ export const getTodayPlan = () => {
 export const getTodayTreavel = () => {
   return authRequest.get("/travel/today");
 };
+
+export const getTransactions = ({ queryKey }) => {
+  return authRequest.get(`/banking/transaction/list/${queryKey[1]}`);
+};
