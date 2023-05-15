@@ -95,14 +95,9 @@ export default function Chatgpt(){
 return(<>
 
 
-<div  className="text-lg  w-72">
-
-<div>{x}</div>
-<div>{y}</div>
-<div>{myplace?myplace:1}</div>
-<div className="border-black">{reply?reply:123}</div>
-
-</div>
+<div className="text-lg w-72">
+      <div className="border-black whitespace-pre-wrap">{reply ? reply : "loading"}</div>
+    </div>
 
 
 
