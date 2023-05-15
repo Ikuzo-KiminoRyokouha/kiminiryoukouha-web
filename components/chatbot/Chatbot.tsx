@@ -3,13 +3,19 @@ import styled, { ThemeProvider } from "styled-components";
 import Chatgpt from "./chatgpt";
 import ABC from "components/chatbot/weather";
 import { useQuery } from "@tanstack/react-query";
-import { getTodayPlan, getTodayTreavel } from "@/utils/fetchFn/query/chatBot";
+import {
+  getTodayPlan,
+  getTodayTreavel,
+  getTransactions,
+} from "@/utils/fetchFn/query/chatBot";
 import { Component, useCallback, useEffect, useMemo, useState } from "react";
-import { TodayTravel } from "./TodayTravel";
-import { ShowNewTravels } from "./ShowNewTravels";
+import { TodayTravel } from "./travels/TodayTravel";
+import { ShowNewTravels } from "./travels/ShowNewTravels";
 import useChatBot from "hooks/useChatBot";
-import { UpdateTravel } from "./UpdataTravel";
+import { UpdateTravel } from "./travels/UpdataTravel";
 import { useRouter } from "next/router";
+import { BudgetIndex } from "./budgets";
+import { Transactions } from "./budgets/Transactions";
 
 const CustomComponent = styled.div`
   background-color: #848484;
@@ -28,27 +34,36 @@ const Button = styled.button`
 export default function Chatbot() {
   console.log("hello chatbot");
   const router = useRouter();
-  let { data: planData } = useQuery(["getTodayPlan"], getTodayPlan);
+
+  const { getNewTravels, getNewTravelsData } = useChatBot();
+
+  const { data: planData } = useQuery(["getTodayPlan"], getTodayPlan);
   const plan = useMemo(() => planData?.data.plan, [planData]);
-  const [count, setCount] = useState(1);
 
   const { data: travelData, refetch } = useQuery(
     ["getTodayTreavel"],
     getTodayTreavel
   );
-
   const travels = useMemo(() => travelData?.data.travels, [travelData]);
 
-  const { getNewTravels, getNewTravelsData } = useChatBot();
+  const { data: transactionData, refetch: transactionRefetch } = useQuery(
+    ["getTransactions", plan?.id],
+    getTransactions
+  );
 
+  const transactions = useMemo(
+    () => transactionData?.data.transaction,
+    [transactionData]
+  );
+
+  const [count, setCount] = useState(1);
   const [destinations, setDestinations] = useState([]);
+  const tagValues = new Set();
+  const newArray = [];
 
   const handleRefresh = useCallback(() => {
     refetch();
   }, [refetch]);
-
-  const tagValues = new Set();
-  const newArray = [];
 
   if (plan) {
     Object.keys(plan?.tag).forEach((key) => {
@@ -78,9 +93,7 @@ export default function Chatbot() {
     // step: 0
     {
       id: "hello",
-      message: plan
-        ? `여행 중 이시네요. \n 무엇을 도와드릴까요? `
-        : "오늘은 여행 중이 아닙니다.",
+      message: `여행 중 이시네요. \n 무엇을  도와드릴까요? `,
       trigger: "help",
     },
 
@@ -185,11 +198,8 @@ export default function Chatbot() {
         },
         {
           value: "travel3-2",
-          message: ({ previousValue, steps }) => {
-            setCount((count) => count + 1);
-            return "더 추천 해줘";
-          },
-          trigger: "travel3-2",
+          messsage: "처음으로",
+          trigger: "hello",
         },
       ],
     },
@@ -211,13 +221,48 @@ export default function Chatbot() {
       ),
     },
 
+    // 예산 관리--------------------------------------------
+    {
+      id: "budget1",
+      options: [
+        { value: "budget1-1", label: "오늘의 예산", trigger: "budget1-1" },
+        { value: "budget1-2", label: "예산 확인", trigger: "budget1-2" },
+        { value: "budget1-3", label: "거래 내역 확인", trigger: "budget1-3" },
+      ],
+    },
+    {
+      id: "budget1-1",
+      message: "오늘의 예산",
+      trigger: "hello",
+    },
+    {
+      id: "budget1-2",
+      component: (
+        <BudgetIndex
+          budgets={{ totalCost: plan?.totalCost, dayPer: plan?.dayPerCost }}
+          transactions={transactions}
+          startDay={plan?.start}
+          endDay={plan?.end}
+        ></BudgetIndex>
+      ),
+      trigger: "hello",
+    },
+    {
+      id: "budget1-3",
+      component: <Transactions transactions={transactions}></Transactions>,
+      trigger: "hello",
+    },
     {
       id: "food1",
       message: "아직 준비중...",
+      trigger: "hello",
     },
+  ];
+
+  const nonSteps = [
     {
-      id: "budget1",
-      message: "예산 괸리.. 아직 준비중...",
+      id: "hello",
+      message: "오늘은 여행 중이 아닙니다.",
     },
   ];
 
@@ -241,7 +286,7 @@ export default function Chatbot() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <StyledChatbot steps={steps} />
+        <StyledChatbot steps={plan ? steps : nonSteps} />
       </ThemeProvider>
     </>
   );
