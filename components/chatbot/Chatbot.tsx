@@ -213,12 +213,7 @@ export default function Chatbot() {
 
     {
       id: "food1",
-      component:
-      <CustomComponent>
-<Chatgpt></Chatgpt>
-
-      </CustomComponent>
-      
+      message: "아직 준비중...",
     },
     {
       id: "budget1",

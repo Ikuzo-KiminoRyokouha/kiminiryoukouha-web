@@ -289,9 +289,13 @@ export function StepTwo({ ctx }: StepProps) {
           // console.log("el.tag321", el);
           return (
             <button
-              onClick={() => updateTag(el.tag)}
+              onClick={() => {
+                console.log("tag321", tag, el.tag);
+
+                updateTag(el.tag);
+              }}
               key={el.tag + idx}
-              className={`m-2 rounded  ${
+              className={`m-2 rounded bg-gray-400 ${
                 tag[key].includes(el.tag) ? "bg-emerald-500" : "bg-gray-400"
               } px-2 py-2 text-sm font-medium text-white`}
             >
