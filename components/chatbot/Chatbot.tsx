@@ -255,7 +255,6 @@ export default function Chatbot() {
     {
       id: "food1",
       message: "아직 준비중...",
-      trigger: "hello",
     },
   ];
 
