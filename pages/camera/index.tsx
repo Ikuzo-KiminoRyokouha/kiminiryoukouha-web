@@ -231,16 +231,17 @@ export default function Camera({ travelsData, todayPlanId }) {
                 <option value="" selected>
                   -- 선택 --
                 </option>
-                {travelsData.travels.map((travel) => {
-                  return (
-                    <option
-                      value={travel.destinationId}
-                      key={travel.detinationId}
-                    >
-                      {travel.destination.title}
-                    </option>
-                  );
-                })}
+                {travelsData?.travels &&
+                  travelsData?.travels.map((travel) => {
+                    return (
+                      <option
+                        value={travel.destinationId}
+                        key={travel.detinationId}
+                      >
+                        {travel.destination.title}
+                      </option>
+                    );
+                  })}
                 <option value={0}>기타</option>
               </select>
               <ModalButton onClick={onClickSubmit}>save</ModalButton>
