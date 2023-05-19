@@ -66,7 +66,7 @@ export default function Index({ plans }) {
               setMode(0);
             }}
           >
-            진행중인 계획
+            끝난계획
           </ModeChangeButton>
           <ModeChangeButton
             mode={1}
@@ -84,7 +84,7 @@ export default function Index({ plans }) {
               setMode(2);
             }}
           >
-            끝난계획
+            진행중인계획
           </ModeChangeButton>
         </div>
         <div className="mx-2 w-full space-y-2">
@@ -151,7 +151,6 @@ const ModeChangeButton = styled.button<ButtonProps>`
 `;
 
 export async function getServerSideProps({ query, req }) {
-
   try {
     const res = await authRequest.get(`/plan/all/1`, {
       cookie: req.headers.cookie,

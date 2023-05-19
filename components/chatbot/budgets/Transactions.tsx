@@ -12,7 +12,7 @@ export const Transactions = ({ transactions }) => {
 
           return (
             <>
-              {tempDay != transaction.date ? <div>ddd</div> : <div>ll</div>}
+              {/* {tempDay != transaction.date ? <div>ddd</div> : <div>ll</div>} */}
               <div>
                 <span>{transaction.date + " "}</span>
                 <span>{transaction.time + " "}</span>

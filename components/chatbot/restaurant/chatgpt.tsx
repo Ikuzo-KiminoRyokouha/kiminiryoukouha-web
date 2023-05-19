@@ -5,7 +5,7 @@ import { KakaoMap, Marker } from "react-kakao-maps";
 import { Head } from "next/document";
 
 export default function Chatgpt() {
-  const [myplace, setMyplace] = useState("");
+  // const [myplace, setMyplace] = useState("");
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [reply, setReply] = useState("");
@@ -43,9 +43,9 @@ export default function Chatgpt() {
       )
       .then(async (res) => {
         console.log(res.data.documents[1].address_name);
-        await setMyplace(res.data.documents[1].address_name);
+        // await setMyplace(res.data.documents[1].address_name);
 
-        getCompletionFromOpenAI();
+        getCompletionFromOpenAI(res.data.documents[1].address_name);
       })
       .catch((e) => console.log(e));
   };
@@ -56,7 +56,7 @@ export default function Chatgpt() {
     }
   }, [x, y]);
 
-  async function getCompletionFromOpenAI() {
+  async function getCompletionFromOpenAI(myplace) {
     const configuration = new Configuration({
       apiKey: process.env.NEXT_PUBLIC_ChatGpt_API_KEY,
     });
@@ -65,11 +65,18 @@ export default function Chatgpt() {
     console.log(openai);
 
     console.log("맛집추천 대기중");
+    console.log(myplace);
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: `${myplace}+의맛집 추천해줘` }],
+      messages: [
+        {
+          role: "user",
+          content: `${myplace}+에서 만원정도 중국요리 맛집 추천해줘`,
+        },
+      ],
       temperature: 0,
     });
+    console.log(myplace);
 
     console.log(completion.data.choices[0].message.content);
     setReply(completion.data.choices[0].message.content);
@@ -80,7 +87,7 @@ export default function Chatgpt() {
       <div className="w-72  text-lg">
         <div>{x}</div>
         <div>{y}</div>
-        <div>{myplace ? myplace : 1}</div>
+        {/* <div>{myplace ? myplace : 1}</div> */}
         <div>{reply}</div>
         <div className="border-black">{reply}</div>
       </div>
