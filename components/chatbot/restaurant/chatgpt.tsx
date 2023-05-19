@@ -60,9 +60,7 @@ export default function Chatgpt() {
     const configuration = new Configuration({
       apiKey: process.env.NEXT_PUBLIC_ChatGpt_API_KEY,
     });
-    console.log(configuration);
     const openai = new OpenAIApi(configuration);
-    console.log(openai);
 
     console.log("맛집추천 대기중");
     console.log(myplace);
