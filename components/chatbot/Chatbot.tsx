@@ -1,6 +1,6 @@
 import ChatBot from "react-simple-chatbot";
 import styled, { ThemeProvider } from "styled-components";
-import Chatgpt from "./chatgpt";
+import Chatgpt from "./restaurant/chatgpt";
 import ABC from "components/chatbot/weather";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -104,7 +104,7 @@ export default function Chatbot() {
         { value: "travel", label: "오늘 여행 일정 보여줘", trigger: "travel1" },
         { value: "camera", label: "사진 찍을게요", trigger: "camera1" },
         { value: "budget", label: "예산 관리", trigger: "budget1" },
-        { value: "food", label: "맛집 추천", trigger: "food1" },
+        // { value: "food", label: "맛집 추천", trigger: "food1" },
       ],
     },
 
@@ -225,7 +225,6 @@ export default function Chatbot() {
     {
       id: "budget1",
       options: [
-        { value: "budget1-1", label: "오늘의 예산", trigger: "budget1-1" },
         { value: "budget1-2", label: "예산 확인", trigger: "budget1-2" },
         { value: "budget1-3", label: "거래 내역 확인", trigger: "budget1-3" },
       ],
@@ -252,10 +251,12 @@ export default function Chatbot() {
       component: <Transactions transactions={transactions}></Transactions>,
       trigger: "hello",
     },
-    {
-      id: "food1",
-      message: "아직 준비중...",
-    },
+    // {
+    //   id: "food1",
+    //   component: <Chatgpt></Chatgpt>,
+    //   // message: "아직 준비중...",
+    //   trigger: "hello",
+    // },
   ];
 
   const nonSteps = [

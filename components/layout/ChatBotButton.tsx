@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import Chatgpt from "../chatbot/chatgpt";
+import Chatgpt from "../chatbot/restaurant/chatgpt";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import Chatbot from "components/chatbot/Chatbot";
 
