@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function ThreadSummary({ plan }) {
-  
   const router = useRouter();
   const planId = plan?.id as number;
 
@@ -32,7 +31,7 @@ export default function ThreadSummary({ plan }) {
         </div>
         <div className="mx-2 flex flex-1 flex-col justify-around overflow-hidden text-ellipsis">
           <p className="p-1">장소 : {plan ? plan?.plan?.title : "..."}</p>
-          <p className="line-clamp-2 leading-2 m-1 block">
+          <p className="leading-2 m-1 line-clamp-2 block">
             예산 : {plan?.plan?.totalCost}
           </p>
           <p className="p-1">
@@ -45,7 +44,7 @@ export default function ThreadSummary({ plan }) {
               })}
           </p>
         </div>
-        <Link href={`/thread/${planId}`} passHref>
+        <Link href={`/thread/${25}`} passHref>
           <a className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white">
             계획보기
           </a>

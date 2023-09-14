@@ -60,10 +60,10 @@ export default function Index({ plans }) {
 
         <div className=" flex w-full  space-x-4  p-4">
           <ModeChangeButton
-            mode={0}
+            mode={2}
             currentMode={mode}
             onClick={() => {
-              setMode(0);
+              setMode(2);
             }}
           >
             끝난계획
@@ -78,10 +78,10 @@ export default function Index({ plans }) {
             다가오는 계획
           </ModeChangeButton>
           <ModeChangeButton
-            mode={2}
+            mode={0}
             currentMode={mode}
             onClick={() => {
-              setMode(2);
+              setMode(0);
             }}
           >
             진행중인계획

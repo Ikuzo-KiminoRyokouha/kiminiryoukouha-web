@@ -13,7 +13,7 @@ export const BudgetIndex = ({ budgets, transactions, startDay, endDay }) => {
 
   return (
     <Holder>
-      <TotalCost>총 예산 : {totalCost}</TotalCost>
+      <TotalCost>総予算 : {totalCost}</TotalCost>
       <br></br>
       {dayPer != null ? (
         Object.keys(dayPer).map((key) => {
@@ -39,13 +39,13 @@ export const BudgetIndex = ({ budgets, transactions, startDay, endDay }) => {
                   <br></br>
                   <br></br>
                   <TotalRemain>
-                    예상보다
+                    予想より
                     {totoalRemain > 0 ? (
                       <RemainPlus>{totoalRemain}</RemainPlus>
                     ) : (
                       <RemainMinus>{totoalRemain}</RemainMinus>
                     )}
-                    만큼 남았습니다.
+                    が残っています。
                   </TotalRemain>
                 </>
               ) : (
@@ -55,7 +55,7 @@ export const BudgetIndex = ({ budgets, transactions, startDay, endDay }) => {
           );
         })
       ) : (
-        <div>상세 예산 관리가 없습니다</div>
+        <div>予算管理情報がありません。</div>
       )}
     </Holder>
   );
