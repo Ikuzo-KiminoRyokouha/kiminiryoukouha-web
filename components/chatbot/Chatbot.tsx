@@ -93,7 +93,7 @@ export default function Chatbot() {
     // step: 0
     {
       id: "hello",
-      message: `여행 중 이시네요. \n 무엇을  도와드릴까요? `,
+      message: `旅行中ですね。 \n 何かご用ですか？ `,
       trigger: "help",
     },
 
@@ -101,9 +101,9 @@ export default function Chatbot() {
     {
       id: "help",
       options: [
-        { value: "travel", label: "오늘 여행 일정 보여줘", trigger: "travel1" },
-        { value: "camera", label: "사진 찍을게요", trigger: "camera1" },
-        { value: "budget", label: "예산 관리", trigger: "budget1" },
+        { value: "travel", label: "今日の旅程を見せて", trigger: "travel1" },
+        { value: "camera", label: "写真を撮りたい", trigger: "camera1" },
+        { value: "budget", label: "予算管理", trigger: "budget1" },
         // { value: "food", label: "맛집 추천", trigger: "food1" },
       ],
     },
@@ -111,7 +111,7 @@ export default function Chatbot() {
     //step 2
     {
       id: "travel1",
-      message: `오늘의 여행 일정입니다!`,
+      message: `本日の旅行日程です。`,
       trigger: "travel1-1",
     },
     {
@@ -119,7 +119,7 @@ export default function Chatbot() {
       component: (
         <>
           <Button onClick={async () => await router.push("/camera")}>
-            카메라로 이동
+            カメラ
           </Button>
         </>
       ),
@@ -136,17 +136,17 @@ export default function Chatbot() {
       options: [
         {
           value: "travel2-1",
-          label: "네비게이션 보여줘",
+          label: "ナビゲーションを見せて",
           trigger: "travel3-1",
         },
         {
           value: "travel2-2",
-          label: "다른 여행 추천 해줘",
+          label: "他の旅行のおすすめを教えて",
           trigger: "travel3-2",
         },
         {
           value: "travel2-3",
-          label: "처음으로",
+          label: "スタートへ",
           trigger: "hello",
         },
       ],
@@ -197,8 +197,8 @@ export default function Chatbot() {
           trigger: "travel6",
         },
         {
-          value: "travel3-2",
-          messsage: "처음으로",
+          value: "travel5-6",
+          label: "選択しない",
           trigger: "hello",
         },
       ],
@@ -206,7 +206,7 @@ export default function Chatbot() {
 
     {
       id: "travel6",
-      message: "계획에 추가 하겠습니다.",
+      message: "計画に追加します。",
       trigger: "travel7",
     },
     {
@@ -225,13 +225,13 @@ export default function Chatbot() {
     {
       id: "budget1",
       options: [
-        { value: "budget1-2", label: "예산 확인", trigger: "budget1-2" },
-        { value: "budget1-3", label: "거래 내역 확인", trigger: "budget1-3" },
+        { value: "budget1-2", label: "予算の確認", trigger: "budget1-2" },
+        { value: "budget1-3", label: "取引履歴の確認", trigger: "budget1-3" },
       ],
     },
     {
       id: "budget1-1",
-      message: "오늘의 예산",
+      message: "今日の予算",
       trigger: "hello",
     },
     {
@@ -262,7 +262,7 @@ export default function Chatbot() {
   const nonSteps = [
     {
       id: "hello",
-      message: "오늘은 여행 중이 아닙니다.",
+      message: "今日は旅行中ではありません。",
     },
   ];
 

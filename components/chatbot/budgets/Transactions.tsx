@@ -15,7 +15,12 @@ export const Transactions = ({ transactions }) => {
               {/* {tempDay != transaction.date ? <div>ddd</div> : <div>ll</div>} */}
               <div>
                 <span>{transaction.date + " "}</span>
-                <span>{transaction.time + " "}</span>
+                <span>
+                  {transaction.time.slice(0, 2) +
+                    "時　" +
+                    transaction.time.slice(2, 4) +
+                    "分 "}
+                </span>
                 <span>{transaction.inOrOut + " "}</span>
                 <span>{transaction.amount + " "} </span>
                 <span>{transaction.name + " "}</span>
@@ -24,7 +29,7 @@ export const Transactions = ({ transactions }) => {
           );
         })
       ) : (
-        <>아직 여행 중의 거래내역이 없습니다</>
+        <>旅行中の取引履歴はまだありません。</>
       )}
     </Holder>
   );
