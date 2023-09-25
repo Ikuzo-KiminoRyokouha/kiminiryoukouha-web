@@ -316,14 +316,14 @@ function FixProfile({
                 className="rounded bg-sky-600 p-2 text-lg font-semibold text-white"
                 onClick={submitImage}
               >
-                Upload Image
+                イメージアップロ-ド
               </button>
             </div>
           </div>
 
           <div className="flex flex-col">
             <div>
-              <span className="text-lg font-semibold">Description</span>
+              <span className="text-lg font-semibold">説明</span>
             </div>
             <div className="relative mt-4 min-h-[10rem] w-full rounded border-2 border-slate-300">
               <textarea
@@ -337,7 +337,7 @@ function FixProfile({
               className="h- min-h-[2.5rem] w-full rounded bg-sky-600 text-lg font-semibold text-white"
               onClick={submitDescription}
             >
-              Done
+              作成
             </button>
           </div>
         </Modal>
@@ -356,8 +356,8 @@ function ShowFollowing({ hide, followingInfo }: ShowFollowingProps) {
       <Portal qs="#__next">
         <Modal hide={hide}>
           <Modal.Header hide={hide} />
-          <div>this is showFollowing</div>
-          {!followingInfo.length && <div>There isn't any following yet...</div>}
+          <div>フォロー</div>
+          {!followingInfo.length && <div>まだフォローされていません。</div>}
           <FollowerFolloweeInfo info={followingInfo} hide={hide} />
         </Modal>
       </Portal>
@@ -375,8 +375,8 @@ function ShowFollower({ hide, followerInfo }: ShowFollowerProps) {
       <Portal qs="#__next">
         <Modal hide={hide}>
           <Modal.Header hide={hide} />
-          <div>this is showFollower</div>
-          {!followerInfo.length && <div>There isn't any following yet...</div>}
+          <div>フォロワー</div>
+          {!followerInfo.length && <div>まだフォロワーがありません。</div>}
           <FollowerFolloweeInfo info={followerInfo} hide={hide} />
         </Modal>
       </Portal>
@@ -414,7 +414,7 @@ function FollowerFolloweeInfo({ info, hide }: FollwerFollweeInfoProps) {
               </div>
             );
           })}
-        {!info && <div>없음</div>}
+        {!info && <div>無し</div>}
       </div>
     </>
   );

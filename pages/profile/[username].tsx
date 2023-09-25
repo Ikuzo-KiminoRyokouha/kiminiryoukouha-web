@@ -4,7 +4,7 @@ import { useRouter } from "next/dist/client/router";
 import React, { useMemo, useState } from "react";
 
 export default function ProfileUsername() {
-  const [navPage, setNavPage] = useState<string>("계획중인여행");
+  const [navPage, setNavPage] = useState<string>("計画中の旅行");
   const [navItemWidth, setNavItemWidth] = useState<{ [key: string]: number }>(
     {}
   );
@@ -19,8 +19,8 @@ export default function ProfileUsername() {
 
   const obj = useMemo(
     () => [
-      { title: "계획중인여행", onClick: () => setNavPage("계획중인여행") },
-      { title: "내 게시물", onClick: () => setNavPage("내 게시물") },
+      { title: "計画中の旅行", onClick: () => setNavPage("計画中の旅行") },
+      { title: "私の投稿", onClick: () => setNavPage("私の投稿") },
     ],
     []
   );
