@@ -39,7 +39,6 @@ export async function getServerSideProps({ query, req }) {
       if (res.data.ok) return res.data.plans;
       return [];
     });
-
   const test = await mainRequest
     .get(`http://localhost:8000/plan/${query.id}`)
     .then((res) => {

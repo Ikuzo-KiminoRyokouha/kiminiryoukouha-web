@@ -44,7 +44,7 @@ export default function ThreadSummary({ plan }) {
               })}
           </p>
         </div>
-        <Link href={`/thread/${planId}`} passHref>
+        <Link href={`/thread/${25}`} passHref>
           <a className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white">
             プランを見る
           </a>

@@ -4,20 +4,12 @@
     "name": "Plan"
   },
   {
-    "href": "/diary",
-    "name": "Diary"
-  },
-  {
     "href": "/navigation",
     "name": "Navigation"
   },
   {
     "href": "/thread",
     "name": "Community"
-  },
-  {
-    "href": "/about",
-    "name": "ABOUT US"
   },
   {
     "href": "/QnA?page=1",
