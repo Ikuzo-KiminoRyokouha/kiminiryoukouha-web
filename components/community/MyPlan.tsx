@@ -34,9 +34,9 @@ export default function ThreadSummary(planData) {
             />
           </div>
           <div className="mx-2 flex flex-1 flex-col justify-around overflow-hidden text-ellipsis">
-            <p className="p-1">{"장소: " + city}</p>
-            <p className="p-1">{`기간: ${start}~${end} `}</p>
-            <p className="p-1">{"카테고리: " + tag}</p>
+            <p className="p-1">{"場所: " + city}</p>
+            <p className="p-1">{`期間: ${start}~${end} `}</p>
+            <p className="p-1">{"カテゴリ-: " + tag}</p>
           </div>
         </div>
       )}

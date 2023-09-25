@@ -15,10 +15,10 @@ export function CommentBox({
 }) {
   // console.log("commentData123", commentData);
   const isWriting = useToggle(false);
-  const addCommentInput = useInput("", "내용을 입력해주세요");
+  const addCommentInput = useInput("", "内容を入力してください");
   const user = getUser();
 
-  console.log("commentData321", commentData);
+  // console.log("commentData321", commentData);
 
   const onClick = {
     // 대댓글 작성
@@ -36,7 +36,7 @@ export function CommentBox({
     // 대댓글작성 Input창 띄워주는 함수
     openCommentInput: () => {
       if (!user) {
-        alert("로그인이 필요합니다.");
+        alert("ログインが必要です。");
         return;
       } else {
         isWriting.onClick();
@@ -76,7 +76,7 @@ export function CommentBox({
                 className="cursor-pointer pb-1 pr-3 hover:underline"
                 onClick={onClick.openCommentInput}
               >
-                댓글달기
+                コメントする
               </p>
             ) : null}
             {user && user.sub === commentData.user.id ? (
@@ -86,7 +86,7 @@ export function CommentBox({
                   deleteComment(commentData.id);
                 }}
               >
-                삭제
+                削除
               </p>
             ) : null}
           </div>
@@ -122,7 +122,7 @@ export function CommentBox({
           className="w-20 rounded bg-sky-600 text-white"
           onClick={onClick.addComment}
         >
-          등록
+          登録
         </button>
       </form>
     </>
