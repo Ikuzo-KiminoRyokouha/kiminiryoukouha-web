@@ -1,0 +1,10 @@
+{
+  "WALK": "도보",
+  "TRANSFER": "도보(환승)",
+  "BUS": "버스",
+  "SUBWAY": "지하철",
+  "EXPRESSBUS": "고속/시외버스",
+  "TRAIN": "기차",
+  "AIRPLANE": "항공",
+  "FERRY": "해운"
+}

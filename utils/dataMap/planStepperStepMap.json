@@ -1,0 +1,22 @@
+[
+    {
+        "step": 1,
+        "title": "期間",
+        "icon": "SlCalender"
+    },
+    {
+        "step": 2,
+        "title": "地域",
+        "icon": "SlPeople"
+    },
+    {
+        "step": 3,
+        "title": "予算",
+        "icon": "MdOutlineAttachMoney"
+    },
+    {
+        "step": 4,
+        "title": "完了",
+        "icon": "MdDoneOutline"
+    }
+]

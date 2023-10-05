@@ -1,0 +1,18 @@
+[
+  {
+    "href": "/plan",
+    "name": "Plan"
+  },
+  {
+    "href": "/navigation",
+    "name": "Navigation"
+  },
+  {
+    "href": "/thread",
+    "name": "Community"
+  },
+  {
+    "href": "/QnA?page=1",
+    "name": "Q&A"
+  }
+]
