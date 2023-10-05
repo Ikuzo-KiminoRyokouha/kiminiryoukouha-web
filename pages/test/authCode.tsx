@@ -26,14 +26,14 @@ export default function AuthCode() {
   return (
     <>
       <div className="flex flex-1 items-center justify-center">
-        <p className="text-2xl">Your account has been registered.</p>
+        <p className="text-2xl">アカウントが登録されました。</p>
         <button
           className="bg-sky-600 p-5 text-white"
           onClick={() => {
             router.push("/wallet");
           }}
         >
-          Confirm
+          確認
         </button>
       </div>
     </>

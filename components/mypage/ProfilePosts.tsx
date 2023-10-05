@@ -6,7 +6,7 @@ interface ProfilePostsProps {
 }
 
 export default function ProfilePosts({ communityPosts }) {
-  console.log("communityPosts123", communityPosts);
+  // console.log("communityPosts123", communityPosts);
 
   return (
     <>
@@ -15,9 +15,7 @@ export default function ProfilePosts({ communityPosts }) {
       </div> */}
       {!communityPosts?.data?.length && (
         <div className="flex min-h-[8rem] items-center justify-center pt-16">
-          <span className="text-2xl font-semibold">
-            There isn't any Posts yet
-          </span>
+          <span className="text-2xl font-semibold">まだ投稿がありません</span>
         </div>
       )}
       <div className="flex w-full flex-col items-center justify-center">

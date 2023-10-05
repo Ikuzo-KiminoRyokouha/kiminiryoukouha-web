@@ -27,7 +27,7 @@ export default function LoadingCircle({ isLoading, size }: LoadingCircleProps) {
               fill="currentFill"
             />
           </svg>
-          <span className="sr-only">Loading...</span>
+          <span className="sr-only">ロード中...</span>
         </div>
       )}
     </>

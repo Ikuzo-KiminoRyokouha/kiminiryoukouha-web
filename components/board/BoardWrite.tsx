@@ -15,9 +15,9 @@ export default function BoardWrite({
   isSecret,
 }: Props) {
   // 제목
-  const title = useInput(initTitle, "제목을 입력하세요.");
+  const title = useInput(initTitle, "タイトルを入力してください。");
   // 내용
-  const contents = useInput(initContents, "내용을 입력하세요.");
+  const contents = useInput(initContents, "内容を入力してください。");
 
   const router = useRouter();
 
@@ -41,10 +41,10 @@ export default function BoardWrite({
     },
     // 글작성 취소
     writeCancel: () => {
-      if (confirm("글작성을 취소 하시겠습니까?") == true) {
+      if (confirm("書き込みをキャンセルしますか？") == true) {
         router.back();
       } else {
-        alert("글작성을 완료해주세요.");
+        alert("書き込みを完成してください。");
       }
     },
     // 글수정
@@ -70,23 +70,25 @@ export default function BoardWrite({
             <a className=" md:hidden" onClick={onClick.writeCancel}>
               <AiOutlineArrowLeft />
             </a>
-            <p>질의응답</p>
+            <p>質疑応答</p>
           </div>
           {/* 모바일(화면이 작은 경우) 글작성 버튼 */}
           <div className="block space-x-2 md:hidden">
             {router.pathname == "/QnA/write" ? (
-              <button onClick={onClick.submit}>글작성</button>
+              <button onClick={onClick.submit}>投稿</button>
             ) : (
-              <button onClick={onClick.update}>글작성</button>
+              <button onClick={onClick.update}>投稿</button>
             )}
           </div>
         </nav>
         {/* 페이지 작성 */}
-        <div className="flex flex-1 flex-col space-y-2 py-4 px-2">
+        <div className="flex flex-1 flex-col space-y-2 px-2 py-4">
           {/* 제목 */}
           <div className="flex items-center justify-center">
             <div className="hidden md:block">
-              <label className="hidden w-20 text-center md:block">제목:</label>
+              <label className="hidden w-20 text-center md:block">
+                タイトル:
+              </label>
             </div>
             <input
               className="h-10 w-full rounded-md border pl-2"
@@ -99,7 +101,7 @@ export default function BoardWrite({
               onMouseDown={(e) => e.preventDefault()}
             >
               <label className="ml-1 flex-1 p-1 text-sm md:text-base">
-                비밀글
+                非公開記事
               </label>
 
               <input
@@ -118,7 +120,7 @@ export default function BoardWrite({
 
           {/* 내용 */}
           <div className="relative flex flex-1 pt-1">
-            <label className="hidden w-20 text-center md:block">내용:</label>
+            <label className="hidden w-20 text-center md:block">内容:</label>
             <textarea
               className="absolute inset-0 resize-none rounded-md border px-2 py-2 md:left-20"
               {...contents}
@@ -130,24 +132,24 @@ export default function BoardWrite({
             <div className="flex items-center justify-center space-x-2">
               {router.pathname == "/QnA/write" ? (
                 <button
-                  className="rounded border border-sky-600 bg-sky-600 py-2 px-4 font-bold text-white"
+                  className="rounded border border-sky-600 bg-sky-600 px-4 py-2 font-bold text-white"
                   onClick={onClick.submit}
                 >
-                  글작성
+                  投稿
                 </button>
               ) : (
                 <button
-                  className="rounded border border-sky-600 bg-sky-600 py-2 px-4 font-bold text-white"
+                  className="rounded border border-sky-600 bg-sky-600 px-4 py-2 font-bold text-white"
                   onClick={onClick.update}
                 >
-                  글작성
+                  投稿
                 </button>
               )}
               <button
-                className="rounded border border-sky-600 bg-sky-600 py-2 px-4 font-bold text-white"
+                className="rounded border border-sky-600 bg-sky-600 px-4 py-2 font-bold text-white"
                 onClick={onClick.writeCancel}
               >
-                취소
+                キャンセル
               </button>
             </div>
           </div>

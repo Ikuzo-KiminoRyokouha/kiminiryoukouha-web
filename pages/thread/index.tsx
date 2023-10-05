@@ -74,7 +74,7 @@ export default function Thread() {
   const onClick = {
     writePost: () => {
       if (!user) {
-        alert("로그인이 필요한 서비스입니다.");
+        alert("ログインが必要です。");
         return;
       } else {
         onPostWrite.setTrue();
