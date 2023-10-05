@@ -10,8 +10,8 @@ import { Dispatch, SetStateAction } from "react";
  */
 export const convertDateToKorean = (start: string, end: string): string => {
   const diffDate = dayjs(end).diff(dayjs(start), "d");
-  if (diffDate === 0) return "당일치기";
-  return diffDate + "박" + Number(diffDate + 1) + "일";
+  if (diffDate === 0) return "日帰り";
+  return diffDate + "泊" + Number(diffDate + 1) + "日";
 };
 
 export const cookieStringToObject = (cookieString: string | string[]): any => {

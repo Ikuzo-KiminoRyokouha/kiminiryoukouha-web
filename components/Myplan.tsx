@@ -60,12 +60,12 @@ export default function Myplan({ data, getPlanIdNum, getimgSrc }) {
             </div>
             {data && (
               <div className="mx-2 flex flex-1 flex-col justify-around overflow-hidden text-ellipsis">
-                <p className="p-1">장소 : {data[writeIndex]?.city}</p>
-                <p className="line-clamp-2 leading-2 m-1 block">
-                  예산 : {data[writeIndex].totalCost}
+                <p className="p-1">場所 : {data[writeIndex]?.city}</p>
+                <p className="leading-2 m-1 line-clamp-2 block">
+                  予算 : {data[writeIndex].totalCost}
                 </p>
                 <p className="p-1">
-                  테마: {Object.values(data[writeIndex].tag)}
+                  テーマ: {Object.values(data[writeIndex].tag)}
                 </p>
               </div>
             )}

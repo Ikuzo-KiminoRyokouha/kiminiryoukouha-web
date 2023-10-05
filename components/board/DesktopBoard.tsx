@@ -27,7 +27,7 @@ export default function DesktopBoard({
   searchData,
 }: Props) {
   const router = useRouter();
-  const search = useInput("", "검색어를 입력하세요");
+  const search = useInput("", "検索");
   const paginationProps = usePagination(maxPage, pathname);
 
   const onClick = {
@@ -48,7 +48,7 @@ export default function DesktopBoard({
     <div className="hidden w-4/5 md:block">
       {/* 게시판 박스 */}
       <div className="flex h-32 w-full justify-between bg-white">
-        <h1 className="mt-8 text-3xl">질의응답 게시판</h1>
+        <h1 className="mt-8 text-3xl">質疑応答掲示板</h1>
         {/* 검색창 */}
         <form
           className="flex items-end"
@@ -68,7 +68,7 @@ export default function DesktopBoard({
                 e.preventDefault();
               }}
             >
-              검색
+              検索
             </button>
           </div>
         </form>
@@ -84,19 +84,19 @@ export default function DesktopBoard({
               <thead className="bg-gray-300 text-center">
                 <tr>
                   <th className="whitespace-nowrap p-2 text-xl font-normal">
-                    <span>게시물번호</span>
+                    <span>投稿番号</span>
                   </th>
                   <th className="w-2/4 whitespace-nowrap p-2 text-xl font-normal">
-                    제목
+                    タイトル
                   </th>
                   <th className="whitespace-nowrap p-2 text-xl font-normal">
-                    작성자
+                    作成者
                   </th>
                   <th className="whitespace-nowrap p-2 text-xl font-normal">
-                    날짜
+                    日付
                   </th>
                   <th className="whitespace-nowrap p-2 text-xl font-normal">
-                    답변상태
+                    回答状況
                   </th>
                 </tr>
               </thead>
@@ -116,7 +116,7 @@ export default function DesktopBoard({
               className="rounded bg-sky-600 p-3 text-white"
               onClick={onClick.onWrite}
             >
-              글쓰기
+              投稿
             </button>
           </div>
           {/* 페이지네이션 */}

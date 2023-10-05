@@ -13,7 +13,7 @@ interface Props {
 export default function DesktopBoardPosts({ posts }: Props) {
   const router = useRouter();
 
-  console.log("posts", posts);
+  // console.log("posts", posts);
 
   /**
    * @description 게시물이 비밀글인지 확인하는 함수
@@ -25,7 +25,7 @@ export default function DesktopBoardPosts({ posts }: Props) {
       });
       return;
     } else {
-      alert("권한이 없습니다.");
+      alert("権限がありません。");
     }
   };
 
@@ -62,7 +62,7 @@ export default function DesktopBoardPosts({ posts }: Props) {
             </td>
             {/* 답변상태 */}
             <td className="whitespace-nowrap p-2 text-xl font-normal">
-              {data.complete == false ? "답변대기중" : "답변완료"}
+              {data.complete == false ? "回答待ち" : "回答完了"}
             </td>
           </tr>
         );

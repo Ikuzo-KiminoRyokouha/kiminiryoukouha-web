@@ -282,11 +282,11 @@ function FixProfile({
 
   // 프로필 사진 올리기
   const submitImage = () => {
-    console.log("submitImage function launched");
+    // console.log("submitImage function launched");
   };
 
   const submitDescription = () => {
-    console.log("submitDescription function launched");
+    // console.log("submitDescription function launched");
     try {
       writeDescription(
         { description: myDescription.value },
@@ -298,7 +298,7 @@ function FixProfile({
       );
       hide();
     } catch (err) {
-      console.log("submitDescription function err : " + err);
+      // console.log("submitDescription function err : " + err);
     }
   };
 

@@ -14,7 +14,7 @@ export default function Detail({ boardData }) {
   const id = router.query?.id as string;
   const { deleteBoard } = useBoard();
   const { writeComment } = useBoard();
-  const comment = useInput("", "댓글을 입력해주세요");
+  const comment = useInput("", "コメントを入力してください。");
   const [{ data: comments }] = useQueries({
     queries: [
       {
@@ -26,7 +26,7 @@ export default function Detail({ boardData }) {
 
   const authCheck = () => {
     if (!getUser()) {
-      alert("로그인 되지 않은 유저입니다.");
+      alert("ログインしていないユーザーです。");
       return false;
     }
     return true;
@@ -40,7 +40,7 @@ export default function Detail({ boardData }) {
     },
     delete: () => {
       if (authCheck()) {
-        confirm("정말 삭제하시겠습니까?") && deleteBoard(id);
+        confirm("本当に削除しますか？") && deleteBoard(id);
       }
     },
     registerComment: () => {
@@ -69,7 +69,7 @@ export default function Detail({ boardData }) {
               <div className="flex w-full flex-row md:flex-col">
                 <div className="h-9 w-full bg-sky-600 md:mt-9 md:w-2/3 md:flex-none">
                   <h2 className="pl-2 pt-1 text-lg text-white md:pl-1">
-                    질의응답
+                    質疑応答
                   </h2>
                 </div>
               </div>
@@ -80,7 +80,7 @@ export default function Detail({ boardData }) {
               <dl>
                 <div className="m-1 flex items-center p-1">
                   <dt className="border-r border-gray-300  pr-6 text-lg">
-                    제목
+                    タイトル
                   </dt>
                   <dd className="pl-3 text-lg">{boardData?.board?.title}</dd>
                 </div>
@@ -88,7 +88,7 @@ export default function Detail({ boardData }) {
                 <div className="flex border-y p-1">
                   <div className="flex w-full items-center">
                     <dt className=" border-r border-gray-300  pr-2.5  text-lg ">
-                      글쓴이
+                      作成者
                     </dt>
                     <dd className="pl-3 text-lg">
                       {boardData?.board?.user?.nickname}
@@ -98,7 +98,7 @@ export default function Detail({ boardData }) {
 
                 <div className="flex w-full p-1">
                   <dt className="border-r border-gray-300  pr-2 text-lg ">
-                    작성일
+                    日付
                   </dt>
                   <dd className="pl-3 text-lg ">
                     {dayjs(boardData?.board?.created_at).format("YYYY.MM.DD")}
@@ -117,7 +117,7 @@ export default function Detail({ boardData }) {
                     onClick.routing("/QnA");
                   }}
                 >
-                  목록
+                  リスト
                 </button>
                 <button
                   className="mx-2 border px-6 py-2"
@@ -125,13 +125,13 @@ export default function Detail({ boardData }) {
                     onClick.routing(`/QnA/update?id=${id}`);
                   }}
                 >
-                  수정
+                  修正
                 </button>
                 <button
                   className="bg-gray-400 px-6 py-2 text-white"
                   onClick={onClick.delete}
                 >
-                  삭제
+                  削除
                 </button>
               </div>
               {/* 댓글 */}
@@ -155,7 +155,7 @@ export default function Detail({ boardData }) {
                   className="ml-1  w-20 bg-gray-400  p-4 text-white "
                   onClick={onClick.registerComment}
                 >
-                  등록
+                  登録
                 </button>
               </form>
             </div>

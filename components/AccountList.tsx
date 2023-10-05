@@ -40,14 +40,14 @@ function Account({ onClick }: { onClick: () => void }) {
     <>
       <div className="my-1 flex h-20 w-full justify-between rounded border-2 bg-white">
         <div className="flex w-[80%] items-center">
-          <p className="pl-3 text-2xl">오픈뱅크</p>
+          <p className="pl-3 text-2xl">オープンバンク</p>
         </div>
         <div className="w-[20%]">
           <button
             className="h-full w-full rounded-r bg-sky-600 text-xl text-white hover:bg-sky-500"
             onClick={onClick}
           >
-            Select
+            洗濯
           </button>
         </div>
       </div>
