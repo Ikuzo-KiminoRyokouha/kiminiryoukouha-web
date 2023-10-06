@@ -47,16 +47,18 @@ export default function Index({ plans }) {
 
           <div className="flex h-48 w-4/5 pt-3">
             <div className="flex flex-col items-center space-y-4 px-10">
-              <p className="cursor-pointer text-xl font-semibold">나의계획</p>
-              <p className="cursor-pointer text-lg">{plans.length}개</p>
+              <p className="cursor-pointer text-xl font-semibold">私の計画</p>
+              <p className="cursor-pointer text-lg">{plans.length}個</p>
             </div>
             <div className="flex flex-col items-center space-y-4 px-10">
-              <p className="cursor-pointer text-xl font-semibold">계획 리뷰</p>
+              <p className="cursor-pointer text-xl font-semibold">
+                計画レビュー
+              </p>
               <p className="cursor-pointer text-lg">0개</p>
             </div>
           </div>
         </div>
-        <strong className="py-10 pl-4 text-3xl">나의계획</strong>
+        <strong className="py-10 pl-4 text-3xl">私の計画</strong>
 
         <div className=" flex w-full  space-x-4  p-4">
           <ModeChangeButton
@@ -66,7 +68,7 @@ export default function Index({ plans }) {
               setMode(2);
             }}
           >
-            끝난계획
+            終わった計画
           </ModeChangeButton>
           <ModeChangeButton
             mode={1}
@@ -75,7 +77,7 @@ export default function Index({ plans }) {
               setMode(1);
             }}
           >
-            다가오는 계획
+            近寄る計計画
           </ModeChangeButton>
           <ModeChangeButton
             mode={0}
@@ -84,7 +86,7 @@ export default function Index({ plans }) {
               setMode(0);
             }}
           >
-            진행중인계획
+            進行中の計画
           </ModeChangeButton>
         </div>
         <div className="mx-2 w-full space-y-2">
@@ -107,7 +109,7 @@ export default function Index({ plans }) {
                 <AiOutlinePlusCircle size={24} />
               </div>
               <div className="flex items-center justify-center p-6">
-                <span>새로운 계획 세우기</span>
+                <span>新しい計画を立てる</span>
               </div>
             </a>
           </Link>

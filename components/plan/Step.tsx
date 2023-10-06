@@ -82,18 +82,18 @@ export function StepOne({ ctx }: StepProps) {
       />
       <div className="flex w-full md:w-auto md:pl-10">
         <div className="flex w-full justify-around">
-          {["시작", "종료"].map((el, idx) => {
+          {["スタート", "エンド"].map((el, idx) => {
             return (
               <div
                 className="flex flex-col items-center pr-3"
                 key={idx + 10000}
               >
                 <label className="my-2 block font-medium text-gray-900">
-                  {el}날짜
+                  {el}日付
                 </label>
                 <span className="h-10 w-28 border p-3">
-                  {el === "시작" && startDate?.format("YYYY-MM-DD")}
-                  {el === "종료" && endDate?.format("YYYY-MM-DD")}
+                  {el === "スタート" && startDate?.format("YYYY-MM-DD")}
+                  {el === "エンド" && endDate?.format("YYYY-MM-DD")}
                 </span>
               </div>
             );
@@ -227,7 +227,7 @@ export function StepTwo({ ctx }: StepProps) {
             id="areacode"
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           >
-            <option value={"default"}> 지역선택</option>
+            <option value={"default"}>地域選択</option>
             {select.map((el) => {
               return (
                 <>
@@ -250,7 +250,7 @@ export function StepTwo({ ctx }: StepProps) {
             id="sigungucode"
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           >
-            <option value={"default"}> 지역선택</option>
+            <option value={"default"}> 地域選択</option>
             {select.map((el, i) => {
               if (areacode == el.code)
                 return (
@@ -279,28 +279,30 @@ export function StepTwo({ ctx }: StepProps) {
                   setKey(el);
                 }}
               >
-                {el}일차
+                {el}日目
               </DateButton>
             );
           })}
         </div>
         <div className="py-3">Category</div>
         {revealTag?.map((el, idx) => {
-          // console.log("el.tag321", el);
+          console.log(tag[key].includes(el.tag));
           return (
-            <button
-              onClick={() => {
-                console.log("tag321", tag, el.tag);
+            <>
+              <button
+                onClick={() => {
+                  console.log("tag321", tag, el.tag);
 
-                updateTag(el.tag);
-              }}
-              key={el.tag + idx}
-              className={`m-2 rounded bg-gray-400 ${
-                tag[key].includes(el.tag) ? "bg-emerald-500" : "bg-gray-400"
-              } px-2 py-2 text-sm font-medium text-white`}
-            >
-              {el.tag + " " + el.tagCount}
-            </button>
+                  updateTag(el.tag);
+                }}
+                key={el.tag + idx}
+                className={`m-2 rounded bg-gray-400 ${
+                  tag[key].includes(el.tag) ? "bg-teal-600" : "bg-gray-400"
+                } px-2 py-2 text-sm font-medium text-white`}
+              >
+                {el.tag + " " + el.tagCount}
+              </button>
+            </>
           );
         })}
         <div className="flex items-start space-x-3">
@@ -314,8 +316,8 @@ export function StepTwo({ ctx }: StepProps) {
                   hintMessage.map((el) => {
                     return (
                       <p key={`${el}`}>
-                        {el}차 일정갯수가 1개 이하입니다. 다른 카테고리도
-                        골라보세요!
+                        {el}日目
+                        日程の数が1個以下です。他のカテゴリーも選んでください!
                       </p>
                     );
                   })}
@@ -344,7 +346,7 @@ export function StepThree({ ctx }: StepProps) {
   const { info, setInfo, setCanNext } = useContext(ctx);
   const money = useInput<number>(
     info.money,
-    "예상 경비를 입력해주세요",
+    "必要なお金を入力してくだい",
     "number"
   );
 
@@ -364,11 +366,11 @@ export function StepThree({ ctx }: StepProps) {
 
   return (
     <div className="flex flex-1 flex-col">
-      <p className="py-8 md:text-sm">이게 마지막이에요! 화이팅!!</p>
+      <p className="py-8 md:text-sm">これが最後です！</p>
       <div className="flex h-96 justify-between md:h-auto md:flex-1">
         <div>
           <label className="mb-2 block pt-4 font-medium text-gray-900 md:text-sm">
-            입력값 (만원)
+            入力値 (万ウォン)
           </label>
           <input
             {...money}
@@ -377,7 +379,7 @@ export function StepThree({ ctx }: StepProps) {
         </div>
         <div>
           <label className="mb-2 block pt-4 font-medium text-gray-900 md:text-sm">
-            총금액
+            総金額
           </label>
           <input
             value={money.value * 10000}
