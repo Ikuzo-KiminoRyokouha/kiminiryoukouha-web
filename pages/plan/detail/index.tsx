@@ -45,7 +45,7 @@ export default function PlanDetail({ plan }: PlanProps) {
         {/* plan title */}
         <div className="w-full py-14">
           <p className="text-3xl font-semibold">
-            {plan.title.split(" ")[0] || "나의여행"}
+            {plan.title.split(" ")[0] || "私の旅行"}
           </p>
         </div>
         {/* plan date */}
@@ -79,7 +79,7 @@ export default function PlanDetail({ plan }: PlanProps) {
                     router.push(`/wallet`);
                   }}
                 >
-                  계좌등록하기
+                  口座登録
                 </button>
               </div>
             )}

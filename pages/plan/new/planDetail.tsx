@@ -79,25 +79,25 @@ export default function PlanDetail({ travels, plan, info }) {
     <>
       <div className="flex h-full w-full justify-center">
         <div className="flex h-full w-full max-w-2xl  flex-col items-center md:max-w-5xl">
-          <h1 className="pt-10 pb-10 text-4xl font-bold ">경주 역사탐방</h1>
+          <h1 className="pb-10 pt-10 text-4xl font-bold ">경주 역사탐방</h1>
           <h2 className="text-2xl">
             {travels.map((el, idx) => {
               if (idx > 2) return;
               if (idx === 2) return el.destination.title;
               return el.destination.title + ", ";
             })}
-            등
+            等
           </h2>
           <h2 className="px-2 pt-2 text-2xl md:px-0">
             신라시대의 유적들이 가득한 경주의 역사를 경험해 보세요
           </h2>
           <div className="flex w-full justify-around py-5 shadow-lg">
             <InfoCard
-              title="일정"
+              title="日程"
               sub={convertDateToKorean(plan.start, plan.end)}
             />
-            <InfoCard title="예상경비" sub="약7만원" />
-            <InfoCard title="관광시간" sub="약5시간" />
+            <InfoCard title="予算経費" sub="約7万ウォン" />
+            <InfoCard title="観光時間" sub="約5時間" />
           </div>
           <div className="mt-20 w-full max-w-2xl md:max-w-5xl">
             <div className=" mr-5  flex  space-x-1 ">
@@ -147,18 +147,18 @@ export default function PlanDetail({ travels, plan, info }) {
             <div className="mt-20 flex w-full justify-around font-bold text-white">
               <button
                 onClick={rerollePlan}
-                className="rounded-lg border-2 bg-amber-500 py-6 px-9 transition duration-150 ease-in hover:shadow-xl md:px-24"
+                className="rounded-lg border-2 bg-amber-500 px-9 py-6 transition duration-150 ease-in hover:shadow-xl md:px-24"
               >
-                재생성
+                再生成
               </button>
               <button
                 onClick={() => {
                   isSave.current = true;
                   router.push("/plan");
                 }}
-                className="rounded-lg border-2 bg-sky-600 py-6 px-7 transition duration-150 ease-in hover:shadow-xl md:px-24"
+                className="rounded-lg border-2 bg-sky-600 px-7 py-6 transition duration-150 ease-in hover:shadow-xl md:px-24"
               >
-                계획생성
+                計画生成
               </button>
             </div>
             {travels.map((travel) => {
@@ -248,7 +248,7 @@ function IntroduceCard({ travel }) {
           height={9}
         />
       </div>
-      <p className="line-clamp-4 my-10 text-center leading-6">
+      <p className="my-10 line-clamp-4 text-center leading-6">
         {description?.split("<br/>").join().split("<br>")[0]}
       </p>
     </div>

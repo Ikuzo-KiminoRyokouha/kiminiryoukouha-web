@@ -37,8 +37,8 @@ export default function New() {
   return (
     <StepInfoContext.Provider value={{ info, setInfo, setCanNext }}>
       <Stepper
-        title={"여행 사전 설정"}
-        sub={"여행 계획을 위한 사전정보를 입력해주세요"}
+        title={"旅行前設定"}
+        sub={"旅行計画のための情報を入力してください"}
         info={info}
         currentStep={step}
         setCurrentStep={setStep}
