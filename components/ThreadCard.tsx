@@ -79,7 +79,7 @@ export default function ThreadCard({
   const onClick = {
     like: () => {},
     deletePost: () => {
-      if (confirm("정말 삭제하시겠습니까?") === true) {
+      if (confirm("本当に削除しますか？") === true) {
         deletePost(postData.id);
       } else {
         return;
@@ -88,7 +88,7 @@ export default function ThreadCard({
     // 댓글작성
     createComment: () => {
       if (!loginUser) {
-        alert("로그인이 필요합니다.");
+        alert("ログインが必要です。");
         return;
       } else {
         createComment({
@@ -105,7 +105,7 @@ export default function ThreadCard({
 
   const submitComment = (e) => {
     if (!loginUser) {
-      alert("로그인이 필요합니다.");
+      alert("ログインが必要です。");
       return;
     } else {
       if (e.key == "Enter") {
@@ -176,10 +176,10 @@ export default function ThreadCard({
                 {loginUser?.sub === postData.user.id ? (
                   <div className="pr-2">
                     <button className="pr-3" onClick={() => modal.setTrue()}>
-                      수정
+                      修正
                     </button>
                     <button className="" onClick={onClick.deletePost}>
-                      삭제
+                      削除
                     </button>
                   </div>
                 ) : null}
@@ -215,7 +215,7 @@ export default function ThreadCard({
                   ref={inputRef}
                   rows={1}
                   className="w-full resize-none rounded bg-neutral-200 p-2 outline-none"
-                  placeholder="내용을 입력해주세요"
+                  placeholder="内容を入力してください。"
                   onKeyDown={(e) => {
                     submitComment(e);
                   }}
@@ -225,7 +225,7 @@ export default function ThreadCard({
                   type="submit"
                   onClick={onClick.createComment}
                 >
-                  등록
+                  登録
                 </button>
               </form>
             </div>

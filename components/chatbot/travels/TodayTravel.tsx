@@ -35,7 +35,7 @@ export const TodayTravel = () => {
     <div style={{ display: "block" }}>
       <Holder>
         <h2 style={{ textAlign: "center", marginBottom: "12px" }}>
-          오늘의 여행 일정
+          本日の旅程
         </h2>
         <TravelsHolder>
           {travels?.map((travel) => {
@@ -44,23 +44,23 @@ export const TodayTravel = () => {
                 <TravelDes>
                   {travel.destination.title}
                   <br />
-                  완료:
+                  完了：
                   {travel.clear === true ? (
-                    <span style={{ color: "blue" }}>완료</span>
+                    <span style={{ color: "blue" }}>完了</span>
                   ) : (
                     <>
-                      <span style={{ color: "red" }}>미완료</span>
+                      <span style={{ color: "red" }}>未完成</span>
                       <br />
                       <Button
                         onClick={() => {
                           updateBottonOnclick(travel.id);
                         }}
                       >
-                        완료
+                        完了
                       </Button>
 
                       <Button onClick={() => deleteBottonOnclick(travel.id)}>
-                        삭제
+                        削除
                       </Button>
                     </>
                   )}
@@ -74,7 +74,7 @@ export const TodayTravel = () => {
       {deleteModal == true ? (
         <>
           <Modal>
-            삭제 완료
+            削除 完了
             <RefreshButton onClick={handleRefresh}>새로고침</RefreshButton>
           </Modal>
         </>
@@ -82,7 +82,7 @@ export const TodayTravel = () => {
       {updateModal == true ? (
         <>
           <Modal>
-            수정 완료
+            修正 完了
             <RefreshButton onClick={handleRefresh}>새로고침</RefreshButton>
           </Modal>
         </>

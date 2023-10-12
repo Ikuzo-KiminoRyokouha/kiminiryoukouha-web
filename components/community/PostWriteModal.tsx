@@ -26,7 +26,7 @@ export default function PostWriteModal({
   postId,
   refetchData,
 }: PostWriteModalProps) {
-  const contentsInput = useInput("", "게시물 내용을 입력해주세요");
+  const contentsInput = useInput("", "投稿内容を入力してください");
   const showPlan = useToggle(false);
   const [selectedPlan, setSelectedPlan] = useState<number | null>(null);
 
@@ -65,14 +65,14 @@ export default function PostWriteModal({
           planId: selectedPlan,
         });
       }
-      alert("글수정이 완료되었습니다.");
+      alert("文の修正が完了しました。");
     } else {
       createPost({
         img: "",
         content: contentsInput.value,
         planId: selectedPlan,
       });
-      alert("글작성이 완료되었습니다.");
+      alert("投稿が完了しました。");
     }
     hideModal();
     contentsInput.onChange("");
@@ -85,7 +85,7 @@ export default function PostWriteModal({
           <Modal.Header hide={hideModal} />
           <div className="h-fit">
             <div className=" border-0 py-2 text-center text-xl font-black">
-              <label>게시글 작성</label>
+              <label>投稿作成</label>
             </div>
             {/* 디바이더 */}
             <div className="h-2 w-full border-t" />
@@ -138,7 +138,7 @@ export default function PostWriteModal({
                 onClick={submit}
                 className="h-10 flex-1 rounded-md bg-sky-600 text-lg font-bold text-white hover:bg-sky-500"
               >
-                완료
+                作成
               </button>
             </Modal.Footer>
           </div>

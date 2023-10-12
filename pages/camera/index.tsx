@@ -37,8 +37,8 @@ const Video = styled.video`
 
 const Button = styled.button`
   padding: 8px 16px;
-  position: relative;
-  top: -50px;
+  position: fixed;
+  bottom: 10%;
   left: 50%;
   background-image: linear-gradient(to right, #844fff 50%, #ff4f84 50%);
   background-position: 0%;
@@ -222,29 +222,26 @@ export default function Camera({ travelsData, todayPlanId }) {
             <Image src={photoUrl} alt="Captured"></Image>
             <BackButton onClick={cloesPhoto}>x</BackButton>
 
-            <>
-              <select
-                style={{ display: "block", margin: "12px auto" }}
-                name="fruits"
-                onChange={handlePlanIdChange}
-              >
+            <SelectBox>
+              <select name="fruits" onChange={handlePlanIdChange}>
                 <option value="" selected>
                   -- 선택 --
                 </option>
-                {travelsData.travels.map((travel) => {
-                  return (
-                    <option
-                      value={travel.destinationId}
-                      key={travel.detinationId}
-                    >
-                      {travel.destination.title}
-                    </option>
-                  );
-                })}
+                {travelsData?.travels &&
+                  travelsData?.travels.map((travel) => {
+                    return (
+                      <option
+                        value={travel.destinationId}
+                        key={travel.detinationId}
+                      >
+                        {travel.destination.title}
+                      </option>
+                    );
+                  })}
                 <option value={0}>기타</option>
               </select>
               <ModalButton onClick={onClickSubmit}>save</ModalButton>
-            </>
+            </SelectBox>
           </div>
         )}
       </Result>
@@ -275,3 +272,10 @@ export async function getServerSideProps(context) {
     return { props: { travelsData: -1 } };
   }
 }
+
+const SelectBox = styled.div`
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;

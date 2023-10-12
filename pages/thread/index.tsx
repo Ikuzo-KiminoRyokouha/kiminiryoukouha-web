@@ -74,7 +74,7 @@ export default function Thread() {
   const onClick = {
     writePost: () => {
       if (!user) {
-        alert("로그인이 필요한 서비스입니다.");
+        alert("ログインが必要です。");
         return;
       } else {
         onPostWrite.setTrue();
@@ -97,19 +97,19 @@ export default function Thread() {
                 className="mr-3 w-3/4 cursor-pointer resize-none rounded-xl bg-neutral-200 p-4 text-left outline-none"
                 onClick={onClick.writePost}
               >
-                게시물을 작성해주세요.
+                投稿を作成してください。
               </button>
               <input
                 className="w-1/4 rounded-xl border border-solid border-black  p-2 outline-none"
                 type="text"
-                placeholder="게시물 검색"
+                placeholder="投稿検索"
               />
             </div>
           </div>
         </div>
         {data?.pages[0].length === 0 && (
           <div className="flex h-40 items-center justify-center">
-            <p className="text-xl font-semibold">There isn't any posts yet.</p>
+            <p className="text-xl font-semibold">まだ投稿がありません。</p>
           </div>
         )}
         {data?.pages[0].length > 0 &&
@@ -128,7 +128,7 @@ export default function Thread() {
           })}
         <div ref={bottom} />
         <div className="flex justify-center p-5">
-          {isFetchingNextPage && <p>데이터 불러오는중</p>}
+          {isFetchingNextPage && <p>データ読み込み中</p>}
         </div>
       </div>
       {/* 게시물 작성 모달 */}

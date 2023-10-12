@@ -10,7 +10,7 @@ export default function CardAPI() {
     return authRequest.get(`/banking/myinfo`);
   };
   const { data: bankingInfo } = useQuery(["getMyInfo"], getMyInfo);
-  console.log("bankingInfo", bankingInfo?.data?.accounts[0]);
+  // console.log("bankingInfo", bankingInfo?.data?.accounts[0]);
   // bankingInfo가 undefined면 계좌연결 버튼
   // bankingInfo가 있으면 계좌연결된 계좌들 보여주기
 
@@ -33,13 +33,13 @@ export default function CardAPI() {
       {!bankingInfo && (
         <div className="flex flex-1 items-center justify-center">
           <div className="flex-col">
-            <p className="text-3xl">There are no registered accounts yet.</p>
+            <p className="text-3xl">登録アカウントがまだありません。</p>
             <div className="flex justify-center pt-10">
               <button
                 className="rounded bg-sky-600 p-2 text-2xl text-white hover:bg-sky-500"
                 onClick={onClick}
               >
-                계좌연결
+                口座連結
               </button>
             </div>
           </div>
@@ -49,7 +49,7 @@ export default function CardAPI() {
       {bankingInfo && (
         <div className="max-w-8xl mx-auto mb-[53px] flex w-full flex-1 flex-col items-center justify-center">
           <div className="flex items-center pb-10">
-            <p className="text-2xl">계좌선택하기</p>
+            <p className="text-2xl">口座洗濯</p>
           </div>
           <AccountList accountData={bankingInfo?.data?.accounts[0]} />
         </div>

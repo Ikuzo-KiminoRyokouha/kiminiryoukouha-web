@@ -17,7 +17,7 @@ export const UpdateTravel = ({ ...props }) => {
 
   return (
     <>
-      <Holder>추가 완료!!</Holder>
+      <Holder>追加 完了!!</Holder>
     </>
   );
 };

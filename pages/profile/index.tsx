@@ -40,7 +40,7 @@ export default function Profile() {
             fill="currentFill"
           />
         </svg>
-        <span className="sr-only">Loading...</span>
+        <span className="sr-only">ロード中...</span>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ export default function Share({ travels, plan }) {
 
   const router = useRouter();
   const isSave = useRef(false);
-  const startDay1 = useInput("", "시작날짜ex) 2023-02-27");
+  const startDay1 = useInput("", "開始日ex) 2023-02-27");
 
   const [selectedDate, setSelectedDate] = useState(dayjs(plan?.start));
 
@@ -27,7 +27,7 @@ export default function Share({ travels, plan }) {
       start: startDay1.value,
     });
   };
-  console.log(plan.id)
+  // console.log(plan.id)
 
   /** 계획에 따라 지도에 장소를 띄워 주는 로직 */
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function Share({ travels, plan }) {
     <>
       <div className="flex h-full w-full justify-center">
         <div className="flex h-full w-full max-w-2xl  flex-col items-center md:max-w-5xl">
-          <h1 className="pt-10 pb-10 text-4xl font-bold ">경주 역사탐방</h1>
+          <h1 className="pb-10 pt-10 text-4xl font-bold ">慶州歴史探訪</h1>
 
           <h2 className="text-2xl">
             {travels?.map((el, idx) => {
@@ -54,18 +54,18 @@ export default function Share({ travels, plan }) {
               if (idx === 2) return el.destination.title;
               return el.destination.title + ", ";
             })}
-            등
+            等
           </h2>
           <h2 className="text-2xl">
-            신라시대의 유적들이 가득한 경주의 역사를 경험해 보세요
+            新羅時代の遺跡がいっぱいの慶州の歴史を体験してください。
           </h2>
           <div className="flex w-full justify-around py-5 shadow-lg">
             <InfoCard
-              title="일정"
+              title="日程"
               sub={convertDateToKorean(plan?.start, plan?.end)}
             />
-            <InfoCard title="예상경비" sub="약7만원" />
-            <InfoCard title="관광시간" sub="약5시간" />
+            <InfoCard title="予想経費" sub="約7000円" />
+            <InfoCard title="観光時間" sub="約５時間" />
           </div>
           <div className="mt-20 w-full max-w-2xl md:max-w-5xl">
             <div className=" mr-5  flex  space-x-1 ">
@@ -123,9 +123,9 @@ export default function Share({ travels, plan }) {
                     funcopy();
                   };
                 }}
-                className="rounded-lg border-2 bg-sky-600 py-6 px-24 transition duration-150 ease-in hover:bg-sky-700"
+                className="rounded-lg border-2 bg-sky-600 px-24 py-6 transition duration-150 ease-in hover:bg-sky-700"
               >
-                계획가져오기
+                プランの持ち込み
               </button>
             </div>
             {travels?.map((travel) => {
@@ -215,7 +215,7 @@ function IntroduceCard({ travel }) {
           height={9}
         />
       </div>
-      <p className="line-clamp-4 my-10 text-center leading-6">
+      <p className="my-10 line-clamp-4 text-center leading-6">
         {description?.split("<br/>").join().split("<br>")[0]}
       </p>
     </div>

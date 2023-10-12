@@ -30,9 +30,9 @@ export default function Receipt({ planId }) {
   // console.log("transactionData1", transactionData?.data?.transaction);
 
   const [recentValue, setRecentValue] = useState<string>("10");
-  const [sortValue, setSortValue] = useState<string>("최신순");
+  const [sortValue, setSortValue] = useState<string>("最新順");
   const recentList = ["10", "20", "30"];
-  const sortList = ["최신순", "가격순"];
+  const sortList = ["最新順", "価格順"];
   let totalAmount = 0;
 
   for (let i = 0; i < transactionData?.data?.transaction.length; i++) {
@@ -45,7 +45,7 @@ export default function Receipt({ planId }) {
         <div className="mx-auto flex max-w-7xl flex-1 flex-col items-center">
           <div className="flex h-16 w-full justify-start lg:w-2/3">
             <h1 className="mx-5 text-3xl font-semibold lg:mx-0">
-              {`지출금액 : ${totalAmount} 원`}
+              {`支出金額 : ${totalAmount} 円`}
             </h1>
           </div>
           {/* <div className="h-fit w-full">
@@ -69,7 +69,7 @@ export default function Receipt({ planId }) {
                       onClick={recentHandler}
                       ref={recentRef}
                     >
-                      최근({recentValue}건)
+                      最近({recentValue}件)
                     </button>
                     <ul
                       className={`bg-white ${
@@ -84,7 +84,7 @@ export default function Receipt({ planId }) {
                               setRecentValue(el);
                             }}
                           >
-                            {el}건
+                            {el}件
                           </li>
                         );
                       })}
@@ -97,7 +97,7 @@ export default function Receipt({ planId }) {
                       onClick={sortHandler}
                       ref={sortRef}
                     >
-                      정렬({sortValue})
+                      整列({sortValue})
                     </button>
                     <ul
                       className={`bg-white ${
@@ -127,7 +127,7 @@ export default function Receipt({ planId }) {
                 {/* 데이터 없을시 */}
                 {transactionData?.data?.transaction.length === 0 && (
                   <div className="flex items-center justify-center">
-                    <p className="py-5 text-2xl">There isn't any data yet</p>
+                    <p className="py-5 text-2xl">まだデータがない</p>
                   </div>
                 )}
               </div>

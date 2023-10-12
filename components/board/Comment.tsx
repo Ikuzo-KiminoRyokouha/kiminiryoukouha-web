@@ -5,15 +5,15 @@ import { useRouter } from "next/router";
 function Inputform({ isVisible, writeComment }) {
   const router = useRouter();
   const id = router.query.id;
-  const comment = useInput("", "댓글을 입력해주세요");
+  const comment = useInput("", "コメントを入力してください。");
   return (
     <>
-      <div className="mt-3 ml-2 flex">
+      <div className="ml-2 mt-3 flex">
         <span>↳</span>
         <textarea
           rows={4}
           {...comment}
-          placeholder="  댓글을 입력해주세요."
+          placeholder="  コメントを入力してください。"
           className="w-full resize-none border-2 "
         ></textarea>
         <button
@@ -28,7 +28,7 @@ function Inputform({ isVisible, writeComment }) {
             isVisible.setFalse();
           }}
         >
-          등록
+          登録
         </button>
       </div>
     </>
@@ -39,12 +39,15 @@ export default function Comment({ data }) {
   const isVisible = useToggle(false);
   const updateMode = useToggle(false);
   const user = getUser();
-  const comment = useInput(data.content, "수정할 댓글을 입력해주세요.");
+  const comment = useInput(
+    data.content,
+    "修正するコメントを入力してください。"
+  );
   const { deleteComment, updateComment, writeComment } = useBoard();
 
   const authCheck = () => {
     if (!getUser()) {
-      alert("로그인 되지 않은 유저입니다.");
+      alert("ログインしていないユーザーです。");
       return false;
     }
     return true;
@@ -69,12 +72,11 @@ export default function Comment({ data }) {
                   className="float-right mx-2 "
                   onClick={() => {
                     if (authCheck()) {
-                      confirm("정말 삭제하시겠습니까?") &&
-                        deleteComment(data.id);
+                      confirm("本当に削除しますか？") && deleteComment(data.id);
                     }
                   }}
                 >
-                  삭제
+                  削除
                 </button>
                 <button
                   className="float-right"
@@ -84,7 +86,7 @@ export default function Comment({ data }) {
                     }
                   }}
                 >
-                  수정
+                  修正
                 </button>
               </div>
             )}
@@ -108,13 +110,13 @@ export default function Comment({ data }) {
                   updateMode.setFalse();
                 }}
               >
-                완료
+                完了
               </button>
               <button
                 className="flex-1 bg-gray-400 p-1 px-2"
                 onClick={updateMode.setFalse}
               >
-                취소
+                キャンセル
               </button>
             </div>
           </>

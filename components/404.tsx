@@ -35,8 +35,8 @@ export default function NotFound() {
     <>
       <Container>
         <Title>404</Title>
-        <Description>Page Not Found</Description>
-        <HomeLink onClick={onClick}>Go back home &rarr;</HomeLink>
+        <Description>ページがありません。</Description>
+        <HomeLink onClick={onClick}>ページの先頭へ戻る &rarr;</HomeLink>
       </Container>
     </>
   );

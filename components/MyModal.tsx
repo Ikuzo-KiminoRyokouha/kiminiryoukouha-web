@@ -24,14 +24,14 @@ export default function MyModal({ title, date, offModal }: Props) {
               <Modal.Image src="/assets/main-img.png" />
             </div>
             <div className="flex flex-col justify-around pl-4">
-              <span className="text-lg">계획이름 : {title}</span>
-              <span className="text-lg">계획일시 : </span>
+              <span className="text-lg">計画名 : {title}</span>
+              <span className="text-lg">計画日時 : </span>
               <span className="text-base">{date}</span>
             </div>
           </div>
           <div className="flex justify-center pt-6">
             <span className="py-5 text-xl">
-              정말 이 계획을 삭제하시겠습니까?
+              本当にこのプランを削除しますか？
             </span>
           </div>
           <Modal.Footer>
@@ -39,13 +39,13 @@ export default function MyModal({ title, date, offModal }: Props) {
               className="h-10 flex-1 border-r-2 bg-sky-600 text-lg font-bold text-white"
               onClick={onClick.deleteing}
             >
-              삭제
+              削除
             </button>
             <button
               className="h-10 flex-1 text-lg font-bold"
               onClick={offModal}
             >
-              취소
+              キャンセル
             </button>
           </Modal.Footer>
         </Modal>

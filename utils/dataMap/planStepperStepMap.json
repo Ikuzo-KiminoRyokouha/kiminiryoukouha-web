@@ -1,22 +1,22 @@
 [
   {
     "step": 1,
-    "title": "기간",
+    "title": "期間",
     "icon": "SlCalender"
   },
   {
     "step": 2,
-    "title": "개인정보",
+    "title": "個人情報",
     "icon": "SlPeople"
   },
   {
     "step": 3,
-    "title": "예산",
+    "title": "予算",
     "icon": "MdOutlineAttachMoney"
   },
   {
     "step": 4,
-    "title": "완료",
+    "title": "完完了",
     "icon": "MdDoneOutline"
   }
 ]
