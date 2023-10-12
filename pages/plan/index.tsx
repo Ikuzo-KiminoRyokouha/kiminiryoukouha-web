@@ -54,7 +54,7 @@ export default function Index({ plans }) {
               <p className="cursor-pointer text-xl font-semibold">
                 計画レビュー
               </p>
-              <p className="cursor-pointer text-lg">0개</p>
+              <p className="cursor-pointer text-lg">0個</p>
             </div>
           </div>
         </div>
