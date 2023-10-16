@@ -10,6 +10,8 @@ export default function ThreadSummary({ plan }) {
 
   const { data: planData } = useQuery(["getPlan", planId], getPlan);
 
+ 
+
   // console.log("plan123", plan);
   // console.log("planId", planId);
   // console.log("planData321", planData?.data?.plan?.tag[1]);
@@ -44,7 +46,7 @@ export default function ThreadSummary({ plan }) {
               })}
           </p>
         </div>
-        <Link href={`/thread/${25}`} passHref>
+        <Link href={`/thread/${planId}`} passHref>
           <a className="flex cursor-pointer items-center justify-center rounded-lg bg-sky-600 p-2 text-white">
             プランを見る
           </a>

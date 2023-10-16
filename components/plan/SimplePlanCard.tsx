@@ -43,7 +43,7 @@ export default function SimplePlanCard({ plan }: Props) {
       </div>
       <div className="flex flex-1 flex-col justify-around">
         <p className="hidden md:block">
-          계획 일시 : {dayjs(plan.start).format("MM-DD")} ~
+        旅行期間 : {dayjs(plan.start).format("MM-DD")} ~
           {dayjs(plan.end).format("MM-DD")}
         </p>
         <div className="block md:hidden">
@@ -53,9 +53,9 @@ export default function SimplePlanCard({ plan }: Props) {
             {dayjs(plan.end).format("MM-DD")}
           </p>
         </div>
-        <p>예산 : {plan.totalCost} 원</p>
+        <p>予算 : {plan.totalCost} ウォン</p>
         <p>
-          테마 :{" "}
+        テーマ :{" "}
           {Object?.keys(plan?.tag)
             .map((key, idx) => {
               return plan.tag[key];
@@ -82,10 +82,10 @@ export default function SimplePlanCard({ plan }: Props) {
         </div>
         <div className="flex flex-col items-end">
           <Link href={`/album/${plan.id}`} passHref>
-            <a className=" px-2 py-1 text-gray-500">앨범 보기</a>
+            <a className=" px-2 py-1 text-gray-500">アルバムを見る</a>
           </Link>
           <Link href={`/plan/detail?planId=${plan.id}`} passHref>
-            <a className=" px-2 py-1 text-gray-500">자세히 보기</a>
+            <a className=" px-2 py-1 text-gray-500">詳しく見る</a>
           </Link>
         </div>
       </div>

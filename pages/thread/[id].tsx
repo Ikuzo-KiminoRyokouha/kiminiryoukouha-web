@@ -8,8 +8,10 @@ import { useEffect, useState } from "react";
 import PlanDetail from "../plan/new/planDetail";
 import Share from "./share";
 
-export default function q({ totalplan, test }) {
+export default function Board({ totalplan, test }) {
   const { query } = useRouter();
+  // console.log(totalplan,"토탈플랜")
+  // console.log(test,"이건뭔데")
 
   return (
     <>
@@ -21,6 +23,7 @@ totalplan.plans.map((el,i)=>{
   })
 })
 } */}
+
 
       {totalplan.map((el, i) => {
         return totalplan[i]?.id == query.id ? (
@@ -44,6 +47,7 @@ export async function getServerSideProps({ query, req }) {
     .then((res) => {
       if (res.data.ok) return res.data.plan;
     });
+    
 
   return {
     props: {

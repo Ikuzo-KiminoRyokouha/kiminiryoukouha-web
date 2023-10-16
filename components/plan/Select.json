@@ -1,1273 +1,1254 @@
 [
     {
-        "name": "서울",
+        "name": "ソウル特別市",
         "code": "1",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "강남구"
+                "name": "江南区"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "강동구"
+                "name": "江東区"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "강북구"
+                "name": "江北区"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "강서구"
+                "name": "江西区"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "관악구"
+                "name": "冠岳区"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "광진구"
+                "name": "広津区"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "구로구"
+                "name": "九老区"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "금천구"
+                "name": "衿川区"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "노원구"
+                "name": "蘆原区"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "도봉구"
+                "name": "道峰区"
             },
             {
                 "rnum": 11,
                 "code": "11",
-                "name": "동대문구"
+                "name": "東大門区"
             },
             {
                 "rnum": 12,
                 "code": "12",
-                "name": "동작구"
+                "name": "銅雀区"
             },
             {
                 "rnum": 13,
                 "code": "13",
-                "name": "마포구"
+                "name": "麻浦区"
             },
             {
                 "rnum": 14,
                 "code": "14",
-                "name": "서대문구"
+                "name": "西大門区"
             },
             {
                 "rnum": 15,
                 "code": "15",
-                "name": "서초구"
+                "name": "瑞草区"
             },
             {
                 "rnum": 16,
                 "code": "16",
-                "name": "성동구"
+                "name": "城東区"
             },
             {
                 "rnum": 17,
                 "code": "17",
-                "name": "성북구"
+                "name": "城北区"
             },
             {
                 "rnum": 18,
                 "code": "18",
-                "name": "송파구"
+                "name": "松坡区"
             },
             {
                 "rnum": 19,
                 "code": "19",
-                "name": "양천구"
+                "name": "陽川区"
             },
             {
                 "rnum": 20,
                 "code": "20",
-                "name": "영등포구"
+                "name": "永登浦区"
             },
             {
                 "rnum": 21,
                 "code": "21",
-                "name": "용산구"
+                "name": "龍山区"
             },
             {
                 "rnum": 22,
                 "code": "22",
-                "name": "은평구"
+                "name": "恩平区"
             },
             {
                 "rnum": 23,
                 "code": "23",
-                "name": "종로구"
+                "name": "鐘路区"
             },
             {
                 "rnum": 24,
                 "code": "24",
-                "name": "중구"
+                "name": "中区"
             },
             {
                 "rnum": 25,
                 "code": "25",
-                "name": "중랑구"
+                "name": "中浪区"
             }
         ]
     },
     {
-        "name": "인천",
+        "name": "仁川広域市",
         "code": "2",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "강화군"
+                "name": "江華郡"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "계양구"
+                "name": "桂陽区"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "미추홀구"
+                "name": "弥鄒忽区"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "남동구"
+                "name": "南洞区"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "동구"
+                "name": "東区"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "부평구"
+                "name": "富平区"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "서구"
+                "name": "西区"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "연수구"
+                "name": "延寿区"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "옹진군"
+                "name": "甕津郡"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "중구"
+                "name": "中区"
             }
         ]
     },
     {
-        "name": "대전",
+        "name": "大田広域市",
         "code": "3",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "대덕구"
+                "name": "大徳区"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "동구"
+                "name": "東区"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "서구"
+                "name": "西区"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "유성구"
+                "name": "儒城区"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "중구"
+                "name": "中区"
             }
         ]
     },
     {
-        "name": "대구",
+        "name": "テグ広域市",
         "code": "4",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "남구"
+                "name": "南区"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "달서구"
+                "name": "達西区"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "달성군"
+                "name": "達城郡"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "동구"
+                "name": "東区"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "북구"
+                "name": "北区"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "서구"
+                "name": "西区"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "수성구"
+                "name": "寿城区"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "중구"
+                "name": "中区"
             }
         ]
     },
     {
-        "name": "광주",
+        "name": "光州広域市",
         "code": "5",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "광산구"
+                "name": "光山区"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "남구"
+                "name": "南区"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "동구"
+                "name": "東区"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "북구"
+                "name": "北区"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "서구"
+                "name": "西区"
             }
         ]
     },
     {
-        "name": "부산",
+        "name": "釜山広域市",
         "code": "6",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "강서구"
+                "name": "江西区"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "금정구"
+                "name": "金井区"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "기장군"
+                "name": "機張郡"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "남구"
+                "name": "南区"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "동구"
+                "name": "東区"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "동래구"
+                "name": "東莱区"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "부산진구"
+                "name": "釜山鎮区"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "북구"
+                "name": "北区"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "사상구"
+                "name": "沙上区"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "사하구"
+                "name": "沙下区"
             },
             {
                 "rnum": 11,
                 "code": "11",
-                "name": "서구"
+                "name": "西区"
             },
             {
                 "rnum": 12,
                 "code": "12",
-                "name": "수영구"
+                "name": "水営区"
             },
             {
                 "rnum": 13,
                 "code": "13",
-                "name": "연제구"
+                "name": "蓮堤区"
             },
             {
                 "rnum": 14,
                 "code": "14",
-                "name": "영도구"
+                "name": "影島区"
             },
             {
                 "rnum": 15,
                 "code": "15",
-                "name": "중구"
+                "name": "中区"
             },
             {
                 "rnum": 16,
                 "code": "16",
-                "name": "해운대구"
+                "name": "海雲台区"
             }
         ]
     },
     {
-        "name": "울산",
+        "name": "ウルサン広域市",
         "code": "7",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "중구"
+                "name": "中区"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "남구"
+                "name": "南区"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "동구"
+                "name": "東区"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "북구"
+                "name": "北区"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "울주군"
+                "name": "蔚州郡"
             }
         ]
     },
     {
-        "name": "세종특별자치시",
+        "name": "世宗特別自治市",
         "code": "8",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "세종특별자치시"
+                "name": "世宗特別自治市"
             }
         ]
     },
     {
-        "name": "경기도",
+        "name": "キョンギ道",
         "code": "31",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "가평군"
+                "name": "加平郡"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "고양시"
+                "name": "高陽市"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "과천시"
+                "name": "果川市"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "광명시"
+                "name": "光明市"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "광주시"
+                "name": "広州市"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "구리시"
+                "name": "九里市"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "군포시"
+                "name": "軍浦市"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "김포시"
+                "name": "金浦市"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "남양주시"
+                "name": "南楊州市"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "동두천시"
+                "name": "東豆川市"
             },
             {
                 "rnum": 11,
                 "code": "11",
-                "name": "부천시"
+                "name": "富川市"
             },
             {
                 "rnum": 12,
                 "code": "12",
-                "name": "성남시"
+                "name": "城南市"
             },
             {
                 "rnum": 13,
                 "code": "13",
-                "name": "수원시"
+                "name": "水原市"
             },
             {
                 "rnum": 14,
                 "code": "14",
-                "name": "시흥시"
+                "name": "始興市"
             },
             {
                 "rnum": 15,
                 "code": "15",
-                "name": "안산시"
+                "name": "安山市"
             },
             {
                 "rnum": 16,
                 "code": "16",
-                "name": "안성시"
+                "name": "安城市"
             },
             {
                 "rnum": 17,
                 "code": "17",
-                "name": "안양시"
+                "name": "安養市"
             },
             {
                 "rnum": 18,
                 "code": "18",
-                "name": "양주시"
+                "name": "楊州市"
             },
             {
                 "rnum": 19,
                 "code": "19",
-                "name": "양평군"
+                "name": "楊平郡"
             },
             {
                 "rnum": 20,
                 "code": "20",
-                "name": "여주시"
+                "name": "驪州市"
             },
             {
                 "rnum": 21,
                 "code": "21",
-                "name": "연천군"
+                "name": "漣川郡"
             },
             {
                 "rnum": 22,
                 "code": "22",
-                "name": "오산시"
+                "name": "烏山市"
             },
             {
                 "rnum": 23,
                 "code": "23",
-                "name": "용인시"
+                "name": "龍仁市"
             },
             {
                 "rnum": 24,
                 "code": "24",
-                "name": "의왕시"
+                "name": "儀旺市"
             },
             {
                 "rnum": 25,
                 "code": "25",
-                "name": "의정부시"
+                "name": "議政府市"
             },
             {
                 "rnum": 26,
                 "code": "26",
-                "name": "이천시"
+                "name": "利川市"
             },
             {
                 "rnum": 27,
                 "code": "27",
-                "name": "파주시"
+                "name": "坡州市"
             },
             {
                 "rnum": 28,
                 "code": "28",
-                "name": "평택시"
+                "name": "平沢市"
             },
             {
                 "rnum": 29,
                 "code": "29",
-                "name": "포천시"
+                "name": "抱川市"
             },
             {
                 "rnum": 30,
                 "code": "30",
-                "name": "하남시"
+                "name": "河南市"
             },
             {
                 "rnum": 31,
                 "code": "31",
-                "name": "화성시"
+                "name": "華城市"
             }
         ]
     },
     {
-        "name": "강원도",
+        "name": "江原道",
         "code": "32",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "강릉시"
+                "name": "江陵市"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "고성군"
+                "name": "高城郡"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "동해시"
+                "name": "東海市"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "삼척시"
+                "name": "三陟市"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "속초시"
+                "name": "束草市"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "양구군"
+                "name": "楊口郡"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "양양군"
+                "name": "襄陽郡"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "영월군"
+                "name": "寧越郡"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "원주시"
+                "name": "原州市"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "인제군"
+                "name": "麟蹄郡"
             },
             {
                 "rnum": 11,
                 "code": "11",
-                "name": "정선군"
+                "name": "旌善郡"
             },
             {
                 "rnum": 12,
                 "code": "12",
-                "name": "철원군"
+                "name": "鉄原郡"
             },
             {
                 "rnum": 13,
                 "code": "13",
-                "name": "춘천시"
+                "name": "春川市"
             },
             {
                 "rnum": 14,
                 "code": "14",
-                "name": "태백시"
+                "name": "太白市"
             },
             {
                 "rnum": 15,
                 "code": "15",
-                "name": "평창군"
+                "name": "平昌郡"
             },
             {
                 "rnum": 16,
                 "code": "16",
-                "name": "홍천군"
+                "name": "洪川郡"
             },
             {
                 "rnum": 17,
                 "code": "17",
-                "name": "화천군"
+                "name": "華川郡"
             },
             {
                 "rnum": 18,
                 "code": "18",
-                "name": "횡성군"
+                "name": "橫城郡"
             }
         ]
     },
     {
-        "name": "충청북도",
+        "name": "忠清北道",
         "code": "33",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "괴산군"
+                "name": "槐山郡"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "단양군"
+                "name": "丹陽郡"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "보은군"
+                "name": "報恩郡"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "영동군"
+                "name": "永同郡"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "옥천군"
+                "name": "沃川郡"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "음성군"
+                "name": "陰城郡"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "제천시"
+                "name": "堤川市"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "진천군"
+                "name": "鎮川郡"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "청원군"
+                "name": "清原郡"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "청주시"
+                "name": "清州市"
             },
             {
                 "rnum": 11,
                 "code": "11",
-                "name": "충주시"
+                "name": "忠州市"
             },
             {
                 "rnum": 12,
                 "code": "12",
-                "name": "증평군"
+                "name": "曾坪郡"
             }
         ]
     },
     {
-        "name": "충청남도",
+        "name": "忠清南道",
         "code": "34",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "공주시"
+                "name": "公州市"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "금산군"
+                "name": "錦山郡"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "논산시"
+                "name": "論山市"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "당진시"
+                "name": "唐津市"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "보령시"
+                "name": "保寧市"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "부여군"
+                "name": "扶余郡"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "서산시"
+                "name": "瑞山市"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "서천군"
+                "name": "舒川郡"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "아산시"
+                "name": "牙山市"
             },
             {
                 "rnum": 10,
                 "code": "11",
-                "name": "예산군"
+                "name": "礼山郡"
             },
             {
                 "rnum": 11,
                 "code": "12",
-                "name": "천안시"
+                "name": "天安市"
             },
             {
                 "rnum": 12,
                 "code": "13",
-                "name": "청양군"
+                "name": "青陽郡"
             },
             {
                 "rnum": 13,
                 "code": "14",
-                "name": "태안군"
+                "name": "泰安郡"
             },
             {
                 "rnum": 14,
                 "code": "15",
-                "name": "홍성군"
-            },
-            {
-                "rnum": 15,
-                "code": "16",
-                "name": "계룡시"
+                "name": "洪城郡"
             }
         ]
     },
     {
-        "name": "경상북도",
+        "name": "慶尚北道",
         "code": "35",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "경산시"
+                "name": "慶山市"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "경주시"
+                "name": "慶州市"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "고령군"
+                "name": "高霊郡"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "구미시"
-            },
-            {
-                "rnum": 5,
-                "code": "5",
-                "name": "군위군"
+                "name": "亀尾市"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "김천시"
+                "name": "金泉市"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "문경시"
+                "name": "聞慶市"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "봉화군"
+                "name": "奉化郡"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "상주시"
+                "name": "尚州市"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "성주군"
+                "name": "星州郡"
             },
             {
                 "rnum": 11,
                 "code": "11",
-                "name": "안동시"
+                "name": "安東市"
             },
             {
                 "rnum": 12,
                 "code": "12",
-                "name": "영덕군"
+                "name": "盈徳郡"
             },
             {
                 "rnum": 13,
                 "code": "13",
-                "name": "영양군"
+                "name": "英陽郡"
             },
             {
                 "rnum": 14,
                 "code": "14",
-                "name": "영주시"
+                "name": "栄州市"
             },
             {
                 "rnum": 15,
                 "code": "15",
-                "name": "영천시"
+                "name": "永川市"
             },
             {
                 "rnum": 16,
                 "code": "16",
-                "name": "예천군"
+                "name": "醴泉郡"
             },
             {
                 "rnum": 17,
                 "code": "17",
-                "name": "울릉군"
+                "name": "鬱陵郡"
             },
             {
                 "rnum": 18,
                 "code": "18",
-                "name": "울진군"
+                "name": "蔚珍郡"
             },
             {
                 "rnum": 19,
                 "code": "19",
-                "name": "의성군"
+                "name": "義城郡"
             },
             {
                 "rnum": 20,
                 "code": "20",
-                "name": "청도군"
+                "name": "清道郡"
             },
             {
                 "rnum": 21,
                 "code": "21",
-                "name": "청송군"
+                "name": "青松郡"
             },
             {
                 "rnum": 22,
                 "code": "22",
-                "name": "칠곡군"
+                "name": "漆谷郡"
             },
             {
                 "rnum": 23,
                 "code": "23",
-                "name": "포항시"
+                "name": "浦項市"
             }
         ]
     },
     {
-        "name": "경상남도",
+        "name": "慶尚南道",
         "code": "36",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "거제시"
+                "name": "巨濟市"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "거창군"
+                "name": "居昌郡"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "고성군"
+                "name": "固城郡"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "김해시"
+                "name": "金海市"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "남해군"
+                "name": "南海郡"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "마산시"
+                "name": "馬山市"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "밀양시"
+                "name": "密陽市"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "사천시"
+                "name": "泗川市"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "산청군"
+                "name": "山清郡"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "양산시"
+                "name": "梁山市"
             },
             {
                 "rnum": 11,
                 "code": "12",
-                "name": "의령군"
+                "name": "宜寧郡"
             },
             {
                 "rnum": 12,
                 "code": "13",
-                "name": "진주시"
+                "name": "晋州市"
             },
             {
                 "rnum": 13,
                 "code": "14",
-                "name": "진해시"
+                "name": "鎮海市"
             },
             {
                 "rnum": 14,
                 "code": "15",
-                "name": "창녕군"
+                "name": "昌寧郡"
             },
             {
                 "rnum": 15,
                 "code": "16",
-                "name": "창원시"
+                "name": "昌原市"
             },
             {
                 "rnum": 16,
                 "code": "17",
-                "name": "통영시"
+                "name": "統営市"
             },
             {
                 "rnum": 17,
                 "code": "18",
-                "name": "하동군"
+                "name": "河東郡"
             },
             {
                 "rnum": 18,
                 "code": "19",
-                "name": "함안군"
+                "name": "咸安郡"
             },
             {
                 "rnum": 19,
                 "code": "20",
-                "name": "함양군"
+                "name": "咸陽郡"
             },
             {
                 "rnum": 20,
                 "code": "21",
-                "name": "합천군"
+                "name": "陜川郡"
             }
         ]
     },
     {
-        "name": "전라북도",
+        "name": "全羅北道",
         "code": "37",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "고창군"
+                "name": "高敞郡"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "군산시"
+                "name": "群山市"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "김제시"
+                "name": "金堤市"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "남원시"
+                "name": "南原市"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "무주군"
+                "name": "茂朱郡"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "부안군"
+                "name": "扶安郡"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "순창군"
+                "name": "淳昌郡"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "완주군"
+                "name": "完州郡"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "익산시"
+                "name": "益山市"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "임실군"
+                "name": "任実郡"
             },
             {
                 "rnum": 11,
                 "code": "11",
-                "name": "장수군"
+                "name": "長水郡"
             },
             {
                 "rnum": 12,
                 "code": "12",
-                "name": "전주시"
+                "name": "全州市"
             },
             {
                 "rnum": 13,
                 "code": "13",
-                "name": "정읍시"
+                "name": "井邑市"
             },
             {
                 "rnum": 14,
                 "code": "14",
-                "name": "진안군"
+                "name": "鎮安郡"
             }
         ]
     },
     {
-        "name": "전라남도",
+        "name": "全羅南道",
         "code": "38",
         "sigungu": [
             {
                 "rnum": 1,
                 "code": "1",
-                "name": "강진군"
+                "name": "康津郡"
             },
             {
                 "rnum": 2,
                 "code": "2",
-                "name": "고흥군"
+                "name": "高興郡"
             },
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "곡성군"
+                "name": "谷城郡"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "광양시"
+                "name": "光陽市"
             },
             {
                 "rnum": 5,
                 "code": "5",
-                "name": "구례군"
+                "name": "求礼郡"
             },
             {
                 "rnum": 6,
                 "code": "6",
-                "name": "나주시"
+                "name": "羅州市"
             },
             {
                 "rnum": 7,
                 "code": "7",
-                "name": "담양군"
+                "name": "潭陽郡"
             },
             {
                 "rnum": 8,
                 "code": "8",
-                "name": "목포시"
+                "name": "木浦市"
             },
             {
                 "rnum": 9,
                 "code": "9",
-                "name": "무안군"
+                "name": "務安郡"
             },
             {
                 "rnum": 10,
                 "code": "10",
-                "name": "보성군"
+                "name": "宝城郡"
             },
             {
                 "rnum": 11,
                 "code": "11",
-                "name": "순천시"
+                "name": "順天市"
             },
             {
                 "rnum": 12,
                 "code": "12",
-                "name": "신안군"
+                "name": "新安郡"
             },
             {
                 "rnum": 13,
                 "code": "13",
-                "name": "여수시"
+                "name": "麗水市"
             },
             {
                 "rnum": 14,
                 "code": "16",
-                "name": "영광군"
+                "name": "霊光郡"
             },
             {
                 "rnum": 15,
                 "code": "17",
-                "name": "영암군"
+                "name": "霊岩郡"
             },
             {
                 "rnum": 16,
                 "code": "18",
-                "name": "완도군"
+                "name": "莞島郡"
             },
             {
                 "rnum": 17,
                 "code": "19",
-                "name": "장성군"
+                "name": "長城郡"
             },
             {
                 "rnum": 18,
                 "code": "20",
-                "name": "장흥군"
+                "name": "長興郡"
             },
             {
                 "rnum": 19,
                 "code": "21",
-                "name": "진도군"
+                "name": "珍島郡"
             },
             {
                 "rnum": 20,
                 "code": "22",
-                "name": "함평군"
+                "name": "咸平郡"
             },
             {
                 "rnum": 21,
                 "code": "23",
-                "name": "해남군"
+                "name": "海南郡"
             },
             {
                 "rnum": 22,
                 "code": "24",
-                "name": "화순군"
+                "name": "和順郡"
             }
         ]
     },
     {
-        "name": "제주도",
+        "name": "済州特別自治道",
         "code": "39",
         "sigungu": [
-            {
-                "rnum": 1,
-                "code": "1",
-                "name": "남제주군"
-            },
-            {
-                "rnum": 2,
-                "code": "2",
-                "name": "북제주군"
-            },
+          
             {
                 "rnum": 3,
                 "code": "3",
-                "name": "서귀포시"
+                "name": "西帰浦市"
             },
             {
                 "rnum": 4,
                 "code": "4",
-                "name": "제주시"
+                "name": "済州市"
             }
         ]
     }
