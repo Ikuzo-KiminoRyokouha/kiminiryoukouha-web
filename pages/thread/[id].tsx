@@ -47,7 +47,7 @@ export async function getServerSideProps({ query, req }) {
     .then((res) => {
       if (res.data.ok) return res.data.plan;
     });
-    console.log(test)
+    
 
   return {
     props: {
